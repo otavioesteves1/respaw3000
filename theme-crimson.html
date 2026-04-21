@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+﻿?<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[CRIMSON] RESPAW3000 â€” Hunt List</title>
+<title>[CRIMSON] RESPAW3000 — Hunt List</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -54,7 +54,7 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .url-preview.on{display:flex;}
 .url-preview img{height:36px;object-fit:contain;border-radius:6px;background:rgba(0,0,0,.3);padding:3px;border:1px solid var(--c4);image-rendering:pixelated;}
 
-/* â”€â”€ Tabs â”€â”€ */
+/* ── Tabs ── */
 .tab-bar{display:flex;gap:.35rem;margin-bottom:.75rem;}
 .tab-btn{padding:.35rem .85rem;border-radius:20px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;}
 .tab-btn:hover{border-color:var(--gold);color:var(--gold);}
@@ -62,13 +62,13 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .tab-panel{display:none;}
 .tab-panel.on{display:block;}
 
-/* â”€â”€ Vocation selector â”€â”€ */
+/* ── Vocation selector ── */
 .voc-bar{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.75rem;}
 .voc-btn{padding:.32rem .7rem;border-radius:20px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .voc-btn:hover{border-color:var(--gold);color:var(--gold);}
 .voc-btn.on{background:rgba(229,62,62,.18);color:var(--gold);border-color:var(--gold);box-shadow:0 0 0 2px rgba(229,62,62,.15);}
 
-/* â”€â”€ Qty stepper â”€â”€ */
+/* ── Qty stepper ── */
 .qty-row{display:flex;align-items:center;gap:.2rem;flex-wrap:wrap;}
 .qb{height:28px;padding:0 .4rem;border-radius:6px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .12s;white-space:nowrap;}
 .qb:hover{border-color:var(--gold);color:var(--gold);}
@@ -82,12 +82,12 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .sel-rm{width:22px;height:22px;border-radius:5px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
 .sel-rm:hover{background:rgba(239,68,68,.25);}
 
-/* â”€â”€ Item grid (charms / potions / runas / imbu / spells) â”€â”€ */
+/* ── Item grid (charms / potions / runas / imbu / spells) ── */
 .charm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:.4rem;margin-bottom:.5rem;}
 .charm-opt{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:.45rem .3rem .35rem;border-radius:8px;border:1.5px solid var(--c4);background:var(--c3);cursor:pointer;transition:all .15s;text-align:center;position:relative;min-height:72px;}
 .charm-opt:hover{border-color:rgba(229,62,62,.5);background:rgba(229,62,62,.07);}
 .charm-opt.on{border-color:var(--gold);background:rgba(229,62,62,.15);box-shadow:0 0 0 2px rgba(229,62,62,.2);}
-.charm-opt.on::after{content:'Ã—';position:absolute;top:3px;right:5px;font-size:.68rem;color:rgba(229,62,62,.9);font-weight:900;line-height:1;}
+.charm-opt.on::after{content:'×';position:absolute;top:3px;right:5px;font-size:.68rem;color:rgba(229,62,62,.9);font-weight:900;line-height:1;}
 .charm-opt.charm-used{opacity:.25;filter:grayscale(1);cursor:not-allowed;}
 .charm-opt.charm-used:hover{border-color:var(--c4);background:var(--c3);}
 .charm-opt-img{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -98,7 +98,7 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .charm-none-btn{padding:.4rem .75rem;border-radius:8px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;}
 .charm-none-btn.on{border-color:var(--c4);color:var(--t0);background:rgba(255,255,255,.06);}
 
-/* â”€â”€ Monster card (wizard) â”€â”€ */
+/* ── Monster card (wizard) ── */
 .mon-card{background:var(--c3);border-radius:10px;border:1px solid var(--c4);display:grid;grid-template-columns:76px 1fr;gap:.65rem;padding:.8rem;margin-bottom:.5rem;position:relative;transition:border-color .15s;}
 .mon-card:hover{border-color:rgba(229,62,62,.35);}
 .mon-gif{width:76px;height:76px;border-radius:8px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
@@ -116,7 +116,7 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .mon-rm{position:absolute;top:.4rem;right:.4rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .mon-rm:hover{background:rgba(239,68,68,.25);}
 
-/* â”€â”€ Hunt card â”€â”€ */
+/* ── Hunt card ── */
 .hcard{background:var(--c2);border-radius:var(--r);border:1px solid var(--c4);box-shadow:var(--sh);margin-bottom:1.1rem;overflow:hidden;}
 .hcard-hdr{background:linear-gradient(135deg,#1a1010,#2a1212);padding:.875rem 1.1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:background .15s;}
 .hcard-hdr:hover{background:linear-gradient(135deg,#2a1010,#3a1616);}
@@ -146,7 +146,7 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .mon-mini-charm img{width:18px;height:18px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
 .hcard-acts{display:flex;gap:.4rem;padding:.75rem 1.1rem;border-top:1px solid var(--c4);background:rgba(0,0,0,.12);flex-wrap:wrap;}
 
-/* â”€â”€ Wizard â”€â”€ */
+/* ── Wizard ── */
 .wiz-steps{display:flex;gap:.35rem;margin-bottom:1.25rem;flex-wrap:wrap;}
 .wdot{display:flex;align-items:center;gap:.35rem;padding:.3rem .65rem;border-radius:20px;font-size:.75rem;font-weight:700;transition:all .15s;color:var(--t1);border:1.5px solid var(--c4);cursor:pointer;}
 .wdot:hover{border-color:var(--gold);color:var(--gold);}
@@ -157,14 +157,14 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .wpanel{display:none;}
 .wpanel.on{display:block;}
 
-/* â”€â”€ Modal â”€â”€ */
+/* ── Modal ── */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:500;padding:1rem;}
 .ov.on{display:flex;}
 .modal{background:var(--c1);border-radius:16px;border:1px solid var(--c4);box-shadow:0 24px 60px rgba(0,0,0,.6);padding:1.5rem;width:100%;max-height:90vh;overflow-y:auto;}
 .mtitle{font-size:.95rem;font-weight:800;margin-bottom:1.1rem;display:flex;align-items:center;gap:.4rem;}
 .macts{margin-top:1.1rem;display:flex;justify-content:flex-end;gap:.4rem;flex-wrap:wrap;}
 
-/* â”€â”€ Summary modal â”€â”€ */
+/* ── Summary modal ── */
 .sum-sec{margin-bottom:1.15rem;}
 .sum-sec-lbl{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);border-bottom:1px solid rgba(229,62,62,.2);padding-bottom:.38rem;margin-bottom:.75rem;}
 .sum-items{display:flex;flex-wrap:wrap;gap:.45rem;}
@@ -191,7 +191,7 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .sum-charm-card.minor .sum-charm-name{color:#c4b5fd;}
 .sum-no-charm{font-size:.75rem;color:var(--t2);font-style:italic;padding:.2rem 0;}
 
-/* â”€â”€ Toast â”€â”€ */
+/* ── Toast ── */
 .toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--c2);color:var(--t0);border:1px solid var(--c4);padding:.6rem 1.1rem;border-radius:10px;font-size:.83rem;font-weight:500;transition:transform .22s ease;z-index:1000;box-shadow:0 8px 28px rgba(0,0,0,.4);}
 .toast.on{transform:translateX(-50%) translateY(0);}
 .gif-load{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--t1);padding:.25rem 0;}
@@ -216,7 +216,7 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
   .sum-mon-gif{width:60px;height:60px;}
 }
 
-/* â”€â”€ Profile Gate â”€â”€ */
+/* ── Profile Gate ── */
 .p-gate{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;z-index:2000;padding:1rem;backdrop-filter:blur(6px);}
 .p-gate-box{background:var(--c1);border-radius:18px;border:1px solid rgba(229,62,62,.3);box-shadow:0 32px 80px rgba(0,0,0,.7);padding:2rem;width:100%;max-width:440px;}
 .gate-brand{text-align:center;margin-bottom:1.75rem;}
@@ -234,7 +234,7 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .gate-back{background:none;border:none;color:var(--t1);font-size:.78rem;cursor:pointer;padding:.2rem 0;margin-bottom:.75rem;display:flex;align-items:center;gap:.3rem;}
 .gate-back:hover{color:var(--gold);}
 
-/* â”€â”€ KPI Sessions â”€â”€ */
+/* ── KPI Sessions ── */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.5rem;margin-bottom:.85rem;}
 .kpi-box{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.7rem .75rem;text-align:center;}
 .kpi-val{font-size:1.2rem;font-weight:800;color:var(--gold);line-height:1;}
@@ -242,8 +242,8 @@ header{background:linear-gradient(135deg,#130808,#2e1a1a);border-bottom:1px soli
 .sess-form{background:rgba(0,0,0,.2);border:1px solid var(--c4);border-radius:12px;padding:.9rem;margin-bottom:.85rem;}
 .sess-form summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--gold);list-style:none;display:flex;align-items:center;gap:.4rem;}
 .sess-form summary::-webkit-details-marker{display:none;}
-.sess-form[open] summary::before{content:'â–¾ ';}
-.sess-form:not([open]) summary::before{content:'â–¸ ';}
+.sess-form[open] summary::before{content:'▾ ';}
+.sess-form:not([open]) summary::before{content:'▸ ';}
 .sess-form-body{margin-top:.8rem;}
 .inp-sm{width:100%;padding:.48rem .7rem;border:1.5px solid var(--c4);border-radius:8px;font-size:.83rem;outline:none;background:var(--c3);color:var(--t0);transition:border-color .18s;font-family:inherit;}
 .inp-sm:focus{border-color:var(--gold);}
@@ -259,7 +259,7 @@ textarea.inp{resize:vertical;min-height:58px;font-family:inherit;}
 .sess-rm:hover{background:rgba(239,68,68,.28);}
 .no-sess{text-align:center;padding:2.2rem 1rem;color:var(--t2);font-size:.85rem;line-height:1.6;}
 
-/* â”€â”€ Comparison Chart â”€â”€ */
+/* ── Comparison Chart ── */
 .chart-tabs{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.85rem;}
 .chart-tab{padding:.3rem .75rem;border-radius:20px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;}
 .chart-tab:hover{border-color:var(--gold);color:var(--gold);}
@@ -271,24 +271,24 @@ textarea.inp{resize:vertical;min-height:58px;font-family:inherit;}
 .chart-val{font-size:.75rem;font-weight:800;white-space:nowrap;min-width:56px;text-align:left;flex-shrink:0;}
 .chart-note{font-size:.7rem;color:var(--t2);text-align:center;margin-top:.75rem;}
 
-/* â”€â”€ Spinner removal â”€â”€ */
+/* ── Spinner removal ── */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;appearance:none;margin:0;}
 input[type=number]{-moz-appearance:textfield;}
 
-/* â”€â”€ Qty slider â”€â”€ */
+/* ── Qty slider ── */
 .qty-slider{width:100%;margin:.38rem 0 0;height:4px;-webkit-appearance:none;appearance:none;background:var(--c4);border-radius:2px;outline:none;cursor:pointer;display:block;}
 .qty-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid rgba(0,0,0,.5);box-shadow:0 1px 4px rgba(0,0,0,.4);}
 .qty-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid rgba(0,0,0,.5);}
 .qty-slider::-webkit-slider-runnable-track{height:4px;border-radius:2px;}
 
-/* â”€â”€ Wizard header name input (persistent, all steps) â”€â”€ */
+/* ── Wizard header name input (persistent, all steps) ── */
 .wiz-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;padding-bottom:.85rem;border-bottom:1px solid rgba(229,62,62,.15);}
 .wiz-name-inp{flex:1;font-size:1.05rem;font-weight:700;border-color:rgba(255,255,255,.07);background:rgba(255,255,255,.03);}
 .wiz-name-inp:focus{border-color:var(--gold);}
 .wiz-name-inp::placeholder{color:var(--t2);font-weight:400;font-size:.88rem;font-style:italic;}
 
-/* â”€â”€ Step 3 side panel layout â”€â”€ */
+/* ── Step 3 side panel layout ── */
 .step3-wrap{display:grid;grid-template-columns:1fr 310px;gap:.75rem;align-items:start;}
 .step3-list{max-height:calc(90vh - 210px);overflow-y:auto;padding-right:3px;}
 @media(max-width:700px){.step3-wrap{grid-template-columns:1fr;}.step3-list{max-height:340px;}}
@@ -300,33 +300,33 @@ input[type=number]{-moz-appearance:textfield;}
 .charm-badge{display:flex;align-items:center;gap:.2rem;padding:.12rem .38rem;border-radius:6px;font-size:.65rem;font-weight:700;}
 .charm-badge img{width:12px;height:12px;}
 
-/* â”€â”€ Imbu badge & disabled state â”€â”€ */
+/* ── Imbu badge & disabled state ── */
 .imbu-cnt-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;border-radius:8px;background:var(--gold);color:#0f172a;font-size:.6rem;font-weight:900;padding:0 3px;position:absolute;top:3px;right:3px;line-height:1;pointer-events:none;}
 .charm-opt.imbu-opt.on::after{display:none;}
 .charm-opt.imbu-max{opacity:.22;filter:grayscale(.9);cursor:not-allowed;pointer-events:none;}
 
-/* â”€â”€ Hunt card header â€” large ribbon â”€â”€ */
+/* ── Hunt card header — large ribbon ── */
 .hcard-hdr{background:linear-gradient(135deg,#1a1010,#2a1212);padding:1rem 1.2rem;display:flex;align-items:center;gap:.85rem;cursor:pointer;transition:background .15s;min-height:74px;}
 .hcard-hdr:hover{background:linear-gradient(135deg,#2a1010,#3a1616);}
 .hcard-picon{width:64px;height:64px;border-radius:10px;background:rgba(229,62,62,.1);border:1.5px solid rgba(229,62,62,.25);display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;flex-shrink:0;}
-/* Left info block â€” flex:1 so monsters go to the right */
+/* Left info block — flex:1 so monsters go to the right */
 .hcard-info{flex:1;min-width:0;}
 .hcard-name-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.15rem;}
 .hcard-name{font-size:1.15rem;font-weight:800;letter-spacing:.2px;}
 .hcard-voc-chip{font-size:.7rem;font-weight:700;padding:.18rem .5rem;border-radius:20px;background:rgba(229,62,62,.1);border:1px solid rgba(229,62,62,.22);color:var(--gold);white-space:nowrap;flex-shrink:0;}
 .hcard-sub{font-size:.68rem;color:var(--t1);}
-/* Right preview strip â€” monsters only, right-aligned */
+/* Right preview strip — monsters only, right-aligned */
 .hcard-preview{flex:0 0 auto;display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:flex-end;max-width:55%;}
 @media(max-width:480px){.hcard-preview{max-width:40%;}.hcard-name{font-size:.95rem;}.hcard-pv-gif-box{width:38px;height:38px;}.hcard-pv-gif{max-width:38px;max-height:38px;}}
 .hcard-pv-gif{height:48px;max-width:48px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(0,0,0,.5));}
 .hcard-pv-div{width:1px;height:28px;background:rgba(255,255,255,.13);margin:0 .05rem;flex-shrink:0;}
 .hcard-pv-more{font-size:.75rem;font-weight:800;color:var(--t1);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.2rem .45rem;flex-shrink:0;}
 .hcard-pv-sess{font-size:.7rem;font-weight:700;padding:.22rem .48rem;border-radius:20px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;white-space:nowrap;flex-shrink:0;}
-/* Expanded card item tags â€” bigger */
+/* Expanded card item tags — bigger */
 .hd-tag{display:flex;align-items:center;gap:.3rem;font-size:.82rem;font-weight:600;padding:.3rem .55rem;border-radius:8px;}
 .hd-qty{color:var(--gold);font-size:1rem;font-weight:800;}
 
-/* â”€â”€ Expanded card layout â”€â”€ */
+/* ── Expanded card layout ── */
 .hd-block{background:var(--c3);border-radius:9px;padding:.55rem .65rem;margin-bottom:.45rem;}
 .hd-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.38rem;}
 .hd-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
@@ -337,7 +337,7 @@ input[type=number]{-moz-appearance:textfield;}
 .mon-mini-name{font-size:.68rem;font-weight:700;color:var(--t0);margin-bottom:.22rem;line-height:1.25;min-height:2.5em;}
 .mon-mini-charm{display:flex;align-items:center;gap:.2rem;font-size:.6rem;font-weight:600;padding:.08rem .28rem;border-radius:5px;margin-bottom:.12rem;justify-content:center;}
 
-/* â”€â”€ Summary monsters compact grid â”€â”€ */
+/* ── Summary monsters compact grid ── */
 .sum-mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.48rem;}
 .sum-mon-compact{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.6rem;display:flex;gap:.55rem;align-items:flex-start;}
 .sum-mon-c-gif{width:50px;height:50px;border-radius:8px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
@@ -351,23 +351,23 @@ input[type=number]{-moz-appearance:textfield;}
 .sum-charm-sm img{width:15px;height:15px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
 .sum-no-charm-sm{font-size:.67rem;color:var(--t2);font-style:italic;}
 
-/* â”€â”€ Summary 2-column layout â”€â”€ */
+/* ── Summary 2-column layout ── */
 .sum-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start;}
 @media(max-width:680px){.sum-layout{grid-template-columns:1fr;}}
 
-/* â”€â”€ Monster card edit button â”€â”€ */
+/* ── Monster card edit button ── */
 .mon-edit{position:absolute;top:.4rem;right:1.9rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(59,130,246,.14);color:#93c5fd;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .mon-edit:hover{background:rgba(59,130,246,.28);}
 .mon-card.editing{border-color:rgba(59,130,246,.5);box-shadow:0 0 0 2px rgba(59,130,246,.15);}
 
-/* â”€â”€ Normalized GIF container (same size for all monsters) â”€â”€ */
+/* ── Normalized GIF container (same size for all monsters) ── */
 .hcard-pv-gif-box{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hcard-pv-gif{max-width:52px;max-height:52px;width:auto;height:auto;object-fit:contain;image-rendering:pixelated;}
 
-/* â”€â”€ Delete profile modal phrase input â”€â”€ */
+/* ── Delete profile modal phrase input ── */
 .del-phrase{font-size:1rem;font-weight:700;color:#fca5a5;font-style:italic;background:rgba(239,68,68,.07);border-radius:8px;padding:.55rem .75rem;margin:.5rem 0 .75rem;border:1px solid rgba(239,68,68,.2);letter-spacing:.3px;}
 
-/* â”€â”€ Wider modal adjustments â”€â”€ */
+/* ── Wider modal adjustments ── */
 /* step 2 spell scroll cap (many spells) */
 #spellGridWrap{max-height:calc(90vh - 260px);overflow-y:auto;}
 /* step 3 list */
@@ -381,7 +381,7 @@ input[type=number]{-moz-appearance:textfield;}
 /* runa grid wider columns */
 #runaGrid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));}
 
-/* â”€â”€ Pre-Hunt Checklist â”€â”€ */
+/* ── Pre-Hunt Checklist ── */
 .cl-toggle{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:400;background:var(--gold-g);color:#0f172a;border:none;border-radius:12px 0 0 12px;padding:.8rem .5rem;cursor:pointer;box-shadow:-4px 0 20px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:.32rem;transition:all .22s;font-weight:800;}
 .cl-toggle:hover{padding-left:.85rem;box-shadow:-6px 0 28px rgba(229,62,62,.55);}
 .cl-toggle-icon{font-size:1.15rem;line-height:1;}
@@ -443,7 +443,7 @@ input[type=number]{-moz-appearance:textfield;}
 <header>
   <div class="hdr">
     <div class="hdr-brand">
-      <span style="font-size:1.6rem;">âš”ï¸</span>
+      <span style="font-size:1.6rem;">⚔️</span>
       <div><div class="hdr-title">RESPAW3000</div><div class="hdr-sub">Hunt List Manager</div></div>
     </div>
     <div class="profiles-strip" id="profilesStrip"></div>
@@ -452,59 +452,59 @@ input[type=number]{-moz-appearance:textfield;}
 </header>
 
 <div class="unsaved" id="unsaved">
-  âš ï¸ AlteraÃ§Ãµes nÃ£o salvas
-  <button onclick="save()">ðŸ’¾ Salvar agora</button>
+  ⚠️ Alterações não salvas
+  <button onclick="save()">💾 Salvar agora</button>
 </div>
 
 <div class="wrap">
   <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;">
-    <button class="btn btn-g" onclick="openWizard()">âš”ï¸ Nova Hunt</button>
-    <button class="btn btn-o" onclick="save()">ðŸ’¾ Salvar</button>
-    <button class="btn btn-o" onclick="openCompare()">ðŸ“Š Comparar</button>
-    <button class="btn btn-o" onclick="exportJSON()" title="Baixar backup completo (.json)">ðŸ“¤ Exportar</button>
-    <button class="btn btn-o" onclick="importJSON()" title="Carregar backup (.json)">ðŸ“‚ Importar</button>
+    <button class="btn btn-g" onclick="openWizard()">⚔️ Nova Hunt</button>
+    <button class="btn btn-o" onclick="save()">💾 Salvar</button>
+    <button class="btn btn-o" onclick="openCompare()">📊 Comparar</button>
+    <button class="btn btn-o" onclick="exportJSON()" title="Baixar backup completo (.json)">📤 Exportar</button>
+    <button class="btn btn-o" onclick="importJSON()" title="Carregar backup (.json)">📂 Importar</button>
     <input type="file" id="importInput" accept=".json" style="display:none" onchange="handleImport(event)">
-    <button class="btn btn-del btn-sm" onclick="openDelProfile()" title="Apagar perfil e todas as hunts">ðŸ—‘ï¸ Apagar Perfil</button>
+    <button class="btn btn-del btn-sm" onclick="openDelProfile()" title="Apagar perfil e todas as hunts">🗑️ Apagar Perfil</button>
     <span style="flex:1"></span>
     <span id="profileLabel" style="font-size:.75rem;color:var(--t1);font-weight:600;cursor:pointer;" onclick="openGate()" title="Trocar perfil"></span>
   </div>
   <div id="huntList"></div>
   <div class="card" style="margin-top:1.5rem;">
-    <div class="ctitle">ðŸ“¤ Exportar / Importar</div>
+    <div class="ctitle">📤 Exportar / Importar</div>
     <div class="exp-grid">
-      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">ðŸ“¤</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Salva hunts, perfis e checklist em .json</div></div></button>
-      <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">ðŸ“‚</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Carrega um .json exportado anteriormente</div></div></button>
-      <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">ðŸ–¨ï¸</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">VersÃ£o visual para impressÃ£o</div></div></button>
+      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📤</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Salva hunts, perfis e checklist em .json</div></div></button>
+      <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">📂</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Carrega um .json exportado anteriormente</div></div></button>
+      <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">🖨️</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">Versão visual para impressão</div></div></button>
     </div>
   </div>
 </div>
 
-<!-- â•â• WIZARD â•â• -->
+<!-- ══ WIZARD ══ -->
 <div class="ov" id="wizOv">
   <div class="modal" style="max-width:min(1240px,95vw);">
-    <!-- Hunt name input â€” always visible, all steps -->
+    <!-- Hunt name input — always visible, all steps -->
     <div class="wiz-header">
-      <span style="font-size:1.4rem;flex-shrink:0;">âš”ï¸</span>
-      <input class="inp wiz-name-inp" id="wHuntName" placeholder="DÃª um nome Ã  sua nova hunt...">
+      <span style="font-size:1.4rem;flex-shrink:0;">⚔️</span>
+      <input class="inp wiz-name-inp" id="wHuntName" placeholder="Dê um nome à sua nova hunt...">
     </div>
     <div class="wiz-steps">
-      <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> ConsumÃ­veis</div>
+      <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> Consumíveis</div>
       <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Imbu &amp; Magias</div>
       <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Monstros</div>
     </div>
 
-    <!-- Step 1: PoÃ§Ãµes | Runas (side by side) -->
+    <!-- Step 1: Poções | Runas (side by side) -->
     <div class="wpanel" id="wp1">
       <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:1rem;align-items:start;">
         <!-- Pots -->
         <div>
-          <div class="sec-lbl">ðŸ’Š PoÃ§Ãµes <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
+          <div class="sec-lbl">💊 Poções <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
           <div class="charm-grid" id="potGrid"></div>
           <div id="potSel" style="margin-top:.4rem;"></div>
         </div>
         <!-- Runas -->
         <div>
-          <div class="sec-lbl">ðŸ“œ Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
+          <div class="sec-lbl">📜 Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
           <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
           <div id="runaSel" style="margin-top:.4rem;"></div>
         </div>
@@ -516,22 +516,22 @@ input[type=number]{-moz-appearance:textfield;}
       <div style="display:grid;grid-template-columns:230px 1fr;gap:1rem;align-items:start;">
         <!-- Imbu column -->
         <div>
-          <div class="sec-lbl">ðŸ›¡ï¸ Imbuements <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">ProteÃ§Ã£o elemental</span> <span id="imbuCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
-          <div style="font-size:.67rem;color:var(--t1);margin-bottom:.45rem;">MÃ¡x. 2 â€” clique para ciclar 0â†’1â†’2</div>
+          <div class="sec-lbl">🛡️ Imbuements <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">Proteção elemental</span> <span id="imbuCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+          <div style="font-size:.67rem;color:var(--t1);margin-bottom:.45rem;">Máx. 2 — clique para ciclar 0→1→2</div>
           <div class="charm-grid" style="grid-template-columns:repeat(2,1fr);" id="imbuGrid"></div>
         </div>
         <!-- Spells column -->
         <div>
-          <div class="sec-lbl">âœ¨ Magias <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">escolha sua vocaÃ§Ã£o</span> <span id="spellCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+          <div class="sec-lbl">✨ Magias <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">escolha sua vocação</span> <span id="spellCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
           <div class="voc-bar" id="vocBar" style="margin-bottom:.6rem;">
-            <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">ðŸŒ¿ Druid</button>
-            <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">ðŸ”® Sorcerer</button>
-            <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">âš”ï¸ Knight</button>
-            <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">ðŸ¹ Paladin</button>
-            <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">ðŸ¥‹ Monk</button>
+            <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
+            <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
+            <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
+            <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
+            <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
           </div>
           <div id="spellGridWrap">
-            <div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">â¬†ï¸ Selecione uma vocaÃ§Ã£o acima para ver as magias disponÃ­veis.</div>
+            <div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>
           </div>
         </div>
       </div>
@@ -542,7 +542,7 @@ input[type=number]{-moz-appearance:textfield;}
       <div class="step3-wrap">
         <!-- LEFT: add form -->
         <div class="step3-form">
-          <div class="sec-lbl">ðŸ‰ Adicionar Monstro</div>
+          <div class="sec-lbl">🐉 Adicionar Monstro</div>
           <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
             <div class="f">
               <label class="lbl">Nome do Monstro</label>
@@ -552,20 +552,20 @@ input[type=number]{-moz-appearance:textfield;}
               <label class="lbl">Link TibiaWiki</label>
               <div style="display:flex;gap:.4rem;">
                 <input class="inp" id="monWiki" placeholder="https://tibia.fandom.com/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
-                <button class="btn btn-o btn-sm" onclick="fetchGif()">ðŸ–¼ï¸ GIF</button>
+                <button class="btn btn-o btn-sm" onclick="fetchGif()">🖼️ GIF</button>
               </div>
               <div class="gif-load h" id="gifLoad"><div class="spin"></div> Buscando GIF...</div>
               <div class="url-preview" id="gifPreview">
                 <img id="gifImg" alt="">
-                <span style="font-size:.7rem;color:var(--green);">âœ“ GIF encontrado</span>
+                <span style="font-size:.7rem;color:var(--green);">✓ GIF encontrado</span>
               </div>
             </div>
             <div style="font-size:.68rem;color:var(--t1);margin-bottom:.5rem;padding:.28rem .45rem;background:rgba(229,62,62,.06);border-radius:6px;border:1px solid rgba(229,62,62,.12);">
-              âš ï¸ Charms em cinza jÃ¡ foram usados nesta hunt.
+              ⚠️ Charms em cinza já foram usados nesta hunt.
             </div>
             <div class="row">
               <div class="f">
-                <label class="lbl">â­ Major Charm</label>
+                <label class="lbl">⭐ Major Charm</label>
                 <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
                   <button class="charm-none-btn on" id="majorNoneBtn" onclick="selectCharm('major',null)">Nenhum</button>
                   <span style="font-size:.72rem;color:var(--t1);" id="majorCharmLabel"></span>
@@ -573,7 +573,7 @@ input[type=number]{-moz-appearance:textfield;}
                 <div class="charm-grid" id="majorCharmGrid"></div>
               </div>
               <div class="f">
-                <label class="lbl">ðŸ”® Minor Charm</label>
+                <label class="lbl">🔮 Minor Charm</label>
                 <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
                   <button class="charm-none-btn on" id="minorNoneBtn" onclick="selectCharm('minor',null)">Nenhum</button>
                   <span style="font-size:.72rem;color:var(--t1);" id="minorCharmLabel"></span>
@@ -582,61 +582,61 @@ input[type=number]{-moz-appearance:textfield;}
               </div>
             </div>
             <div style="display:flex;gap:.4rem;margin-top:.5rem;">
-              <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">âž• Adicionar</button>
-              <button class="btn btn-o btn-sm" onclick="clearMonForm()">ðŸ—‘ï¸ Limpar</button>
+              <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
+              <button class="btn btn-o btn-sm" onclick="clearMonForm()">🗑️ Limpar</button>
             </div>
           </div>
         </div>
         <!-- RIGHT: monster list -->
         <div class="step3-list">
-          <div class="sec-lbl">ðŸ“‹ Adicionados <span id="monCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+          <div class="sec-lbl">📋 Adicionados <span id="monCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
           <div id="monList"></div>
         </div>
       </div>
     </div>
 
     <div style="display:flex;gap:.4rem;margin-top:1.1rem;align-items:center;">
-      <button class="btn btn-o" id="wizBack" onclick="goStep(wiz.step-1)" style="display:none;">â† Voltar</button>
+      <button class="btn btn-o" id="wizBack" onclick="goStep(wiz.step-1)" style="display:none;">← Voltar</button>
       <span style="flex:1;font-size:.75rem;color:var(--t1);" id="wizPgLbl"></span>
       <button class="btn btn-o" onclick="closeWizard()">Cancelar</button>
-      <button class="btn btn-g" id="wizNext" onclick="wizNext()">PrÃ³ximo â†’</button>
+      <button class="btn btn-g" id="wizNext" onclick="wizNext()">Próximo →</button>
     </div>
   </div>
 </div>
 
-<!-- â•â• PROFILE MODAL â•â• -->
+<!-- ══ PROFILE MODAL ══ -->
 <div class="ov" id="profileOv">
   <div class="modal" style="max-width:380px;">
-    <div class="mtitle">ðŸ‘¤ <span id="profileMTitle">Novo Perfil</span></div>
+    <div class="mtitle">👤 <span id="profileMTitle">Novo Perfil</span></div>
     <div class="f">
       <label class="lbl">Nome do Personagem</label>
       <input class="inp" id="profileName" placeholder="Ex: Tibianus...">
     </div>
     <div class="f">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.38rem;">
-        <label class="lbl" style="margin-bottom:0;">ðŸ–¼ï¸ Imagem / GIF do Outfit</label>
-        <a href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank" class="outfitter-link">ðŸŽ¨ Outfitter â†’</a>
+        <label class="lbl" style="margin-bottom:0;">🖼️ Imagem / GIF do Outfit</label>
+        <a href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank" class="outfitter-link">🎨 Outfitter →</a>
       </div>
       <input class="inp" id="profileImgUrl" placeholder="Cole o link do GIF ou da URL do Outfitter..." oninput="previewProfileImg()">
       <div id="profileImgHint" style="font-size:.67rem;color:var(--t1);margin-top:.28rem;">Cole o link direto de uma imagem, ou a URL gerada pelo Outfitter para carregar o visual do personagem.</div>
       <div class="url-preview" id="profileImgPreview" style="margin-top:.45rem;">
         <img id="profileImgThumb" alt="" style="width:52px;height:52px;border-radius:8px;object-fit:contain;image-rendering:pixelated;border:2px solid rgba(229,62,62,.3);">
-        <span style="font-size:.72rem;color:var(--green);font-weight:600;">âœ“ Imagem carregada</span>
+        <span style="font-size:.72rem;color:var(--green);font-weight:600;">✓ Imagem carregada</span>
       </div>
       <!-- Outfitter iframe helper -->
       <div class="outfitter-helper" id="outfitterHelper">
         <div class="outfitter-helper-hdr">
-          <span style="font-size:.72rem;font-weight:800;color:var(--gold);">ðŸŽ¨ Outfitter detectado</span>
-          <button onclick="closeOutfitterHelper()" style="background:none;border:none;color:var(--t1);cursor:pointer;font-size:.78rem;font-weight:700;padding:.1rem .3rem;">âœ•</button>
+          <span style="font-size:.72rem;font-weight:800;color:var(--gold);">🎨 Outfitter detectado</span>
+          <button onclick="closeOutfitterHelper()" style="background:none;border:none;color:var(--t1);cursor:pointer;font-size:.78rem;font-weight:700;padding:.1rem .3rem;">✕</button>
         </div>
         <div class="outfitter-helper-tip">
-          ðŸ’¡ <strong>Clique com o botÃ£o direito</strong> na imagem do outfit abaixo â†’ <strong>"Copiar imagem"</strong> â†’ Cole no campo acima.<br>
+          💡 <strong>Clique com o botão direito</strong> na imagem do outfit abaixo → <strong>"Copiar imagem"</strong> → Cole no campo acima.<br>
           <span style="color:var(--t2);">Ou copie o link GIF direto se preferir salvar como URL.</span>
         </div>
         <iframe id="outfitterFrame" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
         <div class="outfitter-helper-ext">
-          <a id="outfitterExtLink" href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank">â†— Abrir em nova aba</a>
-          <span>Se o preview nÃ£o carregar, abra em nova aba e copie a imagem de lÃ¡.</span>
+          <a id="outfitterExtLink" href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank">↗ Abrir em nova aba</a>
+          <span>Se o preview não carregar, abra em nova aba e copie a imagem de lá.</span>
         </div>
       </div>
     </div>
@@ -647,11 +647,11 @@ input[type=number]{-moz-appearance:textfield;}
   </div>
 </div>
 
-<!-- â•â• SUMMARY MODAL â•â• -->
+<!-- ══ SUMMARY MODAL ══ -->
 <div class="ov" id="summaryOv">
   <div class="modal" style="max-width:min(1440px,97vw);">
     <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
-      <span style="font-size:1.4rem;">ðŸ“‹</span>
+      <span style="font-size:1.4rem;">📋</span>
       <div>
         <div style="font-size:1rem;font-weight:800;" id="sumHuntName"></div>
         <div style="font-size:.72rem;color:var(--t1);" id="sumHuntMeta"></div>
@@ -660,16 +660,16 @@ input[type=number]{-moz-appearance:textfield;}
     <div id="summaryContent"></div>
     <div class="macts">
       <button class="btn btn-o" onclick="closeSummary()">Fechar</button>
-      <button class="btn btn-o" id="sumCopyBtn" onclick="">ðŸ“‹ Copiar</button>
-      <button class="btn btn-g" onclick="exportPrint()">ðŸ–¨ï¸ Imprimir</button>
+      <button class="btn btn-o" id="sumCopyBtn" onclick="">📋 Copiar</button>
+      <button class="btn btn-g" onclick="exportPrint()">🖨️ Imprimir</button>
     </div>
   </div>
 </div>
 
-<!-- â•â• DELETE PROFILE MODAL â•â• -->
+<!-- ══ DELETE PROFILE MODAL ══ -->
 <div class="ov" id="delProfileOv">
   <div class="modal" style="max-width:420px;">
-    <div class="mtitle" style="color:#fca5a5;">âš ï¸ Apagar Perfil</div>
+    <div class="mtitle" style="color:#fca5a5;">⚠️ Apagar Perfil</div>
     <div id="delProfileInfo" style="font-size:.84rem;color:var(--t1);margin-bottom:1rem;line-height:1.5;"></div>
     <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:.85rem;">
       <div style="font-size:.73rem;color:var(--t1);margin-bottom:.3rem;">Para confirmar, escreva exatamente:</div>
@@ -678,40 +678,40 @@ input[type=number]{-moz-appearance:textfield;}
     </div>
     <div class="macts">
       <button class="btn btn-o" onclick="closeDelProfile()">Cancelar</button>
-      <button class="btn btn-del" id="delProfileConfirmBtn" onclick="confirmDeleteProfile()" disabled style="opacity:.35;cursor:not-allowed;">ðŸ—‘ï¸ Apagar tudo</button>
+      <button class="btn btn-del" id="delProfileConfirmBtn" onclick="confirmDeleteProfile()" disabled style="opacity:.35;cursor:not-allowed;">🗑️ Apagar tudo</button>
     </div>
   </div>
 </div>
 
-<!-- â•â• PROFILE GATE â•â• -->
+<!-- ══ PROFILE GATE ══ -->
 <div class="p-gate" id="profileGate" style="display:none;">
   <div class="p-gate-box">
     <div id="profileGateContent"></div>
   </div>
 </div>
 
-<!-- â•â• SESSIONS / KPI MODAL â•â• -->
+<!-- ══ SESSIONS / KPI MODAL ══ -->
 <div class="ov" id="sessOv">
   <div class="modal" style="max-width:700px;">
     <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
-      <span style="font-size:1.4rem;">ðŸ“Š</span>
+      <span style="font-size:1.4rem;">📊</span>
       <div style="flex:1;min-width:0;">
         <div style="font-size:1rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="sessHuntName"></div>
         <div style="font-size:.72rem;color:var(--t1);" id="sessHuntMeta"></div>
       </div>
-      <button class="btn btn-o btn-sm" onclick="closeSessModal()">âœ• Fechar</button>
+      <button class="btn btn-o btn-sm" onclick="closeSessModal()">✕ Fechar</button>
     </div>
     <div id="sessContent"></div>
   </div>
 </div>
 
-<!-- â•â• COMPARE MODAL â•â• -->
+<!-- ══ COMPARE MODAL ══ -->
 <div class="ov" id="compareOv">
   <div class="modal" style="max-width:680px;">
     <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
-      <span style="font-size:1.4rem;">ðŸ“Š</span>
+      <span style="font-size:1.4rem;">📊</span>
       <div style="font-size:1rem;font-weight:800;flex:1;">Comparar Hunts</div>
-      <button class="btn btn-o btn-sm" onclick="closeCompare()">âœ• Fechar</button>
+      <button class="btn btn-o btn-sm" onclick="closeCompare()">✕ Fechar</button>
     </div>
     <div id="compareContent"></div>
   </div>
@@ -719,19 +719,19 @@ input[type=number]{-moz-appearance:textfield;}
 
 <div class="toast" id="toast"></div>
 
-<!-- â•â• CHECKLIST TOGGLE â•â• -->
-<button class="cl-toggle" id="clToggle" onclick="toggleChecklist()" title="Checklist PrÃ©-Hunt">
-  <span class="cl-toggle-icon">ðŸŽ¯</span>
+<!-- ══ CHECKLIST TOGGLE ══ -->
+<button class="cl-toggle" id="clToggle" onclick="toggleChecklist()" title="Checklist Pré-Hunt">
+  <span class="cl-toggle-icon">🎯</span>
   <span class="cl-toggle-txt">check</span>
   <span class="cl-toggle-badge" id="clBadge">0/3</span>
 </button>
 
-<!-- â•â• CHECKLIST PANEL â•â• -->
+<!-- ══ CHECKLIST PANEL ══ -->
 <div class="cl-panel" id="clPanel">
   <div class="cl-head">
-    <span style="font-size:1.1rem;">ðŸŽ¯</span>
-    <div class="cl-head-title">Checklist PrÃ©-Hunt</div>
-    <button class="cl-close" onclick="toggleChecklist()" title="Fechar">âœ•</button>
+    <span style="font-size:1.1rem;">🎯</span>
+    <div class="cl-head-title">Checklist Pré-Hunt</div>
+    <button class="cl-close" onclick="toggleChecklist()" title="Fechar">✕</button>
   </div>
   <div class="cl-body" id="clBody">
     <div style="color:var(--t1);font-size:.8rem;padding:1rem 0;text-align:center;">Carregando...</div>
@@ -740,17 +740,17 @@ input[type=number]{-moz-appearance:textfield;}
     <div class="cl-prog-bar-wrap"><div class="cl-prog-bar" id="clProgBar" style="width:0%"></div></div>
     <div class="cl-foot-row">
       <div class="cl-prog-txt" id="clProgTxt"><strong>0</strong>/3 prontos</div>
-      <button class="btn btn-o btn-sm" onclick="resetChecklist()" style="flex-shrink:0;">ðŸ”„ Resetar</button>
+      <button class="btn btn-o btn-sm" onclick="resetChecklist()" style="flex-shrink:0;">🔄 Resetar</button>
     </div>
   </div>
 </div>
 
 <script>
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // FIXED DATA CONSTANTS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 
-const VOC_ICONS  = {druid:'ðŸŒ¿',sorcerer:'ðŸ”®',knight:'âš”ï¸',paladin:'ðŸ¹',monk:'ðŸ¥‹'};
+const VOC_ICONS  = {druid:'🌿',sorcerer:'🔮',knight:'⚔️',paladin:'🏹',monk:'🥋'};
 const VOC_LABELS = {druid:'Druid',sorcerer:'Sorcerer',knight:'Knight',paladin:'Paladin',monk:'Monk'};
 
 const MAJOR_CHARMS = [
@@ -827,17 +827,17 @@ const RUNES = [
   {id:'sio',  name:'Strong Ice Wave',     img:'https://tibia.fandom.com/wiki/Special:FilePath/Strong_Ice_Wave_Rune.gif'},
   {id:'gfr',  name:'Great Fireball',      img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Great_Fireball_Rune.gif/revision/latest?cb=20150720234444&path-prefix=en'},
 ];
-// Vibrancy removida (nÃ£o Ã© proteÃ§Ã£o elemental)
+// Vibrancy removida (não é proteção elemental)
 const IMBU_DEFENSE = [
-  {id:'drag', name:'Dragon Hide',    sub:'ProteÃ§Ã£o Fogo',    img:'https://static.wikia.nocookie.net/tibia/images/0/02/Dragon_Hide.png/revision/latest?cb=20200519100926&path-prefix=en'},
-  {id:'quar', name:'Quara Scale',    sub:'ProteÃ§Ã£o Gelo',    img:'https://static.wikia.nocookie.net/tibia/images/9/95/Quara_Scale.png/revision/latest?cb=20200519101056&path-prefix=en'},
-  {id:'clou', name:'Cloud Fabric',   sub:'ProteÃ§Ã£o Energia', img:'https://static.wikia.nocookie.net/tibia/images/3/3a/Cloud_Fabric.png/revision/latest?cb=20200519100856&path-prefix=en'},
-  {id:'snak', name:'Snake Skin',     sub:'ProteÃ§Ã£o Terra',   img:'https://static.wikia.nocookie.net/tibia/images/7/74/Snake_Skin.png/revision/latest?cb=20200519101005&path-prefix=en'},
-  {id:'lich', name:'Lich Shroud',    sub:'ProteÃ§Ã£o Morte',   img:'https://static.wikia.nocookie.net/tibia/images/3/37/Lich_Shroud.png/revision/latest?cb=20200519101029&path-prefix=en'},
-  {id:'demo', name:'Demon Presence', sub:'ProteÃ§Ã£o Holy',    img:'https://static.wikia.nocookie.net/tibia/images/4/4c/Demon_Presence.png/revision/latest?cb=20200519100823&path-prefix=en'},
+  {id:'drag', name:'Dragon Hide',    sub:'Proteção Fogo',    img:'https://static.wikia.nocookie.net/tibia/images/0/02/Dragon_Hide.png/revision/latest?cb=20200519100926&path-prefix=en'},
+  {id:'quar', name:'Quara Scale',    sub:'Proteção Gelo',    img:'https://static.wikia.nocookie.net/tibia/images/9/95/Quara_Scale.png/revision/latest?cb=20200519101056&path-prefix=en'},
+  {id:'clou', name:'Cloud Fabric',   sub:'Proteção Energia', img:'https://static.wikia.nocookie.net/tibia/images/3/3a/Cloud_Fabric.png/revision/latest?cb=20200519100856&path-prefix=en'},
+  {id:'snak', name:'Snake Skin',     sub:'Proteção Terra',   img:'https://static.wikia.nocookie.net/tibia/images/7/74/Snake_Skin.png/revision/latest?cb=20200519101005&path-prefix=en'},
+  {id:'lich', name:'Lich Shroud',    sub:'Proteção Morte',   img:'https://static.wikia.nocookie.net/tibia/images/3/37/Lich_Shroud.png/revision/latest?cb=20200519101029&path-prefix=en'},
+  {id:'demo', name:'Demon Presence', sub:'Proteção Holy',    img:'https://static.wikia.nocookie.net/tibia/images/4/4c/Demon_Presence.png/revision/latest?cb=20200519100823&path-prefix=en'},
 ];
 
-// Spells â€” instÃ¢ntÃ¢neas de ataque por vocaÃ§Ã£o
+// Spells — instântâneas de ataque por vocação
 // img via Special:FilePath redirect (funciona no browser)
 function spellImg(n){ return 'https://tibia.fandom.com/wiki/Special:FilePath/'+encodeURIComponent(n.replace(/ /g,'_'))+'.gif'; }
 const SPELLS = [
@@ -883,7 +883,7 @@ const SPELLS = [
   {id:'k_annihilation', name:'Annihilation',           words:'exori gran ico',     vocs:['knight'],            img:spellImg('Annihilation')},
   {id:'k_berserk',      name:'Berserk',                words:'exori',              vocs:['knight'],            img:spellImg('Berserk')},
   {id:'k_brutalstrike', name:'Brutal Strike',          words:'exori ico',          vocs:['knight'],            img:spellImg('Brutal Strike')},
-  {id:'k_combatmastery',name:'Combat Mastery',         words:'â€”',                  vocs:['knight'],            img:spellImg('Combat Mastery')},
+  {id:'k_combatmastery',name:'Combat Mastery',         words:'—',                  vocs:['knight'],            img:spellImg('Combat Mastery')},
   {id:'k_execthrow',    name:"Executioner's Throw",    words:'exori amp kor',      vocs:['knight'],            img:spellImg("Executioner's Throw")},
   {id:'k_fierceberserk',name:'Fierce Berserk',         words:'exori gran',         vocs:['knight'],            img:spellImg('Fierce Berserk')},
   {id:'k_frontsweep',   name:'Front Sweep',            words:'exori min',          vocs:['knight'],            img:spellImg('Front Sweep')},
@@ -912,17 +912,17 @@ const SPELLS = [
   {id:'p_sethspear',    name:'Strong Ethereal Spear',  words:'exori gran con',     vocs:['paladin'],           img:spellImg('Strong Ethereal Spear')},
 ];
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // STATE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 const KEY = 'respaw3000_v4';
 let state = { profiles:[], activeProfile:null, hunts:[] };
 let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null };
 let _activeTab = 'pot';
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // PERSIST
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function load(){
   try {
     const r=localStorage.getItem(KEY);
@@ -933,30 +933,30 @@ function load(){
     }
   } catch(e){}
 }
-function save(showToast=true){ localStorage.setItem(KEY,JSON.stringify(state)); hideUnsaved(); if(showToast) toast('ðŸ’¾ Salvo!'); }
+function save(showToast=true){ localStorage.setItem(KEY,JSON.stringify(state)); hideUnsaved(); if(showToast) toast('💾 Salvo!'); }
 function dirty(){ document.getElementById('unsaved').classList.add('on'); }
 function hideUnsaved(){ document.getElementById('unsaved').classList.remove('on'); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // HELPERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function fmtGold(n){
-  if(n===null||n===undefined||isNaN(n)) return 'â€”';
+  if(n===null||n===undefined||isNaN(n)) return '—';
   const abs=Math.abs(n);
   if(abs>=1000000) return (n/1000000).toFixed(1).replace('.0','')+'kk';
   if(abs>=1000) return Math.round(n/1000)+'k';
   return String(Math.round(n));
 }
 function fmtDur(mins){
-  if(!mins) return 'â€”';
+  if(!mins) return '—';
   const h=Math.floor(mins/60), m=mins%60;
   return h>0?(m>0?`${h}h ${m}m`:`${h}h`):`${m}m`;
 }
 function fmtDate(d){ if(!d) return ''; try{ const [y,mo,day]=d.split('-'); return `${day}/${mo}/${y}`; }catch(e){return d;} }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // PROFILE GATE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function openGate(){
   const gate=document.getElementById('profileGate');
   if(!state.profiles.length) renderGateNew(false);
@@ -969,11 +969,11 @@ function closeGate(){
 }
 function renderGateNew(showBack=false){
   document.getElementById('profileGateContent').innerHTML=`
-    ${showBack?`<button class="gate-back" onclick="renderGateSelect()">â† Voltar para perfis</button>`:''}
+    ${showBack?`<button class="gate-back" onclick="renderGateSelect()">← Voltar para perfis</button>`:''}
     <div class="gate-brand">
-      <div class="gate-logo">âš”ï¸</div>
+      <div class="gate-logo">⚔️</div>
       <div class="gate-title">RESPAW3000</div>
-      <div class="gate-sub">${showBack?'Crie um novo perfil de personagem.':'Bem-vindo! Crie seu perfil para comeÃ§ar a gerenciar suas hunts.'}</div>
+      <div class="gate-sub">${showBack?'Crie um novo perfil de personagem.':'Bem-vindo! Crie seu perfil para começar a gerenciar suas hunts.'}</div>
     </div>
     <div class="f">
       <label class="lbl">Nome do Personagem *</label>
@@ -981,14 +981,14 @@ function renderGateNew(showBack=false){
     </div>
     <div class="f">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;">
-        <label class="lbl" style="margin-bottom:0;">ðŸ–¼ï¸ GIF do Outfit (opcional)</label>
-        <a href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank" class="outfitter-link">ðŸŽ¨ Outfitter â†’</a>
+        <label class="lbl" style="margin-bottom:0;">🖼️ GIF do Outfit (opcional)</label>
+        <a href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank" class="outfitter-link">🎨 Outfitter →</a>
       </div>
       <input class="inp" id="gateImg" placeholder="Cole o link do GIF do seu personagem...">
       <div style="font-size:.67rem;color:var(--t1);margin-top:.25rem;">Use o Outfitter para gerar o GIF do seu outfit.</div>
     </div>
     <button class="btn btn-g" style="width:100%;justify-content:center;margin-top:.5rem;padding:.7rem;" onclick="createGateProfile()">
-      ${showBack?'Criar Perfil':'Criar Perfil e ComeÃ§ar â†’'}
+      ${showBack?'Criar Perfil':'Criar Perfil e Começar →'}
     </button>`;
   setTimeout(()=>{const n=document.getElementById('gateName');if(n)n.focus();},80);
 }
@@ -1000,16 +1000,16 @@ function renderGateSelect(){
     return `<div class="pcard" onclick="selectGateProfile('${p.id}')">
       <div class="pcard-av">${av}</div>
       <div style="flex:1;min-width:0;">
-        <div class="pcard-name">${p.name}${isLast?' <span style="font-size:.65rem;color:var(--gold);font-weight:600;">(Ãºltimo usado)</span>':''}</div>
+        <div class="pcard-name">${p.name}${isLast?' <span style="font-size:.65rem;color:var(--gold);font-weight:600;">(último usado)</span>':''}</div>
         <div class="pcard-sub">${hc} hunt${hc!==1?'s':''}</div>
       </div>
-      <button class="btn btn-o btn-sm" onclick="event.stopPropagation();editGateProfile('${p.id}')" title="Editar perfil" style="flex-shrink:0;padding:.25rem .5rem;font-size:.72rem;">âœï¸</button>
-      <span style="color:var(--t2);font-size:1.1rem;">â€º</span>
+      <button class="btn btn-o btn-sm" onclick="event.stopPropagation();editGateProfile('${p.id}')" title="Editar perfil" style="flex-shrink:0;padding:.25rem .5rem;font-size:.72rem;">✏️</button>
+      <span style="color:var(--t2);font-size:1.1rem;">›</span>
     </div>`;
   }).join('');
   document.getElementById('profileGateContent').innerHTML=`
     <div class="gate-brand">
-      <div class="gate-logo">âš”ï¸</div>
+      <div class="gate-logo">⚔️</div>
       <div class="gate-title">RESPAW3000</div>
       <div class="gate-sub">Bem-vindo de volta! Escolha seu personagem.</div>
     </div>
@@ -1019,7 +1019,7 @@ function renderGateSelect(){
 }
 function createGateProfile(){
   const name=document.getElementById('gateName').value.trim();
-  if(!name){toast('âš ï¸ Insira o nome do personagem');return;}
+  if(!name){toast('⚠️ Insira o nome do personagem');return;}
   const id='p_'+Date.now();
   const imgUrl=document.getElementById('gateImg').value.trim()||null;
   state.profiles.push({id,name,imgUrl});
@@ -1031,27 +1031,27 @@ function selectGateProfile(id){
   save(false); closeGate();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // TOAST
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 let _tt;
 function toast(m){ const el=document.getElementById('toast'); el.textContent=m; el.classList.add('on'); clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('on'),2400); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // PROFILES
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function renderProfiles(){
   const s=document.getElementById('profilesStrip'); s.innerHTML='';
   state.profiles.forEach(p=>{
     const c=document.createElement('div'); c.className='pchip'+(state.activeProfile===p.id?' on':'');
     c.onclick=()=>setProfile(p.id);
     c.innerHTML=(p.imgUrl?`<img src="${p.imgUrl}">`:'')+'<span>'+p.name+'</span>'+
-      `<button class="pchip-edit" onclick="event.stopPropagation();openProfileModal('${p.id}')" title="Editar perfil">âœï¸</button>`;
+      `<button class="pchip-edit" onclick="event.stopPropagation();openProfileModal('${p.id}')" title="Editar perfil">✏️</button>`;
     s.appendChild(c);
   });
   const lbl=document.getElementById('profileLabel');
   if(state.activeProfile){ const p=state.profiles.find(x=>x.id===state.activeProfile); lbl.textContent=p?`Perfil: ${p.name}`:''; }
-  else lbl.textContent=state.profiles.length?'':'Sem perfil â€” clique em + para criar';
+  else lbl.textContent=state.profiles.length?'':'Sem perfil — clique em + para criar';
 }
 function setProfile(id){ state.activeProfile=id; renderProfiles(); renderHunts(); dirty(); }
 function openProfileModal(editId=null){
@@ -1109,15 +1109,15 @@ function closeOutfitterHelper(){
   const inp=document.getElementById('profileImgUrl');
   if(inp){ inp.value=''; inp.focus(); }
   const hint=document.getElementById('profileImgHint');
-  if(hint){ hint.style.display=''; hint.textContent='âœ“ Agora cole a imagem copiada do Outfitter aqui (Ctrl+V)!'; hint.style.color='var(--green)'; }
+  if(hint){ hint.style.display=''; hint.textContent='✓ Agora cole a imagem copiada do Outfitter aqui (Ctrl+V)!'; hint.style.color='var(--green)'; }
 }
-function saveProfile(){ const name=document.getElementById('profileName').value.trim(); if(!name){toast('âš ï¸ Insira um nome');return;} const id='p_'+Date.now(); const imgUrl=document.getElementById('profileImgUrl').value.trim()||null; state.profiles.push({id,name,imgUrl}); if(!state.activeProfile) state.activeProfile=id; closeProfileModal(); renderProfiles(); dirty(); toast('âœ… Perfil criado!'); }
-function updateProfile(editId){ const name=document.getElementById('profileName').value.trim(); if(!name){toast('âš ï¸ Insira um nome');return;} const p=state.profiles.find(x=>x.id===editId); if(p){p.name=name;p.imgUrl=document.getElementById('profileImgUrl').value.trim()||null;} closeProfileModal(); renderProfiles(); renderHunts(); dirty(); toast('âœ… Perfil atualizado!'); }
+function saveProfile(){ const name=document.getElementById('profileName').value.trim(); if(!name){toast('⚠️ Insira um nome');return;} const id='p_'+Date.now(); const imgUrl=document.getElementById('profileImgUrl').value.trim()||null; state.profiles.push({id,name,imgUrl}); if(!state.activeProfile) state.activeProfile=id; closeProfileModal(); renderProfiles(); dirty(); toast('✅ Perfil criado!'); }
+function updateProfile(editId){ const name=document.getElementById('profileName').value.trim(); if(!name){toast('⚠️ Insira um nome');return;} const p=state.profiles.find(x=>x.id===editId); if(p){p.name=name;p.imgUrl=document.getElementById('profileImgUrl').value.trim()||null;} closeProfileModal(); renderProfiles(); renderHunts(); dirty(); toast('✅ Perfil atualizado!'); }
 function editGateProfile(id){ document.getElementById('profileGate').style.display='none'; openProfileModal(id); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // TABS (step 1)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function switchTab(tab){
   _activeTab=tab;
   document.getElementById('tabPanelPot').classList.toggle('on',tab==='pot');
@@ -1126,9 +1126,9 @@ function switchTab(tab){
   document.getElementById('tabBtnRuna').classList.toggle('on',tab==='runa');
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // GRID: POTIONS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function renderPotGrid(){
   const grid=document.getElementById('potGrid'); grid.innerHTML='';
   POTIONS.forEach(p=>{
@@ -1155,9 +1155,9 @@ function renderPotSel(){
       <div style="flex:1;min-width:0;">
         <div class="sel-name">${x.name}</div>
         <div class="qty-row" style="margin-top:.3rem;">
-          <button class="qb" onclick="adjPot('${x.id}',-1000)">âˆ’1k</button>
-          <button class="qb" onclick="adjPot('${x.id}',-100)">âˆ’100</button>
-          <button class="qb main" onclick="adjPot('${x.id}',-1)">âˆ’</button>
+          <button class="qb" onclick="adjPot('${x.id}',-1000)">−1k</button>
+          <button class="qb" onclick="adjPot('${x.id}',-100)">−100</button>
+          <button class="qb main" onclick="adjPot('${x.id}',-1)">−</button>
           <input class="qi" type="number" value="${x.qty}" min="0" onchange="syncPot('${x.id}',this)">
           <button class="qb main" onclick="adjPot('${x.id}',1)">+</button>
           <button class="qb" onclick="adjPot('${x.id}',100)">+100</button>
@@ -1165,7 +1165,7 @@ function renderPotSel(){
         </div>
         <input class="qty-slider" type="range" min="0" max="10000000" step="100000" value="${x.qty}" oninput="syncPot('${x.id}',this)">
       </div>
-      <button class="sel-rm" onclick="togglePot('${x.id}')" title="Remover" style="align-self:center;">âœ•</button>`;
+      <button class="sel-rm" onclick="togglePot('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
     el.appendChild(r);
   });
 }
@@ -1178,9 +1178,9 @@ function syncPot(id,srcEl){
   if(row){ const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider'); if(ni&&ni!==srcEl)ni.value=v; if(sl&&sl!==srcEl)sl.value=v; }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // GRID: RUNAS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function renderRunaGrid(){
   const grid=document.getElementById('runaGrid'); grid.innerHTML='';
   RUNES.forEach(p=>{
@@ -1207,9 +1207,9 @@ function renderRunaSel(){
       <div style="flex:1;min-width:0;">
         <div class="sel-name">${x.name}</div>
         <div class="qty-row" style="margin-top:.3rem;">
-          <button class="qb" onclick="adjRuna('${x.id}',-1000)">âˆ’1k</button>
-          <button class="qb" onclick="adjRuna('${x.id}',-100)">âˆ’100</button>
-          <button class="qb main" onclick="adjRuna('${x.id}',-1)">âˆ’</button>
+          <button class="qb" onclick="adjRuna('${x.id}',-1000)">−1k</button>
+          <button class="qb" onclick="adjRuna('${x.id}',-100)">−100</button>
+          <button class="qb main" onclick="adjRuna('${x.id}',-1)">−</button>
           <input class="qi" type="number" value="${x.qty}" min="0" onchange="syncRuna('${x.id}',this)">
           <button class="qb main" onclick="adjRuna('${x.id}',1)">+</button>
           <button class="qb" onclick="adjRuna('${x.id}',100)">+100</button>
@@ -1217,7 +1217,7 @@ function renderRunaSel(){
         </div>
         <input class="qty-slider" type="range" min="0" max="10000000" step="100000" value="${x.qty}" oninput="syncRuna('${x.id}',this)">
       </div>
-      <button class="sel-rm" onclick="toggleRuna('${x.id}')" title="Remover" style="align-self:center;">âœ•</button>`;
+      <button class="sel-rm" onclick="toggleRuna('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
     el.appendChild(r);
   });
 }
@@ -1230,9 +1230,9 @@ function syncRuna(id,srcEl){
   if(row){ const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider'); if(ni&&ni!==srcEl)ni.value=v; if(sl&&sl!==srcEl)sl.value=v; }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // GRID: IMBUEMENTS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function renderImbuGrid(){
   const grid=document.getElementById('imbuGrid'); grid.innerHTML='';
   const total=wiz.imbu.length;
@@ -1241,7 +1241,7 @@ function renderImbuGrid(){
     const isMaxed=total>=2&&cnt===0;
     const el=document.createElement('div');
     el.className='charm-opt imbu-opt'+(cnt>0?' on':'')+(isMaxed?' imbu-max':'');
-    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.sub}</div>${cnt>0?`<span class="imbu-cnt-badge">Ã—${cnt}</span>`:''}`;
+    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.sub}</div>${cnt>0?`<span class="imbu-cnt-badge">×${cnt}</span>`:''}`;
     if(!isMaxed) el.onclick=()=>toggleImbu(p.id);
     grid.appendChild(el);
   });
@@ -1252,15 +1252,15 @@ function toggleImbu(id){
   const p=IMBU_DEFENSE.find(x=>x.id===id); if(!p) return;
   const cnt=wiz.imbu.filter(x=>x.id===id).length;
   const total=wiz.imbu.length;
-  if(cnt===0){ if(total<2) wiz.imbu.push({...p}); else toast('âš ï¸ MÃ¡ximo 2 imbuements'); }
+  if(cnt===0){ if(total<2) wiz.imbu.push({...p}); else toast('⚠️ Máximo 2 imbuements'); }
   else if(cnt===1){ if(total<2) wiz.imbu.push({...p}); else { const i=wiz.imbu.findIndex(x=>x.id===id); wiz.imbu.splice(i,1); } }
   else { wiz.imbu=wiz.imbu.filter(x=>x.id!==id); }
   renderImbuGrid();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// VOCAÃ‡ÃƒO + SPELLS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
+// VOCAÇÃO + SPELLS
+// ══════════════════════════════════════════════════════
 function selectVocation(voc){
   // Drop spells that are not available for the new vocation (keep cross-voc ones if still valid)
   wiz.spells=wiz.spells.filter(s=>{ const sp=SPELLS.find(x=>x.id===s.id); return sp&&sp.vocs.includes(voc); });
@@ -1273,7 +1273,7 @@ function renderSpellGrid(){
   const wrap=document.getElementById('spellGridWrap'); wrap.innerHTML='';
   const badge=document.getElementById('spellCount');
   if(!wiz.vocation){
-    wrap.innerHTML='<div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">â¬†ï¸ Selecione uma vocaÃ§Ã£o acima para ver as magias disponÃ­veis.</div>';
+    wrap.innerHTML='<div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>';
     if(badge) badge.textContent='';
     return;
   }
@@ -1298,9 +1298,9 @@ function toggleSpell(id){
   renderSpellGrid();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// CHARMS â€” com detecÃ§Ã£o de conflito
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
+// CHARMS — com detecção de conflito
+// ══════════════════════════════════════════════════════
 let _selMajor=null, _selMinor=null;
 function getUsedCharmIds(type){
   return new Set(wiz.monsters.filter(m=>m.id!==wiz._editMonId).map(m=>type==='major'?m.majorCharm?.id:m.minorCharm?.id).filter(Boolean));
@@ -1312,7 +1312,7 @@ function buildCharmGrid(type){
   charms.forEach(c=>{
     const isUsed=usedIds.has(c.id);
     const el=document.createElement('div'); el.className='charm-opt'+(isUsed?' charm-used':''); el.id='copt_'+c.id;
-    if(isUsed) el.title='JÃ¡ utilizado em outro monstro desta hunt';
+    if(isUsed) el.title='Já utilizado em outro monstro desta hunt';
     el.innerHTML=`<div class="charm-opt-img"><img src="${c.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${c.name}</div>`;
     if(!isUsed) el.onclick=()=>selectCharm(type,c.id);
     grid.appendChild(el);
@@ -1329,9 +1329,9 @@ function selectCharm(type,id){
   else { noneBtn.classList.remove('on'); const el=document.getElementById('copt_'+id); if(el) el.classList.add('on'); const charm=charms.find(c=>c.id===id); lbl.textContent=charm?charm.name:''; }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // MONSTERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 let _gifTimer;
 function onMonWikiInput(){ clearTimeout(_gifTimer); _gifTimer=setTimeout(()=>{ if(document.getElementById('monWiki').value.trim()) autoFetchGif(); },850); }
 function onMonNameInput(){ const name=document.getElementById('monName').value.trim(); const wi=document.getElementById('monWiki'); if(name&&!wi.value.trim()) wi.value=`https://tibia.fandom.com/wiki/${encodeURIComponent(name.replace(/\s+/g,'_'))}`; }
@@ -1347,27 +1347,27 @@ async function autoFetchGif(){
   document.getElementById('gifPreview').classList.remove('on');
   const img=new Image();
   img.onload=()=>{ document.getElementById('gifLoad').classList.add('h'); document.getElementById('gifPreview').classList.add('on'); document.getElementById('gifImg').src=gifUrl; wiz._gif=gifUrl; };
-  img.onerror=()=>{ document.getElementById('gifLoad').classList.add('h'); wiz._gif=null; toast('âš ï¸ GIF nÃ£o encontrado automaticamente'); };
+  img.onerror=()=>{ document.getElementById('gifLoad').classList.add('h'); wiz._gif=null; toast('⚠️ GIF não encontrado automaticamente'); };
   img.src=gifUrl+'?cb='+Date.now();
 }
 function addMonster(){
-  const name=document.getElementById('monName').value.trim(); if(!name){toast('âš ï¸ Insira o nome do monstro');return;}
+  const name=document.getElementById('monName').value.trim(); if(!name){toast('⚠️ Insira o nome do monstro');return;}
   const majorCharm=MAJOR_CHARMS.find(c=>c.id===_selMajor)||null;
   const minorCharm=MINOR_CHARMS.find(c=>c.id===_selMinor)||null;
   if(wiz._editMonId){
     const idx=wiz.monsters.findIndex(m=>m.id===wiz._editMonId);
     if(idx>=0) wiz.monsters[idx]={id:wiz._editMonId,name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm};
-    renderMonList(); clearMonForm(); toast(`âœ… ${name} atualizado!`);
+    renderMonList(); clearMonForm(); toast(`✅ ${name} atualizado!`);
   } else {
     wiz.monsters.push({id:'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm});
-    renderMonList(); clearMonForm(); toast(`âœ… ${name} adicionado!`);
+    renderMonList(); clearMonForm(); toast(`✅ ${name} adicionado!`);
   }
 }
 function clearMonForm(){
   document.getElementById('monName').value=''; document.getElementById('monWiki').value='';
   document.getElementById('gifPreview').classList.remove('on'); document.getElementById('gifLoad').classList.add('h');
   wiz._gif=null; wiz._editMonId=null;
-  const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='âž• Adicionar';
+  const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='➕ Adicionar';
   // rebuild charm grids to reflect used charms
   buildCharmGrid('major'); buildCharmGrid('minor');
   selectCharm('major',null); selectCharm('minor',null);
@@ -1383,10 +1383,10 @@ function editMonster(id){
   buildCharmGrid('major'); buildCharmGrid('minor');
   selectCharm('major',m.majorCharm?.id||null);
   selectCharm('minor',m.minorCharm?.id||null);
-  const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='âœ“ Salvar';
+  const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='✓ Salvar';
   document.querySelectorAll('.mon-card').forEach(c=>c.classList.remove('editing'));
   wiz.monsters.forEach((mon,i)=>{ const cards=document.querySelectorAll('.mon-card'); if(mon.id===id&&cards[i]) cards[i].classList.add('editing'); });
-  toast(`âœï¸ Editando: ${m.name}`);
+  toast(`✏️ Editando: ${m.name}`);
 }
 function rmMon(id){ wiz.monsters=wiz.monsters.filter(m=>m.id!==id); renderMonList(); buildCharmGrid('major'); buildCharmGrid('minor'); }
 function renderMonList(){
@@ -1400,19 +1400,19 @@ function renderMonList(){
   if(badge) badge.textContent=`${wiz.monsters.length} monstro${wiz.monsters.length>1?'s':''}`;
   wiz.monsters.forEach(m=>{
     const c=document.createElement('div'); c.className='mon-card';
-    const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:`<span class="ph">ðŸ‰</span>`;
-    const wl=m.wikiUrl?`<a class="mon-link" href="${m.wikiUrl}" target="_blank">ðŸ“– TibiaWiki</a>`:'';
+    const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:`<span class="ph">🐉</span>`;
+    const wl=m.wikiUrl?`<a class="mon-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
     const maj=m.majorCharm?`<span class="charm-badge major"><img src="${m.majorCharm.img}">${m.majorCharm.name}</span>`:'';
     const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
-    c.innerHTML=`<div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div></div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">âœï¸</button><button class="mon-rm" onclick="rmMon('${m.id}')">âœ•</button>`;
+    c.innerHTML=`<div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div></div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
     el.appendChild(c);
   });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // WIZARD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function openWizard(editId=null){
   wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null};
   _selMajor=null; _selMinor=null; _activeTab='pot';
@@ -1446,7 +1446,7 @@ function setStep(n){
     d.classList.toggle('done',i<n);
   });
   document.getElementById('wizBack').style.display=n>1?'':'none';
-  document.getElementById('wizNext').textContent=n===3?(wiz.editId?'âœ“ Atualizar':'âœ“ Criar Hunt'):'PrÃ³ximo â†’';
+  document.getElementById('wizNext').textContent=n===3?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
   document.getElementById('wizPgLbl').textContent=`Passo ${n} de 3`;
   // show sticky name bar on steps 2 and 3
   const bar=document.getElementById('wizNameBar');
@@ -1467,12 +1467,12 @@ function setStep(n){
 function goStep(n){ if(n<1||n>3)return; setStep(n); }
 function wizNext(){
   if(wiz.step<3){
-    if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('âš ï¸ Insira o nome da hunt');return;}
+    if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('⚠️ Insira o nome da hunt');return;}
     setStep(wiz.step+1);
   } else saveHunt();
 }
 function saveHunt(){
-  const name=document.getElementById('wHuntName').value.trim(); if(!name){toast('âš ï¸ Insira o nome da hunt');return;}
+  const name=document.getElementById('wHuntName').value.trim(); if(!name){toast('⚠️ Insira o nome da hunt');return;}
   const isEdit=!!wiz.editId;
   const hunt={
     id:wiz.editId||('h_'+Date.now()),
@@ -1491,19 +1491,19 @@ function saveHunt(){
   else state.hunts.unshift(hunt);
   closeWizard(); renderHunts();
   save(false);
-  toast(isEdit?'âœ… Hunt atualizada!':'âš”ï¸ Hunt criada!');
+  toast(isEdit?'✅ Hunt atualizada!':'⚔️ Hunt criada!');
   setTimeout(()=>openSummary(hunt.id),350);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // SUMMARY MODAL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function openSummary(huntId){
   const h=state.hunts.find(x=>x.id===huntId); if(!h) return;
   document.getElementById('sumHuntName').textContent=h.name;
   const p=state.profiles.find(x=>x.id===h.profileId);
   const vocLabel=h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):'';
-  document.getElementById('sumHuntMeta').textContent=[p?p.name:'',vocLabel,new Date(h.createdAt).toLocaleDateString('pt-BR')].filter(Boolean).join(' Â· ');
+  document.getElementById('sumHuntMeta').textContent=[p?p.name:'',vocLabel,new Date(h.createdAt).toLocaleDateString('pt-BR')].filter(Boolean).join(' · ');
   document.getElementById('summaryContent').innerHTML=buildSummaryHTML(h);
   const copyBtn=document.getElementById('sumCopyBtn');
   if(copyBtn) copyBtn.onclick=()=>copySummaryToClipboard(huntId);
@@ -1513,45 +1513,45 @@ function closeSummary(){ document.getElementById('summaryOv').classList.remove('
 
 function buildSummaryHTML(h){
   const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length;
-  if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.9rem;">Hunt vazia â€” nenhum item configurado.</div>';
+  if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.9rem;">Hunt vazia — nenhum item configurado.</div>';
 
   let leftCol='';
   // Potions
   if((h.pots||[]).length){
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">ðŸ’Š PoÃ§Ãµes</div><div class="sum-items">`;
-    h.pots.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">ðŸ’Š</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">Ã—${x.qty}</span></div>`; });
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">💊 Poções</div><div class="sum-items">`;
+    h.pots.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">💊</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">×${x.qty}</span></div>`; });
     leftCol+='</div></div>';
   }
   // Runas
   if((h.runas||[]).length){
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">ðŸ“œ Runas</div><div class="sum-items">`;
-    h.runas.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">ðŸ“œ</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">Ã—${x.qty}</span></div>`; });
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">📜 Runas</div><div class="sum-items">`;
+    h.runas.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">📜</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">×${x.qty}</span></div>`; });
     leftCol+='</div></div>';
   }
-  // Imbuements (deduplicated, with Ã—2 badge when doubled)
+  // Imbuements (deduplicated, with ×2 badge when doubled)
   if((h.imbu||[]).length){
     const imbuMap={};
     (h.imbu||[]).forEach(x=>{ if(!imbuMap[x.id]) imbuMap[x.id]={...x,cnt:0}; imbuMap[x.id].cnt++; });
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">ðŸ›¡ï¸ Imbuements de Defesa</div><div class="sum-items">`;
-    Object.values(imbuMap).forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">ðŸ›¡ï¸</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub">${x.sub||''}</div></div>${x.cnt>1?`<span class="sum-item-qty">Ã—${x.cnt}</span>`:''}</div>`; });
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">🛡️ Imbuements de Defesa</div><div class="sum-items">`;
+    Object.values(imbuMap).forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">🛡️</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub">${x.sub||''}</div></div>${x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`; });
     leftCol+='</div></div>';
   }
   // Spells
   if((h.spells||[]).length){
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">âœ¨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items">`;
-    h.spells.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">âœ¨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">✨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items">`;
+    h.spells.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
     leftCol+='</div></div>';
   }
 
-  // Right column â€” Monsters compact grid
+  // Right column — Monsters compact grid
   let rightCol='';
   if((h.monsters||[]).length){
-    rightCol+=`<div class="sum-sec"><div class="sum-sec-lbl">ðŸ‰ Monstros (${h.monsters.length})</div><div class="sum-mon-grid">`;
+    rightCol+=`<div class="sum-sec"><div class="sum-sec-lbl">🐉 Monstros (${h.monsters.length})</div><div class="sum-mon-grid">`;
     h.monsters.forEach(m=>{
-      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.8rem;opacity:.35;">ðŸ‰</span>';
-      const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">ðŸ“– TibiaWiki</a>`:'';
-      const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">â­ ${m.majorCharm.name}</div>`:'';
-      const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">ðŸ”® ${m.minorCharm.name}</div>`:'';
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.8rem;opacity:.35;">🐉</span>';
+      const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
+      const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">⭐ ${m.majorCharm.name}</div>`:'';
+      const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">🔮 ${m.minorCharm.name}</div>`:'';
       const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
       rightCol+=`<div class="sum-mon-compact"><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}</div></div>`;
     });
@@ -1564,13 +1564,13 @@ function buildSummaryHTML(h){
   return `<div class="sum-layout"><div>${leftCol}</div><div>${rightCol}</div></div>`;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // HUNT LIST
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function renderHunts(){
   const el=document.getElementById('huntList');
   const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
-  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico">âš”ï¸</div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.83rem;">Clique em "Nova Hunt" para comeÃ§ar.</div></div>'; return; }
+  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico">⚔️</div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.83rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
   el.innerHTML='';
   hunts.forEach(h=>{
     const p=state.profiles.find(x=>x.id===h.profileId);
@@ -1580,7 +1580,7 @@ function renderHunts(){
     const pills=buildPreviewStrip(h,sessCount);
 
     function mkTags(arr,bg,bc,hasQty){
-      return (arr||[]).map(x=>`<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${(x.img||x.imgUrl)?`<img src="${x.img||x.imgUrl}" alt="" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;">`:''}${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">Ã—${x.qty}</strong>`:''}</div>`).join('');
+      return (arr||[]).map(x=>`<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${(x.img||x.imgUrl)?`<img src="${x.img||x.imgUrl}" alt="" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;">`:''}${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">×${x.qty}</strong>`:''}</div>`).join('');
     }
     const potTags  =mkTags(h.pots,  'rgba(16,185,129,.1)','rgba(16,185,129,.3)',true);
     const runaTags =mkTags(h.runas, 'rgba(59,130,246,.1)', 'rgba(59,130,246,.3)',true);
@@ -1588,7 +1588,7 @@ function renderHunts(){
     const spellTags=mkTags(h.spells,'rgba(229,62,62,.1)','rgba(229,62,62,.3)',false);
 
     const monGrid=(h.monsters||[]).map(m=>{
-      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:'<span style="font-size:2rem;opacity:.35;">ðŸ‰</span>';
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:'<span style="font-size:2rem;opacity:.35;">🐉</span>';
       const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
@@ -1602,36 +1602,36 @@ function renderHunts(){
         ${pIcon}
         <div class="hcard-info">
           <div class="hcard-name-row"><span class="hcard-name">${h.name}</span>${vocChip}</div>
-          <div class="hcard-sub">${p?p.name:'Sem perfil'} Â· ${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
+          <div class="hcard-sub">${p?p.name:'Sem perfil'} · ${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
         </div>
         ${pills}
-        <span style="color:var(--t1);font-size:.9rem;flex-shrink:0;">â–¾</span>
+        <span style="color:var(--t1);font-size:.9rem;flex-shrink:0;">▾</span>
       </div>
       <div class="hcard-body" id="${bodyId}">
-        ${potTags?`<div class="hd-block"><div class="hd-lbl">ðŸ’Š PoÃ§Ãµes</div><div class="hd-tags">${potTags}</div></div>`:''}
-        ${runaTags?`<div class="hd-block"><div class="hd-lbl">ðŸ“œ Runas</div><div class="hd-tags">${runaTags}</div></div>`:''}
-        ${imbuTags?`<div class="hd-block"><div class="hd-lbl">ðŸ›¡ï¸ Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
-        ${spellTags?`<div class="hd-block"><div class="hd-lbl">âœ¨ Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
-        ${monGrid?`<div class="hd-block"><div class="hd-lbl">ðŸ‰ Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
+        ${potTags?`<div class="hd-block"><div class="hd-lbl">💊 Poções</div><div class="hd-tags">${potTags}</div></div>`:''}
+        ${runaTags?`<div class="hd-block"><div class="hd-lbl">📜 Runas</div><div class="hd-tags">${runaTags}</div></div>`:''}
+        ${imbuTags?`<div class="hd-block"><div class="hd-lbl">🛡️ Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
+        ${spellTags?`<div class="hd-block"><div class="hd-lbl">✨ Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
+        ${monGrid?`<div class="hd-block"><div class="hd-lbl">🐉 Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
       </div>
       <div class="hcard-acts">
-        <button class="btn btn-o btn-sm" onclick="openWizard('${h.id}')">âœï¸ Editar</button>
-        <button class="btn btn-del btn-sm" onclick="rmHunt('${h.id}')">ðŸ—‘ï¸ Remover</button>
+        <button class="btn btn-o btn-sm" onclick="openWizard('${h.id}')">✏️ Editar</button>
+        <button class="btn btn-del btn-sm" onclick="rmHunt('${h.id}')">🗑️ Remover</button>
         <span style="flex:1"></span>
-        <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">ðŸ“Š SessÃµes${sessCount>0?` (${sessCount})`:''}</button>
-        <button class="btn btn-o btn-sm" onclick="openSummary('${h.id}')">ðŸ‘ï¸ Resumo</button>
-        <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">ðŸ“‹ Duplicar</button>
+        <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">📊 Sessões${sessCount>0?` (${sessCount})`:''}</button>
+        <button class="btn btn-o btn-sm" onclick="openSummary('${h.id}')">👁️ Resumo</button>
+        <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">📋 Duplicar</button>
       </div>`;
     el.appendChild(c);
   });
 }
 function toggleBody(id){ document.getElementById(id).classList.toggle('on'); }
-function rmHunt(id){ if(!confirm('Remover esta hunt?'))return; state.hunts=state.hunts.filter(h=>h.id!==id); renderHunts(); dirty(); toast('ðŸ—‘ï¸ Hunt removida'); }
-function dupHunt(id){ const h=state.hunts.find(x=>x.id===id); if(!h)return; const copy=JSON.parse(JSON.stringify(h)); copy.id='h_'+Date.now(); copy.name=h.name+' (cÃ³pia)'; copy.createdAt=copy.updatedAt=Date.now(); state.hunts.unshift(copy); renderHunts(); dirty(); toast('ðŸ“‹ Duplicada!'); }
+function rmHunt(id){ if(!confirm('Remover esta hunt?'))return; state.hunts=state.hunts.filter(h=>h.id!==id); renderHunts(); dirty(); toast('🗑️ Hunt removida'); }
+function dupHunt(id){ const h=state.hunts.find(x=>x.id===id); if(!h)return; const copy=JSON.parse(JSON.stringify(h)); copy.id='h_'+Date.now(); copy.name=h.name+' (cópia)'; copy.createdAt=copy.updatedAt=Date.now(); state.hunts.unshift(copy); renderHunts(); dirty(); toast('📋 Duplicada!'); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // EXPORT / IMPORT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function exportJSON(){
   const backup={ version:2, exportedAt:new Date().toISOString(), state, checklist:cl };
   const b=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
@@ -1640,7 +1640,7 @@ function exportJSON(){
   a.download=`respaw3000_backup_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-  toast('ðŸ“¤ Backup exportado!');
+  toast('📤 Backup exportado!');
 }
 function importJSON(){ document.getElementById('importInput').click(); }
 function handleImport(e){
@@ -1652,40 +1652,40 @@ function handleImport(e){
       // Support both old format (plain state) and new format (wrapper with version)
       const newState = d.version===2 ? d.state : d;
       const newCl    = d.version===2 ? d.checklist : null;
-      if(!newState?.hunts){ toast('âŒ Arquivo invÃ¡lido'); return; }
+      if(!newState?.hunts){ toast('❌ Arquivo inválido'); return; }
       if(confirm('Isso vai substituir todos os dados atuais. Continuar?')){
         state=newState;
         if(newCl){ cl=newCl; clSave(); clLoad(); clUpdateBadge(); renderChecklist(); }
         renderProfiles(); renderHunts(); save();
-        toast('ðŸ“‚ Backup importado com sucesso!');
+        toast('📂 Backup importado com sucesso!');
       }
-    }catch{ toast('âŒ Erro ao ler arquivo'); }
+    }catch{ toast('❌ Erro ao ler arquivo'); }
     e.target.value='';
   };
   r.readAsText(f);
 }
 function exportPrint(){
   const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
-  if(!hunts.length){toast('âš ï¸ Nenhuma hunt');return;}
+  if(!hunts.length){toast('⚠️ Nenhuma hunt');return;}
   const p=state.activeProfile?state.profiles.find(x=>x.id===state.activeProfile):null;
   let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>[CRIMSON] RESPAW3000</title>
 <style>body{font-family:Arial,sans-serif;padding:2rem;max-width:820px;margin:0 auto;color:#111;}h1{font-size:1.5rem;margin-bottom:.2rem;}.sub{color:#666;font-size:.85rem;margin-bottom:2rem;}.hunt{border:1px solid #ddd;border-radius:8px;padding:1rem;margin-bottom:1.5rem;page-break-inside:avoid;}.hname{font-size:1.1rem;font-weight:700;border-bottom:2px solid #f59e0b;padding-bottom:.3rem;margin-bottom:.75rem;}.sec{margin-bottom:.6rem;}.lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;color:#666;font-weight:700;margin-bottom:.3rem;}.items{display:flex;gap:.3rem;flex-wrap:wrap;}.item{display:flex;align-items:center;gap:.25rem;padding:.22rem .5rem;border-radius:6px;background:#f5f5f5;font-size:.76rem;font-weight:600;}.item img{height:18px;object-fit:contain;}.qty{color:#b45309;font-weight:800;margin-left:.15rem;}.mons{display:flex;gap:.5rem;flex-wrap:wrap;}.mon{text-align:center;border:1px solid #eee;border-radius:8px;padding:.5rem;min-width:90px;}.mon img.gif{height:52px;display:block;margin:0 auto .3rem;object-fit:contain;}.monname{font-size:.75rem;font-weight:700;}.mcharms{font-size:.65rem;margin-top:.2rem;}.charm-lbl{display:inline-block;padding:.1rem .3rem;border-radius:4px;font-size:.62rem;font-weight:700;margin:.1rem;}.charm-maj{background:#fef3c7;color:#92400e;}.charm-min{background:#ede9fe;color:#5b21b6;}@media print{.hunt{break-inside:avoid;}}</style></head><body>
-<h1>âš”ï¸ RESPAW3000 â€” Hunt List</h1><div class="sub">${p?`Perfil: ${p.name} Â· `:''}${new Date().toLocaleDateString('pt-BR')}</div>`;
+<h1>⚔️ RESPAW3000 — Hunt List</h1><div class="sub">${p?`Perfil: ${p.name} · `:''}${new Date().toLocaleDateString('pt-BR')}</div>`;
   hunts.forEach(h=>{
-    const pot=(h.pots||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'ðŸ’Š'} ${x.name}<span class="qty">Ã—${x.qty}</span></span>`).join('');
-    const run=(h.runas||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'ðŸ“œ'} ${x.name}<span class="qty">Ã—${x.qty}</span></span>`).join('');
-    const imb=(h.imbu||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'ðŸ›¡ï¸'} ${x.name}</span>`).join('');
-    const sp=(h.spells||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'âœ¨'} ${x.name}</span>`).join('');
-    const mons=(h.monsters||[]).map(m=>`<div class="mon">${m.gifUrl?`<img class="gif" src="${m.gifUrl}" alt="">`:'ðŸ‰'}<div class="monname">${m.name}</div><div class="mcharms">${m.majorCharm?`<span class="charm-lbl charm-maj">â­ ${m.majorCharm.name}</span>`:''} ${m.minorCharm?`<span class="charm-lbl charm-min">ðŸ”® ${m.minorCharm.name}</span>`:''}</div></div>`).join('');
-    html+=`<div class="hunt"><div class="hname">${h.name}${h.vocation?` <span style="font-size:.8rem;font-weight:400;color:#666;">(${VOC_LABELS[h.vocation]})</span>`:''}</div>${pot?`<div class="sec"><div class="lbl">PoÃ§Ãµes</div><div class="items">${pot}</div></div>`:''}${run?`<div class="sec"><div class="lbl">Runas</div><div class="items">${run}</div></div>`:''}${imb?`<div class="sec"><div class="lbl">Imbuements</div><div class="items">${imb}</div></div>`:''}${sp?`<div class="sec"><div class="lbl">Magias</div><div class="items">${sp}</div></div>`:''}${mons?`<div class="sec"><div class="lbl">Monstros</div><div class="mons">${mons}</div></div>`:''}</div>`;
+    const pot=(h.pots||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'💊'} ${x.name}<span class="qty">×${x.qty}</span></span>`).join('');
+    const run=(h.runas||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'📜'} ${x.name}<span class="qty">×${x.qty}</span></span>`).join('');
+    const imb=(h.imbu||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'🛡️'} ${x.name}</span>`).join('');
+    const sp=(h.spells||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'✨'} ${x.name}</span>`).join('');
+    const mons=(h.monsters||[]).map(m=>`<div class="mon">${m.gifUrl?`<img class="gif" src="${m.gifUrl}" alt="">`:'🐉'}<div class="monname">${m.name}</div><div class="mcharms">${m.majorCharm?`<span class="charm-lbl charm-maj">⭐ ${m.majorCharm.name}</span>`:''} ${m.minorCharm?`<span class="charm-lbl charm-min">🔮 ${m.minorCharm.name}</span>`:''}</div></div>`).join('');
+    html+=`<div class="hunt"><div class="hname">${h.name}${h.vocation?` <span style="font-size:.8rem;font-weight:400;color:#666;">(${VOC_LABELS[h.vocation]})</span>`:''}</div>${pot?`<div class="sec"><div class="lbl">Poções</div><div class="items">${pot}</div></div>`:''}${run?`<div class="sec"><div class="lbl">Runas</div><div class="items">${run}</div></div>`:''}${imb?`<div class="sec"><div class="lbl">Imbuements</div><div class="items">${imb}</div></div>`:''}${sp?`<div class="sec"><div class="lbl">Magias</div><div class="items">${sp}</div></div>`:''}${mons?`<div class="sec"><div class="lbl">Monstros</div><div class="mons">${mons}</div></div>`:''}</div>`;
   });
   html+='</body></html>';
   const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); setTimeout(()=>w.print(),500);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // KPI SESSIONS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 let _sessHuntId=null;
 
 function openSessModal(huntId){
@@ -1694,7 +1694,7 @@ function openSessModal(huntId){
   document.getElementById('sessHuntName').textContent=h.name;
   const p=state.profiles.find(x=>x.id===h.profileId);
   const vl=h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):'';
-  document.getElementById('sessHuntMeta').textContent=[p?.name,vl].filter(Boolean).join(' Â· ');
+  document.getElementById('sessHuntMeta').textContent=[p?.name,vl].filter(Boolean).join(' · ');
   renderSessContent();
   document.getElementById('sessOv').classList.add('on');
 }
@@ -1704,61 +1704,61 @@ function renderSessContent(){
   const h=state.hunts.find(x=>x.id===_sessHuntId); if(!h) return;
   const sessions=h.sessions||[];
 
-  // â”€â”€ KPI summary boxes â”€â”€
+  // ── KPI summary boxes ──
   let kpiHTML='';
   if(sessions.length){
     const st=calcSessStats(sessions);
     const boxes=[
-      {v:sessions.length,        l:'SessÃµes'},
+      {v:sessions.length,        l:'Sessões'},
       {v:fmtDur(st.totalMin),    l:'Tempo total'},
-      {v:fmtGold(st.avgGoldH)+'/h', l:'Gold/hora (mÃ©d.)'},
-      {v:st.avgXp?Math.round(st.avgXp)+'k/h':'â€”', l:'XP raw/h (mÃ©d.)'},
+      {v:fmtGold(st.avgGoldH)+'/h', l:'Gold/hora (méd.)'},
+      {v:st.avgXp?Math.round(st.avgXp)+'k/h':'—', l:'XP raw/h (méd.)'},
       st.hasNet?{v:fmtGold(st.avgNetH)+'/h',l:'Net profit/h'}:null,
-      st.avgKills?{v:Math.round(st.avgKills),l:'Kills/sessÃ£o (mÃ©d.)'}:null,
+      st.avgKills?{v:Math.round(st.avgKills),l:'Kills/sessão (méd.)'}:null,
     ].filter(Boolean);
     kpiHTML=`<div class="kpi-grid">${boxes.map(b=>`<div class="kpi-box"><div class="kpi-val">${b.v}</div><div class="kpi-lbl">${b.l}</div></div>`).join('')}</div>`;
   }
 
-  // â”€â”€ Add-session form â”€â”€
+  // ── Add-session form ──
   const today=new Date().toISOString().slice(0,10);
   const formHTML=`
   <details class="sess-form" id="sessFormDet">
-    <summary>Nova SessÃ£o <span style="font-size:.7rem;color:var(--t1);font-weight:400;">(expandir para registrar)</span></summary>
+    <summary>Nova Sessão <span style="font-size:.7rem;color:var(--t1);font-weight:400;">(expandir para registrar)</span></summary>
     <div class="sess-form-body">
       <div class="row">
         <div class="f"><label class="lbl">Data</label><input class="inp-sm" type="date" id="sfDate" value="${today}"></div>
-        <div class="f"><label class="lbl">DuraÃ§Ã£o (min)</label><input class="inp-sm" type="number" id="sfDur" placeholder="Ex: 60" min="1" max="999"></div>
+        <div class="f"><label class="lbl">Duração (min)</label><input class="inp-sm" type="number" id="sfDur" placeholder="Ex: 60" min="1" max="999"></div>
         <div class="f"><label class="lbl">Grupo</label>
           <select class="inp-sm" id="sfParty" onchange="updateCompanionFields()">
-            <option value="1">ðŸ‘¤ Solo</option>
-            <option value="2">ðŸ‘¥ Dupla</option>
-            <option value="3">ðŸ‘¥ Trio</option>
-            <option value="4">ðŸ‘¥ 4 players</option>
-            <option value="5">ðŸ‘¥ 5 players</option>
+            <option value="1">👤 Solo</option>
+            <option value="2">👥 Dupla</option>
+            <option value="3">👥 Trio</option>
+            <option value="4">👥 4 players</option>
+            <option value="5">👥 5 players</option>
           </select>
         </div>
       </div>
       <div id="companionFields"></div>
       <div class="row">
-        <div class="f"><label class="lbl">ðŸ’° Gold bruto</label><input class="inp-sm" type="number" id="sfGold" placeholder="Ex: 500000" min="0"></div>
-        <div class="f"><label class="lbl">ðŸ’Š Supplies gastos</label><input class="inp-sm" type="number" id="sfSup" placeholder="Opcional" min="0"></div>
-        <div class="f"><label class="lbl">âœ¨ XP raw (k/h)</label><input class="inp-sm" type="number" id="sfXp" placeholder="Ex: 3500" min="0"></div>
+        <div class="f"><label class="lbl">💰 Gold bruto</label><input class="inp-sm" type="number" id="sfGold" placeholder="Ex: 500000" min="0"></div>
+        <div class="f"><label class="lbl">💊 Supplies gastos</label><input class="inp-sm" type="number" id="sfSup" placeholder="Opcional" min="0"></div>
+        <div class="f"><label class="lbl">✨ XP raw (k/h)</label><input class="inp-sm" type="number" id="sfXp" placeholder="Ex: 3500" min="0"></div>
       </div>
       <div class="row">
-        <div class="f"><label class="lbl">âš”ï¸ Kills</label><input class="inp-sm" type="number" id="sfKills" placeholder="Opcional" min="0"></div>
-        <div class="f"><label class="lbl">ðŸ’€ Mortes</label><input class="inp-sm" type="number" id="sfDeaths" placeholder="Opcional" min="0"></div>
+        <div class="f"><label class="lbl">⚔️ Kills</label><input class="inp-sm" type="number" id="sfKills" placeholder="Opcional" min="0"></div>
+        <div class="f"><label class="lbl">💀 Mortes</label><input class="inp-sm" type="number" id="sfDeaths" placeholder="Opcional" min="0"></div>
       </div>
-      <div class="f"><label class="lbl">ðŸ“ ComentÃ¡rio</label>
-        <textarea class="inp" id="sfComment" placeholder="Notas sobre essa sessÃ£o â€” pull, estratÃ©gia, bugs, etc..."></textarea>
+      <div class="f"><label class="lbl">📝 Comentário</label>
+        <textarea class="inp" id="sfComment" placeholder="Notas sobre essa sessão — pull, estratégia, bugs, etc..."></textarea>
       </div>
-      <button class="btn btn-g btn-sm" onclick="addSession()">âœ“ Salvar SessÃ£o</button>
+      <button class="btn btn-g btn-sm" onclick="addSession()">✓ Salvar Sessão</button>
     </div>
   </details>`;
 
-  // â”€â”€ Sessions list â”€â”€
+  // ── Sessions list ──
   let listHTML='';
   if(!sessions.length){
-    listHTML=`<div class="no-sess">ðŸ“‹ Nenhuma sessÃ£o registrada ainda.<br>Adicione a primeira sessÃ£o acima para comeÃ§ar a tracar seus KPIs!</div>`;
+    listHTML=`<div class="no-sess">📋 Nenhuma sessão registrada ainda.<br>Adicione a primeira sessão acima para começar a tracar seus KPIs!</div>`;
   } else {
     const sorted=[...sessions].sort((a,b)=>b.date.localeCompare(a.date));
     listHTML=sorted.map(s=>{
@@ -1766,22 +1766,22 @@ function renderSessContent(){
       const goldH=s.gold&&dh?fmtGold(Math.round(s.gold/dh)):null;
       const net=s.gold&&s.supplies!=null?s.gold-s.supplies:null;
       const netH=net!==null&&dh?fmtGold(Math.round(net/dh)):null;
-      const compNames=s.companions?.length?` Â· ${s.companions.map(c=>c.name).join(', ')}`:'';
-      const partyLbl=s.partySize>1?`ðŸ‘¥ ${s.partySize} players${compNames}`:'ðŸ‘¤ Solo';
+      const compNames=s.companions?.length?` · ${s.companions.map(c=>c.name).join(', ')}`:'';
+      const partyLbl=s.partySize>1?`👥 ${s.partySize} players${compNames}`:'👤 Solo';
       const stats=[
-        s.duration?`â±ï¸ <span>${fmtDur(s.duration)}</span>`:null,
-        s.gold?`ðŸ’° <span>${fmtGold(s.gold)}</span>`:null,
-        goldH?`ðŸ’°/h <span>${goldH}</span>`:null,
-        s.supplies!=null&&s.supplies>0?`ðŸ’Š <span>-${fmtGold(s.supplies)}</span>`:null,
-        net!==null?`ðŸ“ˆ Net <span>${fmtGold(net)}</span>`:null,
-        netH?`ðŸ“ˆ/h <span>${netH}</span>`:null,
-        s.xpRaw?`âœ¨ <span>${s.xpRaw}k/h</span>`:null,
-        s.kills?`âš”ï¸ <span>${s.kills} kills</span>`:null,
-        s.deaths!=null&&s.deaths>=0?`ðŸ’€ <span>${s.deaths} morte${s.deaths!==1?'s':''}</span>`:null,
+        s.duration?`⏱️ <span>${fmtDur(s.duration)}</span>`:null,
+        s.gold?`💰 <span>${fmtGold(s.gold)}</span>`:null,
+        goldH?`💰/h <span>${goldH}</span>`:null,
+        s.supplies!=null&&s.supplies>0?`💊 <span>-${fmtGold(s.supplies)}</span>`:null,
+        net!==null?`📈 Net <span>${fmtGold(net)}</span>`:null,
+        netH?`📈/h <span>${netH}</span>`:null,
+        s.xpRaw?`✨ <span>${s.xpRaw}k/h</span>`:null,
+        s.kills?`⚔️ <span>${s.kills} kills</span>`:null,
+        s.deaths!=null&&s.deaths>=0?`💀 <span>${s.deaths} morte${s.deaths!==1?'s':''}</span>`:null,
       ].filter(Boolean);
       return `<div class="sess-row">
-        <button class="sess-rm" onclick="rmSession('${s.id}')" title="Remover sessÃ£o">âœ•</button>
-        <div class="sess-date">ðŸ“… ${fmtDate(s.date)} &nbsp;Â·&nbsp; ${partyLbl}</div>
+        <button class="sess-rm" onclick="rmSession('${s.id}')" title="Remover sessão">✕</button>
+        <div class="sess-date">📅 ${fmtDate(s.date)} &nbsp;·&nbsp; ${partyLbl}</div>
         ${stats.length?`<div class="sess-stats">${stats.map(x=>`<span class="sess-stat">${x}</span>`).join('')}</div>`:''}
         ${s.comment?`<div class="sess-comment">${s.comment}</div>`:''}
       </div>`;
@@ -1802,7 +1802,7 @@ function addSession(){
   const kills=parseInt(document.getElementById('sfKills').value)||null;
   const dv=document.getElementById('sfDeaths').value.trim();
   const deaths=dv!==''?parseInt(dv):null;
-  if(!dur&&!gold&&!xpRaw){ toast('âš ï¸ Preencha ao menos duraÃ§Ã£o, gold ou XP'); return; }
+  if(!dur&&!gold&&!xpRaw){ toast('⚠️ Preencha ao menos duração, gold ou XP'); return; }
   const partySize=parseInt(document.getElementById('sfParty').value)||1;
   const companions=[];
   for(let i=0;i<partySize-1;i++){ const inp=document.getElementById('sfComp'+i); if(inp&&inp.value.trim()) companions.push({name:inp.value.trim()}); }
@@ -1813,14 +1813,14 @@ function addSession(){
     partySize, companions,
     comment:document.getElementById('sfComment').value.trim()
   });
-  save(false); renderSessContent(); toast('âœ… SessÃ£o salva!');
+  save(false); renderSessContent(); toast('✅ Sessão salva!');
 }
 
 function rmSession(sessId){
-  if(!confirm('Remover esta sessÃ£o?')) return;
+  if(!confirm('Remover esta sessão?')) return;
   const h=state.hunts.find(x=>x.id===_sessHuntId); if(!h) return;
   h.sessions=(h.sessions||[]).filter(s=>s.id!==sessId);
-  save(false); renderSessContent(); toast('ðŸ—‘ï¸ SessÃ£o removida');
+  save(false); renderSessContent(); toast('🗑️ Sessão removida');
 }
 
 function calcSessStats(sessions){
@@ -1838,16 +1838,16 @@ function calcSessStats(sessions){
   };
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // COMPARE HUNTS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 let _cmpMetric='goldH';
 const CMP_METRICS=[
-  {key:'goldH',  label:'ðŸ’° Gold/hora',    color:'#f59e0b', fmt:v=>fmtGold(v)+'/h'},
-  {key:'xpH',   label:'âœ¨ XP raw/hora',  color:'#8b5cf6', fmt:v=>v?Math.round(v)+'k/h':'â€”'},
-  {key:'netH',   label:'ðŸ“ˆ Net profit/h', color:'#10b981', fmt:v=>fmtGold(v)+'/h'},
-  {key:'dur',    label:'â±ï¸ Tempo total',  color:'#3b82f6', fmt:v=>fmtDur(v)},
-  {key:'kills',  label:'âš”ï¸ Kills/sessÃ£o', color:'#ef4444', fmt:v=>v?Math.round(v)+'':'â€”'},
+  {key:'goldH',  label:'💰 Gold/hora',    color:'#f59e0b', fmt:v=>fmtGold(v)+'/h'},
+  {key:'xpH',   label:'✨ XP raw/hora',  color:'#8b5cf6', fmt:v=>v?Math.round(v)+'k/h':'—'},
+  {key:'netH',   label:'📈 Net profit/h', color:'#10b981', fmt:v=>fmtGold(v)+'/h'},
+  {key:'dur',    label:'⏱️ Tempo total',  color:'#3b82f6', fmt:v=>fmtDur(v)},
+  {key:'kills',  label:'⚔️ Kills/sessão', color:'#ef4444', fmt:v=>v?Math.round(v)+'':'—'},
 ];
 
 function openCompare(){ renderCompare(); document.getElementById('compareOv').classList.add('on'); }
@@ -1858,7 +1858,7 @@ function renderCompare(){
   const withSess=hunts.filter(h=>(h.sessions||[]).length>0);
   const el=document.getElementById('compareContent');
   if(!withSess.length){
-    el.innerHTML=`<div class="no-sess">ðŸ“Š Nenhuma sessÃ£o registrada ainda.<br>Adicione sessÃµes Ã s suas hunts clicando em <strong>ðŸ“Š SessÃµes</strong> em cada hunt card.</div>`;
+    el.innerHTML=`<div class="no-sess">📊 Nenhuma sessão registrada ainda.<br>Adicione sessões às suas hunts clicando em <strong>📊 Sessões</strong> em cada hunt card.</div>`;
     return;
   }
   const tabsHTML=CMP_METRICS.map(m=>`<button class="chart-tab${_cmpMetric===m.key?' on':''}" onclick="setCmpMetric('${m.key}')">${m.label}</button>`).join('');
@@ -1881,73 +1881,73 @@ function renderCompare(){
       <div class="chart-val" style="color:${metric.color};">${disp}</div>
     </div>`;
   }).join('');
-  el.innerHTML=`<div class="chart-tabs">${tabsHTML}</div><div>${barsHTML}</div><div class="chart-note">Baseado nas mÃ©dias de ${withSess.length} hunt${withSess.length>1?'s':''} com sessÃµes â€¢ Perfil: ${state.profiles.find(p=>p.id===state.activeProfile)?.name||'todos'}</div>`;
+  el.innerHTML=`<div class="chart-tabs">${tabsHTML}</div><div>${barsHTML}</div><div class="chart-note">Baseado nas médias de ${withSess.length} hunt${withSess.length>1?'s':''} com sessões • Perfil: ${state.profiles.find(p=>p.id===state.activeProfile)?.name||'todos'}</div>`;
 }
 function setCmpMetric(k){ _cmpMetric=k; renderCompare(); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // PREVIEW STRIP (collapsed hunt card)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function buildPreviewStrip(h, sessCount){
   // Collapsed strip: ONLY monster GIFs (no names, no items), right-aligned
   const parts=[];
   if((h.monsters||[]).length){
     h.monsters.slice(0,9).forEach(m=>{
       if(m.gifUrl) parts.push(`<div class="hcard-pv-gif-box"><img class="hcard-pv-gif" src="${m.gifUrl}" alt="${m.name}" title="${m.name}" loading="lazy"></div>`);
-      else parts.push(`<span style="font-size:1.6rem;opacity:.4;line-height:1;" title="${m.name}">ðŸ‰</span>`);
+      else parts.push(`<span style="font-size:1.6rem;opacity:.4;line-height:1;" title="${m.name}">🐉</span>`);
     });
     if(h.monsters.length>9) parts.push(`<span class="hcard-pv-more">+${h.monsters.length-9}</span>`);
   }
   if(sessCount){
     if(parts.length) parts.push('<span class="hcard-pv-div"></span>');
-    parts.push(`<span class="hcard-pv-sess">ðŸ“Š ${sessCount}</span>`);
+    parts.push(`<span class="hcard-pv-sess">📊 ${sessCount}</span>`);
   }
   return parts.length?`<div class="hcard-preview">${parts.join('')}</div>`:'';
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // CLIPBOARD COPY
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function copySummaryToClipboard(huntId){
   const h=state.hunts.find(x=>x.id===huntId); if(!h)return;
   const p=state.profiles.find(x=>x.id===h.profileId);
   const lines=[];
-  lines.push(`âš”ï¸ *${h.name}*`);
-  if(p||h.vocation) lines.push([p?p.name:'',h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):''].filter(Boolean).join(' Â· '));
+  lines.push(`⚔️ *${h.name}*`);
+  if(p||h.vocation) lines.push([p?p.name:'',h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):''].filter(Boolean).join(' · '));
   lines.push('');
-  if((h.pots||[]).length){ lines.push('ðŸ’Š *PoÃ§Ãµes*'); h.pots.forEach(x=>lines.push(`  â€¢ ${x.name} Ã—${x.qty}`)); lines.push(''); }
-  if((h.runas||[]).length){ lines.push('ðŸ“œ *Runas*'); h.runas.forEach(x=>lines.push(`  â€¢ ${x.name} Ã—${x.qty}`)); lines.push(''); }
+  if((h.pots||[]).length){ lines.push('💊 *Poções*'); h.pots.forEach(x=>lines.push(`  • ${x.name} ×${x.qty}`)); lines.push(''); }
+  if((h.runas||[]).length){ lines.push('📜 *Runas*'); h.runas.forEach(x=>lines.push(`  • ${x.name} ×${x.qty}`)); lines.push(''); }
   if((h.imbu||[]).length){
-    lines.push('ðŸ›¡ï¸ *Imbuements*');
+    lines.push('🛡️ *Imbuements*');
     const seen={}; (h.imbu||[]).forEach(x=>{seen[x.id]=(seen[x.id]||0)+1;});
-    Object.entries(seen).forEach(([id,cnt])=>{ const x=(h.imbu||[]).find(i=>i.id===id); if(x) lines.push(`  â€¢ ${x.name}${cnt>1?' Ã—'+cnt:''}`); });
+    Object.entries(seen).forEach(([id,cnt])=>{ const x=(h.imbu||[]).find(i=>i.id===id); if(x) lines.push(`  • ${x.name}${cnt>1?' ×'+cnt:''}`); });
     lines.push('');
   }
-  if((h.spells||[]).length){ lines.push('âœ¨ *Magias*'); h.spells.forEach(x=>lines.push(`  â€¢ ${x.name} (${x.words})`)); lines.push(''); }
+  if((h.spells||[]).length){ lines.push('✨ *Magias*'); h.spells.forEach(x=>lines.push(`  • ${x.name} (${x.words})`)); lines.push(''); }
   if((h.monsters||[]).length){
-    lines.push('ðŸ‰ *Monstros*');
-    h.monsters.forEach(m=>{ let ml=`  â€¢ ${m.name}`; if(m.majorCharm) ml+=` [â­ ${m.majorCharm.name}]`; if(m.minorCharm) ml+=` [ðŸ”® ${m.minorCharm.name}]`; lines.push(ml); });
+    lines.push('🐉 *Monstros*');
+    h.monsters.forEach(m=>{ let ml=`  • ${m.name}`; if(m.majorCharm) ml+=` [⭐ ${m.majorCharm.name}]`; if(m.minorCharm) ml+=` [🔮 ${m.minorCharm.name}]`; lines.push(ml); });
     lines.push('');
   }
-  lines.push('_Gerado pelo RESPAW3000_ ðŸŠ');
+  lines.push('_Gerado pelo RESPAW3000_ 🐊');
   const text=lines.join('\n');
-  navigator.clipboard.writeText(text).then(()=>toast('ðŸ“‹ Copiado para Ã¡rea de transferÃªncia!')).catch(()=>{
-    const ta=document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0;'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('ðŸ“‹ Copiado!');
+  navigator.clipboard.writeText(text).then(()=>toast('📋 Copiado para área de transferência!')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0;'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('📋 Copiado!');
   });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // WIZARD NAME BAR (live update)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function updateWizNameBar(){
   const bar=document.getElementById('wizNameBar'); if(!bar||!bar.classList.contains('on'))return;
   const v=document.getElementById('wHuntName')?.value.trim();
   const span=document.getElementById('wizNameBarVal'); if(span) span.textContent=v||'(sem nome)';
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // SESSION COMPANIONS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function updateCompanionFields(){
   const party=parseInt(document.getElementById('sfParty')?.value)||1;
   const cf=document.getElementById('companionFields'); if(!cf)return;
@@ -1957,14 +1957,14 @@ function updateCompanionFields(){
   cf.innerHTML=`<datalist id="companionsDL">${dlOpts}</datalist><div class="row" style="flex-wrap:wrap;margin-top:.1rem;">${fields}</div>`;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // PRE-HUNT CHECKLIST
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 const CL_KEY='respaw3000_cl';
 const CL_FIXED=[
-  {id:'f_charm',   label:'Charm',              icon:'â­', hint:'Charms ativos nos monstros certos?'},
-  {id:'f_imbu',    label:'Imbuements',         icon:'ðŸ›¡ï¸', hint:'Slots de imbu ativos?'},
-  {id:'f_weaponp', label:'Weapon Proficiency', icon:'ðŸ’ª', hint:'ProficiÃªncia de arma verificada?'},
+  {id:'f_charm',   label:'Charm',              icon:'⭐', hint:'Charms ativos nos monstros certos?'},
+  {id:'f_imbu',    label:'Imbuements',         icon:'🛡️', hint:'Slots de imbu ativos?'},
+  {id:'f_weaponp', label:'Weapon Proficiency', icon:'💪', hint:'Proficiência de arma verificada?'},
 ];
 let cl={items:[],checks:{}};
 
@@ -1986,7 +1986,7 @@ function clToggleItem(id){
 function resetChecklist(){
   cl.checks={};
   clSave(); renderChecklist();
-  toast('ðŸ”„ Checklist resetado!');
+  toast('🔄 Checklist resetado!');
 }
 
 function clRemoveItem(id){
@@ -1997,9 +1997,9 @@ function clRemoveItem(id){
 
 function clAddItem(){
   const label=document.getElementById('clNewLabel').value.trim();
-  if(!label){toast('âš ï¸ Insira um nome');return;}
+  if(!label){toast('⚠️ Insira um nome');return;}
   const url=document.getElementById('clNewUrl').value.trim();
-  const emoji=document.getElementById('clNewEmoji').value.trim()||'ðŸ“Œ';
+  const emoji=document.getElementById('clNewEmoji').value.trim()||'📌';
   let imgUrl=null;
   if(url){
     if(url.match(/\.(gif|png|jpg|jpeg|webp)(\?|$)/i)){
@@ -2017,7 +2017,7 @@ function clAddItem(){
   document.getElementById('clNewEmoji').value='';
   const form=document.getElementById('clAddForm'); if(form) form.classList.remove('open');
   renderChecklist();
-  toast(`âœ… ${label} adicionado!`);
+  toast(`✅ ${label} adicionado!`);
 }
 
 function clUpdateBadge(){
@@ -2040,14 +2040,14 @@ function renderChecklist(){
   const bar=document.getElementById('clProgBar');
   const txt=document.getElementById('clProgTxt');
   if(bar){ bar.style.width=pct+'%'; bar.className='cl-prog-bar'+(allDone?' cl-all':''); }
-  if(txt){ txt.className='cl-prog-txt'+(allDone?' cl-ok':''); txt.innerHTML=allDone?'<strong>âœ… Tudo pronto!</strong>':`<strong>${done}</strong>/${total} prontos`; }
+  if(txt){ txt.className='cl-prog-txt'+(allDone?' cl-ok':''); txt.innerHTML=allDone?'<strong>✅ Tudo pronto!</strong>':`<strong>${done}</strong>/${total} prontos`; }
   clUpdateBadge();
 
-  let html=`<div class="cl-sec">ðŸ”’ Fixos</div>`;
+  let html=`<div class="cl-sec">🔒 Fixos</div>`;
   CL_FIXED.forEach(item=>{
     const chk=!!cl.checks[item.id];
     html+=`<div class="cl-item${chk?' cl-done':''}" onclick="clToggleItem('${item.id}')">
-      <div class="cl-cb">${chk?'âœ“':''}</div>
+      <div class="cl-cb">${chk?'✓':''}</div>
       <div class="cl-ico">${item.icon}</div>
       <div style="flex:1;min-width:0;">
         <div class="cl-lbl">${item.label}</div>
@@ -2057,64 +2057,64 @@ function renderChecklist(){
   });
 
   if(cl.items.length){
-    html+=`<div class="cl-sec">ðŸ“‹ Personalizados</div>`;
+    html+=`<div class="cl-sec">📋 Personalizados</div>`;
     cl.items.forEach(item=>{
       const chk=!!cl.checks[item.id];
       const icoHtml=item.imgUrl
         ?`<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" data-fb="${item.emoji}" onerror="this.outerHTML=this.dataset.fb">`
         :`<span style="font-size:1.05rem;">${item.emoji}</span>`;
       html+=`<div class="cl-item${chk?' cl-done':''}" onclick="clToggleItem('${item.id}')">
-        <div class="cl-cb">${chk?'âœ“':''}</div>
+        <div class="cl-cb">${chk?'✓':''}</div>
         <div class="cl-ico">${icoHtml}</div>
         <div class="cl-lbl">${item.label}</div>
-        <button class="cl-rm" onclick="event.stopPropagation();clRemoveItem('${item.id}')" title="Remover">âœ•</button>
+        <button class="cl-rm" onclick="event.stopPropagation();clRemoveItem('${item.id}')" title="Remover">✕</button>
       </div>`;
     });
   }
 
-  html+=`<button class="cl-add-toggler" onclick="document.getElementById('clAddForm').classList.toggle('open')">ï¼‹ Adicionar item</button>
+  html+=`<button class="cl-add-toggler" onclick="document.getElementById('clAddForm').classList.toggle('open')">＋ Adicionar item</button>
   <div class="cl-add-form" id="clAddForm">
     <div style="margin-bottom:.42rem;">
       <label class="lbl">Nome</label>
       <input class="inp" id="clNewLabel" placeholder="Ex: Utito Tempo, Anel da cura..." style="padding:.42rem .65rem;font-size:.82rem;">
     </div>
     <div style="margin-bottom:.42rem;">
-      <label class="lbl">Link TibiaWiki (pega o Ã­cone)</label>
+      <label class="lbl">Link TibiaWiki (pega o ícone)</label>
       <input class="inp" id="clNewUrl" placeholder="https://tibia.fandom.com/wiki/..." style="padding:.42rem .65rem;font-size:.82rem;">
-      <div style="font-size:.63rem;color:var(--t1);margin-top:.2rem;">Cole a URL da pÃ¡gina do item para buscar o Ã­cone automaticamente.</div>
+      <div style="font-size:.63rem;color:var(--t1);margin-top:.2rem;">Cole a URL da página do item para buscar o ícone automaticamente.</div>
     </div>
     <div style="margin-bottom:.52rem;display:flex;gap:.5rem;align-items:flex-end;">
       <div style="flex:1">
         <label class="lbl">Emoji (fallback)</label>
-        <input class="inp" id="clNewEmoji" placeholder="ðŸ“Œ" style="padding:.42rem .65rem;font-size:1rem;">
+        <input class="inp" id="clNewEmoji" placeholder="📌" style="padding:.42rem .65rem;font-size:1rem;">
       </div>
     </div>
-    <button class="btn btn-g btn-sm" style="width:100%;justify-content:center;" onclick="clAddItem()">âœ“ Adicionar</button>
+    <button class="btn btn-g btn-sm" style="width:100%;justify-content:center;" onclick="clAddItem()">✓ Adicionar</button>
   </div>`;
 
   body.innerHTML=html;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // DELETE PROFILE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 const DELETE_PHRASES=[
-  'meu pÃ© tem cabelo',
+  'meu pé tem cabelo',
   'eu amo cavalos',
   'todo dia um pato sai de casa',
   'chuva de peixe assado',
-  'o elefante danÃ§a funk',
-  'minha galinha usa chapÃ©u',
-  'o jacarÃ© toca violÃ£o',
+  'o elefante dança funk',
+  'minha galinha usa chapéu',
+  'o jacaré toca violão',
   'borboleta come bolo de rolo',
 ];
 let _delProfilePhrase='';
 
 function openDelProfile(){
   const p=state.profiles.find(x=>x.id===state.activeProfile);
-  if(!p){toast('âš ï¸ Nenhum perfil ativo');return;}
+  if(!p){toast('⚠️ Nenhum perfil ativo');return;}
   const hc=state.hunts.filter(h=>h.profileId===p.id).length;
-  document.getElementById('delProfileInfo').innerHTML=`VocÃª estÃ¡ prestes a apagar o perfil <strong>${p.name}</strong> e todas as suas <strong>${hc} hunt${hc!==1?'s':''}</strong> permanentemente. Essa aÃ§Ã£o nÃ£o pode ser desfeita.`;
+  document.getElementById('delProfileInfo').innerHTML=`Você está prestes a apagar o perfil <strong>${p.name}</strong> e todas as suas <strong>${hc} hunt${hc!==1?'s':''}</strong> permanentemente. Essa ação não pode ser desfeita.`;
   _delProfilePhrase=DELETE_PHRASES[Math.floor(Math.random()*DELETE_PHRASES.length)];
   document.getElementById('delProfilePhrase').textContent=_delProfilePhrase;
   document.getElementById('delProfileInput').value='';
@@ -2138,12 +2138,12 @@ function confirmDeleteProfile(){
   closeDelProfile(); save(false);
   if(!state.profiles.length) openGate();
   else { renderProfiles(); renderHunts(); }
-  toast('ðŸ—‘ï¸ Perfil apagado com sucesso!');
+  toast('🗑️ Perfil apagado com sucesso!');
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 // INIT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════
 function initApp(){
   load(); clLoad(); clUpdateBadge();
   // Show gate if no profiles OR no active profile
