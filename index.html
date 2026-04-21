@@ -461,7 +461,8 @@ input[type=number]{-moz-appearance:textfield;}
     <button class="btn btn-g" onclick="openWizard()">⚔️ Nova Hunt</button>
     <button class="btn btn-o" onclick="save()">💾 Salvar</button>
     <button class="btn btn-o" onclick="openCompare()">📊 Comparar</button>
-    <button class="btn btn-o" onclick="importJSON()">📂 Importar</button>
+    <button class="btn btn-o" onclick="exportJSON()" title="Baixar backup completo (.json)">📤 Exportar</button>
+    <button class="btn btn-o" onclick="importJSON()" title="Carregar backup (.json)">📂 Importar</button>
     <input type="file" id="importInput" accept=".json" style="display:none" onchange="handleImport(event)">
     <button class="btn btn-del btn-sm" onclick="openDelProfile()" title="Apagar perfil e todas as hunts">🗑️ Apagar Perfil</button>
     <span style="flex:1"></span>
@@ -469,9 +470,10 @@ input[type=number]{-moz-appearance:textfield;}
   </div>
   <div id="huntList"></div>
   <div class="card" style="margin-top:1.5rem;">
-    <div class="ctitle">📤 Exportar</div>
+    <div class="ctitle">📤 Exportar / Importar</div>
     <div class="exp-grid">
-      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📦</span><div><div class="exp-ttl">Backup JSON</div><div class="exp-dsc">Arquivo .json com todos os dados</div></div></button>
+      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📤</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Salva hunts, perfis e checklist em .json</div></div></button>
+      <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">📂</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Carrega um .json exportado anteriormente</div></div></button>
       <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">🖨️</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">Versão visual para impressão</div></div></button>
     </div>
   </div>
@@ -1630,9 +1632,38 @@ function dupHunt(id){ const h=state.hunts.find(x=>x.id===id); if(!h)return; cons
 // ══════════════════════════════════════════════════════
 // EXPORT / IMPORT
 // ══════════════════════════════════════════════════════
-function exportJSON(){ const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`respaw3000_${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('📦 JSON exportado!'); }
+function exportJSON(){
+  const backup={ version:2, exportedAt:new Date().toISOString(), state, checklist:cl };
+  const b=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);
+  a.download=`respaw3000_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  toast('📤 Backup exportado!');
+}
 function importJSON(){ document.getElementById('importInput').click(); }
-function handleImport(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{ try{const d=JSON.parse(ev.target.result);if(!d.hunts){toast('❌ Arquivo inválido');return;}if(confirm('Substitui todos os dados. Continuar?')){state=d;renderProfiles();renderHunts();save();toast('📂 Importado!');}}catch{toast('❌ Erro ao ler arquivo');} e.target.value=''; }; r.readAsText(f); }
+function handleImport(e){
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      // Support both old format (plain state) and new format (wrapper with version)
+      const newState = d.version===2 ? d.state : d;
+      const newCl    = d.version===2 ? d.checklist : null;
+      if(!newState?.hunts){ toast('❌ Arquivo inválido'); return; }
+      if(confirm('Isso vai substituir todos os dados atuais. Continuar?')){
+        state=newState;
+        if(newCl){ cl=newCl; clSave(); clLoad(); clUpdateBadge(); renderChecklist(); }
+        renderProfiles(); renderHunts(); save();
+        toast('📂 Backup importado com sucesso!');
+      }
+    }catch{ toast('❌ Erro ao ler arquivo'); }
+    e.target.value='';
+  };
+  r.readAsText(f);
+}
 function exportPrint(){
   const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
   if(!hunts.length){toast('⚠️ Nenhuma hunt');return;}
