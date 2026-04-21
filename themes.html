@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RESPAW3000 — Escolha o Tema</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0f1e;color:#f1f5f9;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;}
+h1{font-size:1.5rem;font-weight:900;margin-bottom:.4rem;letter-spacing:.5px;}
+.sub{font-size:.85rem;color:#64748b;margin-bottom:2.5rem;text-align:center;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;width:100%;max-width:780px;}
+.card{border-radius:14px;overflow:hidden;border:2px solid transparent;transition:all .2s;cursor:pointer;text-decoration:none;display:block;}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.5);}
+.card-preview{height:110px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+.card-body{padding:1rem;}
+.card-name{font-size:1rem;font-weight:800;margin-bottom:.25rem;}
+.card-desc{font-size:.75rem;opacity:.7;line-height:1.4;}
+.card-btn{display:inline-block;margin-top:.75rem;padding:.35rem .9rem;border-radius:20px;font-size:.75rem;font-weight:700;border:none;cursor:pointer;}
+
+/* Gold (current) */
+.gold .card-preview{background:linear-gradient(135deg,#0f172a,#1a2e1a);}
+.gold{border-color:rgba(245,158,11,.4);}
+.gold .card-body{background:#1a2234;}
+.gold .card-name{color:#f59e0b;}
+.gold .card-btn{background:linear-gradient(135deg,#f59e0b,#ef8c00);color:#0f172a;}
+
+/* Crimson */
+.crimson .card-preview{background:linear-gradient(135deg,#130808,#2e1a1a);}
+.crimson{border-color:rgba(229,62,62,.4);}
+.crimson .card-body{background:#1a1010;}
+.crimson .card-name{color:#e53e3e;}
+.crimson .card-btn{background:linear-gradient(135deg,#e53e3e,#c53030);color:#fff;}
+
+/* Arcane */
+.arcane .card-preview{background:linear-gradient(135deg,#0d0a1e,#1a1040);}
+.arcane{border-color:rgba(167,139,250,.4);}
+.arcane .card-body{background:#1a1530;}
+.arcane .card-name{color:#a78bfa;}
+.arcane .card-btn{background:linear-gradient(135deg,#a78bfa,#7c3aed);color:#fff;}
+
+/* Frost */
+.frost .card-preview{background:linear-gradient(135deg,#040d1e,#0a2030);}
+.frost{border-color:rgba(34,211,238,.4);}
+.frost .card-body{background:#0a1a2e;}
+.frost .card-name{color:#22d3ee;}
+.frost .card-btn{background:linear-gradient(135deg,#22d3ee,#0891b2);color:#0a0f1e;}
+
+.current-tag{font-size:.62rem;font-weight:700;padding:.1rem .45rem;border-radius:10px;background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3);margin-left:.4rem;vertical-align:middle;}
+</style>
+</head>
+<body>
+<h1>⚔️ RESPAW3000</h1>
+<p class="sub">Escolha uma interface para testar — nenhuma altera seus dados salvos.</p>
+<div class="grid">
+
+  <a class="card gold" href="index.html">
+    <div class="card-preview">🏆</div>
+    <div class="card-body">
+      <div class="card-name">Gold Forest <span class="current-tag">atual</span></div>
+      <div class="card-desc">O tema original. Verde escuro com detalhes dourados — visual clássico de caçador de Tibia.</div>
+      <span class="card-btn">Abrir →</span>
+    </div>
+  </a>
+
+  <a class="card crimson" href="theme-crimson.html">
+    <div class="card-preview">🩸</div>
+    <div class="card-body">
+      <div class="card-name">Crimson</div>
+      <div class="card-desc">Vermelho sangue, tons escuros e intensos. Energia de boss-fight e perigo constante.</div>
+      <span class="card-btn">Testar →</span>
+    </div>
+  </a>
+
+  <a class="card arcane" href="theme-arcane.html">
+    <div class="card-preview">🔮</div>
+    <div class="card-body">
+      <div class="card-name">Arcane</div>
+      <div class="card-desc">Roxo profundo e violeta elétrico. Estilo mágico, arcano, de conjurador.</div>
+      <span class="card-btn">Testar →</span>
+    </div>
+  </a>
+
+  <a class="card frost" href="theme-frost.html">
+    <div class="card-preview">❄️</div>
+    <div class="card-body">
+      <div class="card-name">Frost</div>
+      <div class="card-desc">Ciano gelo sobre azul marinho profundo. Limpo, preciso, estilo caçador ártico.</div>
+      <span class="card-btn">Testar →</span>
+    </div>
+  </a>
+
+</div>
+</body>
+</html>
