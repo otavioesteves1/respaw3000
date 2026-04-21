@@ -1402,18 +1402,25 @@ function autoFetchGif(){
   if(!slug) return;
   document.getElementById('gifLoad').classList.remove('h');
   document.getElementById('gifPreview').classList.remove('on');
-  // Build ordered list of URLs to try
+  // Build ordered list of URLs to try (no duplicates)
   const urls=[];
-  // If user pasted a tibiawiki.com.br Arquivo: URL → extract exact filename and try BR wiki first
+  const brSlugUrl=`https://www.tibiawiki.com.br/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`;
+  const fanSlugUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`;
+  // If user pasted a tibiawiki.com.br Arquivo:/File: URL → extract exact filename, try BR first
   if(wikiUrl.includes('tibiawiki.com.br')){
     const m=wikiUrl.match(/(?:Arquivo|File):([^?#\s]+)/i);
-    const fname=m?m[1]:slug+'.gif';
-    urls.push(`https://www.tibiawiki.com.br/wiki/Special:FilePath/${fname}`);
+    if(m){
+      const exactUrl=`https://www.tibiawiki.com.br/wiki/Special:FilePath/${m[1]}`;
+      urls.push(exactUrl);
+    } else {
+      urls.push(brSlugUrl);
+    }
+    urls.push(fanSlugUrl); // EN as fallback
+  } else {
+    // Default: EN first, BR as fallback
+    urls.push(fanSlugUrl);
+    urls.push(brSlugUrl);
   }
-  // Always try fandom (EN) wiki
-  urls.push(`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`);
-  // Always try BR wiki as fallback
-  urls.push(`https://www.tibiawiki.com.br/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`);
   _tryGifUrls(urls,0);
 }
 function _tryGifUrls(urls,idx){
