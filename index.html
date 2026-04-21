@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESPAW3000 — Hunt List</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#f59e0b;--gold-d:#d97706;
+  --gold-g:linear-gradient(135deg,#f59e0b 0%,#ef8c00 100%);
+  --blue:#3b82f6;--red:#ef4444;--green:#10b981;--purple:#8b5cf6;
+  --bg:#0a0f1e;--bg2:#0d1a10;
+  --c0:#111827;--c1:#1a2234;--c2:#1e2535;--c3:#252d3d;--c4:#334155;
+  --t0:#f1f5f9;--t1:#94a3b8;--t2:#64748b;
+  --sh:0 2px 12px rgba(0,0,0,.5);--r:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);color:var(--t0);min-height:100vh;}
+header{background:linear-gradient(135deg,#0f172a,#1a2e1a);border-bottom:1px solid rgba(245,158,11,.2);padding:.875rem 1rem;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,.5);}
+.hdr{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:.875rem;flex-wrap:wrap;}
+.hdr-brand{display:flex;align-items:center;gap:.65rem;}
+.hdr-title{font-size:1.15rem;font-weight:800;background:var(--gold-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hdr-sub{font-size:.68rem;color:var(--t1);font-weight:500;}
+.profiles-strip{display:flex;align-items:center;gap:.4rem;overflow-x:auto;flex:1;scrollbar-width:none;}
+.profiles-strip::-webkit-scrollbar{display:none;}
+.pchip{display:flex;align-items:center;gap:.35rem;padding:.28rem .6rem;border-radius:20px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
+.pchip.on{border-color:var(--gold);color:var(--gold);background:rgba(245,158,11,.1);}
+.pchip img{width:16px;height:16px;border-radius:50%;object-fit:cover;}
+.btn-addp{width:28px;height:28px;border-radius:50%;border:1.5px dashed var(--c4);background:none;color:var(--t2);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.btn-addp:hover{border-color:var(--gold);color:var(--gold);}
+.wrap{max-width:960px;margin:0 auto;padding:1.25rem 1rem;}
+.unsaved{display:none;background:rgba(245,158,11,.1);border-bottom:2px solid var(--gold);padding:.5rem 1rem;text-align:center;font-size:.8rem;color:var(--gold);font-weight:600;position:sticky;top:57px;z-index:90;gap:.75rem;align-items:center;justify-content:center;flex-wrap:wrap;}
+.unsaved.on{display:flex;}
+.unsaved button{padding:.28rem .65rem;border-radius:6px;border:1.5px solid var(--gold);background:rgba(245,158,11,.15);color:var(--gold);font-size:.75rem;font-weight:700;cursor:pointer;}
+.btn{padding:.55rem .95rem;border:none;border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:.35rem;}
+.btn-g{background:var(--gold-g);color:#0f172a;font-weight:700;box-shadow:0 3px 12px rgba(245,158,11,.3);}
+.btn-g:hover{box-shadow:0 5px 20px rgba(245,158,11,.45);transform:translateY(-1px);}
+.btn-o{background:none;color:var(--t1);border:1.5px solid var(--c4);}
+.btn-o:hover{background:var(--c3);border-color:var(--gold);color:var(--gold);}
+.btn-del{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
+.btn-del:hover{background:rgba(239,68,68,.22);}
+.btn-sm{padding:.3rem .65rem;font-size:.75rem;border-radius:8px;}
+.card{background:var(--c2);border-radius:var(--r);border:1px solid var(--c4);box-shadow:var(--sh);padding:1.25rem;margin-bottom:1.1rem;}
+.ctitle{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:1.1rem;display:flex;align-items:center;gap:.4rem;}
+.sec-lbl{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);border-bottom:1px solid rgba(245,158,11,.18);padding-bottom:.4rem;margin-bottom:.65rem;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;}
+.sec-lbl span{font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;}
+.f{margin-bottom:.85rem;}
+.lbl{font-size:.68rem;font-weight:700;color:var(--t1);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.35rem;display:block;}
+.inp{width:100%;padding:.65rem .9rem;border:1.5px solid var(--c4);border-radius:10px;font-size:.875rem;outline:none;transition:all .18s;background:var(--c3);color:var(--t0);font-weight:500;}
+.inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,158,11,.12);}
+.row{display:flex;gap:.65rem;flex-wrap:wrap;}
+.row .f{flex:1;min-width:120px;}
+.url-preview{display:none;align-items:center;gap:.5rem;margin-top:.4rem;}
+.url-preview.on{display:flex;}
+.url-preview img{height:36px;object-fit:contain;border-radius:6px;background:rgba(0,0,0,.3);padding:3px;border:1px solid var(--c4);image-rendering:pixelated;}
+
+/* ── Tabs ── */
+.tab-bar{display:flex;gap:.35rem;margin-bottom:.75rem;}
+.tab-btn{padding:.35rem .85rem;border-radius:20px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;}
+.tab-btn:hover{border-color:var(--gold);color:var(--gold);}
+.tab-btn.on{background:var(--gold-g);color:#0f172a;border-color:var(--gold);}
+.tab-panel{display:none;}
+.tab-panel.on{display:block;}
+
+/* ── Vocation selector ── */
+.voc-bar{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.voc-btn{padding:.32rem .7rem;border-radius:20px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.voc-btn:hover{border-color:var(--gold);color:var(--gold);}
+.voc-btn.on{background:rgba(245,158,11,.18);color:var(--gold);border-color:var(--gold);box-shadow:0 0 0 2px rgba(245,158,11,.15);}
+
+/* ── Qty stepper ── */
+.qty-row{display:flex;align-items:center;gap:.2rem;flex-wrap:wrap;}
+.qb{height:28px;padding:0 .4rem;border-radius:6px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.qb:hover{border-color:var(--gold);color:var(--gold);}
+.qb.main{width:28px;font-size:.9rem;padding:0;display:flex;align-items:center;justify-content:center;}
+.qi{width:52px;text-align:center;padding:.25rem .3rem;border:1.5px solid var(--c4);border-radius:6px;background:var(--c2);color:var(--t0);font-size:.9rem;font-weight:700;outline:none;}
+.qi:focus{border-color:var(--gold);}
+.sel-row{display:flex;align-items:center;gap:.55rem;background:var(--c3);border-radius:10px;border:1px solid var(--c4);padding:.45rem .7rem;margin-bottom:.35rem;}
+.sel-icon{width:30px;height:30px;border-radius:6px;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:1px solid var(--c4);}
+.sel-icon img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;}
+.sel-name{flex:1;font-size:.83rem;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sel-rm{width:22px;height:22px;border-radius:5px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+.sel-rm:hover{background:rgba(239,68,68,.25);}
+
+/* ── Item grid (charms / potions / runas / imbu / spells) ── */
+.charm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:.4rem;margin-bottom:.5rem;}
+.charm-opt{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:.45rem .3rem .35rem;border-radius:8px;border:1.5px solid var(--c4);background:var(--c3);cursor:pointer;transition:all .15s;text-align:center;position:relative;min-height:72px;}
+.charm-opt:hover{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.07);}
+.charm-opt.on{border-color:var(--gold);background:rgba(245,158,11,.15);box-shadow:0 0 0 2px rgba(245,158,11,.2);}
+.charm-opt.on::after{content:'×';position:absolute;top:3px;right:5px;font-size:.68rem;color:rgba(245,158,11,.9);font-weight:900;line-height:1;}
+.charm-opt.charm-used{opacity:.25;filter:grayscale(1);cursor:not-allowed;}
+.charm-opt.charm-used:hover{border-color:var(--c4);background:var(--c3);}
+.charm-opt-img{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.charm-opt-img img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;}
+.charm-opt-name{font-size:.62rem;font-weight:600;color:var(--t0);line-height:1.2;width:100%;}
+.charm-opt-sub{font-size:.54rem;color:var(--t1);line-height:1.2;width:100%;font-style:italic;}
+.charm-opt.on .charm-opt-name{color:var(--gold);}
+.charm-none-btn{padding:.4rem .75rem;border-radius:8px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;}
+.charm-none-btn.on{border-color:var(--c4);color:var(--t0);background:rgba(255,255,255,.06);}
+
+/* ── Monster card (wizard) ── */
+.mon-card{background:var(--c3);border-radius:10px;border:1px solid var(--c4);display:grid;grid-template-columns:76px 1fr;gap:.65rem;padding:.8rem;margin-bottom:.5rem;position:relative;transition:border-color .15s;}
+.mon-card:hover{border-color:rgba(245,158,11,.35);}
+.mon-gif{width:76px;height:76px;border-radius:8px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.mon-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
+.mon-gif .ph{font-size:1.75rem;opacity:.35;}
+.mon-info{min-width:0;}
+.mon-name{font-size:.9rem;font-weight:700;margin-bottom:.2rem;}
+.mon-link{font-size:.68rem;color:var(--blue);text-decoration:none;}
+.mon-link:hover{text-decoration:underline;}
+.mon-charms{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.35rem;}
+.charm-badge{display:flex;align-items:center;gap:.25rem;padding:.18rem .5rem;border-radius:7px;font-size:.7rem;font-weight:700;}
+.charm-badge.major{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--gold);}
+.charm-badge.minor{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:#c4b5fd;}
+.charm-badge img{width:14px;height:14px;object-fit:contain;image-rendering:pixelated;}
+.mon-rm{position:absolute;top:.4rem;right:.4rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.mon-rm:hover{background:rgba(239,68,68,.25);}
+
+/* ── Hunt card ── */
+.hcard{background:var(--c2);border-radius:var(--r);border:1px solid var(--c4);box-shadow:var(--sh);margin-bottom:1.1rem;overflow:hidden;}
+.hcard-hdr{background:linear-gradient(135deg,#1a2235,#1a2e1a);padding:.875rem 1.1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:background .15s;}
+.hcard-hdr:hover{background:linear-gradient(135deg,#1e2d48,#1e3820);}
+.hcard-picon{width:64px;height:64px;border-radius:10px;background:rgba(245,158,11,.1);border:1.5px solid rgba(245,158,11,.25);display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;flex-shrink:0;}
+.hcard-picon img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;}
+.hcard-info{flex:1;min-width:0;}
+.hcard-name{font-size:.95rem;font-weight:700;}
+.hcard-sub{font-size:.68rem;color:var(--t1);margin-top:.1rem;}
+.hcard-pills{display:flex;gap:.3rem;flex-wrap:wrap;flex-shrink:0;}
+.pill{display:flex;align-items:center;gap:.2rem;padding:.18rem .5rem;border-radius:20px;font-size:.68rem;font-weight:700;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);color:var(--gold);}
+.hcard-body{display:none;padding:.875rem 1.1rem;border-top:1px solid var(--c4);}
+.hcard-body.on{display:block;}
+.hd-block{background:var(--c3);border-radius:9px;padding:.65rem;margin-bottom:.6rem;}
+.hd-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.45rem;}
+.hd-tags{display:flex;gap:.3rem;flex-wrap:wrap;}
+.hd-tag{display:flex;align-items:center;gap:.25rem;font-size:.75rem;font-weight:600;padding:.22rem .5rem;border-radius:7px;}
+.hd-tag img{width:20px;height:20px;object-fit:contain;image-rendering:pixelated;}
+.mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.6rem;}
+.mon-mini{background:var(--c3);border-radius:9px;padding:.65rem;border:1px solid var(--c4);text-align:center;transition:border-color .15s;text-decoration:none;display:block;}
+.mon-mini:hover{border-color:rgba(245,158,11,.35);}
+.mon-mini-gif{height:52px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem;}
+.mon-mini-gif img{max-height:52px;max-width:100%;object-fit:contain;image-rendering:pixelated;}
+.mon-mini-name{font-size:.75rem;font-weight:700;color:var(--t0);margin-bottom:.3rem;}
+.mon-mini-charm{display:flex;align-items:center;gap:.25rem;font-size:.65rem;font-weight:600;padding:.12rem .35rem;border-radius:5px;margin-bottom:.15rem;justify-content:center;}
+.mon-mini-charm.major{background:rgba(245,158,11,.12);color:var(--gold);}
+.mon-mini-charm.minor{background:rgba(139,92,246,.12);color:#c4b5fd;}
+.mon-mini-charm img{width:18px;height:18px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.hcard-acts{display:flex;gap:.4rem;padding:.75rem 1.1rem;border-top:1px solid var(--c4);background:rgba(0,0,0,.12);flex-wrap:wrap;}
+
+/* ── Wizard ── */
+.wiz-steps{display:flex;gap:.35rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+.wdot{display:flex;align-items:center;gap:.35rem;padding:.3rem .65rem;border-radius:20px;font-size:.75rem;font-weight:700;transition:all .15s;color:var(--t1);border:1.5px solid var(--c4);cursor:pointer;}
+.wdot:hover{border-color:var(--gold);color:var(--gold);}
+.wdot.on{background:var(--gold-g);color:#0f172a;border-color:var(--gold);box-shadow:0 2px 10px rgba(245,158,11,.28);}
+.wdot.done{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.35);color:#6ee7b7;}
+.wnum{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;background:rgba(255,255,255,.1);}
+.wdot.on .wnum{background:rgba(0,0,0,.18);}
+.wpanel{display:none;}
+.wpanel.on{display:block;}
+
+/* ── Modal ── */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:500;padding:1rem;}
+.ov.on{display:flex;}
+.modal{background:var(--c1);border-radius:16px;border:1px solid var(--c4);box-shadow:0 24px 60px rgba(0,0,0,.6);padding:1.5rem;width:100%;max-height:90vh;overflow-y:auto;}
+.mtitle{font-size:.95rem;font-weight:800;margin-bottom:1.1rem;display:flex;align-items:center;gap:.4rem;}
+.macts{margin-top:1.1rem;display:flex;justify-content:flex-end;gap:.4rem;flex-wrap:wrap;}
+
+/* ── Summary modal ── */
+.sum-sec{margin-bottom:1.15rem;}
+.sum-sec-lbl{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);border-bottom:1px solid rgba(245,158,11,.2);padding-bottom:.38rem;margin-bottom:.75rem;}
+.sum-items{display:flex;flex-wrap:wrap;gap:.45rem;}
+.sum-item{display:flex;align-items:center;gap:.5rem;background:var(--c3);border:1px solid var(--c4);border-radius:9px;padding:.4rem .75rem;}
+.sum-item-img{width:34px;height:34px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-item-name{font-size:.85rem;font-weight:600;}
+.sum-item-qty{font-size:.9rem;color:var(--gold);font-weight:800;margin-left:.2rem;}
+.sum-item-sub{font-size:.67rem;color:var(--t1);}
+.sum-mon{background:var(--c3);border:1px solid var(--c4);border-radius:12px;padding:.9rem;display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.55rem;}
+.sum-mon-gif{width:80px;height:80px;border-radius:10px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.sum-mon-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
+.sum-mon-info{flex:1;min-width:0;}
+.sum-mon-name{font-size:1rem;font-weight:800;margin-bottom:.22rem;}
+.sum-mon-link{font-size:.7rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.45rem;}
+.sum-charm-card{display:flex;align-items:center;gap:.55rem;padding:.4rem .65rem;border-radius:8px;margin-bottom:.3rem;}
+.sum-charm-card.major{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.28);}
+.sum-charm-card.minor{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.28);}
+.sum-charm-card img{width:28px;height:28px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-charm-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;opacity:.7;}
+.sum-charm-name{font-size:.88rem;font-weight:800;}
+.sum-charm-card.major .sum-charm-label{color:var(--gold);}
+.sum-charm-card.major .sum-charm-name{color:var(--gold);}
+.sum-charm-card.minor .sum-charm-label{color:#c4b5fd;}
+.sum-charm-card.minor .sum-charm-name{color:#c4b5fd;}
+.sum-no-charm{font-size:.75rem;color:var(--t2);font-style:italic;padding:.2rem 0;}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--c2);color:var(--t0);border:1px solid var(--c4);padding:.6rem 1.1rem;border-radius:10px;font-size:.83rem;font-weight:500;transition:transform .22s ease;z-index:1000;box-shadow:0 8px 28px rgba(0,0,0,.4);}
+.toast.on{transform:translateX(-50%) translateY(0);}
+.gif-load{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--t1);padding:.25rem 0;}
+.gif-load.h{display:none;}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.08);border-top-color:var(--gold);border-radius:50%;animation:spin .65s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:.65rem;}
+.exp-btn{display:flex;align-items:flex-start;gap:.65rem;padding:.8rem;border-radius:9px;border:1.5px solid var(--c4);background:var(--c3);cursor:pointer;transition:all .15s;text-align:left;width:100%;}
+.exp-btn:hover{border-color:var(--gold);box-shadow:0 0 0 2px rgba(245,158,11,.1);}
+.exp-ico{font-size:1.4rem;}
+.exp-ttl{font-size:.82rem;font-weight:700;color:var(--t0);}
+.exp-dsc{font-size:.7rem;color:var(--t1);margin-top:.08rem;line-height:1.3;}
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--t1);}
+.empty-ico{font-size:3rem;margin-bottom:.75rem;opacity:.4;}
+.empty-ttl{font-size:.95rem;font-weight:700;margin-bottom:.3rem;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:rgba(245,158,11,.2);border-radius:99px;}
+@media(max-width:580px){
+  .charm-grid{grid-template-columns:repeat(auto-fill,minmax(72px,1fr));}
+  .mon-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));}
+  .sum-mon{flex-direction:column;}
+  .sum-mon-gif{width:60px;height:60px;}
+}
+
+/* ── Profile Gate ── */
+.p-gate{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;z-index:2000;padding:1rem;backdrop-filter:blur(6px);}
+.p-gate-box{background:var(--c1);border-radius:18px;border:1px solid rgba(245,158,11,.3);box-shadow:0 32px 80px rgba(0,0,0,.7);padding:2rem;width:100%;max-width:440px;}
+.gate-brand{text-align:center;margin-bottom:1.75rem;}
+.gate-logo{font-size:3.2rem;margin-bottom:.5rem;}
+.gate-title{font-size:1.4rem;font-weight:800;background:var(--gold-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px;}
+.gate-sub{font-size:.82rem;color:var(--t1);margin-top:.3rem;line-height:1.4;}
+.pcard{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;border:1.5px solid var(--c4);background:var(--c3);cursor:pointer;transition:all .15s;margin-bottom:.5rem;}
+.pcard:hover{border-color:var(--gold);background:rgba(245,158,11,.07);transform:translateX(3px);}
+.pcard-av{width:44px;height:44px;border-radius:10px;background:rgba(245,158,11,.1);border:1.5px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;overflow:hidden;flex-shrink:0;font-weight:800;color:var(--gold);}
+.pcard-av img{width:100%;height:100%;object-fit:cover;}
+.pcard-name{font-size:.95rem;font-weight:700;}
+.pcard-sub{font-size:.7rem;color:var(--t1);margin-top:.05rem;}
+.gate-sep{display:flex;align-items:center;gap:.75rem;margin:.9rem 0;color:var(--t2);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.gate-sep::before,.gate-sep::after{content:'';flex:1;height:1px;background:var(--c4);}
+.gate-back{background:none;border:none;color:var(--t1);font-size:.78rem;cursor:pointer;padding:.2rem 0;margin-bottom:.75rem;display:flex;align-items:center;gap:.3rem;}
+.gate-back:hover{color:var(--gold);}
+
+/* ── KPI Sessions ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.5rem;margin-bottom:.85rem;}
+.kpi-box{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.7rem .75rem;text-align:center;}
+.kpi-val{font-size:1.2rem;font-weight:800;color:var(--gold);line-height:1;}
+.kpi-lbl{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-top:.25rem;}
+.sess-form{background:rgba(0,0,0,.2);border:1px solid var(--c4);border-radius:12px;padding:.9rem;margin-bottom:.85rem;}
+.sess-form summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--gold);list-style:none;display:flex;align-items:center;gap:.4rem;}
+.sess-form summary::-webkit-details-marker{display:none;}
+.sess-form[open] summary::before{content:'▾ ';}
+.sess-form:not([open]) summary::before{content:'▸ ';}
+.sess-form-body{margin-top:.8rem;}
+.inp-sm{width:100%;padding:.48rem .7rem;border:1.5px solid var(--c4);border-radius:8px;font-size:.83rem;outline:none;background:var(--c3);color:var(--t0);transition:border-color .18s;font-family:inherit;}
+.inp-sm:focus{border-color:var(--gold);}
+select.inp-sm{cursor:pointer;}
+textarea.inp{resize:vertical;min-height:58px;font-family:inherit;}
+.sess-row{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.75rem .9rem;margin-bottom:.45rem;position:relative;}
+.sess-date{font-size:.72rem;font-weight:700;color:var(--gold);margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem;}
+.sess-stats{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.3rem;}
+.sess-stat{font-size:.74rem;font-weight:600;padding:.2rem .48rem;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid var(--c4);white-space:nowrap;}
+.sess-stat span{color:var(--gold);font-weight:800;}
+.sess-comment{font-size:.75rem;color:var(--t1);font-style:italic;margin-top:.35rem;padding:.3rem .6rem;background:rgba(0,0,0,.2);border-radius:6px;border-left:2px solid rgba(245,158,11,.35);}
+.sess-rm{position:absolute;top:.5rem;right:.5rem;width:20px;height:20px;border-radius:4px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;}
+.sess-rm:hover{background:rgba(239,68,68,.28);}
+.no-sess{text-align:center;padding:2.2rem 1rem;color:var(--t2);font-size:.85rem;line-height:1.6;}
+
+/* ── Comparison Chart ── */
+.chart-tabs{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.85rem;}
+.chart-tab{padding:.3rem .75rem;border-radius:20px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;}
+.chart-tab:hover{border-color:var(--gold);color:var(--gold);}
+.chart-tab.on{background:var(--gold-g);color:#0f172a;border-color:var(--gold);}
+.chart-bar-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.45rem;}
+.chart-label{font-size:.74rem;color:var(--t1);font-weight:600;width:130px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chart-track{flex:1;background:var(--c3);border-radius:6px;height:26px;overflow:hidden;position:relative;border:1px solid var(--c4);}
+.chart-fill{height:100%;border-radius:6px;min-width:2px;transition:width .5s ease;}
+.chart-val{font-size:.75rem;font-weight:800;white-space:nowrap;min-width:56px;text-align:left;flex-shrink:0;}
+.chart-note{font-size:.7rem;color:var(--t2);text-align:center;margin-top:.75rem;}
+
+/* ── Spinner removal ── */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;}
+
+/* ── Qty slider ── */
+.qty-slider{width:100%;margin:.38rem 0 0;height:4px;-webkit-appearance:none;appearance:none;background:var(--c4);border-radius:2px;outline:none;cursor:pointer;display:block;}
+.qty-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid rgba(0,0,0,.5);box-shadow:0 1px 4px rgba(0,0,0,.4);}
+.qty-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid rgba(0,0,0,.5);}
+.qty-slider::-webkit-slider-runnable-track{height:4px;border-radius:2px;}
+
+/* ── Wizard header name input (persistent, all steps) ── */
+.wiz-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;padding-bottom:.85rem;border-bottom:1px solid rgba(245,158,11,.15);}
+.wiz-name-inp{flex:1;font-size:1.05rem;font-weight:700;border-color:rgba(255,255,255,.07);background:rgba(255,255,255,.03);}
+.wiz-name-inp:focus{border-color:var(--gold);}
+.wiz-name-inp::placeholder{color:var(--t2);font-weight:400;font-size:.88rem;font-style:italic;}
+
+/* ── Step 3 side panel layout ── */
+.step3-wrap{display:grid;grid-template-columns:1fr 310px;gap:.75rem;align-items:start;}
+.step3-list{max-height:calc(90vh - 210px);overflow-y:auto;padding-right:3px;}
+@media(max-width:700px){.step3-wrap{grid-template-columns:1fr;}.step3-list{max-height:340px;}}
+/* compact monster card for wizard step 3 */
+.mon-card{background:var(--c3);border-radius:9px;border:1px solid var(--c4);display:grid;grid-template-columns:52px 1fr;gap:.45rem;padding:.42rem .6rem;margin-bottom:.3rem;position:relative;transition:border-color .15s;}
+.mon-gif{width:52px;height:52px;border-radius:7px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.mon-name{font-size:.82rem;font-weight:700;margin-bottom:.12rem;}
+.mon-charms{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.2rem;}
+.charm-badge{display:flex;align-items:center;gap:.2rem;padding:.12rem .38rem;border-radius:6px;font-size:.65rem;font-weight:700;}
+.charm-badge img{width:12px;height:12px;}
+
+/* ── Imbu badge & disabled state ── */
+.imbu-cnt-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;border-radius:8px;background:var(--gold);color:#0f172a;font-size:.6rem;font-weight:900;padding:0 3px;position:absolute;top:3px;right:3px;line-height:1;pointer-events:none;}
+.charm-opt.imbu-opt.on::after{display:none;}
+.charm-opt.imbu-max{opacity:.22;filter:grayscale(.9);cursor:not-allowed;pointer-events:none;}
+
+/* ── Hunt card header — large ribbon ── */
+.hcard-hdr{background:linear-gradient(135deg,#1a2235,#1a2e1a);padding:1rem 1.2rem;display:flex;align-items:center;gap:.85rem;cursor:pointer;transition:background .15s;min-height:74px;}
+.hcard-hdr:hover{background:linear-gradient(135deg,#1e2d48,#1e3820);}
+.hcard-picon{width:64px;height:64px;border-radius:10px;background:rgba(245,158,11,.1);border:1.5px solid rgba(245,158,11,.25);display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;flex-shrink:0;}
+/* Left info block — flex:1 so monsters go to the right */
+.hcard-info{flex:1;min-width:0;}
+.hcard-name-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.15rem;}
+.hcard-name{font-size:1.15rem;font-weight:800;letter-spacing:.2px;}
+.hcard-voc-chip{font-size:.7rem;font-weight:700;padding:.18rem .5rem;border-radius:20px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.22);color:var(--gold);white-space:nowrap;flex-shrink:0;}
+.hcard-sub{font-size:.68rem;color:var(--t1);}
+/* Right preview strip — monsters only, right-aligned */
+.hcard-preview{flex:0 0 auto;display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:flex-end;max-width:55%;}
+@media(max-width:480px){.hcard-preview{max-width:40%;}.hcard-name{font-size:.95rem;}.hcard-pv-gif-box{width:38px;height:38px;}.hcard-pv-gif{max-width:38px;max-height:38px;}}
+.hcard-pv-gif{height:48px;max-width:48px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(0,0,0,.5));}
+.hcard-pv-div{width:1px;height:28px;background:rgba(255,255,255,.13);margin:0 .05rem;flex-shrink:0;}
+.hcard-pv-more{font-size:.75rem;font-weight:800;color:var(--t1);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.2rem .45rem;flex-shrink:0;}
+.hcard-pv-sess{font-size:.7rem;font-weight:700;padding:.22rem .48rem;border-radius:20px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;white-space:nowrap;flex-shrink:0;}
+/* Expanded card item tags — bigger */
+.hd-tag{display:flex;align-items:center;gap:.3rem;font-size:.82rem;font-weight:600;padding:.3rem .55rem;border-radius:8px;}
+.hd-qty{color:var(--gold);font-size:1rem;font-weight:800;}
+
+/* ── Expanded card layout ── */
+.hd-block{background:var(--c3);border-radius:9px;padding:.55rem .65rem;margin-bottom:.45rem;}
+.hd-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.38rem;}
+.hd-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
+.mon-mini{background:var(--c3);border-radius:9px;padding:.45rem .35rem;border:1px solid var(--c4);text-align:center;transition:border-color .15s;text-decoration:none;display:block;}
+.mon-mini:hover{border-color:rgba(245,158,11,.35);}
+.mon-mini-gif{height:42px;display:flex;align-items:center;justify-content:center;margin-bottom:.25rem;}
+.mon-mini-gif img{max-height:42px;max-width:100%;object-fit:contain;image-rendering:pixelated;}
+.mon-mini-name{font-size:.68rem;font-weight:700;color:var(--t0);margin-bottom:.22rem;line-height:1.25;min-height:2.5em;}
+.mon-mini-charm{display:flex;align-items:center;gap:.2rem;font-size:.6rem;font-weight:600;padding:.08rem .28rem;border-radius:5px;margin-bottom:.12rem;justify-content:center;}
+
+/* ── Summary monsters compact grid ── */
+.sum-mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.48rem;}
+.sum-mon-compact{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.6rem;display:flex;gap:.55rem;align-items:flex-start;}
+.sum-mon-c-gif{width:50px;height:50px;border-radius:8px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.sum-mon-c-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
+.sum-mon-c-info{flex:1;min-width:0;}
+.sum-mon-c-name{font-size:.82rem;font-weight:700;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sum-mon-c-link{font-size:.63rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.28rem;}
+.sum-charm-sm{display:flex;align-items:center;gap:.28rem;padding:.18rem .4rem;border-radius:6px;margin-bottom:.18rem;font-size:.67rem;font-weight:700;}
+.sum-charm-sm.major{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
+.sum-charm-sm.minor{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#c4b5fd;}
+.sum-charm-sm img{width:15px;height:15px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-no-charm-sm{font-size:.67rem;color:var(--t2);font-style:italic;}
+
+/* ── Summary 2-column layout ── */
+.sum-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start;}
+@media(max-width:680px){.sum-layout{grid-template-columns:1fr;}}
+
+/* ── Monster card edit button ── */
+.mon-edit{position:absolute;top:.4rem;right:1.9rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(59,130,246,.14);color:#93c5fd;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.mon-edit:hover{background:rgba(59,130,246,.28);}
+.mon-card.editing{border-color:rgba(59,130,246,.5);box-shadow:0 0 0 2px rgba(59,130,246,.15);}
+
+/* ── Normalized GIF container (same size for all monsters) ── */
+.hcard-pv-gif-box{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hcard-pv-gif{max-width:52px;max-height:52px;width:auto;height:auto;object-fit:contain;image-rendering:pixelated;}
+
+/* ── Delete profile modal phrase input ── */
+.del-phrase{font-size:1rem;font-weight:700;color:#fca5a5;font-style:italic;background:rgba(239,68,68,.07);border-radius:8px;padding:.55rem .75rem;margin:.5rem 0 .75rem;border:1px solid rgba(239,68,68,.2);letter-spacing:.3px;}
+
+/* ── Wider modal adjustments ── */
+/* step 2 spell scroll cap (many spells) */
+#spellGridWrap{max-height:calc(90vh - 260px);overflow-y:auto;}
+/* step 3 list */
+.step3-list .sec-lbl{position:sticky;top:0;background:var(--c1);z-index:2;padding-bottom:.3rem;margin-bottom:.3rem;}
+/* wizard bottom bar */
+.wiz-nav{display:flex;gap:.4rem;margin-top:.85rem;align-items:center;flex-shrink:0;}
+/* spell grid in wider modal */
+#spellGridWrap .charm-grid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr));}
+/* imbu fixed 2-col */
+#imbuGrid{grid-template-columns:repeat(2,1fr)!important;}
+/* runa grid wider columns */
+#runaGrid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));}
+
+/* ── Pre-Hunt Checklist ── */
+.cl-toggle{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:400;background:var(--gold-g);color:#0f172a;border:none;border-radius:12px 0 0 12px;padding:.8rem .5rem;cursor:pointer;box-shadow:-4px 0 20px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:.32rem;transition:all .22s;font-weight:800;}
+.cl-toggle:hover{padding-left:.85rem;box-shadow:-6px 0 28px rgba(245,158,11,.55);}
+.cl-toggle-icon{font-size:1.15rem;line-height:1;}
+.cl-toggle-txt{font-size:.48rem;writing-mode:vertical-rl;letter-spacing:1.8px;font-weight:900;text-transform:uppercase;transform:rotate(180deg);color:#0f172a;}
+.cl-toggle-badge{font-size:.65rem;font-weight:900;background:rgba(0,0,0,.22);color:#0f172a;border-radius:10px;padding:.05rem .3rem;min-width:18px;text-align:center;line-height:1.5;}
+.cl-panel{position:fixed;right:-360px;top:0;height:100vh;width:340px;background:var(--c1);border-left:1px solid rgba(245,158,11,.15);box-shadow:-10px 0 48px rgba(0,0,0,.65);z-index:450;transition:right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.cl-panel.open{right:0;}
+.cl-head{background:linear-gradient(135deg,#152232,#152a15);padding:.9rem 1rem;border-bottom:1px solid rgba(245,158,11,.18);display:flex;align-items:center;gap:.55rem;flex-shrink:0;}
+.cl-head-title{font-size:.9rem;font-weight:800;flex:1;background:var(--gold-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cl-close{width:26px;height:26px;border-radius:6px;border:none;background:rgba(255,255,255,.07);color:var(--t1);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.cl-close:hover{background:rgba(239,68,68,.2);color:#fca5a5;}
+.cl-body{flex:1;overflow-y:auto;padding:.65rem .75rem;}
+.cl-sec{font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);border-bottom:1px solid rgba(245,158,11,.15);padding-bottom:.28rem;margin:.55rem 0 .42rem;}
+.cl-item{display:flex;align-items:center;gap:.5rem;padding:.45rem .55rem;border-radius:9px;border:1px solid var(--c4);background:var(--c3);margin-bottom:.28rem;cursor:pointer;transition:all .15s;user-select:none;}
+.cl-item:hover{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.04);}
+.cl-item.cl-done{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.3);}
+.cl-cb{width:17px;height:17px;border-radius:5px;border:2px solid var(--c4);background:var(--c2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:.65rem;color:transparent;line-height:1;}
+.cl-item.cl-done .cl-cb{background:var(--green);border-color:var(--green);color:#fff;}
+.cl-ico{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.05rem;line-height:1;}
+.cl-ico img{width:24px;height:24px;object-fit:contain;image-rendering:pixelated;}
+.cl-lbl{flex:1;font-size:.82rem;font-weight:600;line-height:1.25;min-width:0;}
+.cl-item.cl-done .cl-lbl{color:var(--t2);text-decoration:line-through;}
+.cl-rm{width:18px;height:18px;border-radius:4px;border:none;background:none;color:transparent;font-size:.68rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;transition:all .15s;}
+.cl-item:hover .cl-rm{color:var(--t2);}
+.cl-rm:hover{color:#fca5a5!important;background:rgba(239,68,68,.15);}
+.cl-add-toggler{width:100%;padding:.42rem;border-radius:8px;border:1.5px dashed var(--c4);background:none;color:var(--t1);font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;margin-top:.55rem;}
+.cl-add-toggler:hover{border-color:var(--gold);color:var(--gold);}
+.cl-add-form{display:none;background:rgba(0,0,0,.2);border:1px solid var(--c4);border-radius:10px;padding:.65rem;margin-top:.42rem;}
+.cl-add-form.open{display:block;}
+.cl-foot{padding:.65rem .75rem;border-top:1px solid var(--c4);background:rgba(0,0,0,.12);flex-shrink:0;}
+.cl-prog-bar-wrap{height:4px;background:var(--c4);border-radius:2px;margin-bottom:.48rem;overflow:hidden;}
+.cl-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .35s ease;}
+.cl-prog-bar.cl-all{background:linear-gradient(90deg,#10b981,#059669);}
+.cl-foot-row{display:flex;align-items:center;gap:.45rem;}
+.cl-prog-txt{flex:1;font-size:.72rem;color:var(--t1);font-weight:600;}
+.cl-prog-txt strong{color:var(--gold);}
+.cl-prog-txt.cl-ok strong{color:var(--green);}
+/* Outfitter link pill */
+.outfitter-link{font-size:.72rem;color:var(--gold);font-weight:700;text-decoration:none;padding:.18rem .5rem;border:1px solid rgba(245,158,11,.3);border-radius:20px;background:rgba(245,158,11,.08);white-space:nowrap;transition:all .15s;}
+.outfitter-link:hover{background:rgba(245,158,11,.18);border-color:var(--gold);}
+/* Outfitter iframe helper */
+.outfitter-helper{display:none;margin-top:.55rem;border:1px solid rgba(245,158,11,.3);border-radius:10px;overflow:hidden;background:var(--c3);}
+.outfitter-helper.on{display:block;}
+.outfitter-helper-hdr{display:flex;align-items:center;justify-content:space-between;padding:.42rem .7rem;background:rgba(245,158,11,.1);border-bottom:1px solid rgba(245,158,11,.18);}
+.outfitter-helper-tip{padding:.38rem .7rem;font-size:.67rem;color:var(--t1);background:rgba(0,0,0,.18);border-bottom:1px solid rgba(245,158,11,.1);line-height:1.45;}
+.outfitter-helper-tip strong{color:var(--gold);font-weight:700;}
+.outfitter-helper iframe{width:100%;height:290px;border:none;display:block;}
+.outfitter-helper-ext{display:flex;align-items:center;gap:.5rem;padding:.35rem .7rem;background:rgba(0,0,0,.15);border-top:1px solid rgba(245,158,11,.08);}
+.outfitter-helper-ext a{font-size:.7rem;color:var(--gold);font-weight:700;text-decoration:none;padding:.18rem .55rem;border:1px solid rgba(245,158,11,.3);border-radius:20px;background:rgba(245,158,11,.08);white-space:nowrap;}
+.outfitter-helper-ext a:hover{background:rgba(245,158,11,.18);}
+.outfitter-helper-ext span{font-size:.65rem;color:var(--t2);}
+/* pchip edit icon */
+.pchip-edit{width:14px;height:14px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.65rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1;transition:color .15s;}
+.pchip-edit:hover{color:var(--gold);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="hdr-brand">
+      <span style="font-size:1.6rem;">⚔️</span>
+      <div><div class="hdr-title">RESPAW3000</div><div class="hdr-sub">Hunt List Manager</div></div>
+    </div>
+    <div class="profiles-strip" id="profilesStrip"></div>
+    <button class="btn-addp" onclick="openProfileModal()" title="Novo perfil">+</button>
+  </div>
+</header>
+
+<div class="unsaved" id="unsaved">
+  ⚠️ Alterações não salvas
+  <button onclick="save()">💾 Salvar agora</button>
+</div>
+
+<div class="wrap">
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;">
+    <button class="btn btn-g" onclick="openWizard()">⚔️ Nova Hunt</button>
+    <button class="btn btn-o" onclick="save()">💾 Salvar</button>
+    <button class="btn btn-o" onclick="openCompare()">📊 Comparar</button>
+    <button class="btn btn-o" onclick="importJSON()">📂 Importar</button>
+    <input type="file" id="importInput" accept=".json" style="display:none" onchange="handleImport(event)">
+    <button class="btn btn-del btn-sm" onclick="openDelProfile()" title="Apagar perfil e todas as hunts">🗑️ Apagar Perfil</button>
+    <span style="flex:1"></span>
+    <span id="profileLabel" style="font-size:.75rem;color:var(--t1);font-weight:600;cursor:pointer;" onclick="openGate()" title="Trocar perfil"></span>
+  </div>
+  <div id="huntList"></div>
+  <div class="card" style="margin-top:1.5rem;">
+    <div class="ctitle">📤 Exportar</div>
+    <div class="exp-grid">
+      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📦</span><div><div class="exp-ttl">Backup JSON</div><div class="exp-dsc">Arquivo .json com todos os dados</div></div></button>
+      <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">🖨️</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">Versão visual para impressão</div></div></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WIZARD ══ -->
+<div class="ov" id="wizOv">
+  <div class="modal" style="max-width:min(1240px,95vw);">
+    <!-- Hunt name input — always visible, all steps -->
+    <div class="wiz-header">
+      <span style="font-size:1.4rem;flex-shrink:0;">⚔️</span>
+      <input class="inp wiz-name-inp" id="wHuntName" placeholder="Dê um nome à sua nova hunt...">
+    </div>
+    <div class="wiz-steps">
+      <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> Consumíveis</div>
+      <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Imbu &amp; Magias</div>
+      <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Monstros</div>
+    </div>
+
+    <!-- Step 1: Poções | Runas (side by side) -->
+    <div class="wpanel" id="wp1">
+      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:1rem;align-items:start;">
+        <!-- Pots -->
+        <div>
+          <div class="sec-lbl">💊 Poções <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
+          <div class="charm-grid" id="potGrid"></div>
+          <div id="potSel" style="margin-top:.4rem;"></div>
+        </div>
+        <!-- Runas -->
+        <div>
+          <div class="sec-lbl">📜 Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
+          <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
+          <div id="runaSel" style="margin-top:.4rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Imbuements | Magias (side by side) -->
+    <div class="wpanel" id="wp2">
+      <div style="display:grid;grid-template-columns:230px 1fr;gap:1rem;align-items:start;">
+        <!-- Imbu column -->
+        <div>
+          <div class="sec-lbl">🛡️ Imbuements <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">Proteção elemental</span> <span id="imbuCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+          <div style="font-size:.67rem;color:var(--t1);margin-bottom:.45rem;">Máx. 2 — clique para ciclar 0→1→2</div>
+          <div class="charm-grid" style="grid-template-columns:repeat(2,1fr);" id="imbuGrid"></div>
+        </div>
+        <!-- Spells column -->
+        <div>
+          <div class="sec-lbl">✨ Magias <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">escolha sua vocação</span> <span id="spellCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+          <div class="voc-bar" id="vocBar" style="margin-bottom:.6rem;">
+            <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
+            <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
+            <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
+            <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
+            <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
+          </div>
+          <div id="spellGridWrap">
+            <div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Monstros -->
+    <div class="wpanel" id="wp3">
+      <div class="step3-wrap">
+        <!-- LEFT: add form -->
+        <div class="step3-form">
+          <div class="sec-lbl">🐉 Adicionar Monstro</div>
+          <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
+            <div class="f">
+              <label class="lbl">Nome do Monstro</label>
+              <input class="inp" id="monName" placeholder="Ex: Demon, Hydra..." oninput="onMonNameInput()">
+            </div>
+            <div class="f">
+              <label class="lbl">Link TibiaWiki</label>
+              <div style="display:flex;gap:.4rem;">
+                <input class="inp" id="monWiki" placeholder="https://tibia.fandom.com/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
+                <button class="btn btn-o btn-sm" onclick="fetchGif()">🖼️ GIF</button>
+              </div>
+              <div class="gif-load h" id="gifLoad"><div class="spin"></div> Buscando GIF...</div>
+              <div class="url-preview" id="gifPreview">
+                <img id="gifImg" alt="">
+                <span style="font-size:.7rem;color:var(--green);">✓ GIF encontrado</span>
+              </div>
+            </div>
+            <div style="font-size:.68rem;color:var(--t1);margin-bottom:.5rem;padding:.28rem .45rem;background:rgba(245,158,11,.06);border-radius:6px;border:1px solid rgba(245,158,11,.12);">
+              ⚠️ Charms em cinza já foram usados nesta hunt.
+            </div>
+            <div class="row">
+              <div class="f">
+                <label class="lbl">⭐ Major Charm</label>
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+                  <button class="charm-none-btn on" id="majorNoneBtn" onclick="selectCharm('major',null)">Nenhum</button>
+                  <span style="font-size:.72rem;color:var(--t1);" id="majorCharmLabel"></span>
+                </div>
+                <div class="charm-grid" id="majorCharmGrid"></div>
+              </div>
+              <div class="f">
+                <label class="lbl">🔮 Minor Charm</label>
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+                  <button class="charm-none-btn on" id="minorNoneBtn" onclick="selectCharm('minor',null)">Nenhum</button>
+                  <span style="font-size:.72rem;color:var(--t1);" id="minorCharmLabel"></span>
+                </div>
+                <div class="charm-grid" id="minorCharmGrid"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:.4rem;margin-top:.5rem;">
+              <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
+              <button class="btn btn-o btn-sm" onclick="clearMonForm()">🗑️ Limpar</button>
+            </div>
+          </div>
+        </div>
+        <!-- RIGHT: monster list -->
+        <div class="step3-list">
+          <div class="sec-lbl">📋 Adicionados <span id="monCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+          <div id="monList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.4rem;margin-top:1.1rem;align-items:center;">
+      <button class="btn btn-o" id="wizBack" onclick="goStep(wiz.step-1)" style="display:none;">← Voltar</button>
+      <span style="flex:1;font-size:.75rem;color:var(--t1);" id="wizPgLbl"></span>
+      <button class="btn btn-o" onclick="closeWizard()">Cancelar</button>
+      <button class="btn btn-g" id="wizNext" onclick="wizNext()">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROFILE MODAL ══ -->
+<div class="ov" id="profileOv">
+  <div class="modal" style="max-width:380px;">
+    <div class="mtitle">👤 <span id="profileMTitle">Novo Perfil</span></div>
+    <div class="f">
+      <label class="lbl">Nome do Personagem</label>
+      <input class="inp" id="profileName" placeholder="Ex: Tibianus...">
+    </div>
+    <div class="f">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.38rem;">
+        <label class="lbl" style="margin-bottom:0;">🖼️ Imagem / GIF do Outfit</label>
+        <a href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank" class="outfitter-link">🎨 Outfitter →</a>
+      </div>
+      <input class="inp" id="profileImgUrl" placeholder="Cole o link do GIF ou da URL do Outfitter..." oninput="previewProfileImg()">
+      <div id="profileImgHint" style="font-size:.67rem;color:var(--t1);margin-top:.28rem;">Cole o link direto de uma imagem, ou a URL gerada pelo Outfitter para carregar o visual do personagem.</div>
+      <div class="url-preview" id="profileImgPreview" style="margin-top:.45rem;">
+        <img id="profileImgThumb" alt="" style="width:52px;height:52px;border-radius:8px;object-fit:contain;image-rendering:pixelated;border:2px solid rgba(245,158,11,.3);">
+        <span style="font-size:.72rem;color:var(--green);font-weight:600;">✓ Imagem carregada</span>
+      </div>
+      <!-- Outfitter iframe helper -->
+      <div class="outfitter-helper" id="outfitterHelper">
+        <div class="outfitter-helper-hdr">
+          <span style="font-size:.72rem;font-weight:800;color:var(--gold);">🎨 Outfitter detectado</span>
+          <button onclick="closeOutfitterHelper()" style="background:none;border:none;color:var(--t1);cursor:pointer;font-size:.78rem;font-weight:700;padding:.1rem .3rem;">✕</button>
+        </div>
+        <div class="outfitter-helper-tip">
+          💡 <strong>Clique com o botão direito</strong> na imagem do outfit abaixo → <strong>"Copiar imagem"</strong> → Cole no campo acima.<br>
+          <span style="color:var(--t2);">Ou copie o link GIF direto se preferir salvar como URL.</span>
+        </div>
+        <iframe id="outfitterFrame" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        <div class="outfitter-helper-ext">
+          <a id="outfitterExtLink" href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank">↗ Abrir em nova aba</a>
+          <span>Se o preview não carregar, abra em nova aba e copie a imagem de lá.</span>
+        </div>
+      </div>
+    </div>
+    <div class="macts">
+      <button class="btn btn-o" onclick="closeProfileModal()">Cancelar</button>
+      <button class="btn btn-g" id="profileSaveBtn" onclick="saveProfile()">Criar Perfil</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUMMARY MODAL ══ -->
+<div class="ov" id="summaryOv">
+  <div class="modal" style="max-width:min(1440px,97vw);">
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
+      <span style="font-size:1.4rem;">📋</span>
+      <div>
+        <div style="font-size:1rem;font-weight:800;" id="sumHuntName"></div>
+        <div style="font-size:.72rem;color:var(--t1);" id="sumHuntMeta"></div>
+      </div>
+    </div>
+    <div id="summaryContent"></div>
+    <div class="macts">
+      <button class="btn btn-o" onclick="closeSummary()">Fechar</button>
+      <button class="btn btn-o" id="sumCopyBtn" onclick="">📋 Copiar</button>
+      <button class="btn btn-g" onclick="exportPrint()">🖨️ Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DELETE PROFILE MODAL ══ -->
+<div class="ov" id="delProfileOv">
+  <div class="modal" style="max-width:420px;">
+    <div class="mtitle" style="color:#fca5a5;">⚠️ Apagar Perfil</div>
+    <div id="delProfileInfo" style="font-size:.84rem;color:var(--t1);margin-bottom:1rem;line-height:1.5;"></div>
+    <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:.85rem;">
+      <div style="font-size:.73rem;color:var(--t1);margin-bottom:.3rem;">Para confirmar, escreva exatamente:</div>
+      <div class="del-phrase" id="delProfilePhrase"></div>
+      <input class="inp" id="delProfileInput" placeholder="Digite a frase acima..." oninput="checkDelInput()" autocomplete="off">
+    </div>
+    <div class="macts">
+      <button class="btn btn-o" onclick="closeDelProfile()">Cancelar</button>
+      <button class="btn btn-del" id="delProfileConfirmBtn" onclick="confirmDeleteProfile()" disabled style="opacity:.35;cursor:not-allowed;">🗑️ Apagar tudo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROFILE GATE ══ -->
+<div class="p-gate" id="profileGate" style="display:none;">
+  <div class="p-gate-box">
+    <div id="profileGateContent"></div>
+  </div>
+</div>
+
+<!-- ══ SESSIONS / KPI MODAL ══ -->
+<div class="ov" id="sessOv">
+  <div class="modal" style="max-width:700px;">
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
+      <span style="font-size:1.4rem;">📊</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:1rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="sessHuntName"></div>
+        <div style="font-size:.72rem;color:var(--t1);" id="sessHuntMeta"></div>
+      </div>
+      <button class="btn btn-o btn-sm" onclick="closeSessModal()">✕ Fechar</button>
+    </div>
+    <div id="sessContent"></div>
+  </div>
+</div>
+
+<!-- ══ COMPARE MODAL ══ -->
+<div class="ov" id="compareOv">
+  <div class="modal" style="max-width:680px;">
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
+      <span style="font-size:1.4rem;">📊</span>
+      <div style="font-size:1rem;font-weight:800;flex:1;">Comparar Hunts</div>
+      <button class="btn btn-o btn-sm" onclick="closeCompare()">✕ Fechar</button>
+    </div>
+    <div id="compareContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══ CHECKLIST TOGGLE ══ -->
+<button class="cl-toggle" id="clToggle" onclick="toggleChecklist()" title="Checklist Pré-Hunt">
+  <span class="cl-toggle-icon">🎯</span>
+  <span class="cl-toggle-txt">check</span>
+  <span class="cl-toggle-badge" id="clBadge">0/3</span>
+</button>
+
+<!-- ══ CHECKLIST PANEL ══ -->
+<div class="cl-panel" id="clPanel">
+  <div class="cl-head">
+    <span style="font-size:1.1rem;">🎯</span>
+    <div class="cl-head-title">Checklist Pré-Hunt</div>
+    <button class="cl-close" onclick="toggleChecklist()" title="Fechar">✕</button>
+  </div>
+  <div class="cl-body" id="clBody">
+    <div style="color:var(--t1);font-size:.8rem;padding:1rem 0;text-align:center;">Carregando...</div>
+  </div>
+  <div class="cl-foot">
+    <div class="cl-prog-bar-wrap"><div class="cl-prog-bar" id="clProgBar" style="width:0%"></div></div>
+    <div class="cl-foot-row">
+      <div class="cl-prog-txt" id="clProgTxt"><strong>0</strong>/3 prontos</div>
+      <button class="btn btn-o btn-sm" onclick="resetChecklist()" style="flex-shrink:0;">🔄 Resetar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// FIXED DATA CONSTANTS
+// ══════════════════════════════════════════════════════
+
+const VOC_ICONS  = {druid:'🌿',sorcerer:'🔮',knight:'⚔️',paladin:'🏹',monk:'🥋'};
+const VOC_LABELS = {druid:'Druid',sorcerer:'Sorcerer',knight:'Knight',paladin:'Paladin',monk:'Monk'};
+
+const MAJOR_CHARMS = [
+  {id:'carnage',   name:'Carnage',      img:'https://static.wikia.nocookie.net/tibia/images/4/4f/Carnage.png/revision/latest?cb=20241116001734&path-prefix=en'},
+  {id:'curse',     name:'Curse',        img:'https://static.wikia.nocookie.net/tibia/images/4/4f/Curse_%28Charm%29.png/revision/latest?cb=20171121005704&path-prefix=en'},
+  {id:'divwrath',  name:'Divine Wrath', img:'https://static.wikia.nocookie.net/tibia/images/3/38/Divine_Wrath.png/revision/latest?cb=20200611171536&path-prefix=en'},
+  {id:'dodge',     name:'Dodge',        img:'https://static.wikia.nocookie.net/tibia/images/b/b2/Dodge.png/revision/latest?cb=20241122152351&path-prefix=en'},
+  {id:'enflame',   name:'Enflame',      img:'https://static.wikia.nocookie.net/tibia/images/c/c0/Enflame.png/revision/latest?cb=20171121005705&path-prefix=en'},
+  {id:'freeze',    name:'Freeze',       img:'https://static.wikia.nocookie.net/tibia/images/0/00/Freeze.png/revision/latest?cb=20171121005705&path-prefix=en'},
+  {id:'lowblow',   name:'Low Blow',     img:'https://static.wikia.nocookie.net/tibia/images/9/97/Low_Blow.png/revision/latest?cb=20241122152501&path-prefix=en'},
+  {id:'overflux',  name:'Overflux',     img:'https://static.wikia.nocookie.net/tibia/images/8/84/Overflux.png/revision/latest?cb=20241116002304&path-prefix=en'},
+  {id:'overpower', name:'Overpower',    img:'https://static.wikia.nocookie.net/tibia/images/f/f7/Overpower.png/revision/latest?cb=20241116002431&path-prefix=en'},
+  {id:'parry',     name:'Parry',        img:'https://static.wikia.nocookie.net/tibia/images/4/44/Parry.png/revision/latest?cb=20241122152450&path-prefix=en'},
+  {id:'poison',    name:'Poison',       img:'https://static.wikia.nocookie.net/tibia/images/0/05/Poison.png/revision/latest?cb=20171121005707&path-prefix=en'},
+  {id:'savblow',   name:'Savage Blow',  img:'https://static.wikia.nocookie.net/tibia/images/d/d1/Savage_Blow.png/revision/latest?cb=20241107172646&path-prefix=en'},
+  {id:'wound',     name:'Wound',        img:'https://static.wikia.nocookie.net/tibia/images/a/a4/Wound.png/revision/latest?cb=20171121005708&path-prefix=en'},
+  {id:'zap',       name:'Zap',          img:'https://static.wikia.nocookie.net/tibia/images/0/0b/Zap.png/revision/latest?cb=20171121005655&path-prefix=en'},
+];
+const MINOR_CHARMS = [
+  {id:'adrenaline',name:'Adrenaline Burst',  img:'https://static.wikia.nocookie.net/tibia/images/1/11/Adrenaline_Burst.png/revision/latest?cb=20241122152902&path-prefix=en'},
+  {id:'bless',     name:'Bless',             img:'https://static.wikia.nocookie.net/tibia/images/5/51/Bless.png/revision/latest?cb=20171121005703&path-prefix=en'},
+  {id:'cleanse',   name:'Cleanse',           img:'https://static.wikia.nocookie.net/tibia/images/9/95/Cleanse.png/revision/latest?cb=20241122152913&path-prefix=en'},
+  {id:'cripple',   name:'Cripple',           img:'https://static.wikia.nocookie.net/tibia/images/8/86/Cripple.png/revision/latest?cb=20241122152926&path-prefix=en'},
+  {id:'fatalhold', name:'Fatal Hold',        img:'https://static.wikia.nocookie.net/tibia/images/4/41/Fatal_Hold.png/revision/latest?cb=20241107172645&path-prefix=en'},
+  {id:'gut',       name:'Gut',               img:'https://static.wikia.nocookie.net/tibia/images/4/4a/Gut.png/revision/latest?cb=20171121005706&path-prefix=en'},
+  {id:'numb',      name:'Numb',              img:'https://static.wikia.nocookie.net/tibia/images/9/9f/Numb.png/revision/latest?cb=20241122152955&path-prefix=en'},
+  {id:'scavenge',  name:'Scavenge',          img:'https://static.wikia.nocookie.net/tibia/images/6/68/Scavenge.png/revision/latest?cb=20171121005708&path-prefix=en'},
+  {id:'vampiric',  name:'Vampiric Embrace',  img:'https://static.wikia.nocookie.net/tibia/images/b/b7/Vampiric_Embrace.png/revision/latest?cb=20200611171707&path-prefix=en'},
+  {id:'voidinv',   name:'Void Inversion',    img:'https://static.wikia.nocookie.net/tibia/images/b/b1/Void_Inversion.png/revision/latest?cb=20241107172644&path-prefix=en'},
+  {id:'voidcall',  name:"Void's Call",       img:"https://static.wikia.nocookie.net/tibia/images/c/cd/Void%27s_Call.png/revision/latest?cb=20200611171719&path-prefix=en"},
+];
+const POTIONS = [
+  {id:'sup_hp',   name:'Supreme Health',  img:'https://static.wikia.nocookie.net/tibia/images/5/55/Supreme_Health_Potion.gif/revision/latest?cb=20160415182102&path-prefix=en'},
+  {id:'ult_hp',   name:'Ultimate Health', img:'https://static.wikia.nocookie.net/tibia/images/7/7b/Ultimate_Health_Potion.gif/revision/latest?cb=20160416080121&path-prefix=en'},
+  {id:'ult_mp',   name:'Ultimate Mana',   img:'https://static.wikia.nocookie.net/tibia/images/b/b8/Ultimate_Mana_Potion.gif/revision/latest?cb=20160415181417&path-prefix=en'},
+  {id:'ult_sp',   name:'Ultimate Spirit', img:'https://static.wikia.nocookie.net/tibia/images/f/f0/Ultimate_Spirit_Potion.gif/revision/latest?cb=20160415181740&path-prefix=en'},
+  {id:'great_hp', name:'Great Health',    img:'https://static.wikia.nocookie.net/tibia/images/9/91/Great_Health_Potion.gif/revision/latest?cb=20171128183349&path-prefix=en'},
+  {id:'great_mp', name:'Great Mana',      img:'https://static.wikia.nocookie.net/tibia/images/5/5b/Great_Mana_Potion.gif/revision/latest?cb=20071207044312&path-prefix=en'},
+  {id:'great_sp', name:'Great Spirit',    img:'https://static.wikia.nocookie.net/tibia/images/0/08/Great_Spirit_Potion.gif/revision/latest?cb=20080408150451&path-prefix=en'},
+  {id:'str_hp',   name:'Strong Health',   img:'https://static.wikia.nocookie.net/tibia/images/7/78/Strong_Health_Potion.gif/revision/latest?cb=20171128183348&path-prefix=en'},
+  {id:'str_mp',   name:'Strong Mana',     img:'https://static.wikia.nocookie.net/tibia/images/3/3c/Strong_Mana_Potion.gif/revision/latest?cb=20171128183348&path-prefix=en'},
+  {id:'hp',       name:'Health Potion',   img:'https://static.wikia.nocookie.net/tibia/images/e/e2/Health_Potion.gif/revision/latest?cb=20171128183347&path-prefix=en'},
+  {id:'mp',       name:'Mana Potion',     img:'https://static.wikia.nocookie.net/tibia/images/4/43/Mana_Potion.gif/revision/latest?cb=20170904190239&path-prefix=en'},
+];
+const RUNES = [
+  {id:'sd',   name:'Sudden Death',        img:'https://static.wikia.nocookie.net/tibia/images/c/c2/Sudden_Death_Rune.gif/revision/latest?cb=20150720234440&path-prefix=en'},
+  {id:'hmm',  name:'Heavy Magic Missile', img:'https://static.wikia.nocookie.net/tibia/images/6/69/Heavy_Magic_Missile_Rune.gif/revision/latest?cb=20150720234442&path-prefix=en'},
+  {id:'expl', name:'Explosion',           img:'https://static.wikia.nocookie.net/tibia/images/c/c6/Explosion_Rune.gif/revision/latest?cb=20150720234444&path-prefix=en'},
+  {id:'ss',   name:'Stone Shower',        img:'https://static.wikia.nocookie.net/tibia/images/e/ea/Stone_Shower_Rune.gif/revision/latest?cb=20150720234440&path-prefix=en'},
+  {id:'ava',  name:'Avalanche',           img:'https://static.wikia.nocookie.net/tibia/images/0/05/Avalanche_Rune.gif/revision/latest?cb=20170906121830&path-prefix=en'},
+  {id:'gfb',  name:'Great Fireball',      img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Great_Fireball_Rune.gif/revision/latest?cb=20150720234444&path-prefix=en'},
+  {id:'tst',  name:'Thunderstorm',        img:'https://static.wikia.nocookie.net/tibia/images/a/a4/Thunderstorm_Rune.gif/revision/latest?cb=20170906122303&path-prefix=en'},
+  {id:'eb',   name:'Energy Bomb',         img:'https://static.wikia.nocookie.net/tibia/images/5/55/Energy_Bomb_Rune.gif/revision/latest?cb=20121105212544&path-prefix=en'},
+  {id:'ew',   name:'Energy Wall',         img:'https://static.wikia.nocookie.net/tibia/images/1/1e/Energy_Wall_Rune.gif/revision/latest?cb=20121105212559&path-prefix=en'},
+  {id:'pb',   name:'Poison Bomb',         img:'https://static.wikia.nocookie.net/tibia/images/2/2f/Poison_Bomb_Rune.gif/revision/latest?cb=20170906122147&path-prefix=en'},
+  {id:'pw',   name:'Poison Wall',         img:'https://static.wikia.nocookie.net/tibia/images/4/44/Poison_Wall_Rune.gif/revision/latest?cb=20121105212905&path-prefix=en'},
+  {id:'fw',   name:'Fire Wall',           img:'https://static.wikia.nocookie.net/tibia/images/9/95/Fire_Wall_Rune.gif/revision/latest?cb=20121105212645&path-prefix=en'},
+  {id:'fb',   name:'Fire Bomb',           img:'https://static.wikia.nocookie.net/tibia/images/c/c0/Fire_Bomb_Rune.gif/revision/latest?cb=20121105212620&path-prefix=en'},
+  {id:'sta',  name:'Stalagmite',          img:'https://static.wikia.nocookie.net/tibia/images/6/60/Stalagmite_Rune.gif/revision/latest?cb=20150720234443&path-prefix=en'},
+  {id:'par',  name:'Paralyze',            img:'https://static.wikia.nocookie.net/tibia/images/7/7e/Paralyse_Rune.gif/revision/latest?cb=20121105212819&path-prefix=en'},
+  {id:'lmm',  name:'Light Magic Missile', img:'https://static.wikia.nocookie.net/tibia/images/d/d7/Light_Magic_Missile_Rune.gif/revision/latest?cb=20150720234443&path-prefix=en'},
+  {id:'icic', name:'Icicle',              img:'https://static.wikia.nocookie.net/tibia/images/9/92/Icicle_Rune.gif/revision/latest?cb=20150720234441&path-prefix=en'},
+  {id:'mw',   name:'Magic Wall',          img:'https://tibia.fandom.com/wiki/Special:FilePath/Magic_Wall_Rune.gif'},
+  {id:'df',   name:'Destroy Field',       img:'https://tibia.fandom.com/wiki/Special:FilePath/Destroy_Field_Rune.gif'},
+  {id:'hm',   name:'Holy Missile',        img:'https://tibia.fandom.com/wiki/Special:FilePath/Holy_Missile_Rune.gif'},
+  {id:'sf',   name:'Soulfire',            img:'https://static.wikia.nocookie.net/tibia/images/6/65/Soulfire_Rune.gif/revision/latest?cb=20121105212912&path-prefix=en'},
+  {id:'wg',   name:'Wild Growth',         img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Wild_Growth_Rune.gif/revision/latest?cb=20170906122303&path-prefix=en'},
+  {id:'ad',   name:'Animate Dead',        img:'https://static.wikia.nocookie.net/tibia/images/5/53/Animate_Dead_Rune.gif/revision/latest?cb=20121105212405&path-prefix=en'},
+  {id:'dis',  name:'Disintegrate',        img:'https://static.wikia.nocookie.net/tibia/images/b/b4/Disintegrate_Rune.gif/revision/latest?cb=20121105212507&path-prefix=en'},
+  {id:'chm',  name:'Chameleon',           img:'https://static.wikia.nocookie.net/tibia/images/7/7a/Chameleon_Rune.gif/revision/latest?cb=20121105212434&path-prefix=en'},
+  {id:'uh',   name:'Ultimate Healing',    img:'https://static.wikia.nocookie.net/tibia/images/b/ba/Ultimate_Healing_Rune.gif/revision/latest?cb=20150720234440&path-prefix=en'},
+  {id:'ih',   name:'Intense Healing',     img:'https://static.wikia.nocookie.net/tibia/images/2/26/Intense_Healing_Rune.gif/revision/latest?cb=20150720234441&path-prefix=en'},
+  {id:'antidote', name:'Antidote',        img:'https://static.wikia.nocookie.net/tibia/images/0/0b/Antidote_Rune.gif/revision/latest?cb=20121105212423&path-prefix=en'},
+  {id:'sio',  name:'Strong Ice Wave',     img:'https://tibia.fandom.com/wiki/Special:FilePath/Strong_Ice_Wave_Rune.gif'},
+  {id:'gfr',  name:'Great Fireball',      img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Great_Fireball_Rune.gif/revision/latest?cb=20150720234444&path-prefix=en'},
+];
+// Vibrancy removida (não é proteção elemental)
+const IMBU_DEFENSE = [
+  {id:'drag', name:'Dragon Hide',    sub:'Proteção Fogo',    img:'https://static.wikia.nocookie.net/tibia/images/0/02/Dragon_Hide.png/revision/latest?cb=20200519100926&path-prefix=en'},
+  {id:'quar', name:'Quara Scale',    sub:'Proteção Gelo',    img:'https://static.wikia.nocookie.net/tibia/images/9/95/Quara_Scale.png/revision/latest?cb=20200519101056&path-prefix=en'},
+  {id:'clou', name:'Cloud Fabric',   sub:'Proteção Energia', img:'https://static.wikia.nocookie.net/tibia/images/3/3a/Cloud_Fabric.png/revision/latest?cb=20200519100856&path-prefix=en'},
+  {id:'snak', name:'Snake Skin',     sub:'Proteção Terra',   img:'https://static.wikia.nocookie.net/tibia/images/7/74/Snake_Skin.png/revision/latest?cb=20200519101005&path-prefix=en'},
+  {id:'lich', name:'Lich Shroud',    sub:'Proteção Morte',   img:'https://static.wikia.nocookie.net/tibia/images/3/37/Lich_Shroud.png/revision/latest?cb=20200519101029&path-prefix=en'},
+  {id:'demo', name:'Demon Presence', sub:'Proteção Holy',    img:'https://static.wikia.nocookie.net/tibia/images/4/4c/Demon_Presence.png/revision/latest?cb=20200519100823&path-prefix=en'},
+];
+
+// Spells — instântâneas de ataque por vocação
+// img via Special:FilePath redirect (funciona no browser)
+function spellImg(n){ return 'https://tibia.fandom.com/wiki/Special:FilePath/'+encodeURIComponent(n.replace(/ /g,'_'))+'.gif'; }
+const SPELLS = [
+  // Druid
+  {id:'d_envenom',      name:'Envenom',              words:'utori pox',          vocs:['druid'],             img:spellImg('Envenom')},
+  {id:'d_icew',         name:'Ice Wave',              words:'exevo frigo hur',    vocs:['druid'],             img:spellImg('Ice Wave')},
+  {id:'d_physstrike',   name:'Physical Strike',       words:'exori moe ico',      vocs:['druid'],             img:spellImg('Physical Strike')},
+  {id:'d_sicew',        name:'Strong Ice Wave',       words:'exevo gran frigo hur',vocs:['druid'],            img:spellImg('Strong Ice Wave')},
+  {id:'d_terraw',       name:'Terra Wave',            words:'exevo tera hur',     vocs:['druid'],             img:spellImg('Terra Wave')},
+  {id:'d_iceburst',     name:'Ice Burst',             words:'exevo ulus frigo',   vocs:['druid'],             img:spellImg('Ice Burst')},
+  {id:'d_terraburst',   name:'Terra Burst',           words:'exevo ulus tera',    vocs:['druid'],             img:spellImg('Terra Burst')},
+  {id:'d_etwinter',     name:'Eternal Winter',        words:'exevo gran mas frigo',vocs:['druid'],            img:spellImg('Eternal Winter')},
+  {id:'d_wrathnature',  name:'Wrath of Nature',       words:'exevo gran mas tera', vocs:['druid'],            img:spellImg('Wrath of Nature')},
+  {id:'d_sicestrike',   name:'Strong Ice Strike',     words:'exori gran frigo',   vocs:['druid'],             img:spellImg('Strong Ice Strike')},
+  {id:'d_sterrastrike', name:'Strong Terra Strike',   words:'exori gran tera',    vocs:['druid'],             img:spellImg('Strong Terra Strike')},
+  {id:'d_ulticestrike', name:'Ultimate Ice Strike',   words:'exori max frigo',    vocs:['druid'],             img:spellImg('Ultimate Ice Strike')},
+  {id:'d_ultterrastrike',name:'Ultimate Terra Strike',words:'exori max tera',     vocs:['druid'],             img:spellImg('Ultimate Terra Strike')},
+  // Druid + Sorcerer
+  {id:'ds_appstrike',   name:"Apprentice's Strike",   words:'exori min flam',     vocs:['druid','sorcerer'],  img:spellImg("Apprentice's Strike")},
+  {id:'ds_energystrike',name:'Energy Strike',          words:'exori vis',          vocs:['druid','sorcerer'],  img:spellImg('Energy Strike')},
+  {id:'ds_flamestrike', name:'Flame Strike',           words:'exori flam',         vocs:['druid','sorcerer'],  img:spellImg('Flame Strike')},
+  {id:'ds_icestrike',   name:'Ice Strike',             words:'exori frigo',        vocs:['druid','sorcerer'],  img:spellImg('Ice Strike')},
+  {id:'ds_terrastrike', name:'Terra Strike',           words:'exori tera',         vocs:['druid','sorcerer'],  img:spellImg('Terra Strike')},
+  // Sorcerer
+  {id:'s_curse',        name:'Curse',                  words:'utori mort',         vocs:['sorcerer'],          img:spellImg('Curse')},
+  {id:'s_deathstrike',  name:'Death Strike',           words:'exori mort',         vocs:['sorcerer'],          img:spellImg('Death Strike')},
+  {id:'s_electrify',    name:'Electrify',              words:'utori vis',          vocs:['sorcerer'],          img:spellImg('Electrify')},
+  {id:'s_energybeam',   name:'Energy Beam',            words:'exevo vis lux',      vocs:['sorcerer'],          img:spellImg('Energy Beam')},
+  {id:'s_energywave',   name:'Energy Wave',            words:'exevo vis hur',      vocs:['sorcerer'],          img:spellImg('Energy Wave')},
+  {id:'s_firewave',     name:'Fire Wave',              words:'exevo flam hur',     vocs:['sorcerer'],          img:spellImg('Fire Wave')},
+  {id:'s_gdeathbeam',   name:'Great Death Beam',       words:'exevo max mort',     vocs:['sorcerer'],          img:spellImg('Great Death Beam')},
+  {id:'s_gfirewave',    name:'Great Fire Wave',        words:'exevo gran flam hur',vocs:['sorcerer'],          img:spellImg('Great Fire Wave')},
+  {id:'s_ignite',       name:'Ignite',                 words:'utori flam',         vocs:['sorcerer'],          img:spellImg('Ignite')},
+  {id:'s_hellscore',    name:"Hell's Core",            words:'exevo gran mas flam',vocs:['sorcerer'],          img:spellImg("Hell's Core")},
+  {id:'s_rageofskies',  name:'Rage of the Skies',      words:'exevo gran mas vis', vocs:['sorcerer'],          img:spellImg('Rage of the Skies')},
+  {id:'s_genebeam',     name:'Great Energy Beam',      words:'exevo gran vis lux', vocs:['sorcerer'],          img:spellImg('Great Energy Beam')},
+  {id:'s_lightning',    name:'Lightning',              words:'exori amp vis',      vocs:['sorcerer'],          img:spellImg('Lightning')},
+  {id:'s_senergystrike',name:'Strong Energy Strike',   words:'exori gran vis',     vocs:['sorcerer'],          img:spellImg('Strong Energy Strike')},
+  {id:'s_sflamestrike', name:'Strong Flame Strike',    words:'exori gran flam',    vocs:['sorcerer'],          img:spellImg('Strong Flame Strike')},
+  {id:'s_ulenergy',     name:'Ultimate Energy Strike', words:'exori max vis',      vocs:['sorcerer'],          img:spellImg('Ultimate Energy Strike')},
+  {id:'s_ulflame',      name:'Ultimate Flame Strike',  words:'exori max flam',     vocs:['sorcerer'],          img:spellImg('Ultimate Flame Strike')},
+  // Knight
+  {id:'k_annihilation', name:'Annihilation',           words:'exori gran ico',     vocs:['knight'],            img:spellImg('Annihilation')},
+  {id:'k_berserk',      name:'Berserk',                words:'exori',              vocs:['knight'],            img:spellImg('Berserk')},
+  {id:'k_brutalstrike', name:'Brutal Strike',          words:'exori ico',          vocs:['knight'],            img:spellImg('Brutal Strike')},
+  {id:'k_combatmastery',name:'Combat Mastery',         words:'—',                  vocs:['knight'],            img:spellImg('Combat Mastery')},
+  {id:'k_execthrow',    name:"Executioner's Throw",    words:'exori amp kor',      vocs:['knight'],            img:spellImg("Executioner's Throw")},
+  {id:'k_fierceberserk',name:'Fierce Berserk',         words:'exori gran',         vocs:['knight'],            img:spellImg('Fierce Berserk')},
+  {id:'k_frontsweep',   name:'Front Sweep',            words:'exori min',          vocs:['knight'],            img:spellImg('Front Sweep')},
+  {id:'k_groundshaker', name:'Groundshaker',           words:'exori mas',          vocs:['knight'],            img:spellImg('Groundshaker')},
+  {id:'k_whirlwind',    name:'Whirlwind Throw',        words:'exori hur',          vocs:['knight'],            img:spellImg('Whirlwind Throw')},
+  // Knight + Monk
+  {id:'km_inflictwound',name:'Inflict Wound',          words:'utori kor',          vocs:['knight','monk'],     img:spellImg('Inflict Wound')},
+  // Monk
+  {id:'m_chainedpenance',name:'Chained Penance',       words:'exori med pug',      vocs:['monk'],              img:spellImg('Chained Penance')},
+  {id:'m_devknockout',  name:'Devastating Knockout',   words:'exori gran nia',     vocs:['monk'],              img:spellImg('Devastating Knockout')},
+  {id:'m_doublejab',    name:'Double Jab',             words:'exori pug',          vocs:['monk'],              img:spellImg('Double Jab')},
+  {id:'m_flurryblows',  name:'Flurry of Blows',        words:'exori mas pug',      vocs:['monk'],              img:spellImg('Flurry of Blows')},
+  {id:'m_forceful',     name:'Forceful Uppercut',      words:'exori gran pug',     vocs:['monk'],              img:spellImg('Forceful Uppercut')},
+  {id:'m_gflurry',      name:'Greater Flurry of Blows',words:'exori gran mas pug', vocs:['monk'],              img:spellImg('Greater Flurry of Blows')},
+  {id:'m_gtigerclash',  name:'Greater Tiger Clash',    words:'exori nia',          vocs:['monk'],              img:spellImg('Greater Tiger Clash')},
+  {id:'m_lessermystic', name:'Lesser Mystic Repulse',  words:'exori infir amp pug',vocs:['monk'],              img:spellImg('Lesser Mystic Repulse')},
+  {id:'m_mysticrepulse',name:'Mystic Repulse',         words:'exori amp pug',      vocs:['monk'],              img:spellImg('Mystic Repulse')},
+  {id:'m_spiritualout', name:'Spiritual Outburst',     words:'exori gran mas nia', vocs:['monk'],              img:spellImg('Spiritual Outburst')},
+  {id:'m_sweepingtd',   name:'Sweeping Takedown',      words:'exori mas nia',      vocs:['monk'],              img:spellImg('Sweeping Takedown')},
+  // Paladin
+  {id:'p_divcaldera',   name:'Divine Caldera',         words:'exevo mas san',      vocs:['paladin'],           img:spellImg('Divine Caldera')},
+  {id:'p_divgrenade',   name:'Divine Grenade',         words:'exevo tempo mas san',vocs:['paladin'],           img:spellImg('Divine Grenade')},
+  {id:'p_divmissile',   name:'Divine Missile',         words:'exori san',          vocs:['paladin'],           img:spellImg('Divine Missile')},
+  {id:'p_ethspear',     name:'Ethereal Spear',         words:'exori con',          vocs:['paladin'],           img:spellImg('Ethereal Spear')},
+  {id:'p_holyflash',    name:'Holy Flash',             words:'utori san',          vocs:['paladin'],           img:spellImg('Holy Flash')},
+  {id:'p_sethspear',    name:'Strong Ethereal Spear',  words:'exori gran con',     vocs:['paladin'],           img:spellImg('Strong Ethereal Spear')},
+];
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+const KEY = 'respaw3000_v4';
+let state = { profiles:[], activeProfile:null, hunts:[] };
+let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null };
+let _activeTab = 'pot';
+
+// ══════════════════════════════════════════════════════
+// PERSIST
+// ══════════════════════════════════════════════════════
+function load(){
+  try {
+    const r=localStorage.getItem(KEY);
+    if(r){ state=JSON.parse(r); }
+    else {
+      const old=localStorage.getItem('respaw3000_v3');
+      if(old){ const d=JSON.parse(old); state.profiles=d.profiles||[]; state.activeProfile=d.activeProfile||null; state.hunts=d.hunts||[]; }
+    }
+  } catch(e){}
+}
+function save(showToast=true){ localStorage.setItem(KEY,JSON.stringify(state)); hideUnsaved(); if(showToast) toast('💾 Salvo!'); }
+function dirty(){ document.getElementById('unsaved').classList.add('on'); }
+function hideUnsaved(){ document.getElementById('unsaved').classList.remove('on'); }
+
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
+function fmtGold(n){
+  if(n===null||n===undefined||isNaN(n)) return '—';
+  const abs=Math.abs(n);
+  if(abs>=1000000) return (n/1000000).toFixed(1).replace('.0','')+'kk';
+  if(abs>=1000) return Math.round(n/1000)+'k';
+  return String(Math.round(n));
+}
+function fmtDur(mins){
+  if(!mins) return '—';
+  const h=Math.floor(mins/60), m=mins%60;
+  return h>0?(m>0?`${h}h ${m}m`:`${h}h`):`${m}m`;
+}
+function fmtDate(d){ if(!d) return ''; try{ const [y,mo,day]=d.split('-'); return `${day}/${mo}/${y}`; }catch(e){return d;} }
+
+// ══════════════════════════════════════════════════════
+// PROFILE GATE
+// ══════════════════════════════════════════════════════
+function openGate(){
+  const gate=document.getElementById('profileGate');
+  if(!state.profiles.length) renderGateNew(false);
+  else renderGateSelect();
+  gate.style.display='flex';
+}
+function closeGate(){
+  document.getElementById('profileGate').style.display='none';
+  renderProfiles(); renderHunts();
+}
+function renderGateNew(showBack=false){
+  document.getElementById('profileGateContent').innerHTML=`
+    ${showBack?`<button class="gate-back" onclick="renderGateSelect()">← Voltar para perfis</button>`:''}
+    <div class="gate-brand">
+      <div class="gate-logo">⚔️</div>
+      <div class="gate-title">RESPAW3000</div>
+      <div class="gate-sub">${showBack?'Crie um novo perfil de personagem.':'Bem-vindo! Crie seu perfil para começar a gerenciar suas hunts.'}</div>
+    </div>
+    <div class="f">
+      <label class="lbl">Nome do Personagem *</label>
+      <input class="inp" id="gateName" placeholder="Ex: Tibianus..." onkeydown="if(event.key==='Enter')createGateProfile()">
+    </div>
+    <div class="f">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;">
+        <label class="lbl" style="margin-bottom:0;">🖼️ GIF do Outfit (opcional)</label>
+        <a href="https://www.tibiawiki.com.br/wiki/Outfitter" target="_blank" class="outfitter-link">🎨 Outfitter →</a>
+      </div>
+      <input class="inp" id="gateImg" placeholder="Cole o link do GIF do seu personagem...">
+      <div style="font-size:.67rem;color:var(--t1);margin-top:.25rem;">Use o Outfitter para gerar o GIF do seu outfit.</div>
+    </div>
+    <button class="btn btn-g" style="width:100%;justify-content:center;margin-top:.5rem;padding:.7rem;" onclick="createGateProfile()">
+      ${showBack?'Criar Perfil':'Criar Perfil e Começar →'}
+    </button>`;
+  setTimeout(()=>{const n=document.getElementById('gateName');if(n)n.focus();},80);
+}
+function renderGateSelect(){
+  const pcards=state.profiles.map(p=>{
+    const hc=state.hunts.filter(h=>h.profileId===p.id).length;
+    const av=p.imgUrl?`<img src="${p.imgUrl}" alt="">`:`<span>${p.name[0]||'?'}</span>`;
+    const isLast=p.id===state.activeProfile;
+    return `<div class="pcard" onclick="selectGateProfile('${p.id}')">
+      <div class="pcard-av">${av}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="pcard-name">${p.name}${isLast?' <span style="font-size:.65rem;color:var(--gold);font-weight:600;">(último usado)</span>':''}</div>
+        <div class="pcard-sub">${hc} hunt${hc!==1?'s':''}</div>
+      </div>
+      <button class="btn btn-o btn-sm" onclick="event.stopPropagation();editGateProfile('${p.id}')" title="Editar perfil" style="flex-shrink:0;padding:.25rem .5rem;font-size:.72rem;">✏️</button>
+      <span style="color:var(--t2);font-size:1.1rem;">›</span>
+    </div>`;
+  }).join('');
+  document.getElementById('profileGateContent').innerHTML=`
+    <div class="gate-brand">
+      <div class="gate-logo">⚔️</div>
+      <div class="gate-title">RESPAW3000</div>
+      <div class="gate-sub">Bem-vindo de volta! Escolha seu personagem.</div>
+    </div>
+    ${pcards}
+    <div class="gate-sep">ou</div>
+    <button class="btn btn-o" style="width:100%;justify-content:center;" onclick="renderGateNew(true)">+ Criar novo perfil</button>`;
+}
+function createGateProfile(){
+  const name=document.getElementById('gateName').value.trim();
+  if(!name){toast('⚠️ Insira o nome do personagem');return;}
+  const id='p_'+Date.now();
+  const imgUrl=document.getElementById('gateImg').value.trim()||null;
+  state.profiles.push({id,name,imgUrl});
+  state.activeProfile=id;
+  save(false); closeGate();
+}
+function selectGateProfile(id){
+  state.activeProfile=id;
+  save(false); closeGate();
+}
+
+// ══════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════
+let _tt;
+function toast(m){ const el=document.getElementById('toast'); el.textContent=m; el.classList.add('on'); clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('on'),2400); }
+
+// ══════════════════════════════════════════════════════
+// PROFILES
+// ══════════════════════════════════════════════════════
+function renderProfiles(){
+  const s=document.getElementById('profilesStrip'); s.innerHTML='';
+  state.profiles.forEach(p=>{
+    const c=document.createElement('div'); c.className='pchip'+(state.activeProfile===p.id?' on':'');
+    c.onclick=()=>setProfile(p.id);
+    c.innerHTML=(p.imgUrl?`<img src="${p.imgUrl}">`:'')+'<span>'+p.name+'</span>'+
+      `<button class="pchip-edit" onclick="event.stopPropagation();openProfileModal('${p.id}')" title="Editar perfil">✏️</button>`;
+    s.appendChild(c);
+  });
+  const lbl=document.getElementById('profileLabel');
+  if(state.activeProfile){ const p=state.profiles.find(x=>x.id===state.activeProfile); lbl.textContent=p?`Perfil: ${p.name}`:''; }
+  else lbl.textContent=state.profiles.length?'':'Sem perfil — clique em + para criar';
+}
+function setProfile(id){ state.activeProfile=id; renderProfiles(); renderHunts(); dirty(); }
+function openProfileModal(editId=null){
+  document.getElementById('profileName').value='';
+  document.getElementById('profileImgUrl').value='';
+  document.getElementById('profileImgPreview').classList.remove('on');
+  const helper=document.getElementById('outfitterHelper');
+  if(helper){ helper.classList.remove('on'); const f=document.getElementById('outfitterFrame'); if(f) f.src=''; }
+  const hint=document.getElementById('profileImgHint');
+  if(hint){ hint.style.display=''; hint.style.color=''; hint.textContent='Cole o link direto de uma imagem, ou a URL gerada pelo Outfitter para carregar o visual do personagem.'; }
+  document.getElementById('profileMTitle').textContent=editId?'Editar Perfil':'Novo Perfil';
+  const btn=document.getElementById('profileSaveBtn');
+  if(editId){ const p=state.profiles.find(x=>x.id===editId); if(p){document.getElementById('profileName').value=p.name;if(p.imgUrl){document.getElementById('profileImgUrl').value=p.imgUrl;previewProfileImg();}} btn.textContent='Salvar'; btn.onclick=()=>updateProfile(editId); }
+  else { btn.textContent='Criar Perfil'; btn.onclick=saveProfile; }
+  document.getElementById('profileOv').classList.add('on');
+}
+function closeProfileModal(){ document.getElementById('profileOv').classList.remove('on'); const helper=document.getElementById('outfitterHelper'); if(helper){helper.classList.remove('on');const f=document.getElementById('outfitterFrame');if(f)f.src='';} }
+function previewProfileImg(){
+  const url=document.getElementById('profileImgUrl').value.trim();
+  const preview=document.getElementById('profileImgPreview');
+  const helper=document.getElementById('outfitterHelper');
+  const hint=document.getElementById('profileImgHint');
+  if(!url){
+    preview.classList.remove('on');
+    if(helper) helper.classList.remove('on');
+    if(hint) hint.style.display='';
+    return;
+  }
+  // Detect Outfitter URL
+  if(url.match(/tibiawiki\.com\.br\/wiki\/Outfitter/i)){
+    if(helper){
+      helper.classList.add('on');
+      const frame=document.getElementById('outfitterFrame');
+      if(frame && frame.src!==url){ frame.src=url; }
+      const extLink=document.getElementById('outfitterExtLink');
+      if(extLink) extLink.href=url;
+    }
+    preview.classList.remove('on');
+    if(hint) hint.style.display='none';
+    return;
+  }
+  // Normal image URL or data URL
+  if(helper) helper.classList.remove('on');
+  if(hint) hint.style.display='none';
+  document.getElementById('profileImgThumb').src=url;
+  preview.classList.add('on');
+}
+function closeOutfitterHelper(){
+  const helper=document.getElementById('outfitterHelper');
+  if(helper) helper.classList.remove('on');
+  // Clear the frame to stop loading
+  const frame=document.getElementById('outfitterFrame');
+  if(frame) frame.src='';
+  // Clear the input so user can paste the copied data URL
+  const inp=document.getElementById('profileImgUrl');
+  if(inp){ inp.value=''; inp.focus(); }
+  const hint=document.getElementById('profileImgHint');
+  if(hint){ hint.style.display=''; hint.textContent='✓ Agora cole a imagem copiada do Outfitter aqui (Ctrl+V)!'; hint.style.color='var(--green)'; }
+}
+function saveProfile(){ const name=document.getElementById('profileName').value.trim(); if(!name){toast('⚠️ Insira um nome');return;} const id='p_'+Date.now(); const imgUrl=document.getElementById('profileImgUrl').value.trim()||null; state.profiles.push({id,name,imgUrl}); if(!state.activeProfile) state.activeProfile=id; closeProfileModal(); renderProfiles(); dirty(); toast('✅ Perfil criado!'); }
+function updateProfile(editId){ const name=document.getElementById('profileName').value.trim(); if(!name){toast('⚠️ Insira um nome');return;} const p=state.profiles.find(x=>x.id===editId); if(p){p.name=name;p.imgUrl=document.getElementById('profileImgUrl').value.trim()||null;} closeProfileModal(); renderProfiles(); renderHunts(); dirty(); toast('✅ Perfil atualizado!'); }
+function editGateProfile(id){ document.getElementById('profileGate').style.display='none'; openProfileModal(id); }
+
+// ══════════════════════════════════════════════════════
+// TABS (step 1)
+// ══════════════════════════════════════════════════════
+function switchTab(tab){
+  _activeTab=tab;
+  document.getElementById('tabPanelPot').classList.toggle('on',tab==='pot');
+  document.getElementById('tabPanelRuna').classList.toggle('on',tab==='runa');
+  document.getElementById('tabBtnPot').classList.toggle('on',tab==='pot');
+  document.getElementById('tabBtnRuna').classList.toggle('on',tab==='runa');
+}
+
+// ══════════════════════════════════════════════════════
+// GRID: POTIONS
+// ══════════════════════════════════════════════════════
+function renderPotGrid(){
+  const grid=document.getElementById('potGrid'); grid.innerHTML='';
+  POTIONS.forEach(p=>{
+    const sel=wiz.pots.find(x=>x.id===p.id);
+    const el=document.createElement('div'); el.className='charm-opt'+(sel?' on':'');
+    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div>`;
+    el.onclick=()=>togglePot(p.id);
+    grid.appendChild(el);
+  });
+  renderPotSel();
+}
+function togglePot(id){
+  const p=POTIONS.find(x=>x.id===id); if(!p) return;
+  const idx=wiz.pots.findIndex(x=>x.id===id);
+  if(idx>=0) wiz.pots.splice(idx,1); else wiz.pots.push({...p,qty:200});
+  renderPotGrid();
+}
+function renderPotSel(){
+  const el=document.getElementById('potSel'); el.innerHTML='';
+  if(!wiz.pots.length) return;
+  wiz.pots.forEach(x=>{
+    const r=document.createElement('div'); r.className='sel-row';
+    r.innerHTML=`<div class="sel-icon" style="align-self:center;"><img src="${x.img}" alt=""></div>
+      <div style="flex:1;min-width:0;">
+        <div class="sel-name">${x.name}</div>
+        <div class="qty-row" style="margin-top:.3rem;">
+          <button class="qb" onclick="adjPot('${x.id}',-1000)">−1k</button>
+          <button class="qb" onclick="adjPot('${x.id}',-100)">−100</button>
+          <button class="qb main" onclick="adjPot('${x.id}',-1)">−</button>
+          <input class="qi" type="number" value="${x.qty}" min="0" onchange="syncPot('${x.id}',this)">
+          <button class="qb main" onclick="adjPot('${x.id}',1)">+</button>
+          <button class="qb" onclick="adjPot('${x.id}',100)">+100</button>
+          <button class="qb" onclick="adjPot('${x.id}',1000)">+1k</button>
+        </div>
+        <input class="qty-slider" type="range" min="0" max="10000000" step="100000" value="${x.qty}" oninput="syncPot('${x.id}',this)">
+      </div>
+      <button class="sel-rm" onclick="togglePot('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
+    el.appendChild(r);
+  });
+}
+function adjPot(id,d){ const x=wiz.pots.find(i=>i.id===id); if(x) x.qty=Math.max(0,(x.qty||0)+d); renderPotSel(); }
+function setPot(id,v){ const x=wiz.pots.find(i=>i.id===id); if(x) x.qty=Math.max(0,parseInt(v)||0); }
+function syncPot(id,srcEl){
+  const x=wiz.pots.find(i=>i.id===id); if(!x)return;
+  const v=Math.max(0,parseInt(srcEl.value)||0); x.qty=v;
+  const row=srcEl.closest('.sel-row');
+  if(row){ const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider'); if(ni&&ni!==srcEl)ni.value=v; if(sl&&sl!==srcEl)sl.value=v; }
+}
+
+// ══════════════════════════════════════════════════════
+// GRID: RUNAS
+// ══════════════════════════════════════════════════════
+function renderRunaGrid(){
+  const grid=document.getElementById('runaGrid'); grid.innerHTML='';
+  RUNES.forEach(p=>{
+    const sel=wiz.runas.find(x=>x.id===p.id);
+    const el=document.createElement('div'); el.className='charm-opt'+(sel?' on':'');
+    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div>`;
+    el.onclick=()=>toggleRuna(p.id);
+    grid.appendChild(el);
+  });
+  renderRunaSel();
+}
+function toggleRuna(id){
+  const p=RUNES.find(x=>x.id===id); if(!p) return;
+  const idx=wiz.runas.findIndex(x=>x.id===id);
+  if(idx>=0) wiz.runas.splice(idx,1); else wiz.runas.push({...p,qty:100});
+  renderRunaGrid();
+}
+function renderRunaSel(){
+  const el=document.getElementById('runaSel'); el.innerHTML='';
+  if(!wiz.runas.length) return;
+  wiz.runas.forEach(x=>{
+    const r=document.createElement('div'); r.className='sel-row';
+    r.innerHTML=`<div class="sel-icon" style="align-self:center;"><img src="${x.img}" alt=""></div>
+      <div style="flex:1;min-width:0;">
+        <div class="sel-name">${x.name}</div>
+        <div class="qty-row" style="margin-top:.3rem;">
+          <button class="qb" onclick="adjRuna('${x.id}',-1000)">−1k</button>
+          <button class="qb" onclick="adjRuna('${x.id}',-100)">−100</button>
+          <button class="qb main" onclick="adjRuna('${x.id}',-1)">−</button>
+          <input class="qi" type="number" value="${x.qty}" min="0" onchange="syncRuna('${x.id}',this)">
+          <button class="qb main" onclick="adjRuna('${x.id}',1)">+</button>
+          <button class="qb" onclick="adjRuna('${x.id}',100)">+100</button>
+          <button class="qb" onclick="adjRuna('${x.id}',1000)">+1k</button>
+        </div>
+        <input class="qty-slider" type="range" min="0" max="10000000" step="100000" value="${x.qty}" oninput="syncRuna('${x.id}',this)">
+      </div>
+      <button class="sel-rm" onclick="toggleRuna('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
+    el.appendChild(r);
+  });
+}
+function adjRuna(id,d){ const x=wiz.runas.find(i=>i.id===id); if(x) x.qty=Math.max(0,(x.qty||0)+d); renderRunaSel(); }
+function setRuna(id,v){ const x=wiz.runas.find(i=>i.id===id); if(x) x.qty=Math.max(0,parseInt(v)||0); }
+function syncRuna(id,srcEl){
+  const x=wiz.runas.find(i=>i.id===id); if(!x)return;
+  const v=Math.max(0,parseInt(srcEl.value)||0); x.qty=v;
+  const row=srcEl.closest('.sel-row');
+  if(row){ const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider'); if(ni&&ni!==srcEl)ni.value=v; if(sl&&sl!==srcEl)sl.value=v; }
+}
+
+// ══════════════════════════════════════════════════════
+// GRID: IMBUEMENTS
+// ══════════════════════════════════════════════════════
+function renderImbuGrid(){
+  const grid=document.getElementById('imbuGrid'); grid.innerHTML='';
+  const total=wiz.imbu.length;
+  IMBU_DEFENSE.forEach(p=>{
+    const cnt=wiz.imbu.filter(x=>x.id===p.id).length;
+    const isMaxed=total>=2&&cnt===0;
+    const el=document.createElement('div');
+    el.className='charm-opt imbu-opt'+(cnt>0?' on':'')+(isMaxed?' imbu-max':'');
+    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.sub}</div>${cnt>0?`<span class="imbu-cnt-badge">×${cnt}</span>`:''}`;
+    if(!isMaxed) el.onclick=()=>toggleImbu(p.id);
+    grid.appendChild(el);
+  });
+  const badge=document.getElementById('imbuCount');
+  if(badge) badge.textContent=total?`${total}/2 slot${total>1?'s':''}` :'';
+}
+function toggleImbu(id){
+  const p=IMBU_DEFENSE.find(x=>x.id===id); if(!p) return;
+  const cnt=wiz.imbu.filter(x=>x.id===id).length;
+  const total=wiz.imbu.length;
+  if(cnt===0){ if(total<2) wiz.imbu.push({...p}); else toast('⚠️ Máximo 2 imbuements'); }
+  else if(cnt===1){ if(total<2) wiz.imbu.push({...p}); else { const i=wiz.imbu.findIndex(x=>x.id===id); wiz.imbu.splice(i,1); } }
+  else { wiz.imbu=wiz.imbu.filter(x=>x.id!==id); }
+  renderImbuGrid();
+}
+
+// ══════════════════════════════════════════════════════
+// VOCAÇÃO + SPELLS
+// ══════════════════════════════════════════════════════
+function selectVocation(voc){
+  // Drop spells that are not available for the new vocation (keep cross-voc ones if still valid)
+  wiz.spells=wiz.spells.filter(s=>{ const sp=SPELLS.find(x=>x.id===s.id); return sp&&sp.vocs.includes(voc); });
+  wiz.vocation=voc;
+  document.querySelectorAll('.voc-btn').forEach(b=>b.classList.remove('on'));
+  const btn=document.getElementById('vbtn_'+voc); if(btn) btn.classList.add('on');
+  renderSpellGrid();
+}
+function renderSpellGrid(){
+  const wrap=document.getElementById('spellGridWrap'); wrap.innerHTML='';
+  const badge=document.getElementById('spellCount');
+  if(!wiz.vocation){
+    wrap.innerHTML='<div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>';
+    if(badge) badge.textContent='';
+    return;
+  }
+  const list=SPELLS.filter(s=>s.vocs.includes(wiz.vocation));
+  if(!list.length){ wrap.innerHTML='<div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">Nenhuma magia encontrada.</div>'; if(badge) badge.textContent=''; return; }
+  const grid=document.createElement('div'); grid.className='charm-grid'; wrap.appendChild(grid);
+  list.forEach(p=>{
+    const sel=wiz.spells.find(x=>x.id===p.id);
+    const el=document.createElement('div'); el.className='charm-opt'+(sel?' on':'');
+    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.words}</div>`;
+    el.onclick=()=>toggleSpell(p.id);
+    grid.appendChild(el);
+  });
+  // update counter badge
+  const selCount=wiz.spells.filter(s=>list.find(x=>x.id===s.id)).length;
+  if(badge) badge.textContent=selCount?`${selCount} selecionada${selCount>1?'s':''}` :'';
+}
+function toggleSpell(id){
+  const p=SPELLS.find(x=>x.id===id); if(!p) return;
+  const idx=wiz.spells.findIndex(x=>x.id===id);
+  if(idx>=0) wiz.spells.splice(idx,1); else wiz.spells.push({...p});
+  renderSpellGrid();
+}
+
+// ══════════════════════════════════════════════════════
+// CHARMS — com detecção de conflito
+// ══════════════════════════════════════════════════════
+let _selMajor=null, _selMinor=null;
+function getUsedCharmIds(type){
+  return new Set(wiz.monsters.filter(m=>m.id!==wiz._editMonId).map(m=>type==='major'?m.majorCharm?.id:m.minorCharm?.id).filter(Boolean));
+}
+function buildCharmGrid(type){
+  const charms=type==='major'?MAJOR_CHARMS:MINOR_CHARMS;
+  const grid=document.getElementById(type+'CharmGrid'); grid.innerHTML='';
+  const usedIds=getUsedCharmIds(type);
+  charms.forEach(c=>{
+    const isUsed=usedIds.has(c.id);
+    const el=document.createElement('div'); el.className='charm-opt'+(isUsed?' charm-used':''); el.id='copt_'+c.id;
+    if(isUsed) el.title='Já utilizado em outro monstro desta hunt';
+    el.innerHTML=`<div class="charm-opt-img"><img src="${c.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${c.name}</div>`;
+    if(!isUsed) el.onclick=()=>selectCharm(type,c.id);
+    grid.appendChild(el);
+  });
+}
+function selectCharm(type,id){
+  const charms=type==='major'?MAJOR_CHARMS:MINOR_CHARMS;
+  if(type==='major') _selMajor=id; else _selMinor=id;
+  const grid=document.getElementById(type+'CharmGrid');
+  grid.querySelectorAll('.charm-opt').forEach(el=>el.classList.remove('on'));
+  const noneBtn=document.getElementById(type+'NoneBtn');
+  const lbl=document.getElementById(type+'CharmLabel');
+  if(!id){ noneBtn.classList.add('on'); lbl.textContent=''; }
+  else { noneBtn.classList.remove('on'); const el=document.getElementById('copt_'+id); if(el) el.classList.add('on'); const charm=charms.find(c=>c.id===id); lbl.textContent=charm?charm.name:''; }
+}
+
+// ══════════════════════════════════════════════════════
+// MONSTERS
+// ══════════════════════════════════════════════════════
+let _gifTimer;
+function onMonWikiInput(){ clearTimeout(_gifTimer); _gifTimer=setTimeout(()=>{ if(document.getElementById('monWiki').value.trim()) autoFetchGif(); },850); }
+function onMonNameInput(){ const name=document.getElementById('monName').value.trim(); const wi=document.getElementById('monWiki'); if(name&&!wi.value.trim()) wi.value=`https://tibia.fandom.com/wiki/${encodeURIComponent(name.replace(/\s+/g,'_'))}`; }
+async function fetchGif(){ await autoFetchGif(); }
+async function autoFetchGif(){
+  let name=document.getElementById('monName').value.trim();
+  const wikiUrl=document.getElementById('monWiki').value.trim();
+  if(!name&&!wikiUrl) return;
+  if(!name){ const m=wikiUrl.match(/wiki\/(.+)$/); if(m){name=decodeURIComponent(m[1]).replace(/_/g,' '); document.getElementById('monName').value=name;} }
+  const slug=name.replace(/\s+/g,'_');
+  const gifUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`;
+  document.getElementById('gifLoad').classList.remove('h');
+  document.getElementById('gifPreview').classList.remove('on');
+  const img=new Image();
+  img.onload=()=>{ document.getElementById('gifLoad').classList.add('h'); document.getElementById('gifPreview').classList.add('on'); document.getElementById('gifImg').src=gifUrl; wiz._gif=gifUrl; };
+  img.onerror=()=>{ document.getElementById('gifLoad').classList.add('h'); wiz._gif=null; toast('⚠️ GIF não encontrado automaticamente'); };
+  img.src=gifUrl+'?cb='+Date.now();
+}
+function addMonster(){
+  const name=document.getElementById('monName').value.trim(); if(!name){toast('⚠️ Insira o nome do monstro');return;}
+  const majorCharm=MAJOR_CHARMS.find(c=>c.id===_selMajor)||null;
+  const minorCharm=MINOR_CHARMS.find(c=>c.id===_selMinor)||null;
+  if(wiz._editMonId){
+    const idx=wiz.monsters.findIndex(m=>m.id===wiz._editMonId);
+    if(idx>=0) wiz.monsters[idx]={id:wiz._editMonId,name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm};
+    renderMonList(); clearMonForm(); toast(`✅ ${name} atualizado!`);
+  } else {
+    wiz.monsters.push({id:'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm});
+    renderMonList(); clearMonForm(); toast(`✅ ${name} adicionado!`);
+  }
+}
+function clearMonForm(){
+  document.getElementById('monName').value=''; document.getElementById('monWiki').value='';
+  document.getElementById('gifPreview').classList.remove('on'); document.getElementById('gifLoad').classList.add('h');
+  wiz._gif=null; wiz._editMonId=null;
+  const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='➕ Adicionar';
+  // rebuild charm grids to reflect used charms
+  buildCharmGrid('major'); buildCharmGrid('minor');
+  selectCharm('major',null); selectCharm('minor',null);
+}
+function editMonster(id){
+  const m=wiz.monsters.find(x=>x.id===id); if(!m) return;
+  wiz._editMonId=id;
+  document.getElementById('monName').value=m.name;
+  document.getElementById('monWiki').value=m.wikiUrl||'';
+  if(m.gifUrl){ wiz._gif=m.gifUrl; document.getElementById('gifImg').src=m.gifUrl; document.getElementById('gifPreview').classList.add('on'); }
+  else { wiz._gif=null; document.getElementById('gifPreview').classList.remove('on'); }
+  document.getElementById('gifLoad').classList.add('h');
+  buildCharmGrid('major'); buildCharmGrid('minor');
+  selectCharm('major',m.majorCharm?.id||null);
+  selectCharm('minor',m.minorCharm?.id||null);
+  const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='✓ Salvar';
+  document.querySelectorAll('.mon-card').forEach(c=>c.classList.remove('editing'));
+  wiz.monsters.forEach((mon,i)=>{ const cards=document.querySelectorAll('.mon-card'); if(mon.id===id&&cards[i]) cards[i].classList.add('editing'); });
+  toast(`✏️ Editando: ${m.name}`);
+}
+function rmMon(id){ wiz.monsters=wiz.monsters.filter(m=>m.id!==id); renderMonList(); buildCharmGrid('major'); buildCharmGrid('minor'); }
+function renderMonList(){
+  const el=document.getElementById('monList'); el.innerHTML='';
+  const badge=document.getElementById('monCount');
+  if(!wiz.monsters.length){
+    el.innerHTML='<div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">Nenhum monstro adicionado ainda.</div>';
+    if(badge) badge.textContent='';
+    return;
+  }
+  if(badge) badge.textContent=`${wiz.monsters.length} monstro${wiz.monsters.length>1?'s':''}`;
+  wiz.monsters.forEach(m=>{
+    const c=document.createElement('div'); c.className='mon-card';
+    const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:`<span class="ph">🐉</span>`;
+    const wl=m.wikiUrl?`<a class="mon-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
+    const maj=m.majorCharm?`<span class="charm-badge major"><img src="${m.majorCharm.img}">${m.majorCharm.name}</span>`:'';
+    const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
+    const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
+    c.innerHTML=`<div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div></div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
+    el.appendChild(c);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// WIZARD
+// ══════════════════════════════════════════════════════
+function openWizard(editId=null){
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null};
+  _selMajor=null; _selMinor=null; _activeTab='pot';
+  if(editId){
+    const h=state.hunts.find(x=>x.id===editId);
+    if(h){
+      document.getElementById('wHuntName').value=h.name;
+      wiz.pots=JSON.parse(JSON.stringify(h.pots||[]));
+      wiz.runas=JSON.parse(JSON.stringify(h.runas||[]));
+      wiz.imbu=JSON.parse(JSON.stringify(h.imbu||[]));
+      wiz.spells=JSON.parse(JSON.stringify(h.spells||[]));
+      wiz.monsters=JSON.parse(JSON.stringify(h.monsters||[]));
+      wiz.vocation=h.vocation||null;
+    }
+  } else {
+    document.getElementById('wHuntName').value='';
+  }
+  buildCharmGrid('major'); buildCharmGrid('minor');
+  selectCharm('major',null); selectCharm('minor',null);
+  renderMonList();
+  setStep(1);
+  document.getElementById('wizOv').classList.add('on');
+}
+function closeWizard(){ document.getElementById('wizOv').classList.remove('on'); }
+function setStep(n){
+  wiz.step=n;
+  [1,2,3].forEach(i=>{
+    document.getElementById('wp'+i).classList.toggle('on',i===n);
+    const d=document.getElementById('wd'+i);
+    d.classList.toggle('on',i===n);
+    d.classList.toggle('done',i<n);
+  });
+  document.getElementById('wizBack').style.display=n>1?'':'none';
+  document.getElementById('wizNext').textContent=n===3?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
+  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 3`;
+  // show sticky name bar on steps 2 and 3
+  const bar=document.getElementById('wizNameBar');
+  if(bar){
+    const name=document.getElementById('wHuntName').value.trim();
+    document.getElementById('wizNameBarVal').textContent=name||'(sem nome)';
+    bar.classList.toggle('on',n>1);
+  }
+  if(n===1){ renderPotGrid(); renderRunaGrid(); }
+  if(n===2){
+    renderImbuGrid();
+    // restore vocation button state
+    document.querySelectorAll('.voc-btn').forEach(b=>b.classList.remove('on'));
+    if(wiz.vocation){ const b=document.getElementById('vbtn_'+wiz.vocation); if(b) b.classList.add('on'); }
+    renderSpellGrid();
+  }
+}
+function goStep(n){ if(n<1||n>3)return; setStep(n); }
+function wizNext(){
+  if(wiz.step<3){
+    if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('⚠️ Insira o nome da hunt');return;}
+    setStep(wiz.step+1);
+  } else saveHunt();
+}
+function saveHunt(){
+  const name=document.getElementById('wHuntName').value.trim(); if(!name){toast('⚠️ Insira o nome da hunt');return;}
+  const isEdit=!!wiz.editId;
+  const hunt={
+    id:wiz.editId||('h_'+Date.now()),
+    profileId:state.activeProfile,
+    name,
+    vocation:wiz.vocation,
+    pots:wiz.pots.map(x=>({...x})),
+    runas:wiz.runas.map(x=>({...x})),
+    imbu:wiz.imbu.map(x=>({...x})),
+    spells:wiz.spells.map(x=>({...x})),
+    monsters:wiz.monsters.map(x=>({...x})),
+    createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
+    updatedAt:Date.now()
+  };
+  if(isEdit){ const i=state.hunts.findIndex(h=>h.id===wiz.editId); if(i>=0) state.hunts[i]=hunt; }
+  else state.hunts.unshift(hunt);
+  closeWizard(); renderHunts();
+  save(false);
+  toast(isEdit?'✅ Hunt atualizada!':'⚔️ Hunt criada!');
+  setTimeout(()=>openSummary(hunt.id),350);
+}
+
+// ══════════════════════════════════════════════════════
+// SUMMARY MODAL
+// ══════════════════════════════════════════════════════
+function openSummary(huntId){
+  const h=state.hunts.find(x=>x.id===huntId); if(!h) return;
+  document.getElementById('sumHuntName').textContent=h.name;
+  const p=state.profiles.find(x=>x.id===h.profileId);
+  const vocLabel=h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):'';
+  document.getElementById('sumHuntMeta').textContent=[p?p.name:'',vocLabel,new Date(h.createdAt).toLocaleDateString('pt-BR')].filter(Boolean).join(' · ');
+  document.getElementById('summaryContent').innerHTML=buildSummaryHTML(h);
+  const copyBtn=document.getElementById('sumCopyBtn');
+  if(copyBtn) copyBtn.onclick=()=>copySummaryToClipboard(huntId);
+  document.getElementById('summaryOv').classList.add('on');
+}
+function closeSummary(){ document.getElementById('summaryOv').classList.remove('on'); }
+
+function buildSummaryHTML(h){
+  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length;
+  if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.9rem;">Hunt vazia — nenhum item configurado.</div>';
+
+  let leftCol='';
+  // Potions
+  if((h.pots||[]).length){
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">💊 Poções</div><div class="sum-items">`;
+    h.pots.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">💊</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">×${x.qty}</span></div>`; });
+    leftCol+='</div></div>';
+  }
+  // Runas
+  if((h.runas||[]).length){
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">📜 Runas</div><div class="sum-items">`;
+    h.runas.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">📜</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">×${x.qty}</span></div>`; });
+    leftCol+='</div></div>';
+  }
+  // Imbuements (deduplicated, with ×2 badge when doubled)
+  if((h.imbu||[]).length){
+    const imbuMap={};
+    (h.imbu||[]).forEach(x=>{ if(!imbuMap[x.id]) imbuMap[x.id]={...x,cnt:0}; imbuMap[x.id].cnt++; });
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">🛡️ Imbuements de Defesa</div><div class="sum-items">`;
+    Object.values(imbuMap).forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">🛡️</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub">${x.sub||''}</div></div>${x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`; });
+    leftCol+='</div></div>';
+  }
+  // Spells
+  if((h.spells||[]).length){
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">✨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items">`;
+    h.spells.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
+    leftCol+='</div></div>';
+  }
+
+  // Right column — Monsters compact grid
+  let rightCol='';
+  if((h.monsters||[]).length){
+    rightCol+=`<div class="sum-sec"><div class="sum-sec-lbl">🐉 Monstros (${h.monsters.length})</div><div class="sum-mon-grid">`;
+    h.monsters.forEach(m=>{
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.8rem;opacity:.35;">🐉</span>';
+      const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
+      const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">⭐ ${m.majorCharm.name}</div>`:'';
+      const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">🔮 ${m.minorCharm.name}</div>`:'';
+      const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
+      rightCol+=`<div class="sum-mon-compact"><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}</div></div>`;
+    });
+    rightCol+='</div></div>';
+  }
+
+  // If only monsters, show full width; otherwise 2-column
+  if(!leftCol) return rightCol;
+  if(!rightCol) return leftCol;
+  return `<div class="sum-layout"><div>${leftCol}</div><div>${rightCol}</div></div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// HUNT LIST
+// ══════════════════════════════════════════════════════
+function renderHunts(){
+  const el=document.getElementById('huntList');
+  const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
+  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico">⚔️</div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.83rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
+  el.innerHTML='';
+  hunts.forEach(h=>{
+    const p=state.profiles.find(x=>x.id===h.profileId);
+    const c=document.createElement('div'); c.className='hcard';
+    const pIcon=p?.imgUrl?`<div class="hcard-picon"><img src="${p.imgUrl}"></div>`:'';
+    const sessCount=(h.sessions||[]).length;
+    const pills=buildPreviewStrip(h,sessCount);
+
+    function mkTags(arr,bg,bc,hasQty){
+      return (arr||[]).map(x=>`<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${(x.img||x.imgUrl)?`<img src="${x.img||x.imgUrl}" alt="" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;">`:''}${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">×${x.qty}</strong>`:''}</div>`).join('');
+    }
+    const potTags  =mkTags(h.pots,  'rgba(16,185,129,.1)','rgba(16,185,129,.3)',true);
+    const runaTags =mkTags(h.runas, 'rgba(59,130,246,.1)', 'rgba(59,130,246,.3)',true);
+    const imbuTags =mkTags(h.imbu,  'rgba(139,92,246,.1)','rgba(139,92,246,.3)',false);
+    const spellTags=mkTags(h.spells,'rgba(245,158,11,.1)','rgba(245,158,11,.3)',false);
+
+    const monGrid=(h.monsters||[]).map(m=>{
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:'<span style="font-size:2rem;opacity:.35;">🐉</span>';
+      const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
+      const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
+      const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
+      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}</a>`;
+    }).join('');
+
+    const bodyId='hb_'+h.id;
+    const vocChip=h.vocation?`<span class="hcard-voc-chip">${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]}</span>`:'';
+    c.innerHTML=`
+      <div class="hcard-hdr" onclick="toggleBody('${bodyId}')">
+        ${pIcon}
+        <div class="hcard-info">
+          <div class="hcard-name-row"><span class="hcard-name">${h.name}</span>${vocChip}</div>
+          <div class="hcard-sub">${p?p.name:'Sem perfil'} · ${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
+        </div>
+        ${pills}
+        <span style="color:var(--t1);font-size:.9rem;flex-shrink:0;">▾</span>
+      </div>
+      <div class="hcard-body" id="${bodyId}">
+        ${potTags?`<div class="hd-block"><div class="hd-lbl">💊 Poções</div><div class="hd-tags">${potTags}</div></div>`:''}
+        ${runaTags?`<div class="hd-block"><div class="hd-lbl">📜 Runas</div><div class="hd-tags">${runaTags}</div></div>`:''}
+        ${imbuTags?`<div class="hd-block"><div class="hd-lbl">🛡️ Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
+        ${spellTags?`<div class="hd-block"><div class="hd-lbl">✨ Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
+        ${monGrid?`<div class="hd-block"><div class="hd-lbl">🐉 Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
+      </div>
+      <div class="hcard-acts">
+        <button class="btn btn-o btn-sm" onclick="openWizard('${h.id}')">✏️ Editar</button>
+        <button class="btn btn-del btn-sm" onclick="rmHunt('${h.id}')">🗑️ Remover</button>
+        <span style="flex:1"></span>
+        <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">📊 Sessões${sessCount>0?` (${sessCount})`:''}</button>
+        <button class="btn btn-o btn-sm" onclick="openSummary('${h.id}')">👁️ Resumo</button>
+        <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">📋 Duplicar</button>
+      </div>`;
+    el.appendChild(c);
+  });
+}
+function toggleBody(id){ document.getElementById(id).classList.toggle('on'); }
+function rmHunt(id){ if(!confirm('Remover esta hunt?'))return; state.hunts=state.hunts.filter(h=>h.id!==id); renderHunts(); dirty(); toast('🗑️ Hunt removida'); }
+function dupHunt(id){ const h=state.hunts.find(x=>x.id===id); if(!h)return; const copy=JSON.parse(JSON.stringify(h)); copy.id='h_'+Date.now(); copy.name=h.name+' (cópia)'; copy.createdAt=copy.updatedAt=Date.now(); state.hunts.unshift(copy); renderHunts(); dirty(); toast('📋 Duplicada!'); }
+
+// ══════════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ══════════════════════════════════════════════════════
+function exportJSON(){ const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`respaw3000_${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('📦 JSON exportado!'); }
+function importJSON(){ document.getElementById('importInput').click(); }
+function handleImport(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{ try{const d=JSON.parse(ev.target.result);if(!d.hunts){toast('❌ Arquivo inválido');return;}if(confirm('Substitui todos os dados. Continuar?')){state=d;renderProfiles();renderHunts();save();toast('📂 Importado!');}}catch{toast('❌ Erro ao ler arquivo');} e.target.value=''; }; r.readAsText(f); }
+function exportPrint(){
+  const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
+  if(!hunts.length){toast('⚠️ Nenhuma hunt');return;}
+  const p=state.activeProfile?state.profiles.find(x=>x.id===state.activeProfile):null;
+  let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>RESPAW3000</title>
+<style>body{font-family:Arial,sans-serif;padding:2rem;max-width:820px;margin:0 auto;color:#111;}h1{font-size:1.5rem;margin-bottom:.2rem;}.sub{color:#666;font-size:.85rem;margin-bottom:2rem;}.hunt{border:1px solid #ddd;border-radius:8px;padding:1rem;margin-bottom:1.5rem;page-break-inside:avoid;}.hname{font-size:1.1rem;font-weight:700;border-bottom:2px solid #f59e0b;padding-bottom:.3rem;margin-bottom:.75rem;}.sec{margin-bottom:.6rem;}.lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;color:#666;font-weight:700;margin-bottom:.3rem;}.items{display:flex;gap:.3rem;flex-wrap:wrap;}.item{display:flex;align-items:center;gap:.25rem;padding:.22rem .5rem;border-radius:6px;background:#f5f5f5;font-size:.76rem;font-weight:600;}.item img{height:18px;object-fit:contain;}.qty{color:#b45309;font-weight:800;margin-left:.15rem;}.mons{display:flex;gap:.5rem;flex-wrap:wrap;}.mon{text-align:center;border:1px solid #eee;border-radius:8px;padding:.5rem;min-width:90px;}.mon img.gif{height:52px;display:block;margin:0 auto .3rem;object-fit:contain;}.monname{font-size:.75rem;font-weight:700;}.mcharms{font-size:.65rem;margin-top:.2rem;}.charm-lbl{display:inline-block;padding:.1rem .3rem;border-radius:4px;font-size:.62rem;font-weight:700;margin:.1rem;}.charm-maj{background:#fef3c7;color:#92400e;}.charm-min{background:#ede9fe;color:#5b21b6;}@media print{.hunt{break-inside:avoid;}}</style></head><body>
+<h1>⚔️ RESPAW3000 — Hunt List</h1><div class="sub">${p?`Perfil: ${p.name} · `:''}${new Date().toLocaleDateString('pt-BR')}</div>`;
+  hunts.forEach(h=>{
+    const pot=(h.pots||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'💊'} ${x.name}<span class="qty">×${x.qty}</span></span>`).join('');
+    const run=(h.runas||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'📜'} ${x.name}<span class="qty">×${x.qty}</span></span>`).join('');
+    const imb=(h.imbu||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'🛡️'} ${x.name}</span>`).join('');
+    const sp=(h.spells||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'✨'} ${x.name}</span>`).join('');
+    const mons=(h.monsters||[]).map(m=>`<div class="mon">${m.gifUrl?`<img class="gif" src="${m.gifUrl}" alt="">`:'🐉'}<div class="monname">${m.name}</div><div class="mcharms">${m.majorCharm?`<span class="charm-lbl charm-maj">⭐ ${m.majorCharm.name}</span>`:''} ${m.minorCharm?`<span class="charm-lbl charm-min">🔮 ${m.minorCharm.name}</span>`:''}</div></div>`).join('');
+    html+=`<div class="hunt"><div class="hname">${h.name}${h.vocation?` <span style="font-size:.8rem;font-weight:400;color:#666;">(${VOC_LABELS[h.vocation]})</span>`:''}</div>${pot?`<div class="sec"><div class="lbl">Poções</div><div class="items">${pot}</div></div>`:''}${run?`<div class="sec"><div class="lbl">Runas</div><div class="items">${run}</div></div>`:''}${imb?`<div class="sec"><div class="lbl">Imbuements</div><div class="items">${imb}</div></div>`:''}${sp?`<div class="sec"><div class="lbl">Magias</div><div class="items">${sp}</div></div>`:''}${mons?`<div class="sec"><div class="lbl">Monstros</div><div class="mons">${mons}</div></div>`:''}</div>`;
+  });
+  html+='</body></html>';
+  const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); setTimeout(()=>w.print(),500);
+}
+
+// ══════════════════════════════════════════════════════
+// KPI SESSIONS
+// ══════════════════════════════════════════════════════
+let _sessHuntId=null;
+
+function openSessModal(huntId){
+  _sessHuntId=huntId;
+  const h=state.hunts.find(x=>x.id===huntId); if(!h) return;
+  document.getElementById('sessHuntName').textContent=h.name;
+  const p=state.profiles.find(x=>x.id===h.profileId);
+  const vl=h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):'';
+  document.getElementById('sessHuntMeta').textContent=[p?.name,vl].filter(Boolean).join(' · ');
+  renderSessContent();
+  document.getElementById('sessOv').classList.add('on');
+}
+function closeSessModal(){ document.getElementById('sessOv').classList.remove('on'); renderHunts(); }
+
+function renderSessContent(){
+  const h=state.hunts.find(x=>x.id===_sessHuntId); if(!h) return;
+  const sessions=h.sessions||[];
+
+  // ── KPI summary boxes ──
+  let kpiHTML='';
+  if(sessions.length){
+    const st=calcSessStats(sessions);
+    const boxes=[
+      {v:sessions.length,        l:'Sessões'},
+      {v:fmtDur(st.totalMin),    l:'Tempo total'},
+      {v:fmtGold(st.avgGoldH)+'/h', l:'Gold/hora (méd.)'},
+      {v:st.avgXp?Math.round(st.avgXp)+'k/h':'—', l:'XP raw/h (méd.)'},
+      st.hasNet?{v:fmtGold(st.avgNetH)+'/h',l:'Net profit/h'}:null,
+      st.avgKills?{v:Math.round(st.avgKills),l:'Kills/sessão (méd.)'}:null,
+    ].filter(Boolean);
+    kpiHTML=`<div class="kpi-grid">${boxes.map(b=>`<div class="kpi-box"><div class="kpi-val">${b.v}</div><div class="kpi-lbl">${b.l}</div></div>`).join('')}</div>`;
+  }
+
+  // ── Add-session form ──
+  const today=new Date().toISOString().slice(0,10);
+  const formHTML=`
+  <details class="sess-form" id="sessFormDet">
+    <summary>Nova Sessão <span style="font-size:.7rem;color:var(--t1);font-weight:400;">(expandir para registrar)</span></summary>
+    <div class="sess-form-body">
+      <div class="row">
+        <div class="f"><label class="lbl">Data</label><input class="inp-sm" type="date" id="sfDate" value="${today}"></div>
+        <div class="f"><label class="lbl">Duração (min)</label><input class="inp-sm" type="number" id="sfDur" placeholder="Ex: 60" min="1" max="999"></div>
+        <div class="f"><label class="lbl">Grupo</label>
+          <select class="inp-sm" id="sfParty" onchange="updateCompanionFields()">
+            <option value="1">👤 Solo</option>
+            <option value="2">👥 Dupla</option>
+            <option value="3">👥 Trio</option>
+            <option value="4">👥 4 players</option>
+            <option value="5">👥 5 players</option>
+          </select>
+        </div>
+      </div>
+      <div id="companionFields"></div>
+      <div class="row">
+        <div class="f"><label class="lbl">💰 Gold bruto</label><input class="inp-sm" type="number" id="sfGold" placeholder="Ex: 500000" min="0"></div>
+        <div class="f"><label class="lbl">💊 Supplies gastos</label><input class="inp-sm" type="number" id="sfSup" placeholder="Opcional" min="0"></div>
+        <div class="f"><label class="lbl">✨ XP raw (k/h)</label><input class="inp-sm" type="number" id="sfXp" placeholder="Ex: 3500" min="0"></div>
+      </div>
+      <div class="row">
+        <div class="f"><label class="lbl">⚔️ Kills</label><input class="inp-sm" type="number" id="sfKills" placeholder="Opcional" min="0"></div>
+        <div class="f"><label class="lbl">💀 Mortes</label><input class="inp-sm" type="number" id="sfDeaths" placeholder="Opcional" min="0"></div>
+      </div>
+      <div class="f"><label class="lbl">📝 Comentário</label>
+        <textarea class="inp" id="sfComment" placeholder="Notas sobre essa sessão — pull, estratégia, bugs, etc..."></textarea>
+      </div>
+      <button class="btn btn-g btn-sm" onclick="addSession()">✓ Salvar Sessão</button>
+    </div>
+  </details>`;
+
+  // ── Sessions list ──
+  let listHTML='';
+  if(!sessions.length){
+    listHTML=`<div class="no-sess">📋 Nenhuma sessão registrada ainda.<br>Adicione a primeira sessão acima para começar a tracar seus KPIs!</div>`;
+  } else {
+    const sorted=[...sessions].sort((a,b)=>b.date.localeCompare(a.date));
+    listHTML=sorted.map(s=>{
+      const dh=s.duration?(s.duration/60):null;
+      const goldH=s.gold&&dh?fmtGold(Math.round(s.gold/dh)):null;
+      const net=s.gold&&s.supplies!=null?s.gold-s.supplies:null;
+      const netH=net!==null&&dh?fmtGold(Math.round(net/dh)):null;
+      const compNames=s.companions?.length?` · ${s.companions.map(c=>c.name).join(', ')}`:'';
+      const partyLbl=s.partySize>1?`👥 ${s.partySize} players${compNames}`:'👤 Solo';
+      const stats=[
+        s.duration?`⏱️ <span>${fmtDur(s.duration)}</span>`:null,
+        s.gold?`💰 <span>${fmtGold(s.gold)}</span>`:null,
+        goldH?`💰/h <span>${goldH}</span>`:null,
+        s.supplies!=null&&s.supplies>0?`💊 <span>-${fmtGold(s.supplies)}</span>`:null,
+        net!==null?`📈 Net <span>${fmtGold(net)}</span>`:null,
+        netH?`📈/h <span>${netH}</span>`:null,
+        s.xpRaw?`✨ <span>${s.xpRaw}k/h</span>`:null,
+        s.kills?`⚔️ <span>${s.kills} kills</span>`:null,
+        s.deaths!=null&&s.deaths>=0?`💀 <span>${s.deaths} morte${s.deaths!==1?'s':''}</span>`:null,
+      ].filter(Boolean);
+      return `<div class="sess-row">
+        <button class="sess-rm" onclick="rmSession('${s.id}')" title="Remover sessão">✕</button>
+        <div class="sess-date">📅 ${fmtDate(s.date)} &nbsp;·&nbsp; ${partyLbl}</div>
+        ${stats.length?`<div class="sess-stats">${stats.map(x=>`<span class="sess-stat">${x}</span>`).join('')}</div>`:''}
+        ${s.comment?`<div class="sess-comment">${s.comment}</div>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('sessContent').innerHTML=kpiHTML+formHTML+`<div style="margin-top:.75rem;">${listHTML}</div>`;
+}
+
+function addSession(){
+  const h=state.hunts.find(x=>x.id===_sessHuntId); if(!h) return;
+  if(!h.sessions) h.sessions=[];
+  const dur=parseInt(document.getElementById('sfDur').value)||null;
+  const gold=parseInt(document.getElementById('sfGold').value)||null;
+  const sup=document.getElementById('sfSup').value.trim();
+  const supplies=sup!==''?parseInt(sup):null;
+  const xpRaw=parseInt(document.getElementById('sfXp').value)||null;
+  const kills=parseInt(document.getElementById('sfKills').value)||null;
+  const dv=document.getElementById('sfDeaths').value.trim();
+  const deaths=dv!==''?parseInt(dv):null;
+  if(!dur&&!gold&&!xpRaw){ toast('⚠️ Preencha ao menos duração, gold ou XP'); return; }
+  const partySize=parseInt(document.getElementById('sfParty').value)||1;
+  const companions=[];
+  for(let i=0;i<partySize-1;i++){ const inp=document.getElementById('sfComp'+i); if(inp&&inp.value.trim()) companions.push({name:inp.value.trim()}); }
+  h.sessions.push({
+    id:'ks_'+Date.now(),
+    date:document.getElementById('sfDate').value||new Date().toISOString().slice(0,10),
+    duration:dur, gold, supplies, xpRaw, kills, deaths,
+    partySize, companions,
+    comment:document.getElementById('sfComment').value.trim()
+  });
+  save(false); renderSessContent(); toast('✅ Sessão salva!');
+}
+
+function rmSession(sessId){
+  if(!confirm('Remover esta sessão?')) return;
+  const h=state.hunts.find(x=>x.id===_sessHuntId); if(!h) return;
+  h.sessions=(h.sessions||[]).filter(s=>s.id!==sessId);
+  save(false); renderSessContent(); toast('🗑️ Sessão removida');
+}
+
+function calcSessStats(sessions){
+  const wg=sessions.filter(s=>s.gold&&s.duration);
+  const wx=sessions.filter(s=>s.xpRaw);
+  const wn=sessions.filter(s=>s.gold&&s.supplies!=null&&s.duration);
+  const wk=sessions.filter(s=>s.kills);
+  return {
+    totalMin:sessions.reduce((a,s)=>a+(s.duration||0),0),
+    avgGoldH:wg.length?Math.round(wg.reduce((a,s)=>a+(s.gold/(s.duration/60)),0)/wg.length):0,
+    avgXp:wx.length?Math.round(wx.reduce((a,s)=>a+s.xpRaw,0)/wx.length):0,
+    avgNetH:wn.length?Math.round(wn.reduce((a,s)=>a+((s.gold-s.supplies)/(s.duration/60)),0)/wn.length):0,
+    hasNet:wn.length>0,
+    avgKills:wk.length?Math.round(wk.reduce((a,s)=>a+s.kills,0)/wk.length):0,
+  };
+}
+
+// ══════════════════════════════════════════════════════
+// COMPARE HUNTS
+// ══════════════════════════════════════════════════════
+let _cmpMetric='goldH';
+const CMP_METRICS=[
+  {key:'goldH',  label:'💰 Gold/hora',    color:'#f59e0b', fmt:v=>fmtGold(v)+'/h'},
+  {key:'xpH',   label:'✨ XP raw/hora',  color:'#8b5cf6', fmt:v=>v?Math.round(v)+'k/h':'—'},
+  {key:'netH',   label:'📈 Net profit/h', color:'#10b981', fmt:v=>fmtGold(v)+'/h'},
+  {key:'dur',    label:'⏱️ Tempo total',  color:'#3b82f6', fmt:v=>fmtDur(v)},
+  {key:'kills',  label:'⚔️ Kills/sessão', color:'#ef4444', fmt:v=>v?Math.round(v)+'':'—'},
+];
+
+function openCompare(){ renderCompare(); document.getElementById('compareOv').classList.add('on'); }
+function closeCompare(){ document.getElementById('compareOv').classList.remove('on'); }
+
+function renderCompare(){
+  const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
+  const withSess=hunts.filter(h=>(h.sessions||[]).length>0);
+  const el=document.getElementById('compareContent');
+  if(!withSess.length){
+    el.innerHTML=`<div class="no-sess">📊 Nenhuma sessão registrada ainda.<br>Adicione sessões às suas hunts clicando em <strong>📊 Sessões</strong> em cada hunt card.</div>`;
+    return;
+  }
+  const tabsHTML=CMP_METRICS.map(m=>`<button class="chart-tab${_cmpMetric===m.key?' on':''}" onclick="setCmpMetric('${m.key}')">${m.label}</button>`).join('');
+  const metric=CMP_METRICS.find(m=>m.key===_cmpMetric);
+  const data=withSess.map(h=>{
+    const st=calcSessStats(h.sessions||[]);
+    return {label:h.name, goldH:st.avgGoldH, xpH:st.avgXp, netH:st.hasNet?st.avgNetH:0, dur:st.totalMin, kills:st.avgKills};
+  }).sort((a,b)=>(b[_cmpMetric]||0)-(a[_cmpMetric]||0));
+  const maxVal=Math.max(...data.map(d=>d[_cmpMetric]||0),1);
+  const barsHTML=data.map(d=>{
+    const val=d[_cmpMetric]||0;
+    const pct=Math.max(val/maxVal*100,val>0?3:0);
+    const disp=metric.fmt(val);
+    const isTop=d===data[0];
+    return `<div class="chart-bar-row">
+      <div class="chart-label" title="${d.label}">${d.label}</div>
+      <div class="chart-track">
+        <div class="chart-fill" style="width:${pct}%;background:${metric.color}${isTop?'':'2a'};${isTop?`box-shadow:inset 0 0 0 1px ${metric.color}88;`:''};border-right:${pct>0?`3px solid ${metric.color}`:'none'};"></div>
+      </div>
+      <div class="chart-val" style="color:${metric.color};">${disp}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML=`<div class="chart-tabs">${tabsHTML}</div><div>${barsHTML}</div><div class="chart-note">Baseado nas médias de ${withSess.length} hunt${withSess.length>1?'s':''} com sessões • Perfil: ${state.profiles.find(p=>p.id===state.activeProfile)?.name||'todos'}</div>`;
+}
+function setCmpMetric(k){ _cmpMetric=k; renderCompare(); }
+
+// ══════════════════════════════════════════════════════
+// PREVIEW STRIP (collapsed hunt card)
+// ══════════════════════════════════════════════════════
+function buildPreviewStrip(h, sessCount){
+  // Collapsed strip: ONLY monster GIFs (no names, no items), right-aligned
+  const parts=[];
+  if((h.monsters||[]).length){
+    h.monsters.slice(0,9).forEach(m=>{
+      if(m.gifUrl) parts.push(`<div class="hcard-pv-gif-box"><img class="hcard-pv-gif" src="${m.gifUrl}" alt="${m.name}" title="${m.name}" loading="lazy"></div>`);
+      else parts.push(`<span style="font-size:1.6rem;opacity:.4;line-height:1;" title="${m.name}">🐉</span>`);
+    });
+    if(h.monsters.length>9) parts.push(`<span class="hcard-pv-more">+${h.monsters.length-9}</span>`);
+  }
+  if(sessCount){
+    if(parts.length) parts.push('<span class="hcard-pv-div"></span>');
+    parts.push(`<span class="hcard-pv-sess">📊 ${sessCount}</span>`);
+  }
+  return parts.length?`<div class="hcard-preview">${parts.join('')}</div>`:'';
+}
+
+// ══════════════════════════════════════════════════════
+// CLIPBOARD COPY
+// ══════════════════════════════════════════════════════
+function copySummaryToClipboard(huntId){
+  const h=state.hunts.find(x=>x.id===huntId); if(!h)return;
+  const p=state.profiles.find(x=>x.id===h.profileId);
+  const lines=[];
+  lines.push(`⚔️ *${h.name}*`);
+  if(p||h.vocation) lines.push([p?p.name:'',h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):''].filter(Boolean).join(' · '));
+  lines.push('');
+  if((h.pots||[]).length){ lines.push('💊 *Poções*'); h.pots.forEach(x=>lines.push(`  • ${x.name} ×${x.qty}`)); lines.push(''); }
+  if((h.runas||[]).length){ lines.push('📜 *Runas*'); h.runas.forEach(x=>lines.push(`  • ${x.name} ×${x.qty}`)); lines.push(''); }
+  if((h.imbu||[]).length){
+    lines.push('🛡️ *Imbuements*');
+    const seen={}; (h.imbu||[]).forEach(x=>{seen[x.id]=(seen[x.id]||0)+1;});
+    Object.entries(seen).forEach(([id,cnt])=>{ const x=(h.imbu||[]).find(i=>i.id===id); if(x) lines.push(`  • ${x.name}${cnt>1?' ×'+cnt:''}`); });
+    lines.push('');
+  }
+  if((h.spells||[]).length){ lines.push('✨ *Magias*'); h.spells.forEach(x=>lines.push(`  • ${x.name} (${x.words})`)); lines.push(''); }
+  if((h.monsters||[]).length){
+    lines.push('🐉 *Monstros*');
+    h.monsters.forEach(m=>{ let ml=`  • ${m.name}`; if(m.majorCharm) ml+=` [⭐ ${m.majorCharm.name}]`; if(m.minorCharm) ml+=` [🔮 ${m.minorCharm.name}]`; lines.push(ml); });
+    lines.push('');
+  }
+  lines.push('_Gerado pelo RESPAW3000_ 🐊');
+  const text=lines.join('\n');
+  navigator.clipboard.writeText(text).then(()=>toast('📋 Copiado para área de transferência!')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0;'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('📋 Copiado!');
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// WIZARD NAME BAR (live update)
+// ══════════════════════════════════════════════════════
+function updateWizNameBar(){
+  const bar=document.getElementById('wizNameBar'); if(!bar||!bar.classList.contains('on'))return;
+  const v=document.getElementById('wHuntName')?.value.trim();
+  const span=document.getElementById('wizNameBarVal'); if(span) span.textContent=v||'(sem nome)';
+}
+
+// ══════════════════════════════════════════════════════
+// SESSION COMPANIONS
+// ══════════════════════════════════════════════════════
+function updateCompanionFields(){
+  const party=parseInt(document.getElementById('sfParty')?.value)||1;
+  const cf=document.getElementById('companionFields'); if(!cf)return;
+  if(party<=1){cf.innerHTML='';return;}
+  const dlOpts=state.profiles.map(p=>`<option value="${p.name}">`).join('');
+  const fields=Array.from({length:party-1},(_,i)=>`<div class="f"><label class="lbl">Companheiro ${i+1}</label><input class="inp-sm" list="companionsDL" id="sfComp${i}" placeholder="Nome do player..." autocomplete="off"></div>`).join('');
+  cf.innerHTML=`<datalist id="companionsDL">${dlOpts}</datalist><div class="row" style="flex-wrap:wrap;margin-top:.1rem;">${fields}</div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// PRE-HUNT CHECKLIST
+// ══════════════════════════════════════════════════════
+const CL_KEY='respaw3000_cl';
+const CL_FIXED=[
+  {id:'f_charm',   label:'Charm',              icon:'⭐', hint:'Charms ativos nos monstros certos?'},
+  {id:'f_imbu',    label:'Imbuements',         icon:'🛡️', hint:'Slots de imbu ativos?'},
+  {id:'f_weaponp', label:'Weapon Proficiency', icon:'💪', hint:'Proficiência de arma verificada?'},
+];
+let cl={items:[],checks:{}};
+
+function clLoad(){ try{const r=localStorage.getItem(CL_KEY);if(r)cl=JSON.parse(r);}catch(e){} }
+function clSave(){ localStorage.setItem(CL_KEY,JSON.stringify(cl)); }
+
+function toggleChecklist(){
+  const panel=document.getElementById('clPanel');
+  const opening=!panel.classList.contains('open');
+  panel.classList.toggle('open');
+  if(opening) renderChecklist();
+}
+
+function clToggleItem(id){
+  cl.checks[id]=!cl.checks[id];
+  clSave(); renderChecklist();
+}
+
+function resetChecklist(){
+  cl.checks={};
+  clSave(); renderChecklist();
+  toast('🔄 Checklist resetado!');
+}
+
+function clRemoveItem(id){
+  cl.items=cl.items.filter(x=>x.id!==id);
+  delete cl.checks[id];
+  clSave(); renderChecklist();
+}
+
+function clAddItem(){
+  const label=document.getElementById('clNewLabel').value.trim();
+  if(!label){toast('⚠️ Insira um nome');return;}
+  const url=document.getElementById('clNewUrl').value.trim();
+  const emoji=document.getElementById('clNewEmoji').value.trim()||'📌';
+  let imgUrl=null;
+  if(url){
+    if(url.match(/\.(gif|png|jpg|jpeg|webp)(\?|$)/i)){
+      imgUrl=url;
+    } else {
+      const m=url.match(/(?:tibia\.fandom\.com\/wiki\/|tibiawiki\.com\.br\/wiki\/)([^?#\s]+)/);
+      if(m){ const slug=decodeURIComponent(m[1]).replace(/\s+/g,'_'); imgUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`; }
+    }
+  }
+  const id='cl_'+Date.now();
+  cl.items.push({id,label,emoji,imgUrl});
+  clSave();
+  document.getElementById('clNewLabel').value='';
+  document.getElementById('clNewUrl').value='';
+  document.getElementById('clNewEmoji').value='';
+  const form=document.getElementById('clAddForm'); if(form) form.classList.remove('open');
+  renderChecklist();
+  toast(`✅ ${label} adicionado!`);
+}
+
+function clUpdateBadge(){
+  const all=[...CL_FIXED,...cl.items];
+  const done=all.filter(x=>cl.checks[x.id]).length;
+  const badge=document.getElementById('clBadge');
+  if(badge) badge.textContent=`${done}/${all.length}`;
+  const btn=document.getElementById('clToggle');
+  if(btn){ const allDone=done===all.length&&all.length>0; btn.style.background=allDone?'linear-gradient(135deg,#10b981,#059669)':''; }
+}
+
+function renderChecklist(){
+  const body=document.getElementById('clBody'); if(!body) return;
+  const all=[...CL_FIXED,...cl.items];
+  const done=all.filter(x=>cl.checks[x.id]).length;
+  const total=all.length;
+  const pct=total?Math.round(done/total*100):0;
+  const allDone=done===total&&total>0;
+
+  const bar=document.getElementById('clProgBar');
+  const txt=document.getElementById('clProgTxt');
+  if(bar){ bar.style.width=pct+'%'; bar.className='cl-prog-bar'+(allDone?' cl-all':''); }
+  if(txt){ txt.className='cl-prog-txt'+(allDone?' cl-ok':''); txt.innerHTML=allDone?'<strong>✅ Tudo pronto!</strong>':`<strong>${done}</strong>/${total} prontos`; }
+  clUpdateBadge();
+
+  let html=`<div class="cl-sec">🔒 Fixos</div>`;
+  CL_FIXED.forEach(item=>{
+    const chk=!!cl.checks[item.id];
+    html+=`<div class="cl-item${chk?' cl-done':''}" onclick="clToggleItem('${item.id}')">
+      <div class="cl-cb">${chk?'✓':''}</div>
+      <div class="cl-ico">${item.icon}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="cl-lbl">${item.label}</div>
+        <div style="font-size:.63rem;color:var(--t2);margin-top:.05rem;">${item.hint}</div>
+      </div>
+    </div>`;
+  });
+
+  if(cl.items.length){
+    html+=`<div class="cl-sec">📋 Personalizados</div>`;
+    cl.items.forEach(item=>{
+      const chk=!!cl.checks[item.id];
+      const icoHtml=item.imgUrl
+        ?`<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" data-fb="${item.emoji}" onerror="this.outerHTML=this.dataset.fb">`
+        :`<span style="font-size:1.05rem;">${item.emoji}</span>`;
+      html+=`<div class="cl-item${chk?' cl-done':''}" onclick="clToggleItem('${item.id}')">
+        <div class="cl-cb">${chk?'✓':''}</div>
+        <div class="cl-ico">${icoHtml}</div>
+        <div class="cl-lbl">${item.label}</div>
+        <button class="cl-rm" onclick="event.stopPropagation();clRemoveItem('${item.id}')" title="Remover">✕</button>
+      </div>`;
+    });
+  }
+
+  html+=`<button class="cl-add-toggler" onclick="document.getElementById('clAddForm').classList.toggle('open')">＋ Adicionar item</button>
+  <div class="cl-add-form" id="clAddForm">
+    <div style="margin-bottom:.42rem;">
+      <label class="lbl">Nome</label>
+      <input class="inp" id="clNewLabel" placeholder="Ex: Utito Tempo, Anel da cura..." style="padding:.42rem .65rem;font-size:.82rem;">
+    </div>
+    <div style="margin-bottom:.42rem;">
+      <label class="lbl">Link TibiaWiki (pega o ícone)</label>
+      <input class="inp" id="clNewUrl" placeholder="https://tibia.fandom.com/wiki/..." style="padding:.42rem .65rem;font-size:.82rem;">
+      <div style="font-size:.63rem;color:var(--t1);margin-top:.2rem;">Cole a URL da página do item para buscar o ícone automaticamente.</div>
+    </div>
+    <div style="margin-bottom:.52rem;display:flex;gap:.5rem;align-items:flex-end;">
+      <div style="flex:1">
+        <label class="lbl">Emoji (fallback)</label>
+        <input class="inp" id="clNewEmoji" placeholder="📌" style="padding:.42rem .65rem;font-size:1rem;">
+      </div>
+    </div>
+    <button class="btn btn-g btn-sm" style="width:100%;justify-content:center;" onclick="clAddItem()">✓ Adicionar</button>
+  </div>`;
+
+  body.innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════════
+// DELETE PROFILE
+// ══════════════════════════════════════════════════════
+const DELETE_PHRASES=[
+  'meu pé tem cabelo',
+  'eu amo cavalos',
+  'todo dia um pato sai de casa',
+  'chuva de peixe assado',
+  'o elefante dança funk',
+  'minha galinha usa chapéu',
+  'o jacaré toca violão',
+  'borboleta come bolo de rolo',
+];
+let _delProfilePhrase='';
+
+function openDelProfile(){
+  const p=state.profiles.find(x=>x.id===state.activeProfile);
+  if(!p){toast('⚠️ Nenhum perfil ativo');return;}
+  const hc=state.hunts.filter(h=>h.profileId===p.id).length;
+  document.getElementById('delProfileInfo').innerHTML=`Você está prestes a apagar o perfil <strong>${p.name}</strong> e todas as suas <strong>${hc} hunt${hc!==1?'s':''}</strong> permanentemente. Essa ação não pode ser desfeita.`;
+  _delProfilePhrase=DELETE_PHRASES[Math.floor(Math.random()*DELETE_PHRASES.length)];
+  document.getElementById('delProfilePhrase').textContent=_delProfilePhrase;
+  document.getElementById('delProfileInput').value='';
+  const btn=document.getElementById('delProfileConfirmBtn');
+  btn.disabled=true; btn.style.opacity='.35'; btn.style.cursor='not-allowed';
+  document.getElementById('delProfileOv').classList.add('on');
+  setTimeout(()=>document.getElementById('delProfileInput').focus(),120);
+}
+function closeDelProfile(){ document.getElementById('delProfileOv').classList.remove('on'); }
+function checkDelInput(){
+  const val=document.getElementById('delProfileInput').value.trim().toLowerCase();
+  const ok=val===_delProfilePhrase.toLowerCase();
+  const btn=document.getElementById('delProfileConfirmBtn');
+  btn.disabled=!ok; btn.style.opacity=ok?'1':'.35'; btn.style.cursor=ok?'pointer':'not-allowed';
+}
+function confirmDeleteProfile(){
+  const p=state.profiles.find(x=>x.id===state.activeProfile); if(!p) return;
+  state.hunts=state.hunts.filter(h=>h.profileId!==p.id);
+  state.profiles=state.profiles.filter(x=>x.id!==p.id);
+  state.activeProfile=state.profiles.length?state.profiles[0].id:null;
+  closeDelProfile(); save(false);
+  if(!state.profiles.length) openGate();
+  else { renderProfiles(); renderHunts(); }
+  toast('🗑️ Perfil apagado com sucesso!');
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+function initApp(){
+  load(); clLoad(); clUpdateBadge();
+  // Show gate if no profiles OR no active profile
+  const profileOk=state.activeProfile&&state.profiles.find(p=>p.id===state.activeProfile);
+  if(!profileOk){
+    if(!state.profiles.length) renderGateNew(false);
+    else renderGateSelect();
+    document.getElementById('profileGate').style.display='flex';
+  } else {
+    document.getElementById('profileGate').style.display='none';
+    renderProfiles(); renderHunts();
+  }
+}
+initApp();
+</script>
+</body>
+</html>
