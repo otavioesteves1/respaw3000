@@ -590,7 +590,7 @@ input[type=number]{-moz-appearance:textfield;}
             <div class="f">
               <label class="lbl">Link TibiaWiki</label>
               <div style="display:flex;gap:.4rem;">
-                <input class="inp" id="monWiki" placeholder="https://tibia.fandom.com/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
+                <input class="inp" id="monWiki" placeholder="tibia.fandom.com/wiki/... ou tibiawiki.com.br/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
                 <button class="btn btn-o btn-sm" onclick="fetchGif()">🖼️ GIF</button>
               </div>
               <div class="gif-load h" id="gifLoad"><div class="spin"></div> Buscando GIF...</div>
@@ -1373,20 +1373,66 @@ function selectCharm(type,id){
 // ══════════════════════════════════════════════════════
 let _gifTimer;
 function onMonWikiInput(){ clearTimeout(_gifTimer); _gifTimer=setTimeout(()=>{ if(document.getElementById('monWiki').value.trim()) autoFetchGif(); },850); }
-function onMonNameInput(){ const name=document.getElementById('monName').value.trim(); const wi=document.getElementById('monWiki'); if(name&&!wi.value.trim()) wi.value=`https://tibia.fandom.com/wiki/${encodeURIComponent(name.replace(/\s+/g,'_'))}`; }
-async function fetchGif(){ await autoFetchGif(); }
-async function autoFetchGif(){
+function onMonNameInput(){
+  const name=document.getElementById('monName').value.trim();
+  const wi=document.getElementById('monWiki');
+  if(name&&!wi.value.trim()) wi.value=`https://tibia.fandom.com/wiki/${encodeURIComponent(name.replace(/\s+/g,'_'))}`;
+}
+// Extract clean slug from any wiki URL (fandom or tibiawiki.com.br, Arquivo:/File: prefix)
+function _wikiSlug(url){
+  // Match Arquivo:Name.gif or File:Name.gif patterns (BR wiki file pages)
+  let m=url.match(/(?:Arquivo|File):([^?#\s]+?)(?:\.gif)?$/i);
+  if(m) return decodeURIComponent(m[1]);
+  // Match /wiki/MonsterName
+  m=url.match(/\/wiki\/([^?#\s]+)/);
+  if(m) return decodeURIComponent(m[1]).replace(/\s+/g,'_');
+  return null;
+}
+function fetchGif(){ autoFetchGif(); }
+function autoFetchGif(){
   let name=document.getElementById('monName').value.trim();
   const wikiUrl=document.getElementById('monWiki').value.trim();
   if(!name&&!wikiUrl) return;
-  if(!name){ const m=wikiUrl.match(/wiki\/(.+)$/); if(m){name=decodeURIComponent(m[1]).replace(/_/g,' '); document.getElementById('monName').value=name;} }
-  const slug=name.replace(/\s+/g,'_');
-  const gifUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`;
+  // Fill name from URL if empty
+  if(!name&&wikiUrl){
+    const slug=_wikiSlug(wikiUrl);
+    if(slug){ name=slug.replace(/_/g,' '); document.getElementById('monName').value=name; }
+  }
+  const slug=(name||'').replace(/\s+/g,'_');
+  if(!slug) return;
   document.getElementById('gifLoad').classList.remove('h');
   document.getElementById('gifPreview').classList.remove('on');
+  // Build ordered list of URLs to try
+  const urls=[];
+  // If user pasted a tibiawiki.com.br Arquivo: URL → extract exact filename and try BR wiki first
+  if(wikiUrl.includes('tibiawiki.com.br')){
+    const m=wikiUrl.match(/(?:Arquivo|File):([^?#\s]+)/i);
+    const fname=m?m[1]:slug+'.gif';
+    urls.push(`https://www.tibiawiki.com.br/wiki/Special:FilePath/${fname}`);
+  }
+  // Always try fandom (EN) wiki
+  urls.push(`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`);
+  // Always try BR wiki as fallback
+  urls.push(`https://www.tibiawiki.com.br/wiki/Special:FilePath/${encodeURIComponent(slug)}.gif`);
+  _tryGifUrls(urls,0);
+}
+function _tryGifUrls(urls,idx){
+  if(idx>=urls.length){
+    document.getElementById('gifLoad').classList.add('h');
+    wiz._gif=null;
+    toast('⚠️ GIF não encontrado nas wikis — cole a URL direta da imagem no campo Wiki');
+    return;
+  }
+  const gifUrl=urls[idx];
   const img=new Image();
-  img.onload=()=>{ document.getElementById('gifLoad').classList.add('h'); document.getElementById('gifPreview').classList.add('on'); document.getElementById('gifImg').src=gifUrl; wiz._gif=gifUrl; };
-  img.onerror=()=>{ document.getElementById('gifLoad').classList.add('h'); wiz._gif=null; toast('⚠️ GIF não encontrado automaticamente'); };
+  img.onload=()=>{
+    document.getElementById('gifLoad').classList.add('h');
+    document.getElementById('gifPreview').classList.add('on');
+    document.getElementById('gifImg').src=gifUrl;
+    wiz._gif=gifUrl;
+    if(idx>0) toast('✅ GIF encontrado na wiki BR!');
+  };
+  img.onerror=()=>_tryGifUrls(urls,idx+1);
   img.src=gifUrl+'?cb='+Date.now();
 }
 function addMonster(){
