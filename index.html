@@ -372,6 +372,16 @@ input[type=number]{-moz-appearance:textfield;}
 .hcard-pv-gif-box{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hcard-pv-gif{max-width:52px;max-height:52px;width:auto;height:auto;object-fit:contain;image-rendering:pixelated;}
 
+/* ── Resistance badges ── */
+.res-row{display:flex;flex-wrap:wrap;gap:.15rem;margin-top:.25rem;justify-content:center;}
+.res-row.left{justify-content:flex-start;}
+.res-badge{display:inline-flex;align-items:center;gap:.12rem;padding:.09rem .26rem .09rem .14rem;border-radius:5px;border:1px solid;font-size:.57rem;font-weight:800;line-height:1.3;white-space:nowrap;}
+.res-icon{width:11px;height:11px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.res-weak{background:rgba(72,187,120,.16);border-color:rgba(72,187,120,.38);color:#6ee7b7;}
+.res-res {background:rgba(237,137,54,.16);border-color:rgba(237,137,54,.38);color:#fbd38d;}
+.res-imm {background:rgba(100,116,139,.14);border-color:rgba(100,116,139,.28);color:#64748b;text-decoration:line-through;}
+.res-neu {background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.08);color:var(--t2);}
+
 /* ── Delete profile modal phrase input ── */
 .del-phrase{font-size:1rem;font-weight:700;color:#fca5a5;font-style:italic;background:rgba(239,68,68,.07);border-radius:8px;padding:.55rem .75rem;margin:.5rem 0 .75rem;border:1px solid rgba(239,68,68,.2);letter-spacing:.3px;}
 
@@ -620,7 +630,9 @@ input[type=number]{-moz-appearance:textfield;}
                 <div class="charm-grid" id="minorCharmGrid"></div>
               </div>
             </div>
-            <div style="display:flex;gap:.4rem;margin-top:.5rem;">
+            <!-- Resistance preview (auto-filled when GIF loads) -->
+            <div id="resPreview" style="min-height:1.4rem;margin-top:.3rem;"></div>
+            <div style="display:flex;gap:.4rem;margin-top:.4rem;">
               <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
               <button class="btn btn-o btn-sm" onclick="clearMonForm()">🗑️ Limpar</button>
             </div>
@@ -791,6 +803,69 @@ input[type=number]{-moz-appearance:textfield;}
 
 const VOC_ICONS  = {druid:'🌿',sorcerer:'🔮',knight:'⚔️',paladin:'🏹',monk:'🥋'};
 const VOC_LABELS = {druid:'Druid',sorcerer:'Sorcerer',knight:'Knight',paladin:'Paladin',monk:'Monk'};
+
+// ══════════════════════════════════════════════════════
+// ELEMENT RESISTANCE SYSTEM
+// ══════════════════════════════════════════════════════
+const ELEM_TYPES = [
+  {key:'physical',  label:'Physical',   wikiField:'physicalDmgMod',  icon:'Physical_Damage_Icon.gif'},
+  {key:'earth',     label:'Earth',      wikiField:'earthDmgMod',     icon:'Earth_Damage_Icon.gif'},
+  {key:'fire',      label:'Fire',       wikiField:'fireDmgMod',      icon:'Fire_Damage_Icon.gif'},
+  {key:'energy',    label:'Energy',     wikiField:'energyDmgMod',    icon:'Energy_Damage_Icon.gif'},
+  {key:'ice',       label:'Ice',        wikiField:'iceDmgMod',       icon:'Ice_Damage_Icon.gif'},
+  {key:'holy',      label:'Holy',       wikiField:'holyDmgMod',      icon:'Holy_Damage_Icon.gif'},
+  {key:'death',     label:'Death',      wikiField:'deathDmgMod',     icon:'Death_Damage_Icon.gif'},
+  {key:'drown',     label:'Drown',      wikiField:'drownDmgMod',     icon:'Drown_Damage_Icon.gif'},
+  {key:'lifedrain', label:'Life Drain', wikiField:'lifeDrainDmgMod', icon:'Life_Drain_Damage_Icon.gif'},
+];
+// Pre-render element icons (try fandom first, BR wiki fallback via onerror)
+function _elemIconHtml(e){
+  const fan=`https://tibia.fandom.com/wiki/Special:FilePath/${e.icon}`;
+  const br=`https://www.tibiawiki.com.br/wiki/Special:FilePath/${e.icon}`;
+  return `<img class="res-icon" src="${fan}" alt="${e.label}" onerror="this.src='${br}'" title="${e.label}">`;
+}
+function _resCls(pct){
+  if(pct===0)   return 'res-imm';
+  if(pct<100)   return 'res-res';
+  if(pct===100) return 'res-neu';
+  return 'res-weak';
+}
+// Build resistance badge row HTML from a resistances object
+function buildResistRow(res, leftAlign=false){
+  if(!res||!Object.keys(res).length) return '';
+  const badges = ELEM_TYPES
+    .filter(e=>res[e.key]!=null)
+    .map(e=>`<span class="res-badge ${_resCls(res[e.key])}" title="${e.label}: ${res[e.key]}%">${_elemIconHtml(e)}${res[e.key]}%</span>`)
+    .join('');
+  if(!badges) return '';
+  return `<div class="res-row${leftAlign?' left':''}">${badges}</div>`;
+}
+// Parse wikitext from either wiki to extract resistance values
+function parseWikiResistances(wt){
+  const res={};
+  ELEM_TYPES.forEach(e=>{
+    const m=wt.match(new RegExp(`\\|\\s*${e.wikiField}\\s*=\\s*(\\d+)%`,'i'));
+    if(m) res[e.key]=parseInt(m[1]);
+  });
+  return Object.keys(res).length?res:null;
+}
+// Fetch resistances from fandom wiki, then BR wiki as fallback
+async function fetchMonsterResistances(name){
+  const slug=name.trim().replace(/\s+/g,'_');
+  const apis=[
+    `https://tibia.fandom.com/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
+    `https://www.tibiawiki.com.br/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
+  ];
+  for(const url of apis){
+    try{
+      const r=await fetch(url);
+      const d=await r.json();
+      const wt=d.parse?.wikitext?.['*'];
+      if(wt){ const res=parseWikiResistances(wt); if(res) return res; }
+    }catch(e){}
+  }
+  return null;
+}
 
 const MAJOR_CHARMS = [
   {id:'carnage',   name:'Carnage',      img:'https://static.wikia.nocookie.net/tibia/images/4/4f/Carnage.png/revision/latest?cb=20241116001734&path-prefix=en'},
@@ -1438,27 +1513,39 @@ function _tryGifUrls(urls,idx){
     document.getElementById('gifImg').src=gifUrl;
     wiz._gif=gifUrl;
     if(idx>0) toast('✅ GIF encontrado na wiki BR!');
+    // Fetch resistances in parallel after GIF loads
+    const name=document.getElementById('monName').value.trim();
+    if(name) _fetchAndStoreResistances(name);
   };
   img.onerror=()=>_tryGifUrls(urls,idx+1);
   img.src=gifUrl+'?cb='+Date.now();
+}
+async function _fetchAndStoreResistances(name){
+  const res=await fetchMonsterResistances(name);
+  wiz._resistances=res;
+  // Show preview badge row in form if we got data
+  const preview=document.getElementById('resPreview');
+  if(preview) preview.innerHTML=res?buildResistRow(res,true):'';
 }
 function addMonster(){
   const name=document.getElementById('monName').value.trim(); if(!name){toast('⚠️ Insira o nome do monstro');return;}
   const majorCharm=MAJOR_CHARMS.find(c=>c.id===_selMajor)||null;
   const minorCharm=MINOR_CHARMS.find(c=>c.id===_selMinor)||null;
+  const monData={id:wiz._editMonId||'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm,resistances:wiz._resistances||null};
   if(wiz._editMonId){
     const idx=wiz.monsters.findIndex(m=>m.id===wiz._editMonId);
-    if(idx>=0) wiz.monsters[idx]={id:wiz._editMonId,name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm};
+    if(idx>=0) wiz.monsters[idx]=monData;
     renderMonList(); clearMonForm(); toast(`✅ ${name} atualizado!`);
   } else {
-    wiz.monsters.push({id:'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm});
+    wiz.monsters.push(monData);
     renderMonList(); clearMonForm(); toast(`✅ ${name} adicionado!`);
   }
 }
 function clearMonForm(){
   document.getElementById('monName').value=''; document.getElementById('monWiki').value='';
   document.getElementById('gifPreview').classList.remove('on'); document.getElementById('gifLoad').classList.add('h');
-  wiz._gif=null; wiz._editMonId=null;
+  wiz._gif=null; wiz._editMonId=null; wiz._resistances=null;
+  const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML='';
   const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='➕ Adicionar';
   // rebuild charm grids to reflect used charms
   buildCharmGrid('major'); buildCharmGrid('minor');
@@ -1472,6 +1559,8 @@ function editMonster(id){
   if(m.gifUrl){ wiz._gif=m.gifUrl; document.getElementById('gifImg').src=m.gifUrl; document.getElementById('gifPreview').classList.add('on'); }
   else { wiz._gif=null; document.getElementById('gifPreview').classList.remove('on'); }
   document.getElementById('gifLoad').classList.add('h');
+  wiz._resistances=m.resistances||null;
+  const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML=wiz._resistances?buildResistRow(wiz._resistances,true):'';
   buildCharmGrid('major'); buildCharmGrid('minor');
   selectCharm('major',m.majorCharm?.id||null);
   selectCharm('minor',m.minorCharm?.id||null);
@@ -1496,8 +1585,9 @@ function renderMonList(){
     const wl=m.wikiUrl?`<a class="mon-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
     const maj=m.majorCharm?`<span class="charm-badge major"><img src="${m.majorCharm.img}">${m.majorCharm.name}</span>`:'';
     const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
+    const resRow=buildResistRow(m.resistances,true);
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
-    c.innerHTML=`<div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div></div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
+    c.innerHTML=`<div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
     el.appendChild(c);
   });
 }
@@ -1684,7 +1774,8 @@ function renderHunts(){
       const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
-      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}</a>`;
+      const resRow=buildResistRow(m.resistances);
+      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${resRow}</a>`;
     }).join('');
 
     const bodyId='hb_'+h.id;
