@@ -142,7 +142,7 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .hd-tags{display:flex;gap:.3rem;flex-wrap:wrap;}
 .hd-tag{display:flex;align-items:center;gap:.25rem;font-size:.75rem;font-weight:600;padding:.22rem .5rem;border-radius:7px;}
 .hd-tag img{width:20px;height:20px;object-fit:contain;image-rendering:pixelated;}
-.mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.6rem;}
+.mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem;}
 .mon-mini{background:var(--c3);border-radius:9px;padding:.65rem;border:1px solid var(--c4);text-align:center;transition:border-color .15s;text-decoration:none;display:block;}
 .mon-mini:hover{border-color:rgba(var(--accent-rgb),.35);}
 .mon-mini-gif{height:52px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem;}
@@ -219,7 +219,7 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 ::-webkit-scrollbar-thumb{background:rgba(var(--accent-rgb),.2);border-radius:99px;}
 @media(max-width:580px){
   .charm-grid{grid-template-columns:repeat(auto-fill,minmax(72px,1fr));}
-  .mon-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));}
+  .mon-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));}
   .sum-mon{flex-direction:column;}
   .sum-mon-gif{width:60px;height:60px;}
 }
@@ -372,15 +372,18 @@ input[type=number]{-moz-appearance:textfield;}
 .hcard-pv-gif-box{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hcard-pv-gif{max-width:52px;max-height:52px;width:auto;height:auto;object-fit:contain;image-rendering:pixelated;}
 
-/* ── Resistance badges ── */
-.res-row{display:flex;flex-wrap:wrap;gap:.15rem;margin-top:.25rem;justify-content:center;}
-.res-row.left{justify-content:flex-start;}
-.res-badge{display:inline-flex;align-items:center;gap:.12rem;padding:.09rem .26rem .09rem .14rem;border-radius:5px;border:1px solid;font-size:.57rem;font-weight:800;line-height:1.3;white-space:nowrap;}
-.res-icon{width:11px;height:11px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
-.res-weak{background:rgba(72,187,120,.16);border-color:rgba(72,187,120,.38);color:#6ee7b7;}
-.res-res {background:rgba(237,137,54,.16);border-color:rgba(237,137,54,.38);color:#fbd38d;}
-.res-imm {background:rgba(100,116,139,.14);border-color:rgba(100,116,139,.28);color:#64748b;text-decoration:line-through;}
-.res-neu {background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.08);color:var(--t2);}
+/* ── Resistance grid (wiki-style) ── */
+.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.28rem;margin-top:.4rem;}
+.res-grid.res-sm{gap:.16rem;margin-top:.25rem;}
+.res-badge{display:flex;align-items:center;justify-content:center;gap:.2rem;padding:.22rem .18rem;border-radius:7px;border:2px solid;font-weight:900;font-size:.66rem;white-space:nowrap;line-height:1;}
+.res-grid.res-sm .res-badge{padding:.13rem .12rem;border-radius:5px;border-width:1.5px;font-size:.57rem;gap:.14rem;}
+.res-icon{width:15px;height:15px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.res-grid.res-sm .res-icon{width:12px;height:12px;}
+/* Colors — vivid like TibiaWiki */
+.res-weak{background:rgba(22,163,74,.28);border-color:rgba(34,197,94,.7);color:#4ade80;}
+.res-res {background:rgba(194,65,12,.28);border-color:rgba(251,146,60,.7);color:#fdba74;}
+.res-imm {background:rgba(185,28,28,.3);border-color:rgba(239,68,68,.75);color:#fca5a5;}
+.res-neu {background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.13);color:#64748b;}
 
 /* ── Delete profile modal phrase input ── */
 .del-phrase{font-size:1rem;font-weight:700;color:#fca5a5;font-style:italic;background:rgba(239,68,68,.07);border-radius:8px;padding:.55rem .75rem;margin:.5rem 0 .75rem;border:1px solid rgba(239,68,68,.2);letter-spacing:.3px;}
@@ -830,15 +833,19 @@ function _resCls(pct){
   if(pct===100) return 'res-neu';
   return 'res-weak';
 }
-// Build resistance badge row HTML from a resistances object
-function buildResistRow(res, leftAlign=false){
+// Build resistance grid — sorted highest % first (most vulnerable → left)
+// sm=true uses smaller variant for hunt card monster tiles
+function buildResistRow(res, _unused=false, sm=false){
   if(!res||!Object.keys(res).length) return '';
-  const badges = ELEM_TYPES
-    .filter(e=>res[e.key]!=null)
-    .map(e=>`<span class="res-badge ${_resCls(res[e.key])}" title="${e.label}: ${res[e.key]}%">${_elemIconHtml(e)}${res[e.key]}%</span>`)
-    .join('');
-  if(!badges) return '';
-  return `<div class="res-row${leftAlign?' left':''}">${badges}</div>`;
+  const elems = ELEM_TYPES.filter(e=>res[e.key]!=null);
+  if(!elems.length) return '';
+  // Sort: highest % first → lowest % last (most vulnerable at top-left)
+  elems.sort((a,b)=>(res[b.key]||0)-(res[a.key]||0));
+  const badges = elems.map(e=>{
+    const pct=res[e.key];
+    return `<span class="res-badge ${_resCls(pct)}" title="${e.label}: ${pct}%">${_elemIconHtml(e)}<span>${pct}%</span></span>`;
+  }).join('');
+  return `<div class="res-grid${sm?' res-sm':''}">${badges}</div>`;
 }
 // Parse wikitext from either wiki to extract resistance values
 function parseWikiResistances(wt){
@@ -1525,7 +1532,7 @@ async function _fetchAndStoreResistances(name){
   wiz._resistances=res;
   // Show preview badge row in form if we got data
   const preview=document.getElementById('resPreview');
-  if(preview) preview.innerHTML=res?buildResistRow(res,true):'';
+  if(preview) preview.innerHTML=res?buildResistRow(res):'';
 }
 function addMonster(){
   const name=document.getElementById('monName').value.trim(); if(!name){toast('⚠️ Insira o nome do monstro');return;}
@@ -1560,7 +1567,7 @@ function editMonster(id){
   else { wiz._gif=null; document.getElementById('gifPreview').classList.remove('on'); }
   document.getElementById('gifLoad').classList.add('h');
   wiz._resistances=m.resistances||null;
-  const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML=wiz._resistances?buildResistRow(wiz._resistances,true):'';
+  const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML=wiz._resistances?buildResistRow(wiz._resistances):'';
   buildCharmGrid('major'); buildCharmGrid('minor');
   selectCharm('major',m.majorCharm?.id||null);
   selectCharm('minor',m.minorCharm?.id||null);
@@ -1585,7 +1592,7 @@ function renderMonList(){
     const wl=m.wikiUrl?`<a class="mon-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
     const maj=m.majorCharm?`<span class="charm-badge major"><img src="${m.majorCharm.img}">${m.majorCharm.name}</span>`:'';
     const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
-    const resRow=buildResistRow(m.resistances,true);
+    const resRow=buildResistRow(m.resistances);
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
     c.innerHTML=`<div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
     el.appendChild(c);
@@ -1774,7 +1781,7 @@ function renderHunts(){
       const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
-      const resRow=buildResistRow(m.resistances);
+      const resRow=buildResistRow(m.resistances,false,true);
       return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${resRow}</a>`;
     }).join('');
 
