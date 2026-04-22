@@ -302,6 +302,40 @@ input[type=number]{-moz-appearance:textfield;}
 .step3-wrap{display:grid;grid-template-columns:1fr 310px;gap:.75rem;align-items:start;}
 .step3-list{max-height:calc(90vh - 210px);overflow-y:auto;padding-right:3px;}
 @media(max-width:700px){.step3-wrap{grid-template-columns:1fr;}.step3-list{max-height:340px;}}
+
+/* ── Step 4 (Runas + Monster Weaknesses) ── */
+.step4-wrap{display:grid;grid-template-columns:1fr 300px;gap:.75rem;align-items:start;}
+.step4-runa-col{min-width:0;}
+.step4-mon-col{background:var(--c3);border-radius:10px;border:1px solid var(--c4);padding:.65rem;max-height:calc(90vh - 210px);overflow-y:auto;}
+@media(max-width:700px){.step4-wrap{grid-template-columns:1fr;}.step4-mon-col{max-height:280px;}}
+.step4-mon-row{display:flex;align-items:center;gap:.5rem;padding:.35rem .45rem;border-radius:8px;border:1px solid var(--c4);background:var(--c2);margin-bottom:.28rem;}
+.step4-mon-gif{width:38px;height:38px;border-radius:6px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.step4-mon-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
+.step4-mon-info{flex:1;min-width:0;}
+.step4-mon-name{font-size:.78rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:.18rem;}
+
+/* ── Step 5 (Loot) ── */
+.loot-status{font-size:.75rem;color:var(--t1);padding:.4rem 0;display:flex;align-items:center;gap:.5rem;}
+.loot-cats{display:flex;flex-direction:column;gap:.55rem;}
+.loot-cat-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:.18rem .55rem;border-radius:20px;display:inline-flex;align-items:center;gap:.25rem;margin-bottom:.3rem;}
+.loot-cat-always{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.3);}
+.loot-cat-common{background:rgba(16,185,129,.12);color:#6ee7b7;border:1px solid rgba(16,185,129,.25);}
+.loot-cat-uncommon{background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.25);}
+.loot-cat-semirare{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.25);}
+.loot-cat-rare{background:rgba(236,72,153,.12);color:#f9a8d4;border:1px solid rgba(236,72,153,.25);}
+.loot-cat-veryrare{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
+.loot-items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.28rem;}
+.loot-item{display:flex;align-items:center;gap:.45rem;padding:.32rem .55rem;border-radius:8px;border:1px solid var(--c4);background:var(--c3);cursor:pointer;user-select:none;transition:all .12s;}
+.loot-item:hover{border-color:rgba(var(--accent-rgb),.35);}
+.loot-item.loot-excluded{opacity:.4;text-decoration:line-through;}
+.loot-item.loot-excluded:hover{opacity:.6;}
+.loot-item-cb{width:14px;height:14px;border-radius:4px;border:2px solid var(--c4);background:var(--c2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.55rem;color:transparent;transition:all .12s;}
+.loot-item:not(.loot-excluded) .loot-item-cb{background:var(--green);border-color:var(--green);color:#fff;}
+.loot-item-name{font-size:.75rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.loot-item-from{font-size:.6rem;color:var(--t2);flex-shrink:0;}
+.loot-fetch-prog{height:3px;border-radius:2px;background:var(--c4);margin:.4rem 0;overflow:hidden;}
+.loot-fetch-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
+.loot-empty{font-size:.8rem;color:var(--t2);text-align:center;padding:2rem 0;}
 /* compact monster card for wizard step 3 */
 .mon-card{background:var(--c3);border-radius:9px;border:1px solid var(--c4);display:grid;grid-template-columns:52px 1fr;gap:.45rem;padding:.42rem .6rem;margin-bottom:.3rem;position:relative;transition:border-color .15s;}
 .mon-gif{width:52px;height:52px;border-radius:7px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
@@ -492,7 +526,7 @@ input[type=number]{-moz-appearance:textfield;}
 .theme-card:hover{border-color:rgba(var(--accent-rgb),.5);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
 .theme-card.active{border-color:var(--gold);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.2);}
 .theme-swatch{height:70px;display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;}
-.theme-card.active .theme-swatch::after{content:'?';position:absolute;top:6px;right:8px;font-size:.75rem;font-weight:900;color:#fff;background:rgba(0,0,0,.5);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;line-height:1;}
+.theme-card.active .theme-swatch::after{content:'✓';position:absolute;top:6px;right:8px;font-size:.75rem;font-weight:900;color:#fff;background:rgba(0,0,0,.5);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;line-height:1;}
 .theme-info{padding:.6rem .75rem .75rem;}
 .theme-name{font-size:.82rem;font-weight:800;margin-bottom:.18rem;}
 .theme-desc{font-size:.65rem;color:var(--t1);line-height:1.4;}
@@ -508,14 +542,14 @@ input[type=number]{-moz-appearance:textfield;}
     </div>
     <div class="profiles-strip" id="profilesStrip"></div>
     <button class="btn-addp" onclick="openProfileModal()" title="Novo perfil">+</button>
-    <button class="theme-btn" onclick="openThemePicker()" title="Mudar tema">??</button>
+    <button class="theme-btn" onclick="openThemePicker()" title="Mudar tema">🎨</button>
   </div>
 </header>
 
 <!-- -- THEME PICKER -- -->
 <div class="theme-ov" id="themeOv" onclick="if(event.target===this)closeThemePicker()">
   <div class="theme-modal">
-    <div class="theme-title">?? Tema da Interface</div>
+    <div class="theme-title">🎨 Tema da Interface</div>
     <div class="theme-sub">Escolha o visual do app. Salvo automaticamente.</div>
     <div class="theme-grid" id="themeGrid"></div>
     <div style="margin-top:1.1rem;text-align:right;">
@@ -564,24 +598,15 @@ input[type=number]{-moz-appearance:textfield;}
       <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> Consumíveis</div>
       <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Imbu &amp; Magias</div>
       <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Monstros</div>
+      <div class="wdot" id="wd4" onclick="goStep(4)"><span class="wnum">4</span> Runas</div>
+      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Loot</div>
     </div>
 
-    <!-- Step 1: Poções | Runas (side by side) -->
+    <!-- Step 1: Poções -->
     <div class="wpanel" id="wp1">
-      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:1rem;align-items:start;">
-        <!-- Pots -->
-        <div>
-          <div class="sec-lbl">💊 Poções <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
-          <div class="charm-grid" id="potGrid"></div>
-          <div id="potSel" style="margin-top:.4rem;"></div>
-        </div>
-        <!-- Runas -->
-        <div>
-          <div class="sec-lbl">📜 Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
-          <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
-          <div id="runaSel" style="margin-top:.4rem;"></div>
-        </div>
-      </div>
+      <div class="sec-lbl">💊 Poções <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
+      <div class="charm-grid" id="potGrid"></div>
+      <div id="potSel" style="margin-top:.4rem;"></div>
     </div>
 
     <!-- Step 2: Imbuements | Magias (side by side) -->
@@ -705,6 +730,30 @@ input[type=number]{-moz-appearance:textfield;}
           <div id="monList"></div>
         </div>
       </div>
+    </div>
+
+    <!-- Step 4: Runas + Monster Weaknesses -->
+    <div class="wpanel" id="wp4">
+      <div class="step4-wrap">
+        <!-- LEFT: runa selection -->
+        <div class="step4-runa-col">
+          <div class="sec-lbl">📜 Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
+          <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
+          <div id="runaSel" style="margin-top:.4rem;"></div>
+        </div>
+        <!-- RIGHT: monster weaknesses (read-only) -->
+        <div class="step4-mon-col">
+          <div class="sec-lbl" style="position:sticky;top:0;background:var(--c3);z-index:2;padding-bottom:.3rem;">🐉 Monstros &amp; Fraquezas</div>
+          <div id="step4MonList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Loot -->
+    <div class="wpanel" id="wp5">
+      <div class="sec-lbl">📦 Loot <span id="lootSubLbl" style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">puxando dados da wiki...</span></div>
+      <div class="loot-fetch-prog" id="lootFetchProg" style="display:none;"><div class="loot-fetch-prog-bar" id="lootFetchProgBar" style="width:0%"></div></div>
+      <div id="lootList" class="loot-cats"></div>
     </div>
 
     <div style="display:flex;gap:.4rem;margin-top:1.1rem;align-items:center;">
@@ -999,10 +1048,10 @@ const RUNES = [
   {id:'ad',   name:'Animate Dead',        img:'https://static.wikia.nocookie.net/tibia/images/5/53/Animate_Dead_Rune.gif/revision/latest?cb=20121105212405&path-prefix=en'},
   {id:'dis',  name:'Disintegrate',        img:'https://static.wikia.nocookie.net/tibia/images/b/b4/Disintegrate_Rune.gif/revision/latest?cb=20121105212507&path-prefix=en'},
   {id:'chm',  name:'Chameleon',           img:'https://static.wikia.nocookie.net/tibia/images/7/7a/Chameleon_Rune.gif/revision/latest?cb=20121105212434&path-prefix=en'},
-  {id:'uh',   name:'Ultimate Healing',    img:'https://static.wikia.nocookie.net/tibia/images/b/ba/Ultimate_Healing_Rune.gif/revision/latest?cb=20150720234440&path-prefix=en'},
-  {id:'ih',   name:'Intense Healing',     img:'https://static.wikia.nocookie.net/tibia/images/2/26/Intense_Healing_Rune.gif/revision/latest?cb=20150720234441&path-prefix=en'},
-  {id:'antidote', name:'Antidote',        img:'https://static.wikia.nocookie.net/tibia/images/0/0b/Antidote_Rune.gif/revision/latest?cb=20121105212423&path-prefix=en'},
-  {id:'sio',  name:'Strong Ice Wave',     img:'https://tibia.fandom.com/wiki/Special:FilePath/Strong_Ice_Wave_Rune.gif'},
+  {id:'uh',   name:'Ultimate Healing',    img:'https://static.wikia.nocookie.net/tibia/images/e/e7/Ultimate_Healing_Rune.gif/revision/latest?cb=20140920171116&path-prefix=en'},
+  {id:'ih',   name:'Intense Healing',     img:'https://static.wikia.nocookie.net/tibia/images/b/bf/Intense_Healing_Rune.gif/revision/latest?cb=20221004180035&path-prefix=en'},
+  {id:'antidote', name:'Antidote',        img:'https://static.wikia.nocookie.net/tibia/images/f/f7/Cure_Poison_Rune.gif/revision/latest?cb=20221004175612&path-prefix=en'},
+  {id:'sio',  name:'Strong Ice Wave',     img:'https://static.wikia.nocookie.net/tibia/images/a/ae/Strong_Ice_Wave.gif/revision/latest?cb=20221003213701&path-prefix=en'},
   {id:'gfr',  name:'Great Fireball',      img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Great_Fireball_Rune.gif/revision/latest?cb=20150720234444&path-prefix=en'},
 ];
 // Vibrancy removida (não é proteção elemental)
@@ -1095,7 +1144,7 @@ const SPELLS = [
 // ══════════════════════════════════════════════════════
 const KEY = 'respaw3000_v4';
 let state = { profiles:[], activeProfile:null, hunts:[] };
-let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null };
+let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null, loot:[] };
 let _activeTab = 'pot';
 
 // ══════════════════════════════════════════════════════
@@ -1336,7 +1385,7 @@ function renderPotSel(){
           <button class="qb" onclick="adjPot('${x.id}',-1000)">−1k</button>
           <button class="qb" onclick="adjPot('${x.id}',-100)">−100</button>
           <button class="qb main" onclick="adjPot('${x.id}',-1)">−</button>
-          <input class="qi" type="number" value="${x.qty}" min="0" max="5000" oninput="syncPot('${x.id}',this)" onchange="syncPot('${x.id}',this)">
+          <input class="qi" type="number" value="${x.qty}" min="0" oninput="syncPot('${x.id}',this)" onchange="syncPot('${x.id}',this)">
           <button class="qb main" onclick="adjPot('${x.id}',1)">+</button>
           <button class="qb" onclick="adjPot('${x.id}',100)">+100</button>
           <button class="qb" onclick="adjPot('${x.id}',1000)">+1k</button>
@@ -1347,18 +1396,22 @@ function renderPotSel(){
     el.appendChild(r);
   });
 }
-function adjPot(id,d){ const x=wiz.pots.find(i=>i.id===id); if(x) x.qty=Math.min(5000,Math.max(0,(x.qty||0)+d)); renderPotSel(); }
-function setPot(id,v){ const x=wiz.pots.find(i=>i.id===id); if(x) x.qty=Math.min(5000,Math.max(0,parseInt(v)||0)); }
+function adjPot(id,d){ const x=wiz.pots.find(i=>i.id===id); if(x) x.qty=Math.max(0,(x.qty||0)+d); renderPotSel(); }
+function setPot(id,v){ const x=wiz.pots.find(i=>i.id===id); if(x) x.qty=Math.max(0,parseInt(v)||0); }
 function syncPot(id,srcEl){
   const x=wiz.pots.find(i=>i.id===id); if(!x)return;
-  const v=Math.min(5000,Math.max(0,parseInt(srcEl.value)||0)); x.qty=v;
+  const isSl=srcEl.classList.contains('qty-slider');
+  // Slider clamps to 5000; typed input allows any value
+  const v=isSl?Math.min(5000,Math.max(0,parseInt(srcEl.value)||0)):Math.max(0,parseInt(srcEl.value)||0);
+  x.qty=v;
   const row=srcEl.closest('.sel-row');
   if(row){
     const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider');
     if(ni&&ni!==srcEl) ni.value=v;
-    if(sl&&sl!==srcEl) sl.value=v;
-    if(sl) sl.style.setProperty('--pct',Math.round((v/5000)*100)+'%');
-    if(srcEl.classList.contains('qty-slider')) srcEl.style.setProperty('--pct',Math.round((v/5000)*100)+'%');
+    if(sl&&sl!==srcEl) sl.value=Math.min(5000,v);
+    const pct=Math.min(100,Math.round((v/5000)*100))+'%';
+    if(sl) sl.style.setProperty('--pct',pct);
+    if(isSl) srcEl.style.setProperty('--pct',pct);
   }
 }
 
@@ -1394,7 +1447,7 @@ function renderRunaSel(){
           <button class="qb" onclick="adjRuna('${x.id}',-1000)">−1k</button>
           <button class="qb" onclick="adjRuna('${x.id}',-100)">−100</button>
           <button class="qb main" onclick="adjRuna('${x.id}',-1)">−</button>
-          <input class="qi" type="number" value="${x.qty}" min="0" max="5000" oninput="syncRuna('${x.id}',this)" onchange="syncRuna('${x.id}',this)">
+          <input class="qi" type="number" value="${x.qty}" min="0" oninput="syncRuna('${x.id}',this)" onchange="syncRuna('${x.id}',this)">
           <button class="qb main" onclick="adjRuna('${x.id}',1)">+</button>
           <button class="qb" onclick="adjRuna('${x.id}',100)">+100</button>
           <button class="qb" onclick="adjRuna('${x.id}',1000)">+1k</button>
@@ -1405,19 +1458,190 @@ function renderRunaSel(){
     el.appendChild(r);
   });
 }
-function adjRuna(id,d){ const x=wiz.runas.find(i=>i.id===id); if(x) x.qty=Math.min(5000,Math.max(0,(x.qty||0)+d)); renderRunaSel(); }
-function setRuna(id,v){ const x=wiz.runas.find(i=>i.id===id); if(x) x.qty=Math.min(5000,Math.max(0,parseInt(v)||0)); }
+function adjRuna(id,d){ const x=wiz.runas.find(i=>i.id===id); if(x) x.qty=Math.max(0,(x.qty||0)+d); renderRunaSel(); }
+function setRuna(id,v){ const x=wiz.runas.find(i=>i.id===id); if(x) x.qty=Math.max(0,parseInt(v)||0); }
 function syncRuna(id,srcEl){
   const x=wiz.runas.find(i=>i.id===id); if(!x)return;
-  const v=Math.min(5000,Math.max(0,parseInt(srcEl.value)||0)); x.qty=v;
+  const isSl=srcEl.classList.contains('qty-slider');
+  const v=isSl?Math.min(5000,Math.max(0,parseInt(srcEl.value)||0)):Math.max(0,parseInt(srcEl.value)||0);
+  x.qty=v;
   const row=srcEl.closest('.sel-row');
   if(row){
     const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider');
     if(ni&&ni!==srcEl) ni.value=v;
-    if(sl&&sl!==srcEl) sl.value=v;
-    if(sl) sl.style.setProperty('--pct',Math.round((v/5000)*100)+'%');
-    if(srcEl.classList.contains('qty-slider')) srcEl.style.setProperty('--pct',Math.round((v/5000)*100)+'%');
+    if(sl&&sl!==srcEl) sl.value=Math.min(5000,v);
+    const pct=Math.min(100,Math.round((v/5000)*100))+'%';
+    if(sl) sl.style.setProperty('--pct',pct);
+    if(isSl) srcEl.style.setProperty('--pct',pct);
   }
+}
+
+// ══════════════════════════════════════════════════════
+// STEP 4 — Monster Weaknesses panel (right column)
+// ══════════════════════════════════════════════════════
+function renderStep4MonWeaknesses(){
+  const el=document.getElementById('step4MonList'); if(!el) return;
+  if(!wiz.monsters.length){
+    el.innerHTML='<div style="color:var(--t2);font-size:.78rem;text-align:center;padding:1.5rem 0;">Nenhum monstro adicionado ainda.<br><span style="font-size:.68rem;">Volte ao passo 3 para adicionar.</span></div>';
+    return;
+  }
+  el.innerHTML='';
+  wiz.monsters.forEach(m=>{
+    const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.4rem;opacity:.4;">🐉</span>';
+    const res=m.resistances?buildResistRow(m.resistances,false,true):'<span style="font-size:.65rem;color:var(--t2);">Sem dados</span>';
+    const row=document.createElement('div'); row.className='step4-mon-row';
+    row.innerHTML=`<div class="step4-mon-gif">${gif}</div><div class="step4-mon-info"><div class="step4-mon-name">${m.name}</div>${res}</div>`;
+    el.appendChild(row);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// STEP 5 — LOOT FETCH & RENDER
+// ══════════════════════════════════════════════════════
+const LOOT_RARITY_ORDER=['always','common','uncommon','semirare','rare','veryrare','unknown'];
+const LOOT_RARITY_LABELS={always:'Sempre',common:'Comum',uncommon:'Incomum',semirare:'Semi-raro',rare:'Raro',veryrare:'Muito Raro',unknown:'Desconhecido'};
+const LOOT_RARITY_CSS={always:'loot-cat-always',common:'loot-cat-common',uncommon:'loot-cat-uncommon',semirare:'loot-cat-semirare',rare:'loot-cat-rare',veryrare:'loot-cat-veryrare',unknown:'loot-cat-uncommon'};
+
+function parseLootFromWikitext(wt){
+  // Handles {{Loot Item|qty|name|rarity}} and {{Loot2|rarity|name|...}} and {{Loot|rarity|name|...}}
+  const items=[];
+  // Pattern 1: {{Loot Item|...|Name|rarity}} or {{Loot Item|Name|rarity}}
+  const rx1=/\{\{Loot\s*Item\s*\|([^}]+)\}\}/gi;
+  let m;
+  while((m=rx1.exec(wt))!==null){
+    const parts=m[1].split('|').map(s=>s.trim());
+    // Could be: qty|name|rarity or name|rarity
+    let name='', rarity='unknown';
+    if(parts.length>=3){ name=parts[1]; rarity=parts[2].toLowerCase().replace(/\s+/g,''); }
+    else if(parts.length===2){ name=parts[0]; rarity=parts[1].toLowerCase().replace(/\s+/g,''); }
+    else if(parts.length===1){ name=parts[0]; }
+    if(name&&!name.match(/^\d/)) items.push({name,rarity:normalizeRarity(rarity)});
+  }
+  // Pattern 2: {{Loot2|rarity|name|qty}} or {{Loot|rarity|name}}
+  const rx2=/\{\{Loot2?\s*\|([^}]+)\}\}/gi;
+  while((m=rx2.exec(wt))!==null){
+    const parts=m[1].split('|').map(s=>s.trim());
+    if(parts.length>=2){ const rarity=parts[0].toLowerCase().replace(/\s+/g,''); const name=parts[1]; if(name&&!name.match(/^\d/)) items.push({name,rarity:normalizeRarity(rarity)}); }
+  }
+  return items;
+}
+function normalizeRarity(r){
+  const map={'always':'always','common':'common','uncommon':'uncommon','semirare':'semirare','semi-rare':'semirare','rare':'rare','veryrare':'veryrare','very-rare':'veryrare','veryRare':'veryrare'};
+  return map[r]||'unknown';
+}
+
+let _lootFetchActive=false;
+async function startLootFetch(){
+  const subLbl=document.getElementById('lootSubLbl');
+  const prog=document.getElementById('lootFetchProg');
+  const progBar=document.getElementById('lootFetchProgBar');
+  const list=document.getElementById('lootList');
+  if(!wiz.monsters.length){
+    list.innerHTML='<div class="loot-empty">⚠️ Nenhum monstro adicionado.<br><span style="font-size:.68rem;">Volte ao passo 3 para adicionar monstros.</span></div>';
+    if(subLbl) subLbl.textContent='sem monstros';
+    return;
+  }
+
+  // If we already have loot AND monsters haven't changed, just re-render
+  const monNames=wiz.monsters.map(m=>m.name).sort().join(',');
+  if(wiz.loot.length>0 && wiz._lootMonKey===monNames){ renderLootList(); return; }
+
+  // Fetch loot from wiki
+  _lootFetchActive=true;
+  wiz.loot=[];
+  wiz._lootMonKey=monNames;
+  if(subLbl) subLbl.textContent='buscando loot da wiki...';
+  if(prog) prog.style.display='';
+  if(progBar) progBar.style.width='0%';
+  list.innerHTML='';
+
+  const mons=wiz.monsters;
+  const seen=new Map(); // name -> {rarity, monsters:[]}
+  for(let i=0;i<mons.length;i++){
+    if(!_lootFetchActive) return;
+    const m=mons[i];
+    const slug=m.name.trim().replace(/\s+/g,'_');
+    const apis=[
+      `https://tibia.fandom.com/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
+      `https://www.tibiawiki.com.br/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
+    ];
+    let fetched=false;
+    for(const url of apis){
+      if(fetched) break;
+      try{
+        const r=await fetch(url);
+        const d=await r.json();
+        const wt=d.parse?.wikitext?.['*'];
+        if(wt){
+          const items=parseLootFromWikitext(wt);
+          items.forEach(it=>{
+            const k=it.name.toLowerCase();
+            if(!seen.has(k)) seen.set(k,{name:it.name,rarity:it.rarity,monsters:[]});
+            const entry=seen.get(k);
+            if(!entry.monsters.includes(m.name)) entry.monsters.push(m.name);
+            // Keep most specific rarity (veryrare > rare > semirare > uncommon > common > always)
+            const ord=LOOT_RARITY_ORDER;
+            if(ord.indexOf(it.rarity)>ord.indexOf(entry.rarity)) entry.rarity=it.rarity;
+          });
+          fetched=true;
+        }
+      }catch(e){}
+    }
+    const pct=Math.round(((i+1)/mons.length)*100);
+    if(progBar) progBar.style.width=pct+'%';
+    if(subLbl) subLbl.textContent=`${i+1}/${mons.length} monstros processados`;
+  }
+
+  if(prog) prog.style.display='none';
+  // Build wiz.loot from seen map — merge with existing excluded list
+  const existingExcluded=new Set(wiz.loot.filter(x=>x.excluded).map(x=>x.name.toLowerCase()));
+  wiz.loot=Array.from(seen.values()).map(it=>({
+    name:it.name, rarity:it.rarity, monsters:it.monsters,
+    excluded: existingExcluded.has(it.name.toLowerCase())
+  }));
+  renderLootList();
+  if(subLbl) subLbl.textContent=`${wiz.loot.length} itens encontrados`;
+}
+
+function renderLootList(){
+  const list=document.getElementById('lootList'); if(!list) return;
+  list.innerHTML='';
+  if(!wiz.loot.length){
+    list.innerHTML='<div class="loot-empty">Nenhum loot encontrado para estes monstros.</div>';
+    return;
+  }
+  // Group by rarity
+  const groups={};
+  LOOT_RARITY_ORDER.forEach(r=>groups[r]=[]);
+  wiz.loot.forEach(it=>{
+    const r=groups[it.rarity]?it.rarity:'unknown';
+    groups[r].push(it);
+  });
+  LOOT_RARITY_ORDER.forEach(r=>{
+    if(!groups[r]||!groups[r].length) return;
+    // Sort alphabetically within group
+    groups[r].sort((a,b)=>a.name.localeCompare(b.name));
+    const section=document.createElement('div');
+    const catCls=LOOT_RARITY_CSS[r]||'loot-cat-uncommon';
+    const catLbl=LOOT_RARITY_LABELS[r]||r;
+    section.innerHTML=`<div class="loot-cat-title ${catCls}">${catLbl} <span style="font-weight:400;opacity:.7;">(${groups[r].length})</span></div>`;
+    const grid=document.createElement('div'); grid.className='loot-items-grid';
+    groups[r].forEach(it=>{
+      const div=document.createElement('div'); div.className='loot-item'+(it.excluded?' loot-excluded':'');
+      const fromLabel=it.monsters.length<=2?it.monsters.join(', '):`${it.monsters.length} monstros`;
+      div.innerHTML=`<div class="loot-item-cb">✓</div><div class="loot-item-name" title="${it.name}">${it.name}</div><div class="loot-item-from" title="${it.monsters.join(', ')}">${fromLabel}</div>`;
+      div.onclick=()=>toggleLootItem(it.name);
+      grid.appendChild(div);
+    });
+    section.appendChild(grid);
+    list.appendChild(section);
+  });
+}
+
+function toggleLootItem(name){
+  const it=wiz.loot.find(x=>x.name===name); if(!it) return;
+  it.excluded=!it.excluded;
+  renderLootList();
 }
 
 // ══════════════════════════════════════════════════════
@@ -1936,7 +2160,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[]};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -1950,6 +2174,7 @@ function openWizard(editId=null){
       wiz.spells=JSON.parse(JSON.stringify(h.spells||[]));
       wiz.monsters=JSON.parse(JSON.stringify(h.monsters||[]));
       wiz.vocation=h.vocation||null;
+      wiz.loot=JSON.parse(JSON.stringify(h.loot||[]));
     }
   } else {
     document.getElementById('wHuntName').value='';
@@ -1960,37 +2185,38 @@ function openWizard(editId=null){
   setStep(1);
   document.getElementById('wizOv').classList.add('on');
 }
-function closeWizard(){ document.getElementById('wizOv').classList.remove('on'); }
+function closeWizard(){ _lootFetchActive=false; document.getElementById('wizOv').classList.remove('on'); }
 function setStep(n){
   wiz.step=n;
-  [1,2,3].forEach(i=>{
+  [1,2,3,4,5].forEach(i=>{
     document.getElementById('wp'+i).classList.toggle('on',i===n);
     const d=document.getElementById('wd'+i);
     d.classList.toggle('on',i===n);
     d.classList.toggle('done',i<n);
   });
   document.getElementById('wizBack').style.display=n>1?'':'none';
-  document.getElementById('wizNext').textContent=n===3?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
-  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 3`;
-  // show sticky name bar on steps 2 and 3
+  document.getElementById('wizNext').textContent=n===5?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
+  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 5`;
+  // show sticky name bar on steps 2+
   const bar=document.getElementById('wizNameBar');
   if(bar){
     const name=document.getElementById('wHuntName').value.trim();
     document.getElementById('wizNameBarVal').textContent=name||'(sem nome)';
     bar.classList.toggle('on',n>1);
   }
-  if(n===1){ renderPotGrid(); renderRunaGrid(); }
+  if(n===1){ renderPotGrid(); }
   if(n===2){
     renderImbuGrid();
-    // restore vocation button state
     document.querySelectorAll('.voc-btn').forEach(b=>b.classList.remove('on'));
     if(wiz.vocation){ const b=document.getElementById('vbtn_'+wiz.vocation); if(b) b.classList.add('on'); }
     renderSpellGrid();
   }
+  if(n===4){ renderRunaGrid(); renderStep4MonWeaknesses(); }
+  if(n===5){ startLootFetch(); }
 }
-function goStep(n){ if(n<1||n>3)return; setStep(n); }
+function goStep(n){ if(n<1||n>5)return; setStep(n); }
 function wizNext(){
-  if(wiz.step<3){
+  if(wiz.step<5){
     if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('⚠️ Insira o nome da hunt');return;}
     setStep(wiz.step+1);
   } else saveHunt();
@@ -2008,6 +2234,7 @@ function saveHunt(){
     imbu:wiz.imbu.map(x=>({...x})),
     spells:wiz.spells.map(x=>({...x})),
     monsters:wiz.monsters.map(x=>({...x})),
+    loot:wiz.loot.map(x=>({...x})),
     createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
     updatedAt:Date.now()
   };
@@ -2036,7 +2263,8 @@ function openSummary(huntId){
 function closeSummary(){ document.getElementById('summaryOv').classList.remove('on'); }
 
 function buildSummaryHTML(h){
-  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length;
+  const activeLoot=(h.loot||[]).filter(x=>!x.excluded);
+  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||activeLoot.length;
   if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.9rem;">Hunt vazia — nenhum item configurado.</div>';
 
   let leftCol='';
@@ -2065,6 +2293,22 @@ function buildSummaryHTML(h){
     leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">✨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items">`;
     h.spells.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
     leftCol+='</div></div>';
+  }
+  // Loot — show active (non-excluded) items grouped by rarity
+  if(activeLoot.length){
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">📦 Loot <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${activeLoot.length} itens)</span></div>`;
+    const lootGroups={};
+    LOOT_RARITY_ORDER.forEach(r=>lootGroups[r]=[]);
+    activeLoot.forEach(it=>{ const r=lootGroups[it.rarity]?it.rarity:'unknown'; lootGroups[r].push(it); });
+    LOOT_RARITY_ORDER.forEach(r=>{
+      if(!lootGroups[r]||!lootGroups[r].length) return;
+      const catCls=LOOT_RARITY_CSS[r]||'loot-cat-uncommon';
+      const catLbl=LOOT_RARITY_LABELS[r]||r;
+      leftCol+=`<div style="margin-bottom:.4rem;"><span class="loot-cat-title ${catCls}" style="font-size:.58rem;">${catLbl}</span><div style="display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.2rem;">`;
+      lootGroups[r].forEach(it=>{ leftCol+=`<span style="font-size:.72rem;font-weight:600;padding:.15rem .45rem;border-radius:5px;background:var(--c3);border:1px solid var(--c4);">${it.name}</span>`; });
+      leftCol+='</div></div>';
+    });
+    leftCol+='</div>';
   }
 
   // Right column — Monsters compact grid
@@ -2137,6 +2381,7 @@ function renderHunts(){
         ${imbuTags?`<div class="hd-block"><div class="hd-lbl">🛡️ Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
         ${spellTags?`<div class="hd-block"><div class="hd-lbl">✨ Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
         ${monGrid?`<div class="hd-block"><div class="hd-lbl">🐉 Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
+        ${(h.loot||[]).filter(x=>!x.excluded).length?`<div class="hd-block"><div class="hd-lbl">📦 Loot <span style="font-weight:400;font-size:.68rem;color:var(--t1);">(${(h.loot||[]).filter(x=>!x.excluded).length} itens)</span></div><div style="display:flex;flex-wrap:wrap;gap:.25rem;">${(h.loot||[]).filter(x=>!x.excluded).slice(0,20).map(it=>`<span style="font-size:.72rem;font-weight:600;padding:.15rem .45rem;border-radius:5px;background:var(--c2);border:1px solid var(--c4);">${it.name}</span>`).join('')}${(h.loot||[]).filter(x=>!x.excluded).length>20?`<span style="font-size:.72rem;color:var(--t2);padding:.15rem .35rem;">+${(h.loot||[]).filter(x=>!x.excluded).length-20} mais</span>`:''}</div></div>`:''}
       </div>
       <div class="hcard-acts">
         <button class="btn btn-o btn-sm" onclick="openWizard('${h.id}')">✏️ Editar</button>
@@ -2813,6 +3058,30 @@ function openThemePicker(){
 function closeThemePicker(){
   document.getElementById('themeOv').classList.remove('on');
 }
+
+// ── ESC to close modals (with confirm when wizard has unsaved data)
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Escape') return;
+  // Determine which overlay is open (priority order)
+  if(document.getElementById('themeOv')?.classList.contains('on')){
+    closeThemePicker(); return;
+  }
+  if(document.getElementById('profileOv')?.classList.contains('on')){
+    closeProfileModal(); return;
+  }
+  if(document.getElementById('wizOv')?.classList.contains('on')){
+    const hasData = wiz.monsters.length||wiz.pots.length||wiz.runas.length||wiz.imbu.length||wiz.spells.length;
+    if(hasData){
+      if(confirm('Tem dados não salvos. Fechar mesmo assim?')) closeWizard();
+    } else {
+      closeWizard();
+    }
+    return;
+  }
+  // Checklist panel
+  const clPanel = document.querySelector('.cl-panel.open');
+  if(clPanel) clPanel.classList.remove('open');
+});
 
 function initApp(){
   loadTheme();
