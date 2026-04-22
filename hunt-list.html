@@ -325,7 +325,7 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-cat-rare{background:rgba(236,72,153,.12);color:#f9a8d4;border:1px solid rgba(236,72,153,.25);}
 .loot-cat-veryrare{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
 .loot-items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.28rem;}
-.loot-item{display:flex;align-items:center;gap:.45rem;padding:.32rem .55rem;border-radius:8px;border:1px solid var(--c4);background:var(--c3);cursor:pointer;user-select:none;transition:all .12s;}
+.loot-item{display:flex;align-items:center;gap:.45rem;padding:.32rem .55rem;border-radius:8px;border:1px solid var(--c4);background:var(--c3);cursor:pointer;user-select:none;transition:all .12s;min-height:34px;}
 .loot-item:hover{border-color:rgba(var(--accent-rgb),.35);}
 .loot-item.loot-excluded{opacity:.4;text-decoration:line-through;}
 .loot-item.loot-excluded:hover{opacity:.6;}
@@ -333,6 +333,10 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-item:not(.loot-excluded) .loot-item-cb{background:var(--green);border-color:var(--green);color:#fff;}
 .loot-item-name{font-size:.75rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .loot-item-from{font-size:.6rem;color:var(--t2);flex-shrink:0;}
+.loot-item-icon{width:24px;height:24px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.loot-item-price{font-size:.6rem;color:var(--gold);flex-shrink:0;font-weight:700;white-space:nowrap;}
+.loot-price-bar{display:flex;align-items:center;gap:.6rem;margin-top:.35rem;margin-bottom:.2rem;flex-wrap:wrap;}
+.loot-total-val{font-size:.72rem;font-weight:700;color:var(--gold);}
 .loot-fetch-prog{height:3px;border-radius:2px;background:var(--c4);margin:.4rem 0;overflow:hidden;}
 .loot-fetch-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
 .loot-empty{font-size:.8rem;color:var(--t2);text-align:center;padding:2rem 0;}
@@ -527,6 +531,20 @@ input[type=number]{-moz-appearance:textfield;}
 /* pchip edit icon */
 .pchip-edit{width:14px;height:14px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.65rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1;transition:color .15s;}
 .pchip-edit:hover{color:var(--gold);}
+
+.ph-paste-area{width:100%;min-height:60px;max-height:100px;background:var(--c2);border:1px solid var(--c4);border-radius:8px;color:var(--t0);font-size:.72rem;padding:.5rem .65rem;resize:vertical;font-family:monospace;}
+.ph-paste-area::placeholder{color:var(--t2);}
+.ph-paste-row{display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.65rem;}
+.spell-priority-list{margin-top:.75rem;}
+.spell-priority-row{display:flex;align-items:center;gap:.5rem;padding:.3rem .5rem;background:var(--c3);border:1px solid var(--c4);border-radius:8px;margin-bottom:.3rem;}
+.spell-priority-num{font-size:.65rem;font-weight:900;color:var(--gold);min-width:1.2rem;text-align:center;}
+.spell-priority-img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;}
+.spell-priority-name{font-size:.78rem;font-weight:700;flex:1;}
+.spell-priority-words{font-size:.62rem;color:var(--t2);}
+.spell-priority-btns{display:flex;flex-direction:column;gap:.1rem;}
+.spell-priority-btn{background:none;border:1px solid var(--c4);color:var(--t1);border-radius:4px;width:20px;height:18px;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+.spell-priority-btn:hover{border-color:var(--gold);color:var(--gold);}
+.charm-opt-badge{position:absolute;top:2px;right:2px;font-size:.5rem;font-weight:900;background:var(--gold);color:#0f172a;border-radius:4px;padding:1px 3px;line-height:1;pointer-events:none;}
 
 /* -- Theme Switcher -- */
 .theme-btn{width:34px;height:34px;border-radius:50%;border:2px solid rgba(var(--accent-rgb),.35);background:var(--c3);color:var(--t1);font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
@@ -1039,7 +1057,6 @@ const RUNES = [
   {id:'uh',   name:'Ultimate Healing',    img:'https://static.wikia.nocookie.net/tibia/images/e/e7/Ultimate_Healing_Rune.gif/revision/latest?cb=20140920171116&path-prefix=en'},
   {id:'ih',   name:'Intense Healing',     img:'https://static.wikia.nocookie.net/tibia/images/b/bf/Intense_Healing_Rune.gif/revision/latest?cb=20221004180035&path-prefix=en'},
   {id:'antidote', name:'Antidote',        img:'https://static.wikia.nocookie.net/tibia/images/f/f7/Cure_Poison_Rune.gif/revision/latest?cb=20221004175612&path-prefix=en'},
-  {id:'sio',  name:'Strong Ice Wave',     img:'https://static.wikia.nocookie.net/tibia/images/a/ae/Strong_Ice_Wave.gif/revision/latest?cb=20221003213701&path-prefix=en'},
   {id:'gfr',  name:'Great Fireball',      img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Great_Fireball_Rune.gif/revision/latest?cb=20150720234444&path-prefix=en'},
 ];
 // Vibrancy removida (não é proteção elemental)
@@ -1098,7 +1115,6 @@ const SPELLS = [
   {id:'k_annihilation', name:'Annihilation',           words:'exori gran ico',     vocs:['knight'],            img:spellImg('Annihilation')},
   {id:'k_berserk',      name:'Berserk',                words:'exori',              vocs:['knight'],            img:spellImg('Berserk')},
   {id:'k_brutalstrike', name:'Brutal Strike',          words:'exori ico',          vocs:['knight'],            img:spellImg('Brutal Strike')},
-  {id:'k_combatmastery',name:'Combat Mastery',         words:'—',                  vocs:['knight'],            img:spellImg('Combat Mastery')},
   {id:'k_execthrow',    name:"Executioner's Throw",    words:'exori amp kor',      vocs:['knight'],            img:spellImg("Executioner's Throw")},
   {id:'k_fierceberserk',name:'Fierce Berserk',         words:'exori gran',         vocs:['knight'],            img:spellImg('Fierce Berserk')},
   {id:'k_frontsweep',   name:'Front Sweep',            words:'exori min',          vocs:['knight'],            img:spellImg('Front Sweep')},
@@ -1661,6 +1677,16 @@ function renderLootList(){
     list.innerHTML='<div class="loot-empty">Nenhum loot encontrado para estes monstros.</div>';
     return;
   }
+  // Price bar
+  const prices=wiz._lootPrices||{};
+  const hasPrices=Object.keys(prices).length>0;
+  const totalVal=hasPrices?wiz.loot.filter(x=>!x.excluded).reduce((s,it)=>s+(prices[it.name.toLowerCase()]||0),0):0;
+  const priceBarHTML=`<div class="loot-price-bar">
+    <button class="btn btn-sm" onclick="fetchLootPrices()" id="lootPriceBtn" style="font-size:.72rem;">💰 Buscar Valores (NPC)</button>
+    ${hasPrices&&totalVal>0?`<span class="loot-total-val">Total incluídos: ${fmtGold(totalVal)} gp</span>`:''}
+    ${hasPrices?`<span style="font-size:.62rem;color:var(--t2);">Valores NPC · clique num item para incluir/excluir</span>`:'<span style="font-size:.62rem;color:var(--t2);">Clique num item para excluir/incluir do resumo</span>'}
+  </div>`;
+  list.insertAdjacentHTML('beforeend',priceBarHTML);
   // Group by rarity
   const groups={};
   LOOT_RARITY_ORDER.forEach(r=>groups[r]=[]);
@@ -1670,7 +1696,6 @@ function renderLootList(){
   });
   LOOT_RARITY_ORDER.forEach(r=>{
     if(!groups[r]||!groups[r].length) return;
-    // Sort alphabetically within group
     groups[r].sort((a,b)=>a.name.localeCompare(b.name));
     const section=document.createElement('div');
     const catCls=LOOT_RARITY_CSS[r]||'loot-cat-uncommon';
@@ -1679,8 +1704,12 @@ function renderLootList(){
     const grid=document.createElement('div'); grid.className='loot-items-grid';
     groups[r].forEach(it=>{
       const div=document.createElement('div'); div.className='loot-item'+(it.excluded?' loot-excluded':'');
+      const iconSlug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
+      const iconUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${iconSlug}.gif`;
       const fromLabel=it.monsters.length<=2?it.monsters.join(', '):`${it.monsters.length} monstros`;
-      div.innerHTML=`<div class="loot-item-cb">✓</div><div class="loot-item-name" title="${it.name}">${it.name}</div><div class="loot-item-from" title="${it.monsters.join(', ')}">${fromLabel}</div>`;
+      const price=prices[it.name.toLowerCase()];
+      const priceHtml=price?`<span class="loot-item-price">${fmtGold(price)} gp</span>`:'';
+      div.innerHTML=`<div class="loot-item-cb">✓</div><img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<div class="loot-item-from" title="${it.monsters.join(', ')}">${fromLabel}</div>`;
       div.onclick=()=>toggleLootItem(it.name);
       grid.appendChild(div);
     });
@@ -1693,6 +1722,36 @@ function toggleLootItem(name){
   const it=wiz.loot.find(x=>x.name===name); if(!it) return;
   it.excluded=!it.excluded;
   renderLootList();
+}
+
+async function fetchLootPrices(){
+  const btn=document.getElementById('lootPriceBtn');
+  if(btn){ btn.textContent='⏳ Buscando...'; btn.disabled=true; }
+  if(!wiz._lootPrices) wiz._lootPrices={};
+  const items=wiz.loot.filter(x=>!x.excluded).map(x=>x.name);
+  const CHUNK=40;
+  for(let i=0;i<items.length;i+=CHUNK){
+    const chunk=items.slice(i,i+CHUNK);
+    const titles=chunk.map(n=>n.replace(/\s+/g,'_')).join('|');
+    try{
+      const r=await fetch(`https://tibia.fandom.com/api.php?action=query&titles=${encodeURIComponent(titles)}&prop=revisions&rvprop=content&format=json&origin=*`);
+      const d=await r.json();
+      const pages=d.query?.pages||{};
+      Object.values(pages).forEach(page=>{
+        const wt=page.revisions?.[0]?.['*']||'';
+        const nameM=wt.match(/\|\s*name\s*=\s*([^\n|]+)/i);
+        const valM=wt.match(/\|\s*value\s*=\s*([\d,]+)/i);
+        if(valM){
+          const itemName=(nameM?nameM[1].trim():page.title).replace(/_/g,' ');
+          const val=parseInt(valM[1].replace(/,/g,''));
+          if(val>0) wiz._lootPrices[itemName.toLowerCase()]=val;
+        }
+      });
+    }catch(e){}
+  }
+  if(btn){ btn.textContent='💰 Buscar Valores (NPC)'; btn.disabled=false; }
+  renderLootList();
+  toast(`💰 Valores carregados!`);
 }
 
 // ══════════════════════════════════════════════════════
@@ -1737,29 +1796,46 @@ function selectVocation(voc){
 function renderSpellGrid(){
   const wrap=document.getElementById('spellGridWrap'); wrap.innerHTML='';
   const badge=document.getElementById('spellCount');
-  if(!wiz.vocation){
-    wrap.innerHTML='<div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>';
-    if(badge) badge.textContent='';
-    return;
-  }
-  const list=SPELLS.filter(s=>s.vocs.includes(wiz.vocation));
-  if(!list.length){ wrap.innerHTML='<div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">Nenhuma magia encontrada.</div>'; if(badge) badge.textContent=''; return; }
+  if(!wiz.vocation){ wrap.innerHTML='<div style="color:var(--t2);font-size:.8rem;padding:.5rem 0;">Selecione uma vocação acima.</div>'; if(badge) badge.textContent=''; return; }
+  const list=SPELLS.filter(p=>p.vocs.includes(wiz.vocation));
+  if(!list.length){ wrap.innerHTML='<div style="color:var(--t2);font-size:.8rem;">Nenhuma magia disponível.</div>'; return; }
   const grid=document.createElement('div'); grid.className='charm-grid'; wrap.appendChild(grid);
   list.forEach(p=>{
-    const sel=wiz.spells.find(x=>x.id===p.id);
-    const el=document.createElement('div'); el.className='charm-opt'+(sel?' on':'');
-    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.words}</div>`;
+    const selIdx=wiz.spells.findIndex(x=>x.id===p.id);
+    const sel=selIdx>=0;
+    const el=document.createElement('div'); el.className='charm-opt'+(sel?' on':''); el.style.position='relative';
+    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.words}</div>${sel?`<div class="charm-opt-badge">${selIdx+1}</div>`:''}`;
     el.onclick=()=>toggleSpell(p.id);
     grid.appendChild(el);
   });
-  // update counter badge
+  // Update counter badge
   const selCount=wiz.spells.filter(s=>list.find(x=>x.id===s.id)).length;
   if(badge) badge.textContent=selCount?`${selCount} selecionada${selCount>1?'s':''}` :'';
+  // Priority list
+  const vocSpells=wiz.spells.filter(s=>list.find(x=>x.id===s.id));
+  if(vocSpells.length>1){
+    const plist=document.createElement('div'); plist.className='spell-priority-list';
+    plist.innerHTML=`<div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.35rem;">Ordem de prioridade</div>`;
+    vocSpells.forEach((sp,i)=>{
+      const full=SPELLS.find(x=>x.id===sp.id); if(!full) return;
+      const row=document.createElement('div'); row.className='spell-priority-row';
+      row.innerHTML=`<div class="spell-priority-num">${i+1}</div><img class="spell-priority-img" src="${full.img}" alt="" onerror="this.style.opacity='0'"><div style="flex:1;min-width:0;"><div class="spell-priority-name">${full.name}</div><div class="spell-priority-words">${full.words}</div></div><div class="spell-priority-btns">${i>0?`<button class="spell-priority-btn" onclick="moveSpell('${sp.id}',-1)" title="Subir">▲</button>`:''}<button class="spell-priority-btn" onclick="moveSpell('${sp.id}',1)" title="Descer" ${i===vocSpells.length-1?'disabled style="opacity:.3;cursor:default;"':''}>▼</button></div>`;
+      plist.appendChild(row);
+    });
+    wrap.appendChild(plist);
+  }
 }
 function toggleSpell(id){
   const p=SPELLS.find(x=>x.id===id); if(!p) return;
   const idx=wiz.spells.findIndex(x=>x.id===id);
   if(idx>=0) wiz.spells.splice(idx,1); else wiz.spells.push({...p});
+  renderSpellGrid();
+}
+function moveSpell(id,dir){
+  const idx=wiz.spells.findIndex(x=>x.id===id); if(idx<0) return;
+  const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=wiz.spells.length) return;
+  [wiz.spells[idx],wiz.spells[newIdx]]=[wiz.spells[newIdx],wiz.spells[idx]];
   renderSpellGrid();
 }
 
@@ -2560,6 +2636,13 @@ function renderSessContent(){
   <details class="sess-form" id="sessFormDet">
     <summary>Nova Sessão <span style="font-size:.7rem;color:var(--t1);font-weight:400;">(expandir para registrar)</span></summary>
     <div class="sess-form-body">
+      <div style="margin-bottom:.6rem;">
+        <label class="lbl">📋 Colar Party Hunt <span style="font-weight:400;text-transform:none;">(opcional — preenche os campos automaticamente)</span></label>
+        <div class="ph-paste-row">
+          <textarea class="ph-paste-area" id="sfPasteArea" placeholder="Cole aqui o texto copiado do botão Party Hunt do jogo..."></textarea>
+          <button class="btn btn-sm" style="white-space:nowrap;flex-shrink:0;" onclick="fillFromPartyHunt()">⚡ Preencher</button>
+        </div>
+      </div>
       <div class="row">
         <div class="f"><label class="lbl">Data</label><input class="inp-sm" type="date" id="sfDate" value="${today}"></div>
         <div class="f"><label class="lbl">Duração (min)</label><input class="inp-sm" type="number" id="sfDur" placeholder="Ex: 60" min="1" max="999"></div>
@@ -2624,6 +2707,49 @@ function renderSessContent(){
   }
 
   document.getElementById('sessContent').innerHTML=kpiHTML+formHTML+`<div style="margin-top:.75rem;">${listHTML}</div>`;
+}
+
+function fillFromPartyHunt(){
+  const raw=document.getElementById('sfPasteArea')?.value||'';
+  if(!raw.trim()){toast('⚠️ Cole o texto da Party Hunt primeiro');return;}
+  // Parse date: "From 2026-04-21, 23:51:25 to ..."
+  const dateM=raw.match(/From\s+(\d{4}-\d{2}-\d{2})/i);
+  if(dateM){ const el=document.getElementById('sfDate'); if(el) el.value=dateM[1]; }
+  // Parse duration: "Session: 01:23h" or "00:45h"
+  const durM=raw.match(/Session:\s*(\d+):(\d+)h/i);
+  if(durM){ const mins=parseInt(durM[1])*60+parseInt(durM[2]); const el=document.getElementById('sfDur'); if(el) el.value=mins; }
+  // Parse totals (top-level, not indented): Loot: 89,732  /  Supplies: 13,421
+  // Top-level lines are NOT preceded by tab
+  const lines=raw.split('\n');
+  let totalLoot=null, totalSup=null;
+  const players=[];
+  for(const line of lines){
+    const isIndented=line.startsWith('\t')||line.startsWith('  ');
+    const clean=line.trim();
+    if(!isIndented){
+      const lootM=clean.match(/^Loot:\s*([\d,]+)/i);
+      if(lootM&&totalLoot===null) totalLoot=parseInt(lootM[1].replace(/,/g,''));
+      const supM=clean.match(/^Supplies:\s*([\d,]+)/i);
+      if(supM&&totalSup===null) totalSup=parseInt(supM[1].replace(/,/g,''));
+      // Player names: lines that are NOT headers (Session:, Loot:, Supplies:, Balance:, Loot Type:, Seciona data:, From )
+      if(clean&&!/^(Session:|Loot:|Supplies:|Balance:|Loot Type:|Seciona data:|From\s)/i.test(clean)){
+        players.push(clean.replace(/\s*\(Leader\)/i,'').trim());
+      }
+    }
+  }
+  if(totalLoot!==null){ const el=document.getElementById('sfGold'); if(el) el.value=totalLoot; }
+  if(totalSup!==null){ const el=document.getElementById('sfSup'); if(el) el.value=totalSup; }
+  // Set party size based on player count
+  if(players.length>1){
+    const partyEl=document.getElementById('sfParty');
+    if(partyEl){ partyEl.value=Math.min(players.length,5); updateCompanionFields(); }
+    // Fill companion names (skip first player = assumed to be the user, fill rest)
+    players.slice(1).forEach((name,i)=>{
+      const inp=document.getElementById('sfComp'+i);
+      if(inp) inp.value=name;
+    });
+  }
+  toast('✅ Campos preenchidos da Party Hunt!');
 }
 
 function addSession(){
