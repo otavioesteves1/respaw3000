@@ -509,6 +509,21 @@ input[type=number]{-moz-appearance:textfield;}
 .import-prog{height:3px;border-radius:2px;background:var(--c4);margin:.35rem 0;overflow:hidden;}
 .import-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
 .outfitter-helper-ext span{font-size:.65rem;color:var(--t2);}
+
+/* ── Step 6: Charms per monster ── */
+.step6-mon-card{background:var(--c3);border-radius:10px;border:1px solid var(--c4);padding:.75rem;margin-bottom:.6rem;}
+.step6-mon-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:.55rem;}
+.step6-mon-hdr-gif{width:44px;height:44px;border-radius:8px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.step6-mon-hdr-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
+.step6-mon-hdr-info{flex:1;min-width:0;}
+.step6-mon-hdr-name{font-size:.9rem;font-weight:700;margin-bottom:.15rem;}
+.step6-charm-cols{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;}
+@media(max-width:600px){.step6-charm-cols{grid-template-columns:1fr;}}
+.step6-charm-sect{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--t1);margin-bottom:.28rem;display:flex;align-items:center;gap:.3rem;}
+.step6-charm-none{padding:.2rem .55rem;border-radius:6px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .12s;margin-bottom:.28rem;}
+.step6-charm-none.on{border-color:var(--gold);color:var(--gold);background:rgba(var(--accent-rgb),.08);}
+.step6-charm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:.2rem;max-height:190px;overflow-y:auto;}
+
 /* pchip edit icon */
 .pchip-edit{width:14px;height:14px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.65rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1;transition:color .15s;}
 .pchip-edit:hover{color:var(--gold);}
@@ -595,11 +610,13 @@ input[type=number]{-moz-appearance:textfield;}
       <input class="inp wiz-name-inp" id="wHuntName" placeholder="Dê um nome à sua nova hunt...">
     </div>
     <div class="wiz-steps">
-      <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> Consumíveis</div>
-      <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Imbu &amp; Magias</div>
-      <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Monstros</div>
-      <div class="wdot" id="wd4" onclick="goStep(4)"><span class="wnum">4</span> Runas</div>
-      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Loot</div>
+      <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> Poções</div>
+      <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Runas</div>
+      <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Imbuimentos</div>
+      <div class="wdot" id="wd4" onclick="goStep(4)"><span class="wnum">4</span> Magias</div>
+      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Monstros</div>
+      <div class="wdot" id="wd6" onclick="goStep(6)"><span class="wnum">6</span> Charms</div>
+      <div class="wdot" id="wd7" onclick="goStep(7)"><span class="wnum">7</span> Loot</div>
     </div>
 
     <!-- Step 1: Poções -->
@@ -609,44 +626,45 @@ input[type=number]{-moz-appearance:textfield;}
       <div id="potSel" style="margin-top:.4rem;"></div>
     </div>
 
-    <!-- Step 2: Imbuements | Magias (side by side) -->
+    <!-- Step 2: Runas -->
     <div class="wpanel" id="wp2">
-      <div style="display:grid;grid-template-columns:230px 1fr;gap:1rem;align-items:start;">
-        <!-- Imbu column -->
-        <div>
-          <div class="sec-lbl">🛡️ Imbuements <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">Proteção elemental</span> <span id="imbuCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
-          <div style="font-size:.67rem;color:var(--t1);margin-bottom:.45rem;">Máx. 2 — clique para ciclar 0→1→2</div>
-          <div class="charm-grid" style="grid-template-columns:repeat(2,1fr);" id="imbuGrid"></div>
-        </div>
-        <!-- Spells column -->
-        <div>
-          <div class="sec-lbl">✨ Magias <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">escolha sua vocação</span> <span id="spellCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
-          <div class="voc-bar" id="vocBar" style="margin-bottom:.6rem;">
-            <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
-            <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
-            <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
-            <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
-            <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
-          </div>
-          <div id="spellGridWrap">
-            <div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>
-          </div>
-        </div>
+      <div class="sec-lbl">📜 Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
+      <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
+      <div id="runaSel" style="margin-top:.4rem;"></div>
+    </div>
+
+    <!-- Step 3: Imbuimentos -->
+    <div class="wpanel" id="wp3">
+      <div class="sec-lbl">🛡️ Imbuimentos <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">Proteção elemental</span> <span id="imbuCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+      <div style="font-size:.67rem;color:var(--t1);margin-bottom:.45rem;">Máx. 2 — clique para ciclar 0→1→2</div>
+      <div class="charm-grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));max-width:580px;" id="imbuGrid"></div>
+    </div>
+
+    <!-- Step 4: Magias -->
+    <div class="wpanel" id="wp4">
+      <div class="sec-lbl">✨ Magias <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">escolha sua vocação</span> <span id="spellCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+      <div class="voc-bar" id="vocBar" style="margin-bottom:.6rem;">
+        <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
+        <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
+        <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
+        <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
+        <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
+      </div>
+      <div id="spellGridWrap">
+        <div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>
       </div>
     </div>
 
-    <!-- Step 3: Monstros -->
-    <div class="wpanel" id="wp3">
+    <!-- Step 5: Monstros -->
+    <div class="wpanel" id="wp5">
       <div class="step3-wrap">
         <!-- LEFT: add form -->
         <div class="step3-form">
-          <!-- Mode toggle -->
           <div class="import-toggle">
             <button class="import-toggle-btn on" id="modeSingleBtn" onclick="setMonMode('single')">🐉 Monstro único</button>
             <button class="import-toggle-btn" id="modeBulkBtn" onclick="setMonMode('bulk')">📋 Importar por respaw</button>
           </div>
-
-          <!-- ── Panel: single monster ── -->
+          <!-- Single monster panel -->
           <div id="singlePanel">
             <div class="sec-lbl">🐉 Adicionar Monstro</div>
             <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
@@ -655,7 +673,7 @@ input[type=number]{-moz-appearance:textfield;}
                 <input class="inp" id="monName" placeholder="Ex: Demon, Hydra..." oninput="onMonNameInput()">
               </div>
               <div class="f">
-                <label class="lbl">Link TibiaWiki</label>
+                <label class="lbl">Link TibiaWiki <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.65rem;">— ou busque em: <a href="https://www.tibiawiki.com.br" target="_blank" style="color:var(--gold);">tibiawiki.com.br</a> / <a href="https://tibia.fandom.com" target="_blank" style="color:var(--gold);">fandom</a></span></label>
                 <div style="display:flex;gap:.4rem;">
                   <input class="inp" id="monWiki" placeholder="tibia.fandom.com/wiki/... ou tibiawiki.com.br/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
                   <button class="btn btn-o btn-sm" onclick="fetchGif()">🖼️ GIF</button>
@@ -666,31 +684,9 @@ input[type=number]{-moz-appearance:textfield;}
                   <span style="font-size:.7rem;color:var(--green);">✓ GIF encontrado</span>
                 </div>
               </div>
-              <!-- Resistances (auto-preenchido ao buscar GIF) -->
               <div style="margin-bottom:.5rem;">
                 <div class="lbl" style="margin-bottom:.3rem;">⚡ Fraquezas</div>
                 <div id="resPreview" style="min-height:1.4rem;"></div>
-              </div>
-              <div class="row">
-                <div class="f">
-                  <label class="lbl">⭐ Major Charm</label>
-                  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
-                    <button class="charm-none-btn on" id="majorNoneBtn" onclick="selectCharm('major',null)">Nenhum</button>
-                    <span style="font-size:.72rem;color:var(--t1);" id="majorCharmLabel"></span>
-                  </div>
-                  <div class="charm-grid" id="majorCharmGrid"></div>
-                </div>
-                <div class="f">
-                  <label class="lbl">🔮 Minor Charm</label>
-                  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
-                    <button class="charm-none-btn on" id="minorNoneBtn" onclick="selectCharm('minor',null)">Nenhum</button>
-                    <span style="font-size:.72rem;color:var(--t1);" id="minorCharmLabel"></span>
-                  </div>
-                  <div class="charm-grid" id="minorCharmGrid"></div>
-                </div>
-              </div>
-              <div style="font-size:.68rem;color:var(--t2);margin-bottom:.4rem;padding:.25rem .4rem;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid var(--c4);">
-                ⚠️ Charms em cinza já foram usados nesta hunt.
               </div>
               <div style="display:flex;gap:.4rem;margin-top:.4rem;">
                 <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
@@ -698,8 +694,7 @@ input[type=number]{-moz-appearance:textfield;}
               </div>
             </div>
           </div>
-
-          <!-- ── Panel: bulk import ── -->
+          <!-- Bulk import panel -->
           <div id="bulkPanel" style="display:none;">
             <div class="sec-lbl">📋 Importar por Respaw</div>
             <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
@@ -710,6 +705,10 @@ input[type=number]{-moz-appearance:textfield;}
                   <button class="btn btn-o btn-sm" id="huntFetchBtn" onclick="fetchHuntPage()">🔍 Buscar</button>
                 </div>
                 <div style="font-size:.65rem;color:var(--t2);margin-top:.28rem;">Suporta qualquer página de hunt do tibiawiki.com.br ou tibia.fandom.com</div>
+                <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.35rem;">
+                  <a href="https://www.tibiawiki.com.br/wiki/Categoria:Locais_de_Hunt" target="_blank" class="outfitter-link" style="font-size:.68rem;">📋 Hunts BR →</a>
+                  <a href="https://tibia.fandom.com/wiki/Hunting_Places" target="_blank" class="outfitter-link" style="font-size:.68rem;">📋 Hunts Fandom →</a>
+                </div>
               </div>
               <div id="importStatus"></div>
               <div class="import-prog" id="importProg" style="display:none;"><div class="import-prog-bar" id="importProgBar" style="width:0%"></div></div>
@@ -732,25 +731,14 @@ input[type=number]{-moz-appearance:textfield;}
       </div>
     </div>
 
-    <!-- Step 4: Runas + Monster Weaknesses -->
-    <div class="wpanel" id="wp4">
-      <div class="step4-wrap">
-        <!-- LEFT: runa selection -->
-        <div class="step4-runa-col">
-          <div class="sec-lbl">📜 Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
-          <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
-          <div id="runaSel" style="margin-top:.4rem;"></div>
-        </div>
-        <!-- RIGHT: monster weaknesses (read-only) -->
-        <div class="step4-mon-col">
-          <div class="sec-lbl" style="position:sticky;top:0;background:var(--c3);z-index:2;padding-bottom:.3rem;">🐉 Monstros &amp; Fraquezas</div>
-          <div id="step4MonList"></div>
-        </div>
-      </div>
+    <!-- Step 6: Charms -->
+    <div class="wpanel" id="wp6">
+      <div class="sec-lbl">✨ Charms <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">atribua charms a cada monstro — os cinzas já foram usados</span></div>
+      <div id="step6CharmList"></div>
     </div>
 
-    <!-- Step 5: Loot -->
-    <div class="wpanel" id="wp5">
+    <!-- Step 7: Loot -->
+    <div class="wpanel" id="wp7">
       <div class="sec-lbl">📦 Loot <span id="lootSubLbl" style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">puxando dados da wiki...</span></div>
       <div class="loot-fetch-prog" id="lootFetchProg" style="display:none;"><div class="loot-fetch-prog-bar" id="lootFetchProgBar" style="width:0%"></div></div>
       <div id="lootList" class="loot-cats"></div>
@@ -1496,7 +1484,70 @@ function renderStep4MonWeaknesses(){
 }
 
 // ══════════════════════════════════════════════════════
-// STEP 5 — LOOT FETCH & RENDER
+// STEP 6 — CHARMS (per-monster)
+// ══════════════════════════════════════════════════════
+function renderStep6Charms(){
+  const el=document.getElementById('step6CharmList'); if(!el) return;
+  if(!wiz.monsters.length){
+    el.innerHTML='<div style="color:var(--t2);font-size:.85rem;text-align:center;padding:2rem 0;">Nenhum monstro adicionado.<br><span style="font-size:.75rem;">Volte ao passo 5 para adicionar monstros.</span></div>';
+    return;
+  }
+  el.innerHTML='';
+  wiz.monsters.forEach(m=>{
+    const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="width:44px;height:44px;object-fit:contain;image-rendering:pixelated;border-radius:8px;">`:'<div style="width:44px;height:44px;border-radius:8px;background:var(--c4);display:flex;align-items:center;justify-content:center;font-size:1.4rem;opacity:.5;">🐉</div>';
+    const res=m.resistances?buildResistRow(m.resistances,false,true):'';
+    const card=document.createElement('div'); card.className='step6-mon-card';
+    card.innerHTML=`
+      <div class="step6-mon-hdr">
+        ${gif}
+        <div>
+          <div class="step6-mon-hdr-name">${m.name}</div>
+          ${res?`<div style="margin-top:.15rem;">${res}</div>`:''}
+        </div>
+      </div>
+      <div class="step6-charm-cols">
+        <div>
+          <div class="step6-charm-sect">⚔️ Charm Principal</div>
+          ${_buildStep6CharmGrid(m.id,'major')}
+        </div>
+        <div>
+          <div class="step6-charm-sect">🛡️ Charm Secundário</div>
+          ${_buildStep6CharmGrid(m.id,'minor')}
+        </div>
+      </div>`;
+    el.appendChild(card);
+  });
+}
+function _buildStep6CharmGrid(monId,type){
+  const charms=type==='major'?MAJOR_CHARMS:MINOR_CHARMS;
+  const mon=wiz.monsters.find(m=>m.id===monId); if(!mon) return '';
+  const selId=type==='major'?mon.majorCharm?.id:mon.minorCharm?.id;
+  // Collect charm IDs used by OTHER monsters (same type)
+  const usedByOthers=new Set(wiz.monsters.filter(m=>m.id!==monId).map(m=>type==='major'?m.majorCharm?.id:m.minorCharm?.id).filter(Boolean));
+  const noneOn=!selId?' on':'';
+  let html=`<div style="margin-bottom:.3rem;"><button class="step6-charm-none${noneOn}" onclick="setMonCharmStep6('${monId}','${type}',null)">Nenhum</button></div>`;
+  html+=`<div class="step6-charm-grid">`;
+  charms.forEach(c=>{
+    const isSelected=selId===c.id;
+    const isUsed=usedByOthers.has(c.id)&&!isSelected;
+    const cls='charm-opt'+(isSelected?' on':'')+(isUsed?' charm-used':'');
+    const onclick=isUsed?'':`onclick="setMonCharmStep6('${monId}','${type}','${c.id}')"`;
+    const title=isUsed?'title="Já usado por outro monstro"':'';
+    html+=`<div class="${cls}" ${onclick} ${title}><div class="charm-opt-img"><img src="${c.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${c.name}</div></div>`;
+  });
+  html+=`</div>`;
+  return html;
+}
+function setMonCharmStep6(monId,type,charmId){
+  const mon=wiz.monsters.find(m=>m.id===monId); if(!mon) return;
+  const charm=charmId?(type==='major'?MAJOR_CHARMS:MINOR_CHARMS).find(c=>c.id===charmId):null;
+  if(type==='major') mon.majorCharm=charm||null;
+  else mon.minorCharm=charm||null;
+  renderStep6Charms();
+}
+
+// ══════════════════════════════════════════════════════
+// STEP 7 — LOOT FETCH & RENDER
 // ══════════════════════════════════════════════════════
 const LOOT_RARITY_ORDER=['always','common','uncommon','semirare','rare','veryrare','unknown'];
 const LOOT_RARITY_LABELS={always:'Sempre',common:'Comum',uncommon:'Incomum',semirare:'Semi-raro',rare:'Raro',veryrare:'Muito Raro',unknown:'Desconhecido'};
@@ -1832,8 +1883,10 @@ async function _fetchAndStoreResistances(name){
 }
 function addMonster(){
   const name=document.getElementById('monName').value.trim(); if(!name){toast('⚠️ Insira o nome do monstro');return;}
-  const majorCharm=MAJOR_CHARMS.find(c=>c.id===_selMajor)||null;
-  const minorCharm=MINOR_CHARMS.find(c=>c.id===_selMinor)||null;
+  // Preserve existing charms if editing; new monsters start with null (assigned in step 6)
+  const existing=wiz._editMonId?wiz.monsters.find(m=>m.id===wiz._editMonId):null;
+  const majorCharm=existing?.majorCharm||null;
+  const minorCharm=existing?.minorCharm||null;
   const monData={id:wiz._editMonId||'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm,resistances:wiz._resistances||null};
   if(wiz._editMonId){
     const idx=wiz.monsters.findIndex(m=>m.id===wiz._editMonId);
@@ -1850,9 +1903,6 @@ function clearMonForm(){
   wiz._gif=null; wiz._editMonId=null; wiz._resistances=null;
   const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML='';
   const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='➕ Adicionar';
-  // rebuild charm grids to reflect used charms
-  buildCharmGrid('major'); buildCharmGrid('minor');
-  selectCharm('major',null); selectCharm('minor',null);
 }
 function editMonster(id){
   const m=wiz.monsters.find(x=>x.id===id); if(!m) return;
@@ -1864,15 +1914,12 @@ function editMonster(id){
   document.getElementById('gifLoad').classList.add('h');
   wiz._resistances=m.resistances||null;
   const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML=wiz._resistances?buildResistRow(wiz._resistances):'';
-  buildCharmGrid('major'); buildCharmGrid('minor');
-  selectCharm('major',m.majorCharm?.id||null);
-  selectCharm('minor',m.minorCharm?.id||null);
   const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='✓ Salvar';
   document.querySelectorAll('.mon-card').forEach(c=>c.classList.remove('editing'));
   wiz.monsters.forEach((mon,i)=>{ const cards=document.querySelectorAll('.mon-card'); if(mon.id===id&&cards[i]) cards[i].classList.add('editing'); });
   toast(`✏️ Editando: ${m.name}`);
 }
-function rmMon(id){ wiz.monsters=wiz.monsters.filter(m=>m.id!==id); renderMonList(); buildCharmGrid('major'); buildCharmGrid('minor'); }
+function rmMon(id){ wiz.monsters=wiz.monsters.filter(m=>m.id!==id); renderMonList(); }
 function renderMonList(){
   const el=document.getElementById('monList'); el.innerHTML='';
   const badge=document.getElementById('monCount');
@@ -1918,50 +1965,69 @@ function _huntUrlToSlug(url){
 // Section title tables have a single cell with the section name.
 function parseHuntHTML(html){
   const doc = new DOMParser().parseFromString(html, 'text/html');
-  const creatures = [];
   const seen = new Set();
 
+  // ── Format 1: separate table per creature (Secret Library style)
   const RX_CREATURE_SECT = /criaturas?\s*(do\s*local|found|of\s*the)?/i;
-  const RX_BOSS          = /sala\s*do\s*boss|boss\s*room|chefe/i;
+  const RX_BOSS_TITLE    = /sala\s*do\s*boss|boss\s*room|chefe/i;
   const RX_SKIP          = /npc|montaria|mount/i;
-
   const tables = Array.from(doc.querySelectorAll('table'));
-  let mode = 'unknown'; // 'creatures' | 'boss' | 'skip' | 'unknown'
-
+  const f1 = [];
+  let mode = 'unknown';
   for(const table of tables){
     const firstRow = table.querySelector('tr');
     if(!firstRow) continue;
     const cells = Array.from(firstRow.querySelectorAll('td,th'));
     const firstText = (cells[0]?.textContent||'').trim();
-
-    // ─ Section title tables (single prominent cell, no links)
     const isTitleRow = cells.length<=2 && !firstRow.querySelector('a') && firstText.length>3;
     if(isTitleRow){
       if(RX_CREATURE_SECT.test(firstText)) mode='creatures';
-      else if(RX_BOSS.test(firstText))     mode='boss';
-      else if(RX_SKIP.test(firstText))     mode='skip';
+      else if(RX_BOSS_TITLE.test(firstText)) mode='boss';
+      else if(RX_SKIP.test(firstText)) mode='skip';
       continue;
     }
-
-    // Only capture creatures from the "creatures" section
     if(mode!=='creatures') continue;
-
-    // ─ Creature table pattern: ≥3 cells, first cell has a link, 3rd cell is numeric (HP)
     if(cells.length<3) continue;
     const firstLink = cells[0].querySelector('a');
     if(!firstLink) continue;
     const thirdTxt = (cells[2]?.textContent||'').trim();
-    const thirdIsNumeric = /^\d+$/.test(thirdTxt) || thirdTxt==='?';
-    if(!thirdIsNumeric) continue;
-
+    if(!/^\d+$/.test(thirdTxt) && thirdTxt!=='?') continue;
     const name = firstLink.textContent.trim();
     const href = firstLink.getAttribute('href')||'';
-    if(name.length>2 && name.length<60 && /^[A-Z]/.test(name) &&
-       href.includes('/wiki/') && !href.includes(':') && !seen.has(name)){
-      seen.add(name); creatures.push(name);
+    if(name.length>2&&name.length<60&&/^[A-Z]/.test(name)&&href.includes('/wiki/')&&!href.includes(':')&&!seen.has(name)){
+      seen.add(name); f1.push(name);
     }
   }
-  return creatures;
+  if(f1.length) return f1;
+
+  // ── Format 2: one big table with creature rows (Nimmersatt style)
+  const SKIP_HREFS = ['Hit_point','Experience_point','Charm','Tibia','Category'];
+  const f2 = [];
+  for(const table of tables){
+    const rows = Array.from(table.querySelectorAll('tr'));
+    let inCreatures = false;
+    let found = 0;
+    for(const row of rows){
+      const rowText = row.textContent || '';
+      const shortText = rowText.slice(0,300);
+      if(!inCreatures && /criaturas?/i.test(shortText)) inCreatures = true;
+      if(inCreatures && /\bbosses?\b/i.test(shortText.slice(0,120)) && found>0) break;
+      if(!inCreatures) continue;
+      const cells = Array.from(row.querySelectorAll('td,th'));
+      if(cells.length < 5) continue;
+      const firstLink = cells[0].querySelector('a');
+      if(!firstLink) continue;
+      const name = firstLink.textContent.trim();
+      const href = firstLink.getAttribute('href')||'';
+      if(name.length<3||name.length>60||!/^[A-Z]/.test(name)) continue;
+      if(!href.includes('/wiki/')||href.includes(':')) continue;
+      if(SKIP_HREFS.some(s=>href.includes(s))) continue;
+      if(seen.has(name)) continue;
+      seen.add(name); f2.push(name); found++;
+    }
+    if(f2.length) break;
+  }
+  return f2;
 }
 
 // Also try wikitext as fallback parser
@@ -2179,8 +2245,6 @@ function openWizard(editId=null){
   } else {
     document.getElementById('wHuntName').value='';
   }
-  buildCharmGrid('major'); buildCharmGrid('minor');
-  selectCharm('major',null); selectCharm('minor',null);
   renderMonList();
   setStep(1);
   document.getElementById('wizOv').classList.add('on');
@@ -2188,15 +2252,15 @@ function openWizard(editId=null){
 function closeWizard(){ _lootFetchActive=false; document.getElementById('wizOv').classList.remove('on'); }
 function setStep(n){
   wiz.step=n;
-  [1,2,3,4,5].forEach(i=>{
+  [1,2,3,4,5,6,7].forEach(i=>{
     document.getElementById('wp'+i).classList.toggle('on',i===n);
     const d=document.getElementById('wd'+i);
     d.classList.toggle('on',i===n);
     d.classList.toggle('done',i<n);
   });
   document.getElementById('wizBack').style.display=n>1?'':'none';
-  document.getElementById('wizNext').textContent=n===5?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
-  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 5`;
+  document.getElementById('wizNext').textContent=n===7?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
+  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 7`;
   // show sticky name bar on steps 2+
   const bar=document.getElementById('wizNameBar');
   if(bar){
@@ -2205,18 +2269,20 @@ function setStep(n){
     bar.classList.toggle('on',n>1);
   }
   if(n===1){ renderPotGrid(); }
-  if(n===2){
-    renderImbuGrid();
+  if(n===2){ renderRunaGrid(); }
+  if(n===3){ renderImbuGrid(); }
+  if(n===4){
     document.querySelectorAll('.voc-btn').forEach(b=>b.classList.remove('on'));
     if(wiz.vocation){ const b=document.getElementById('vbtn_'+wiz.vocation); if(b) b.classList.add('on'); }
     renderSpellGrid();
   }
-  if(n===4){ renderRunaGrid(); renderStep4MonWeaknesses(); }
-  if(n===5){ startLootFetch(); }
+  if(n===5){ setMonMode('single'); }
+  if(n===6){ renderStep6Charms(); }
+  if(n===7){ startLootFetch(); }
 }
-function goStep(n){ if(n<1||n>5)return; setStep(n); }
+function goStep(n){ if(n<1||n>7)return; setStep(n); }
 function wizNext(){
-  if(wiz.step<5){
+  if(wiz.step<7){
     if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('⚠️ Insira o nome da hunt');return;}
     setStep(wiz.step+1);
   } else saveHunt();
@@ -2921,7 +2987,7 @@ const THEMES = [
   {
     id: 'gold',
     name: 'Gold Forest',
-    emoji: '??',
+    emoji: '🏆',
     desc: 'O tema original. Verde escuro com detalhes dourados.',
     swatch: 'linear-gradient(135deg,#0f172a 0%,#1a2e1a 100%)',
     vars: {
@@ -2937,7 +3003,7 @@ const THEMES = [
   {
     id: 'crimson',
     name: 'Crimson',
-    emoji: '??',
+    emoji: '🩸',
     desc: 'Vermelho sangue, intenso. Energia de boss-fight.',
     swatch: 'linear-gradient(135deg,#130808 0%,#2e1a1a 100%)',
     vars: {
@@ -2953,7 +3019,7 @@ const THEMES = [
   {
     id: 'arcane',
     name: 'Arcane',
-    emoji: '??',
+    emoji: '🔮',
     desc: 'Roxo profundo e violeta el�trico. Estilo m�gico.',
     swatch: 'linear-gradient(135deg,#0d0a1e 0%,#1a1040 100%)',
     vars: {
@@ -2969,7 +3035,7 @@ const THEMES = [
   {
     id: 'frost',
     name: 'Frost',
-    emoji: '??',
+    emoji: '❄️',
     desc: 'Ciano gelo sobre azul marinho. Limpo e preciso.',
     swatch: 'linear-gradient(135deg,#040d1e 0%,#0a2030 100%)',
     vars: {
@@ -2985,7 +3051,7 @@ const THEMES = [
   {
     id: 'obsidian',
     name: 'Obsidian',
-    emoji: '??',
+    emoji: '🖤',
     desc: 'Preto profundo com detalhes prata. Elegante e neutro.',
     swatch: 'linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 100%)',
     vars: {
@@ -3001,7 +3067,7 @@ const THEMES = [
   {
     id: 'emerald',
     name: 'Emerald',
-    emoji: '??',
+    emoji: '🌿',
     desc: 'Verde esmeralda vibrante. Bosque encantado.',
     swatch: 'linear-gradient(135deg,#042010 0%,#064a20 100%)',
     vars: {
