@@ -455,6 +455,25 @@ input[type=number]{-moz-appearance:textfield;}
 .outfitter-helper-ext{display:flex;align-items:center;gap:.5rem;padding:.35rem .7rem;background:rgba(0,0,0,.15);border-top:1px solid rgba(var(--accent-rgb),.08);}
 .outfitter-helper-ext a{font-size:.7rem;color:var(--gold);font-weight:700;text-decoration:none;padding:.18rem .55rem;border:1px solid rgba(var(--accent-rgb),.3);border-radius:20px;background:rgba(var(--accent-rgb),.08);white-space:nowrap;}
 .outfitter-helper-ext a:hover{background:rgba(var(--accent-rgb),.18);}
+/* ── Import by hunt page ── */
+.import-toggle{display:flex;gap:.35rem;margin-bottom:.65rem;}
+.import-toggle-btn{flex:1;padding:.38rem .5rem;border-radius:9px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;}
+.import-toggle-btn:hover{border-color:rgba(var(--accent-rgb),.4);color:var(--gold);}
+.import-toggle-btn.on{background:rgba(var(--accent-rgb),.12);border-color:var(--gold);color:var(--gold);}
+.import-result{max-height:280px;overflow-y:auto;margin-top:.5rem;padding-right:2px;}
+.import-mon-row{display:flex;align-items:center;gap:.45rem;padding:.38rem .5rem;border-radius:8px;border:1px solid var(--c4);background:var(--c3);margin-bottom:.22rem;cursor:pointer;transition:border-color .15s,background .15s;user-select:none;}
+.import-mon-row:hover{border-color:rgba(var(--accent-rgb),.4);}
+.import-mon-row.isel{border-color:var(--gold);background:rgba(var(--accent-rgb),.07);}
+.import-mon-gif{width:34px;height:34px;border-radius:6px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.import-mon-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
+.import-mon-name{flex:1;font-size:.8rem;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.import-mon-res{flex-shrink:0;}
+.import-chk{width:15px;height:15px;flex-shrink:0;accent-color:var(--gold);cursor:pointer;}
+.import-status{font-size:.7rem;padding:.45rem .3rem;color:var(--t1);text-align:center;}
+.import-status.err{color:#fca5a5;}
+.import-status.ok{color:#4ade80;}
+.import-prog{height:3px;border-radius:2px;background:var(--c4);margin:.35rem 0;overflow:hidden;}
+.import-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
 .outfitter-helper-ext span{font-size:.65rem;color:var(--t2);}
 /* pchip edit icon */
 .pchip-edit{width:14px;height:14px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.65rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1;transition:color .15s;}
@@ -596,53 +615,87 @@ input[type=number]{-moz-appearance:textfield;}
       <div class="step3-wrap">
         <!-- LEFT: add form -->
         <div class="step3-form">
-          <div class="sec-lbl">🐉 Adicionar Monstro</div>
-          <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
-            <div class="f">
-              <label class="lbl">Nome do Monstro</label>
-              <input class="inp" id="monName" placeholder="Ex: Demon, Hydra..." oninput="onMonNameInput()">
-            </div>
-            <div class="f">
-              <label class="lbl">Link TibiaWiki</label>
-              <div style="display:flex;gap:.4rem;">
-                <input class="inp" id="monWiki" placeholder="tibia.fandom.com/wiki/... ou tibiawiki.com.br/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
-                <button class="btn btn-o btn-sm" onclick="fetchGif()">🖼️ GIF</button>
-              </div>
-              <div class="gif-load h" id="gifLoad"><div class="spin"></div> Buscando GIF...</div>
-              <div class="url-preview" id="gifPreview">
-                <img id="gifImg" alt="">
-                <span style="font-size:.7rem;color:var(--green);">✓ GIF encontrado</span>
-              </div>
-            </div>
-            <!-- Resistances (auto-preenchido ao buscar GIF) -->
-            <div style="margin-bottom:.5rem;">
-              <div class="lbl" style="margin-bottom:.3rem;">⚡ Fraquezas</div>
-              <div id="resPreview" style="min-height:1.4rem;"></div>
-            </div>
-            <div class="row">
+          <!-- Mode toggle -->
+          <div class="import-toggle">
+            <button class="import-toggle-btn on" id="modeSingleBtn" onclick="setMonMode('single')">🐉 Monstro único</button>
+            <button class="import-toggle-btn" id="modeBulkBtn" onclick="setMonMode('bulk')">📋 Importar por respaw</button>
+          </div>
+
+          <!-- ── Panel: single monster ── -->
+          <div id="singlePanel">
+            <div class="sec-lbl">🐉 Adicionar Monstro</div>
+            <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
               <div class="f">
-                <label class="lbl">⭐ Major Charm</label>
-                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
-                  <button class="charm-none-btn on" id="majorNoneBtn" onclick="selectCharm('major',null)">Nenhum</button>
-                  <span style="font-size:.72rem;color:var(--t1);" id="majorCharmLabel"></span>
-                </div>
-                <div class="charm-grid" id="majorCharmGrid"></div>
+                <label class="lbl">Nome do Monstro</label>
+                <input class="inp" id="monName" placeholder="Ex: Demon, Hydra..." oninput="onMonNameInput()">
               </div>
               <div class="f">
-                <label class="lbl">🔮 Minor Charm</label>
-                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
-                  <button class="charm-none-btn on" id="minorNoneBtn" onclick="selectCharm('minor',null)">Nenhum</button>
-                  <span style="font-size:.72rem;color:var(--t1);" id="minorCharmLabel"></span>
+                <label class="lbl">Link TibiaWiki</label>
+                <div style="display:flex;gap:.4rem;">
+                  <input class="inp" id="monWiki" placeholder="tibia.fandom.com/wiki/... ou tibiawiki.com.br/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
+                  <button class="btn btn-o btn-sm" onclick="fetchGif()">🖼️ GIF</button>
                 </div>
-                <div class="charm-grid" id="minorCharmGrid"></div>
+                <div class="gif-load h" id="gifLoad"><div class="spin"></div> Buscando GIF...</div>
+                <div class="url-preview" id="gifPreview">
+                  <img id="gifImg" alt="">
+                  <span style="font-size:.7rem;color:var(--green);">✓ GIF encontrado</span>
+                </div>
+              </div>
+              <!-- Resistances (auto-preenchido ao buscar GIF) -->
+              <div style="margin-bottom:.5rem;">
+                <div class="lbl" style="margin-bottom:.3rem;">⚡ Fraquezas</div>
+                <div id="resPreview" style="min-height:1.4rem;"></div>
+              </div>
+              <div class="row">
+                <div class="f">
+                  <label class="lbl">⭐ Major Charm</label>
+                  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+                    <button class="charm-none-btn on" id="majorNoneBtn" onclick="selectCharm('major',null)">Nenhum</button>
+                    <span style="font-size:.72rem;color:var(--t1);" id="majorCharmLabel"></span>
+                  </div>
+                  <div class="charm-grid" id="majorCharmGrid"></div>
+                </div>
+                <div class="f">
+                  <label class="lbl">🔮 Minor Charm</label>
+                  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+                    <button class="charm-none-btn on" id="minorNoneBtn" onclick="selectCharm('minor',null)">Nenhum</button>
+                    <span style="font-size:.72rem;color:var(--t1);" id="minorCharmLabel"></span>
+                  </div>
+                  <div class="charm-grid" id="minorCharmGrid"></div>
+                </div>
+              </div>
+              <div style="font-size:.68rem;color:var(--t2);margin-bottom:.4rem;padding:.25rem .4rem;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid var(--c4);">
+                ⚠️ Charms em cinza já foram usados nesta hunt.
+              </div>
+              <div style="display:flex;gap:.4rem;margin-top:.4rem;">
+                <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
+                <button class="btn btn-o btn-sm" onclick="clearMonForm()">🗑️ Limpar</button>
               </div>
             </div>
-            <div style="font-size:.68rem;color:var(--t2);margin-bottom:.4rem;padding:.25rem .4rem;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid var(--c4);">
-              ⚠️ Charms em cinza já foram usados nesta hunt.
-            </div>
-            <div style="display:flex;gap:.4rem;margin-top:.4rem;">
-              <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
-              <button class="btn btn-o btn-sm" onclick="clearMonForm()">🗑️ Limpar</button>
+          </div>
+
+          <!-- ── Panel: bulk import ── -->
+          <div id="bulkPanel" style="display:none;">
+            <div class="sec-lbl">📋 Importar por Respaw</div>
+            <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
+              <div class="f">
+                <label class="lbl">Link da Hunt — TibiaWiki BR ou Fandom</label>
+                <div style="display:flex;gap:.4rem;">
+                  <input class="inp" id="huntUrl" placeholder="tibiawiki.com.br/wiki/Secret_Library_Energy_Section" style="flex:1;">
+                  <button class="btn btn-o btn-sm" id="huntFetchBtn" onclick="fetchHuntPage()">🔍 Buscar</button>
+                </div>
+                <div style="font-size:.65rem;color:var(--t2);margin-top:.28rem;">Suporta qualquer página de hunt do tibiawiki.com.br ou tibia.fandom.com</div>
+              </div>
+              <div id="importStatus"></div>
+              <div class="import-prog" id="importProg" style="display:none;"><div class="import-prog-bar" id="importProgBar" style="width:0%"></div></div>
+              <div id="importResults" class="import-result"></div>
+              <div id="importActions" style="display:none;margin-top:.55rem;display:none;">
+                <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                  <button class="btn btn-g btn-sm" onclick="confirmImport()">➕ Adicionar <span id="importSelCount">0</span> selecionados</button>
+                  <button class="btn btn-o btn-sm" onclick="toggleAllImport()">☑️ Sel. todos</button>
+                  <button class="btn btn-o btn-sm" onclick="clearImport()">🗑️ Limpar</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1619,11 +1672,274 @@ function renderMonList(){
 }
 
 // ══════════════════════════════════════════════════════
+// IMPORT BY HUNT PAGE
+// ══════════════════════════════════════════════════════
+let _importMonsters = [];
+
+function setMonMode(mode){
+  document.getElementById('modeSingleBtn').classList.toggle('on', mode==='single');
+  document.getElementById('modeBulkBtn').classList.toggle('on', mode==='bulk');
+  document.getElementById('singlePanel').style.display = mode==='single' ? '' : 'none';
+  document.getElementById('bulkPanel').style.display   = mode==='bulk'   ? '' : 'none';
+}
+
+function _huntUrlToSlug(url){
+  const m = url.match(/\/wiki\/([^?#\s]+)/);
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+// Parse rendered HTML from MediaWiki API.
+// TibiaWiki BR structure: each creature has its OWN table.
+// Creature table pattern: first row = [CreatureName(link)] [img] [HP_number] [Exp_number] ...
+// Section title tables have a single cell with the section name.
+function parseHuntHTML(html){
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const creatures = [];
+  const seen = new Set();
+
+  const RX_CREATURE_SECT = /criaturas?\s*(do\s*local|found|of\s*the)?/i;
+  const RX_BOSS          = /sala\s*do\s*boss|boss\s*room|chefe/i;
+  const RX_SKIP          = /npc|montaria|mount/i;
+
+  const tables = Array.from(doc.querySelectorAll('table'));
+  let mode = 'unknown'; // 'creatures' | 'boss' | 'skip' | 'unknown'
+
+  for(const table of tables){
+    const firstRow = table.querySelector('tr');
+    if(!firstRow) continue;
+    const cells = Array.from(firstRow.querySelectorAll('td,th'));
+    const firstText = (cells[0]?.textContent||'').trim();
+
+    // ─ Section title tables (single prominent cell, no links)
+    const isTitleRow = cells.length<=2 && !firstRow.querySelector('a') && firstText.length>3;
+    if(isTitleRow){
+      if(RX_CREATURE_SECT.test(firstText)) mode='creatures';
+      else if(RX_BOSS.test(firstText))     mode='boss';
+      else if(RX_SKIP.test(firstText))     mode='skip';
+      continue;
+    }
+
+    // Only capture creatures from the "creatures" section
+    if(mode!=='creatures') continue;
+
+    // ─ Creature table pattern: ≥3 cells, first cell has a link, 3rd cell is numeric (HP)
+    if(cells.length<3) continue;
+    const firstLink = cells[0].querySelector('a');
+    if(!firstLink) continue;
+    const thirdTxt = (cells[2]?.textContent||'').trim();
+    const thirdIsNumeric = /^\d+$/.test(thirdTxt) || thirdTxt==='?';
+    if(!thirdIsNumeric) continue;
+
+    const name = firstLink.textContent.trim();
+    const href = firstLink.getAttribute('href')||'';
+    if(name.length>2 && name.length<60 && /^[A-Z]/.test(name) &&
+       href.includes('/wiki/') && !href.includes(':') && !seen.has(name)){
+      seen.add(name); creatures.push(name);
+    }
+  }
+  return creatures;
+}
+
+// Also try wikitext as fallback parser
+function parseHuntWikitext(wt){
+  const seen = new Set(); const result = [];
+  // Find Criaturas section
+  const sectM = wt.match(/==\s*[Cc]riaturas?\s*==([\s\S]*?)(?:\n==(?!=)|$)/);
+  let section = sectM ? sectM[1] : wt;
+  // Remove boss/NPC/Montarias subsections
+  section = section.replace(/===?\s*(?:[Bb]oss(?:es)?|[Nn]PC|[Mm]ontaria[s]?|[Mm]ount[s]?)\s*===?[\s\S]*?(?====|$)/g,'');
+  // |nome=... or |name=...
+  for(const m of section.matchAll(/\|\s*(?:nome|name)\s*=\s*([^\n|}<\]]+)/gi)){
+    const n=m[1].trim().replace(/\[\[|\]\]/g,'').split('|')[0].trim();
+    if(n&&n.length>2&&!seen.has(n)){seen.add(n);result.push(n);}
+  }
+  // [[Name]] links fallback
+  if(!result.length){
+    for(const m of section.matchAll(/\[\[([A-Z][^|\[\]#:<>\/]+?)(?:\|[^\]]+)?\]\]/g)){
+      const n=m[1].trim();
+      if(n.length>2&&!seen.has(n)){seen.add(n);result.push(n);}
+    }
+  }
+  return result;
+}
+
+// Fetch GIF URL (promise-based, returns Special:FilePath redirect URL that works as img src)
+async function _fetchGifAsync(name){
+  const slug = encodeURIComponent(name.replace(/\s+/g,'_'));
+  const urls = [
+    `https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif`,
+    `https://www.tibiawiki.com.br/wiki/Special:FilePath/${slug}.gif`,
+  ];
+  for(const url of urls){
+    const ok = await new Promise(res=>{
+      const img=new Image(); img.onload=()=>res(url); img.onerror=()=>res(null); img.src=url;
+    });
+    if(ok) return ok;
+  }
+  return null;
+}
+
+// Fetch GIF + resistances for one import monster object
+async function _fetchImportMonData(mon){
+  [mon.gifUrl, mon.resistances] = await Promise.all([
+    _fetchGifAsync(mon.name),
+    fetchMonsterResistances(mon.name),
+  ]);
+  mon.loading = false;
+}
+
+function _setImportStatus(msg, cls=''){
+  const el=document.getElementById('importStatus');
+  if(el) el.innerHTML=msg?`<div class="import-status ${cls}">${msg}</div>`:'';
+}
+
+function _setImportProgress(done, total){
+  const bar=document.getElementById('importProgBar');
+  const wrap=document.getElementById('importProg');
+  if(!bar||!wrap) return;
+  if(total===0){wrap.style.display='none';return;}
+  wrap.style.display='';
+  bar.style.width=Math.round((done/total)*100)+'%';
+}
+
+function renderImportList(){
+  const el=document.getElementById('importResults'); if(!el) return;
+  if(!_importMonsters.length){el.innerHTML='';return;}
+  el.innerHTML=_importMonsters.map((m,i)=>{
+    const gif=m.gifUrl
+      ?`<img src="${m.gifUrl}" alt="">`
+      :`<span style="font-size:1.1rem;opacity:.35;">🐉</span>`;
+    const spin=m.loading?`<span style="font-size:.6rem;color:var(--t2);">⏳</span>`:'';
+    const res=(!m.loading&&m.resistances)?buildResistRow(m.resistances,false,true):'';
+    return `<div class="import-mon-row${m.selected?' isel':''}" onclick="toggleImportMon(${i})">
+      <input class="import-chk" type="checkbox" ${m.selected?'checked':''} onclick="event.stopPropagation();toggleImportMon(${i})">
+      <div class="import-mon-gif">${gif}</div>
+      <span class="import-mon-name">${m.name}</span>
+      <span class="import-mon-res">${res}</span>
+      ${spin}
+    </div>`;
+  }).join('');
+  updateImportCount();
+}
+
+function toggleImportMon(i){
+  if(!_importMonsters[i]) return;
+  _importMonsters[i].selected=!_importMonsters[i].selected;
+  renderImportList();
+}
+
+function toggleAllImport(){
+  const allSel=_importMonsters.every(m=>m.selected);
+  _importMonsters.forEach(m=>m.selected=!allSel);
+  renderImportList();
+}
+
+function updateImportCount(){
+  const c=_importMonsters.filter(m=>m.selected).length;
+  const el=document.getElementById('importSelCount'); if(el) el.textContent=c;
+  const acts=document.getElementById('importActions'); if(acts) acts.style.display=c||_importMonsters.length?'':'none';
+}
+
+function clearImport(){
+  _importMonsters=[];
+  document.getElementById('huntUrl').value='';
+  document.getElementById('importResults').innerHTML='';
+  document.getElementById('importStatus').innerHTML='';
+  document.getElementById('importActions').style.display='none';
+  _setImportProgress(0,0);
+}
+
+async function fetchHuntPage(){
+  const rawUrl=(document.getElementById('huntUrl').value||'').trim();
+  if(!rawUrl){toast('⚠️ Cole o link da hunt');return;}
+  const slug=_huntUrlToSlug(rawUrl);
+  if(!slug){toast('⚠️ URL inválida. Use um link do TibiaWiki');return;}
+
+  const btn=document.getElementById('huntFetchBtn');
+  if(btn){btn.disabled=true;btn.textContent='⏳';}
+  _setImportStatus('🔍 Buscando criaturas...');
+  document.getElementById('importResults').innerHTML='';
+  document.getElementById('importActions').style.display='none';
+  _setImportProgress(0,0);
+
+  const isFandom=rawUrl.includes('fandom.com');
+  const apiBase=isFandom?'https://tibia.fandom.com/api.php':'https://www.tibiawiki.com.br/api.php';
+
+  let creatures=[];
+  try{
+    // Try HTML parse first (most reliable for structure)
+    const r=await fetch(`${apiBase}?action=parse&page=${encodeURIComponent(slug)}&prop=text&format=json&origin=*`);
+    const d=await r.json();
+    const html=d.parse?.text?.['*'];
+    if(!html) throw new Error('Página não encontrada');
+    creatures=parseHuntHTML(html);
+    // Fallback to wikitext if HTML parse found nothing
+    if(!creatures.length){
+      const r2=await fetch(`${apiBase}?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`);
+      const d2=await r2.json();
+      const wt=d2.parse?.wikitext?.['*'];
+      if(wt) creatures=parseHuntWikitext(wt);
+    }
+  }catch(e){
+    _setImportStatus('❌ Erro: '+e.message,'err');
+    if(btn){btn.disabled=false;btn.textContent='🔍 Buscar';}
+    return;
+  }
+
+  if(btn){btn.disabled=false;btn.textContent='🔍 Buscar';}
+
+  if(!creatures.length){
+    _setImportStatus('⚠️ Nenhuma criatura encontrada. Verifique se é uma página de hunt com tabela de criaturas.','');
+    return;
+  }
+
+  _setImportStatus(`✅ ${creatures.length} criatura${creatures.length>1?'s':''} encontrada${creatures.length>1?'s':''}. Buscando GIFs e fraquezas...`,'ok');
+  _importMonsters=creatures.map(name=>({name,gifUrl:null,resistances:null,selected:true,loading:true}));
+  renderImportList();
+  document.getElementById('importActions').style.display='';
+  updateImportCount();
+
+  // Fetch in batches of 3 to avoid hammering the API
+  const BATCH=3;
+  let done=0;
+  _setImportProgress(0, _importMonsters.length);
+  for(let i=0;i<_importMonsters.length;i+=BATCH){
+    await Promise.all(_importMonsters.slice(i,i+BATCH).map(async m=>{ await _fetchImportMonData(m); done++; _setImportProgress(done,_importMonsters.length); }));
+    renderImportList();
+  }
+  _setImportStatus(`🎉 ${creatures.length} monstro${creatures.length>1?'s':''} prontos — selecione e adicione!`,'ok');
+}
+
+async function confirmImport(){
+  const toAdd=_importMonsters.filter(m=>m.selected);
+  if(!toAdd.length){toast('⚠️ Nenhum monstro selecionado');return;}
+  let added=0;
+  toAdd.forEach(m=>{
+    if(wiz.monsters.find(x=>x.name.toLowerCase()===m.name.toLowerCase())) return; // skip dup
+    wiz.monsters.push({
+      id:'m_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+      name:m.name,
+      wikiUrl:`https://www.tibiawiki.com.br/wiki/${encodeURIComponent(m.name.replace(/\s+/g,'_'))}`,
+      gifUrl:m.gifUrl||null,
+      majorCharm:null, minorCharm:null,
+      resistances:m.resistances||null,
+    });
+    added++;
+  });
+  renderMonList();
+  toast(`✅ ${added} monstro${added>1?'s':''} adicionado${added>1?'s':''}!`);
+  clearImport();
+  setMonMode('single');
+}
+
+// ══════════════════════════════════════════════════════
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
   wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null};
   _selMajor=null; _selMinor=null; _activeTab='pot';
+  // Reset import state
+  _importMonsters=[]; setMonMode('single');
   if(editId){
     const h=state.hunts.find(x=>x.id===editId);
     if(h){
