@@ -142,7 +142,7 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .hd-tags{display:flex;gap:.3rem;flex-wrap:wrap;}
 .hd-tag{display:flex;align-items:center;gap:.25rem;font-size:.75rem;font-weight:600;padding:.22rem .5rem;border-radius:7px;}
 .hd-tag img{width:20px;height:20px;object-fit:contain;image-rendering:pixelated;}
-.mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem;}
+.mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:.6rem;}
 .mon-mini{background:var(--c3);border-radius:9px;padding:.65rem;border:1px solid var(--c4);text-align:center;transition:border-color .15s;text-decoration:none;display:block;}
 .mon-mini:hover{border-color:rgba(var(--accent-rgb),.35);}
 .mon-mini-gif{height:52px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem;}
@@ -152,6 +152,7 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .mon-mini-charm.major{background:rgba(var(--accent-rgb),.12);color:var(--gold);}
 .mon-mini-charm.minor{background:rgba(139,92,246,.12);color:#c4b5fd;}
 .mon-mini-charm img{width:18px;height:18px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.mon-mini .res-grid{margin-top:.3rem;}
 .hcard-acts{display:flex;gap:.4rem;padding:.75rem 1.1rem;border-top:1px solid var(--c4);background:rgba(0,0,0,.12);flex-wrap:wrap;}
 
 /* ── Wizard ── */
@@ -338,11 +339,11 @@ input[type=number]{-moz-appearance:textfield;}
 .hd-block{background:var(--c3);border-radius:9px;padding:.55rem .65rem;margin-bottom:.45rem;}
 .hd-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.38rem;}
 .hd-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
-.mon-mini{background:var(--c3);border-radius:9px;padding:.45rem .35rem;border:1px solid var(--c4);text-align:center;transition:border-color .15s;text-decoration:none;display:block;}
+.mon-mini{background:var(--c3);border-radius:9px;padding:.55rem .45rem;border:1px solid var(--c4);text-align:center;transition:border-color .15s;text-decoration:none;display:block;}
 .mon-mini:hover{border-color:rgba(var(--accent-rgb),.35);}
-.mon-mini-gif{height:42px;display:flex;align-items:center;justify-content:center;margin-bottom:.25rem;}
-.mon-mini-gif img{max-height:42px;max-width:100%;object-fit:contain;image-rendering:pixelated;}
-.mon-mini-name{font-size:.68rem;font-weight:700;color:var(--t0);margin-bottom:.22rem;line-height:1.25;min-height:2.5em;}
+.mon-mini-gif{height:48px;display:flex;align-items:center;justify-content:center;margin-bottom:.28rem;}
+.mon-mini-gif img{max-height:48px;max-width:100%;object-fit:contain;image-rendering:pixelated;}
+.mon-mini-name{font-size:.72rem;font-weight:700;color:var(--t0);margin-bottom:.25rem;line-height:1.3;}
 .mon-mini-charm{display:flex;align-items:center;gap:.2rem;font-size:.6rem;font-weight:600;padding:.08rem .28rem;border-radius:5px;margin-bottom:.12rem;justify-content:center;}
 
 /* ── Summary monsters compact grid ── */
@@ -612,8 +613,10 @@ input[type=number]{-moz-appearance:textfield;}
                 <span style="font-size:.7rem;color:var(--green);">✓ GIF encontrado</span>
               </div>
             </div>
-            <div style="font-size:.68rem;color:var(--t1);margin-bottom:.5rem;padding:.28rem .45rem;background:rgba(var(--accent-rgb),.06);border-radius:6px;border:1px solid rgba(var(--accent-rgb),.12);">
-              ⚠️ Charms em cinza já foram usados nesta hunt.
+            <!-- Resistances (auto-preenchido ao buscar GIF) -->
+            <div style="margin-bottom:.5rem;">
+              <div class="lbl" style="margin-bottom:.3rem;">⚡ Fraquezas</div>
+              <div id="resPreview" style="min-height:1.4rem;"></div>
             </div>
             <div class="row">
               <div class="f">
@@ -633,8 +636,9 @@ input[type=number]{-moz-appearance:textfield;}
                 <div class="charm-grid" id="minorCharmGrid"></div>
               </div>
             </div>
-            <!-- Resistance preview (auto-filled when GIF loads) -->
-            <div id="resPreview" style="min-height:1.4rem;margin-top:.3rem;"></div>
+            <div style="font-size:.68rem;color:var(--t2);margin-bottom:.4rem;padding:.25rem .4rem;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid var(--c4);">
+              ⚠️ Charms em cinza já foram usados nesta hunt.
+            </div>
             <div style="display:flex;gap:.4rem;margin-top:.4rem;">
               <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
               <button class="btn btn-o btn-sm" onclick="clearMonForm()">🗑️ Limpar</button>
@@ -810,36 +814,35 @@ const VOC_LABELS = {druid:'Druid',sorcerer:'Sorcerer',knight:'Knight',paladin:'P
 // ══════════════════════════════════════════════════════
 // ELEMENT RESISTANCE SYSTEM
 // ══════════════════════════════════════════════════════
+// Direct CDN URLs — hardcoded from tibia.fandom.com API (no redirect, no CORS issue)
 const ELEM_TYPES = [
-  {key:'physical',  label:'Physical',   wikiField:'physicalDmgMod',  icon:'Physical_Damage_Icon.gif'},
-  {key:'earth',     label:'Earth',      wikiField:'earthDmgMod',     icon:'Earth_Damage_Icon.gif'},
-  {key:'fire',      label:'Fire',       wikiField:'fireDmgMod',      icon:'Fire_Damage_Icon.gif'},
-  {key:'energy',    label:'Energy',     wikiField:'energyDmgMod',    icon:'Energy_Damage_Icon.gif'},
-  {key:'ice',       label:'Ice',        wikiField:'iceDmgMod',       icon:'Ice_Damage_Icon.gif'},
-  {key:'holy',      label:'Holy',       wikiField:'holyDmgMod',      icon:'Holy_Damage_Icon.gif'},
-  {key:'death',     label:'Death',      wikiField:'deathDmgMod',     icon:'Death_Damage_Icon.gif'},
-  {key:'drown',     label:'Drown',      wikiField:'drownDmgMod',     icon:'Drown_Damage_Icon.gif'},
-  {key:'lifedrain', label:'Life Drain', wikiField:'lifeDrainDmgMod', icon:'Life_Drain_Damage_Icon.gif'},
+  {key:'physical',  label:'Physical',   wikiField:'physicalDmgMod',  icon:'https://static.wikia.nocookie.net/tibia/images/3/37/Physical_Damage_Icon.gif/revision/latest?cb=20210531030930&path-prefix=en'},
+  {key:'earth',     label:'Earth',      wikiField:'earthDmgMod',     icon:'https://static.wikia.nocookie.net/tibia/images/5/5e/Poisoned_Icon.gif/revision/latest?cb=20171123000012&path-prefix=en'},
+  {key:'fire',      label:'Fire',       wikiField:'fireDmgMod',      icon:'https://static.wikia.nocookie.net/tibia/images/7/7a/Fire_Damage_Icon.gif/revision/latest?cb=20210531161622&path-prefix=en'},
+  {key:'energy',    label:'Energy',     wikiField:'energyDmgMod',    icon:'https://static.wikia.nocookie.net/tibia/images/3/30/Electrified_Icon.gif/revision/latest?cb=20171122235453&path-prefix=en'},
+  {key:'ice',       label:'Ice',        wikiField:'iceDmgMod',       icon:'https://static.wikia.nocookie.net/tibia/images/8/88/Freezing_Icon.gif/revision/latest?cb=20171122235520&path-prefix=en'},
+  {key:'holy',      label:'Holy',       wikiField:'holyDmgMod',      icon:'https://static.wikia.nocookie.net/tibia/images/4/45/Holy_Damage_Icon.gif/revision/latest?cb=20210531161633&path-prefix=en'},
+  {key:'death',     label:'Death',      wikiField:'deathDmgMod',     icon:'https://static.wikia.nocookie.net/tibia/images/9/9c/Cursed_Icon.gif/revision/latest?cb=20171122234722&path-prefix=en'},
+  {key:'drown',     label:'Drown',      wikiField:'drownDmgMod',     icon:'https://static.wikia.nocookie.net/tibia/images/f/f1/Drowning_Icon.gif/revision/latest?cb=20171122235017&path-prefix=en'},
+  {key:'lifedrain', label:'Life Drain', wikiField:'lifeDrainDmgMod', icon:'https://static.wikia.nocookie.net/tibia/images/2/27/Life_Drain_Icon.gif/revision/latest?cb=20210531025009&path-prefix=en'},
 ];
-// Pre-render element icons (try fandom first, BR wiki fallback via onerror)
+// Render element icon — direct CDN URL, sem redirect, sem CORS
 function _elemIconHtml(e){
-  const fan=`https://tibia.fandom.com/wiki/Special:FilePath/${e.icon}`;
-  const br=`https://www.tibiawiki.com.br/wiki/Special:FilePath/${e.icon}`;
-  return `<img class="res-icon" src="${fan}" alt="${e.label}" onerror="this.src='${br}'" title="${e.label}">`;
+  return `<img class="res-icon" src="${e.icon}" alt="${e.label}" title="${e.label}">`;
 }
 function _resCls(pct){
   if(pct===0)   return 'res-imm';
   if(pct<100)   return 'res-res';
-  if(pct===100) return 'res-neu';
-  return 'res-weak';
+  return 'res-weak'; // >100
 }
-// Build resistance grid — sorted highest % first (most vulnerable → left)
-// sm=true uses smaller variant for hunt card monster tiles
+// Build resistance grid — mostra só >100% (fraco) e <100% (resistente/imune), ignora 100% (neutro)
+// sorted: mais fraco primeiro (esq), mais resistente/imune por último (dir)
 function buildResistRow(res, _unused=false, sm=false){
   if(!res||!Object.keys(res).length) return '';
-  const elems = ELEM_TYPES.filter(e=>res[e.key]!=null);
+  // Filtra: só mostra se diferente de 100% (neutro)
+  const elems = ELEM_TYPES.filter(e=>res[e.key]!=null && res[e.key]!==100);
   if(!elems.length) return '';
-  // Sort: highest % first → lowest % last (most vulnerable at top-left)
+  // Ordena: maior % primeiro (mais vulnerável à esq), menor % por último (mais resistente à dir)
   elems.sort((a,b)=>(res[b.key]||0)-(res[a.key]||0));
   const badges = elems.map(e=>{
     const pct=res[e.key];
@@ -1453,12 +1456,15 @@ function selectCharm(type,id){
 // ══════════════════════════════════════════════════════
 // MONSTERS
 // ══════════════════════════════════════════════════════
-let _gifTimer;
+let _gifTimer, _resTimer;
 function onMonWikiInput(){ clearTimeout(_gifTimer); _gifTimer=setTimeout(()=>{ if(document.getElementById('monWiki').value.trim()) autoFetchGif(); },850); }
 function onMonNameInput(){
   const name=document.getElementById('monName').value.trim();
   const wi=document.getElementById('monWiki');
   if(name&&!wi.value.trim()) wi.value=`https://tibia.fandom.com/wiki/${encodeURIComponent(name.replace(/\s+/g,'_'))}`;
+  // Auto-fetch resistances as user types the name (debounced)
+  clearTimeout(_resTimer);
+  if(name.length>=3) _resTimer=setTimeout(()=>_fetchAndStoreResistances(name),1200);
 }
 // Extract clean slug from any wiki URL (fandom or tibiawiki.com.br, Arquivo:/File: prefix)
 function _wikiSlug(url){
