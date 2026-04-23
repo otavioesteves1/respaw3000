@@ -378,6 +378,12 @@ input[type=number]{-moz-appearance:textfield;}
 .hcard-pv-gif{height:48px;max-width:48px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(0,0,0,.5));}
 .hcard-pv-div{width:1px;height:28px;background:rgba(255,255,255,.13);margin:0 .05rem;flex-shrink:0;}
 .hcard-pv-more{font-size:.75rem;font-weight:800;color:var(--t1);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.2rem .45rem;flex-shrink:0;}
+.hunt-layout{display:flex;gap:1.25rem;align-items:flex-start;}
+.hunt-portrait{flex-shrink:0;width:120px;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:sticky;top:1rem;}
+.hunt-portrait-img{width:110px;height:110px;border-radius:14px;object-fit:contain;image-rendering:pixelated;background:rgba(var(--accent-rgb),.08);border:2px solid rgba(var(--accent-rgb),.2);}
+.hunt-portrait-name{font-size:.72rem;font-weight:700;color:var(--t1);text-align:center;word-break:break-word;}
+.hunt-list-col{flex:1;min-width:0;}
+@media(max-width:600px){.hunt-layout{flex-direction:column;}.hunt-portrait{width:100%;flex-direction:row;align-items:center;position:static;}.hunt-portrait-img{width:60px;height:60px;}}
 .hcard-pv-sess{font-size:.7rem;font-weight:700;padding:.22rem .48rem;border-radius:20px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;white-space:nowrap;flex-shrink:0;}
 /* Expanded card item tags — bigger */
 .hd-tag{display:flex;align-items:center;gap:.3rem;font-size:.82rem;font-weight:600;padding:.3rem .55rem;border-radius:8px;}
@@ -592,7 +598,7 @@ input[type=number]{-moz-appearance:textfield;}
 <header>
   <div class="hdr">
     <div class="hdr-brand">
-      <span style="font-size:1.6rem;">⚔️</span>
+      <img src="assets/logo_respaw.png" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
       <div><div class="hdr-title">RESPAW3000</div><div class="hdr-sub">Hunt List Manager</div></div>
     </div>
     <div class="profiles-strip" id="profilesStrip"></div>
@@ -620,22 +626,27 @@ input[type=number]{-moz-appearance:textfield;}
 
 <div class="wrap">
   <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;">
-    <button class="btn btn-g" onclick="openWizard()">⚔️ Nova Hunt</button>
+    <button class="btn btn-g" onclick="openWizard()">Nova Hunt</button>
     <button class="btn btn-o" onclick="save()">💾 Salvar</button>
     <button class="btn btn-o" onclick="openCompare()">📊 Comparar</button>
     <button class="btn btn-o" onclick="exportJSON()" title="Baixar backup completo (.json)">📤 Exportar</button>
     <button class="btn btn-o" onclick="importJSON()" title="Carregar backup (.json)">📂 Importar</button>
-    <input type="file" id="importInput" accept=".json" style="display:none" onchange="handleImport(event)">
+    <!-- importInput removed: now using paste-based import -->
     <button class="btn btn-del btn-sm" onclick="openDelProfile()" title="Apagar perfil e todas as hunts">🗑️ Apagar Perfil</button>
     <span style="flex:1"></span>
-    <span id="profileLabel" style="font-size:.75rem;color:var(--t1);font-weight:600;cursor:pointer;" onclick="openGate()" title="Trocar perfil"></span>
+    <span id="profileLabel" style="display:none;"></span>
   </div>
-  <div id="huntList"></div>
+  <div class="hunt-layout">
+    <div class="hunt-portrait" id="huntPortrait"></div>
+    <div class="hunt-list-col">
+      <div id="huntList"></div>
+    </div>
+  </div>
   <div class="card" style="margin-top:1.5rem;">
     <div class="ctitle">📤 Exportar / Importar</div>
     <div class="exp-grid">
-      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📤</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Salva hunts, perfis e checklist em .json</div></div></button>
-      <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">📂</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Carrega um .json exportado anteriormente</div></div></button>
+      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📋</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Copia todas as hunts para o clipboard</div></div></button>
+      <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">📂</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Cola um backup ou hunt compartilhada</div></div></button>
       <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">🖨️</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">Versão visual para impressão</div></div></button>
     </div>
   </div>
@@ -646,7 +657,7 @@ input[type=number]{-moz-appearance:textfield;}
   <div class="modal" style="max-width:min(1240px,95vw);">
     <!-- Hunt name input — always visible, all steps -->
     <div class="wiz-header">
-      <span style="font-size:1.4rem;flex-shrink:0;">⚔️</span>
+      <img src="assets/logo_respaw.png" alt="" style="height:32px;width:auto;object-fit:contain;flex-shrink:0;">
       <input class="inp wiz-name-inp" id="wHuntName" placeholder="Dê um nome à sua nova hunt...">
     </div>
     <div class="wiz-steps">
@@ -1302,13 +1313,22 @@ function renderProfiles(){
   state.profiles.forEach(p=>{
     const c=document.createElement('div'); c.className='pchip'+(state.activeProfile===p.id?' on':'');
     c.onclick=()=>setProfile(p.id);
-    c.innerHTML=(p.imgUrl?`<img src="${p.imgUrl}">`:'')+'<span>'+p.name+'</span>'+
+    c.innerHTML='<span>'+p.name+'</span>'+
       `<button class="pchip-edit" onclick="event.stopPropagation();openProfileModal('${p.id}')" title="Editar perfil">✏️</button>`;
     s.appendChild(c);
   });
   const lbl=document.getElementById('profileLabel');
-  if(state.activeProfile){ const p=state.profiles.find(x=>x.id===state.activeProfile); lbl.textContent=p?`Perfil: ${p.name}`:''; }
-  else lbl.textContent=state.profiles.length?'':'Sem perfil — clique em + para criar';
+  lbl.textContent='';
+  // Update large portrait
+  const portrait=document.getElementById('huntPortrait'); if(!portrait) return;
+  const ap=state.profiles.find(x=>x.id===state.activeProfile);
+  if(ap?.imgUrl){
+    portrait.innerHTML=`<img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}"><div class="hunt-portrait-name">${ap.name}</div>`;
+    portrait.style.display='';
+  } else {
+    portrait.innerHTML='';
+    portrait.style.display='none';
+  }
 }
 function setProfile(id){ state.activeProfile=id; renderProfiles(); renderHunts(); dirty(); }
 function openProfileModal(editId=null){
@@ -1541,7 +1561,8 @@ function renderStep2Charms(){
     const gif=m.gifUrl?`<img class="charm2-mon-gif" src="${m.gifUrl}" alt="${m.name}">`:'<div class="charm2-mon-gif" style="display:flex;align-items:center;justify-content:center;font-size:1.5rem;opacity:.4;background:var(--c4);">🐉</div>';
     const majChip=m.majorCharm?`<span class="charm2-mon-chip maj">⚔️ ${m.majorCharm.name}</span>`:'';
     const minChip=m.minorCharm?`<span class="charm2-mon-chip min">🛡️ ${m.minorCharm.name}</span>`:'';
-    btn.innerHTML=`${gif}<div style="min-width:0;flex:1;"><div class="charm2-mon-name">${m.name}</div><div class="charm2-mon-chips">${majChip}${minChip}</div></div>`;
+    const resHtml=m.resistances?`<div style="margin-top:.2rem;">${buildResistRow(m.resistances,false,true)}</div>`:'';
+    btn.innerHTML=`${gif}<div style="min-width:0;flex:1;"><div class="charm2-mon-name">${m.name}</div><div class="charm2-mon-chips">${majChip}${minChip}</div>${resHtml}</div>`;
     btn.onclick=()=>selectCharmMon(m.id);
     monList.appendChild(btn);
   });
@@ -1560,9 +1581,12 @@ function _renderCharmPicker(monId){
   const mon=wiz.monsters.find(m=>m.id===monId);
   if(!mon){ picker.innerHTML=''; return; }
   picker.innerHTML=`
-    <div style="font-size:.85rem;font-weight:800;margin-bottom:.65rem;display:flex;align-items:center;gap:.45rem;">
-      ${mon.gifUrl?`<img src="${mon.gifUrl}" style="width:34px;height:34px;object-fit:contain;image-rendering:pixelated;border-radius:6px;">`:'🐉'}
-      ${mon.name}
+    <div style="margin-bottom:.65rem;">
+      <div style="font-size:.85rem;font-weight:800;display:flex;align-items:center;gap:.45rem;margin-bottom:.35rem;">
+        ${mon.gifUrl?`<img src="${mon.gifUrl}" style="width:34px;height:34px;object-fit:contain;image-rendering:pixelated;border-radius:6px;">`:'🐉'}
+        ${mon.name}
+      </div>
+      ${mon.resistances?buildResistRow(mon.resistances,false,true):'<span style="font-size:.65rem;color:var(--t2);">Sem dados de fraqueza</span>'}
     </div>
     <div class="step6-charm-cols">
       <div>
@@ -2579,12 +2603,12 @@ function buildSummaryHTML(h){
 function renderHunts(){
   const el=document.getElementById('huntList');
   const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
-  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico">⚔️</div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.83rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
+  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico"><img src="assets/logo_respaw.png" style="height:52px;opacity:.5;"></div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.83rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
   el.innerHTML='';
   hunts.forEach(h=>{
     const p=state.profiles.find(x=>x.id===h.profileId);
     const c=document.createElement('div'); c.className='hcard';
-    const pIcon=p?.imgUrl?`<div class="hcard-picon"><img src="${p.imgUrl}"></div>`:'';
+    const pIcon='';
     const sessCount=(h.sessions||[]).length;
     const pills=buildPreviewStrip(h,sessCount);
 
@@ -2630,6 +2654,7 @@ function renderHunts(){
         <span style="flex:1"></span>
         <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">📊 Sessões${sessCount>0?` (${sessCount})`:''}</button>
         <button class="btn btn-o btn-sm" onclick="openSummary('${h.id}')">👁️ Resumo</button>
+        <button class="btn btn-o btn-sm" onclick="exportHuntJSON('${h.id}')" title="Copiar esta hunt para compartilhar">📤 Exportar</button>
         <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">📋 Duplicar</button>
       </div>`;
     el.appendChild(c);
@@ -2644,15 +2669,62 @@ function dupHunt(id){ const h=state.hunts.find(x=>x.id===id); if(!h)return; cons
 // ══════════════════════════════════════════════════════
 function exportJSON(){
   const backup={ version:2, exportedAt:new Date().toISOString(), state, checklist:cl };
-  const b=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(b);
-  a.download=`respaw3000_backup_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-  toast('📤 Backup exportado!');
+  const txt=JSON.stringify(backup,null,2);
+  navigator.clipboard.writeText(txt).then(()=>toast('📋 Backup copiado para o clipboard!')).catch(()=>{
+    // Fallback: show in textarea modal
+    _showCopyModal('Backup Completo — Cole para importar depois',txt);
+  });
 }
-function importJSON(){ document.getElementById('importInput').click(); }
+function exportHuntJSON(huntId){
+  const h=state.hunts.find(x=>x.id===huntId); if(!h)return;
+  const data={version:2,type:'single_hunt',exportedAt:new Date().toISOString(),hunt:JSON.parse(JSON.stringify(h))};
+  const txt=JSON.stringify(data,null,2);
+  navigator.clipboard.writeText(txt).then(()=>toast('📋 Hunt copiada! Compartilhe e cole no Importar.')).catch(()=>{
+    _showCopyModal(`Hunt: ${h.name}`,txt);
+  });
+}
+function _showCopyModal(title,txt){
+  const ov=document.createElement('div'); ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  ov.innerHTML=`<div style="background:var(--c2);border-radius:14px;padding:1.25rem;max-width:600px;width:95%;border:1px solid var(--c4);"><div style="font-size:.85rem;font-weight:800;margin-bottom:.75rem;">${title}</div><textarea style="width:100%;height:180px;background:var(--c1);border:1px solid var(--c4);border-radius:8px;color:var(--t0);font-size:.68rem;padding:.5rem;font-family:monospace;resize:vertical;" readonly>${txt.replace(/</g,'&lt;')}</textarea><div style="display:flex;gap:.5rem;margin-top:.75rem;justify-content:flex-end;"><button class="btn btn-o btn-sm" onclick="this.closest('div[style]').remove()">Fechar</button></div></div>`;
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  document.body.appendChild(ov);
+  ov.querySelector('textarea').select();
+}
+function importJSON(){
+  const ov=document.createElement('div'); ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  ov.innerHTML=`<div style="background:var(--c2);border-radius:14px;padding:1.25rem;max-width:600px;width:95%;border:1px solid var(--c4);"><div style="font-size:.85rem;font-weight:800;margin-bottom:.5rem;">📂 Importar — Cole o JSON abaixo</div><textarea id="_importTA" style="width:100%;height:200px;background:var(--c1);border:1px solid var(--c4);border-radius:8px;color:var(--t0);font-size:.68rem;padding:.5rem;font-family:monospace;resize:vertical;" placeholder="Cole aqui o JSON copiado do Exportar..."></textarea><div style="display:flex;gap:.5rem;margin-top:.75rem;justify-content:flex-end;"><button class="btn btn-o btn-sm" onclick="this.closest('div[style]').remove()">Cancelar</button><button class="btn btn-g btn-sm" onclick="_doImportFromText()">📂 Importar</button></div></div>`;
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  document.body.appendChild(ov);
+  document.getElementById('_importTA').focus();
+}
+function _doImportFromText(){
+  const ta=document.getElementById('_importTA'); if(!ta)return;
+  const txt=ta.value.trim(); if(!txt){toast('⚠️ Cole o JSON primeiro');return;}
+  try{
+    const d=JSON.parse(txt);
+    let newState,newCl;
+    if(d.type==='single_hunt'&&d.hunt){
+      // Single hunt import
+      if(!confirm(`Importar a hunt "${d.hunt.name}"? Ela será adicionada à lista.`)) return;
+      if(!state.hunts) state.hunts=[];
+      const copy=JSON.parse(JSON.stringify(d.hunt));
+      copy.id='h_'+Date.now(); copy.importedAt=Date.now();
+      state.hunts.unshift(copy);
+      ta.closest('div[style]').remove();
+      renderHunts(); save(); toast(`✅ Hunt "${copy.name}" importada!`);
+      return;
+    }
+    newState = d.version===2 ? d.state : d;
+    newCl    = d.version===2 ? d.checklist : null;
+    if(!newState?.hunts){ toast('❌ JSON inválido'); return; }
+    if(confirm('Isso vai substituir todos os dados atuais. Continuar?')){
+      state=newState;
+      if(newCl){ cl=newCl; clSave(); clLoad(); clUpdateBadge(); renderChecklist(); }
+      ta.closest('div[style]').remove();
+      renderProfiles(); renderHunts(); save(); toast('📂 Backup importado!');
+    }
+  }catch{ toast('❌ Erro ao ler JSON'); }
+}
 function handleImport(e){
   const f=e.target.files[0]; if(!f)return;
   const r=new FileReader();
