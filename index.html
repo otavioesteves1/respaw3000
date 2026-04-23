@@ -334,9 +334,18 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-item-name{font-size:.75rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .loot-item-from{font-size:.6rem;color:var(--t2);flex-shrink:0;}
 .loot-item-icon{width:24px;height:24px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
-.loot-item-price{font-size:.6rem;color:var(--gold);flex-shrink:0;font-weight:700;white-space:nowrap;}
+.loot-item-price{font-size:.62rem;font-weight:800;flex-shrink:0;white-space:nowrap;transition:all .15s;}
 .loot-price-bar{display:flex;align-items:center;gap:.6rem;margin-top:.35rem;margin-bottom:.2rem;flex-wrap:wrap;}
 .loot-total-val{font-size:.72rem;font-weight:700;color:var(--gold);}
+.loot-mon-filter{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center;margin-bottom:.55rem;padding:.45rem .55rem;background:var(--c3);border-radius:10px;border:1px solid var(--c4);}
+.loot-mon-filter-lbl{font-size:.6rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-right:.15rem;white-space:nowrap;}
+.loot-mon-filt-btn{display:flex;flex-direction:column;align-items:center;gap:.1rem;cursor:pointer;padding:.2rem .35rem;border-radius:8px;border:2px solid transparent;transition:all .15s;background:none;}
+.loot-mon-filt-btn:hover{border-color:rgba(var(--accent-rgb),.4);background:rgba(var(--accent-rgb),.06);}
+.loot-mon-filt-btn.on{border-color:var(--gold);background:rgba(var(--accent-rgb),.1);}
+.loot-mon-filt-btn img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated;}
+.loot-mon-filt-name{font-size:.5rem;font-weight:700;color:var(--t1);max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.loot-item.loot-dim{opacity:.18;filter:saturate(0);}
+.loot-item.loot-filter-hi{border-color:rgba(var(--accent-rgb),.5)!important;background:rgba(var(--accent-rgb),.07)!important;}
 .loot-fetch-prog{height:3px;border-radius:2px;background:var(--c4);margin:.4rem 0;overflow:hidden;}
 .loot-fetch-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
 .loot-empty{font-size:.8rem;color:var(--t2);text-align:center;padding:2rem 0;}
@@ -1597,6 +1606,27 @@ function normalizeRarity(r){
   return map[r]||'unknown';
 }
 
+// ══════════════════════════════════════════════════════
+// LOOT PRICE HELPERS
+// ══════════════════════════════════════════════════════
+let _summLootFilter=null;
+function fmtPrice(v){
+  if(!v||v<=0) return null;
+  if(v>=1000000) return (v/1000000).toFixed(v%1000000===0?0:1)+'M gp';
+  if(v>=1000)    return (v/1000).toFixed(v%1000===0?0:1)+'k gp';
+  return v+' gp';
+}
+function _priceStyle(price){
+  if(!price||price<=0) return {priceColor:'',borderStyle:'',shadowStyle:''};
+  const t=Math.min(1,Math.max(0,(Math.log10(Math.max(1,price))-2)/4));
+  const hue=43, sat=Math.round(30+t*70), lit=Math.round(38+t*27);
+  const alpha=0.25+t*0.75;
+  const priceColor=`hsla(${hue},${sat}%,${lit}%,${alpha})`;
+  const borderStyle=t>0.5?`border-color:hsla(${hue},${sat}%,${lit}%,${Math.round((t-0.5)*2*0.4*100)/100})`:'' ;
+  const shadowStyle=t>0.72?`box-shadow:0 0 ${Math.round((t-0.72)*25)}px hsla(${hue},100%,55%,.22)`:'';
+  return {priceColor,borderStyle,shadowStyle};
+}
+
 let _lootFetchActive=false;
 async function startLootFetch(){
   const subLbl=document.getElementById('lootSubLbl');
@@ -1668,49 +1698,73 @@ async function startLootFetch(){
   }));
   renderLootList();
   if(subLbl) subLbl.textContent=`${wiz.loot.length} itens encontrados`;
+  // Auto-fetch prices
+  wiz._lootPrices={};
+  fetchLootPrices();
 }
 
-function renderLootList(){
-  const list=document.getElementById('lootList'); if(!list) return;
+function renderLootList(ctx){
+  // ctx = {loot, monsters, prices, filter, setFilter, containerId} for summary mode
+  // When called with no args, uses wiz state (wizard mode)
+  const isWiz=!ctx;
+  const loot=ctx?ctx.loot:(wiz.loot||[]);
+  const monsters=ctx?ctx.monsters:(wiz.monsters||[]);
+  const prices=ctx?ctx.prices:(wiz._lootPrices||{});
+  const filter=ctx?ctx.filter:wiz._lootMonFilter;
+  const setFilter=ctx?ctx.setFilter:(name=>{wiz._lootMonFilter=name;renderLootList();});
+  const containerId=ctx?ctx.containerId:'lootList';
+  const list=document.getElementById(containerId); if(!list) return;
   list.innerHTML='';
-  if(!wiz.loot.length){
+  if(!loot.length){
     list.innerHTML='<div class="loot-empty">Nenhum loot encontrado para estes monstros.</div>';
     return;
   }
-  // Price bar
-  const prices=wiz._lootPrices||{};
-  const hasPrices=Object.keys(prices).length>0;
-  const totalVal=hasPrices?wiz.loot.filter(x=>!x.excluded).reduce((s,it)=>s+(prices[it.name.toLowerCase()]||0),0):0;
-  const priceBarHTML=`<div class="loot-price-bar">
-    <button class="btn btn-sm" onclick="fetchLootPrices()" id="lootPriceBtn" style="font-size:.72rem;">💰 Buscar Valores (NPC)</button>
-    ${hasPrices&&totalVal>0?`<span class="loot-total-val">Total incluídos: ${fmtGold(totalVal)} gp</span>`:''}
-    ${hasPrices?`<span style="font-size:.62rem;color:var(--t2);">Valores NPC · clique num item para incluir/excluir</span>`:'<span style="font-size:.62rem;color:var(--t2);">Clique num item para excluir/incluir do resumo</span>'}
-  </div>`;
-  list.insertAdjacentHTML('beforeend',priceBarHTML);
-  // Group by rarity
+  // ── Monster filter bar (only if multiple monsters) ──
+  if(monsters.length>1){
+    const bar=document.createElement('div'); bar.className='loot-mon-filter';
+    const lbl=document.createElement('div'); lbl.className='loot-mon-filter-lbl'; lbl.textContent='🐉 Filtrar:';
+    bar.appendChild(lbl);
+    monsters.forEach(m=>{
+      const btn=document.createElement('button'); btn.className='loot-mon-filt-btn'+(filter===m.name?' on':'');
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}">`:'<span style="font-size:1.6rem;opacity:.4;">🐉</span>';
+      btn.innerHTML=`${gif}<span class="loot-mon-filt-name">${m.name}</span>`;
+      btn.onclick=()=>setFilter(filter===m.name?null:m.name);
+      bar.appendChild(btn);
+    });
+    list.appendChild(bar);
+  }
+  // ── Hint ──
+  const hint=document.createElement('div'); hint.style.cssText='font-size:.6rem;color:var(--t2);margin-bottom:.35rem;';
+  hint.textContent=filter?`Loot de: ${filter} — clique no monstro novamente para ver todos`:'Clique num item para excluir/incluir · clique no monstro para filtrar';
+  list.appendChild(hint);
+  // ── Group by rarity, sorted by price desc within group ──
   const groups={};
   LOOT_RARITY_ORDER.forEach(r=>groups[r]=[]);
-  wiz.loot.forEach(it=>{
-    const r=groups[it.rarity]?it.rarity:'unknown';
-    groups[r].push(it);
-  });
+  loot.forEach(it=>{ const r=groups[it.rarity]?it.rarity:'unknown'; groups[r].push(it); });
   LOOT_RARITY_ORDER.forEach(r=>{
     if(!groups[r]||!groups[r].length) return;
-    groups[r].sort((a,b)=>a.name.localeCompare(b.name));
+    groups[r].sort((a,b)=>{ const pa=prices[a.name.toLowerCase()]||0, pb=prices[b.name.toLowerCase()]||0; return pb-pa||a.name.localeCompare(b.name); });
     const section=document.createElement('div');
     const catCls=LOOT_RARITY_CSS[r]||'loot-cat-uncommon';
     const catLbl=LOOT_RARITY_LABELS[r]||r;
     section.innerHTML=`<div class="loot-cat-title ${catCls}">${catLbl} <span style="font-weight:400;opacity:.7;">(${groups[r].length})</span></div>`;
     const grid=document.createElement('div'); grid.className='loot-items-grid';
     groups[r].forEach(it=>{
-      const div=document.createElement('div'); div.className='loot-item'+(it.excluded?' loot-excluded':'');
+      const price=prices[it.name.toLowerCase()]||0;
+      const {priceColor,borderStyle,shadowStyle}=_priceStyle(price);
+      const fromMonsters=it.monsters||[];
+      const isFiltered=filter&&!fromMonsters.includes(filter);
+      const isHighlit=filter&&fromMonsters.includes(filter);
+      let cls='loot-item'+(it.excluded?' loot-excluded':'')+(isFiltered?' loot-dim':isHighlit?' loot-filter-hi':'');
+      const div=document.createElement('div'); div.className=cls;
+      const inlineStyle=[borderStyle,shadowStyle].filter(Boolean).join(';');
+      if(inlineStyle) div.setAttribute('style',inlineStyle);
       const iconSlug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
       const iconUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${iconSlug}.gif`;
-      const fromLabel=it.monsters.length<=2?it.monsters.join(', '):`${it.monsters.length} monstros`;
-      const price=prices[it.name.toLowerCase()];
-      const priceHtml=price?`<span class="loot-item-price">${fmtGold(price)} gp</span>`:'';
-      div.innerHTML=`<div class="loot-item-cb">✓</div><img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<div class="loot-item-from" title="${it.monsters.join(', ')}">${fromLabel}</div>`;
-      div.onclick=()=>toggleLootItem(it.name);
+      const fromLabel=fromMonsters.length<=2?fromMonsters.join(', '):`${fromMonsters.length} monstros`;
+      const priceHtml=price?`<span class="loot-item-price" style="color:${priceColor};">${fmtPrice(price)}</span>`:'';
+      div.innerHTML=`<div class="loot-item-cb">✓</div><img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<div class="loot-item-from" title="${fromMonsters.join(', ')}">${fromLabel}</div>`;
+      div.onclick=()=>toggleLootItem(it.name,ctx);
       grid.appendChild(div);
     });
     section.appendChild(grid);
@@ -1718,20 +1772,23 @@ function renderLootList(){
   });
 }
 
-function toggleLootItem(name){
-  const it=wiz.loot.find(x=>x.name===name); if(!it) return;
+function toggleLootItem(name,ctx){
+  const loot=ctx?ctx.loot:wiz.loot;
+  const it=loot.find(x=>x.name===name); if(!it) return;
   it.excluded=!it.excluded;
-  renderLootList();
+  renderLootList(ctx);
 }
 
-async function fetchLootPrices(){
-  const btn=document.getElementById('lootPriceBtn');
-  if(btn){ btn.textContent='⏳ Buscando...'; btn.disabled=true; }
-  if(!wiz._lootPrices) wiz._lootPrices={};
-  const items=wiz.loot.filter(x=>!x.excluded).map(x=>x.name);
+async function fetchLootPrices(ctx){
+  const isWiz=!ctx;
+  const loot=ctx?ctx.loot:(wiz.loot||[]);
+  const prices=ctx?ctx.prices:(wiz._lootPrices||(wiz._lootPrices={}));
+  const allItems=loot.map(x=>x.name);
+  if(!allItems.length) return;
+  if(isWiz){ const sub=document.getElementById('lootSubLbl'); if(sub) sub.textContent='buscando preços...'; }
   const CHUNK=40;
-  for(let i=0;i<items.length;i+=CHUNK){
-    const chunk=items.slice(i,i+CHUNK);
+  for(let i=0;i<allItems.length;i+=CHUNK){
+    const chunk=allItems.slice(i,i+CHUNK);
     const titles=chunk.map(n=>n.replace(/\s+/g,'_')).join('|');
     try{
       const r=await fetch(`https://tibia.fandom.com/api.php?action=query&titles=${encodeURIComponent(titles)}&prop=revisions&rvprop=content&format=json&origin=*`);
@@ -1744,14 +1801,18 @@ async function fetchLootPrices(){
         if(valM){
           const itemName=(nameM?nameM[1].trim():page.title).replace(/_/g,' ');
           const val=parseInt(valM[1].replace(/,/g,''));
-          if(val>0) wiz._lootPrices[itemName.toLowerCase()]=val;
+          if(val>0) prices[itemName.toLowerCase()]=val;
         }
       });
     }catch(e){}
   }
-  if(btn){ btn.textContent='💰 Buscar Valores (NPC)'; btn.disabled=false; }
-  renderLootList();
-  toast(`💰 Valores carregados!`);
+  if(isWiz){
+    const sub=document.getElementById('lootSubLbl');
+    if(sub) sub.textContent=`${loot.length} itens · preços carregados`;
+    renderLootList();
+  } else {
+    renderLootList(ctx);
+  }
 }
 
 // ══════════════════════════════════════════════════════
@@ -2302,7 +2363,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[]};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{}};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -2317,6 +2378,7 @@ function openWizard(editId=null){
       wiz.monsters=JSON.parse(JSON.stringify(h.monsters||[]));
       wiz.vocation=h.vocation||null;
       wiz.loot=JSON.parse(JSON.stringify(h.loot||[]));
+      wiz._lootPrices=JSON.parse(JSON.stringify(h.lootPrices||{}));
     }
   } else {
     document.getElementById('wHuntName').value='';
@@ -2377,6 +2439,7 @@ function saveHunt(){
     spells:wiz.spells.map(x=>({...x})),
     monsters:wiz.monsters.map(x=>({...x})),
     loot:wiz.loot.map(x=>({...x})),
+    lootPrices:{...(wiz._lootPrices||{})},
     createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
     updatedAt:Date.now()
   };
@@ -2397,7 +2460,23 @@ function openSummary(huntId){
   const p=state.profiles.find(x=>x.id===h.profileId);
   const vocLabel=h.vocation?(VOC_ICONS[h.vocation]+' '+VOC_LABELS[h.vocation]):'';
   document.getElementById('sumHuntMeta').textContent=[p?p.name:'',vocLabel,new Date(h.createdAt).toLocaleDateString('pt-BR')].filter(Boolean).join(' · ');
+  _summLootFilter=null;
   document.getElementById('summaryContent').innerHTML=buildSummaryHTML(h);
+  // Render rich interactive loot section
+  if(document.getElementById('summLootArea')){
+    const summCtx={
+      loot:h.loot||[],
+      monsters:h.monsters||[],
+      prices:h.lootPrices||{},
+      get filter(){ return _summLootFilter; },
+      setFilter:(name)=>{ _summLootFilter=name; renderLootList(summCtx); },
+      containerId:'summLootArea'
+    };
+    renderLootList(summCtx);
+    if(!Object.keys(h.lootPrices||{}).length&&(h.loot||[]).length){
+      fetchLootPrices(summCtx);
+    }
+  }
   const copyBtn=document.getElementById('sumCopyBtn');
   if(copyBtn) copyBtn.onclick=()=>copySummaryToClipboard(huntId);
   document.getElementById('summaryOv').classList.add('on');
@@ -2436,21 +2515,11 @@ function buildSummaryHTML(h){
     h.spells.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
     leftCol+='</div></div>';
   }
-  // Loot — show active (non-excluded) items grouped by rarity
-  if(activeLoot.length){
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">📦 Loot <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${activeLoot.length} itens)</span></div>`;
-    const lootGroups={};
-    LOOT_RARITY_ORDER.forEach(r=>lootGroups[r]=[]);
-    activeLoot.forEach(it=>{ const r=lootGroups[it.rarity]?it.rarity:'unknown'; lootGroups[r].push(it); });
-    LOOT_RARITY_ORDER.forEach(r=>{
-      if(!lootGroups[r]||!lootGroups[r].length) return;
-      const catCls=LOOT_RARITY_CSS[r]||'loot-cat-uncommon';
-      const catLbl=LOOT_RARITY_LABELS[r]||r;
-      leftCol+=`<div style="margin-bottom:.4rem;"><span class="loot-cat-title ${catCls}" style="font-size:.58rem;">${catLbl}</span><div style="display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.2rem;">`;
-      lootGroups[r].forEach(it=>{ leftCol+=`<span style="font-size:.72rem;font-weight:600;padding:.15rem .45rem;border-radius:5px;background:var(--c3);border:1px solid var(--c4);">${it.name}</span>`; });
-      leftCol+='</div></div>';
-    });
-    leftCol+='</div>';
+  // Loot — rich interactive section rendered after HTML insertion
+  const allLoot=h.loot||[];
+  if(allLoot.length){
+    const activeCnt=allLoot.filter(x=>!x.excluded).length;
+    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">📦 Loot <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${activeCnt} de ${allLoot.length} itens selecionados</span></div><div id="summLootArea" class="loot-cats"></div></div>`;
   }
 
   // Right column — Monsters compact grid
