@@ -524,6 +524,19 @@ input[type=number]{-moz-appearance:textfield;}
 .outfitter-helper-ext span{font-size:.65rem;color:var(--t2);}
 
 /* ── Step 6: Charms per monster ── */
+.charm2-layout{display:grid;grid-template-columns:170px 1fr;gap:.75rem;min-height:260px;}
+@media(max-width:600px){.charm2-layout{grid-template-columns:1fr;}}
+.charm2-monlist{display:flex;flex-direction:column;gap:.25rem;overflow-y:auto;max-height:420px;padding-right:.1rem;}
+.charm2-mon-btn{display:flex;align-items:center;gap:.45rem;padding:.35rem .5rem;border-radius:9px;border:2px solid var(--c4);background:var(--c3);cursor:pointer;transition:all .12s;text-align:left;width:100%;}
+.charm2-mon-btn:hover{border-color:rgba(var(--accent-rgb),.4);background:rgba(var(--accent-rgb),.05);}
+.charm2-mon-btn.on{border-color:var(--gold);background:rgba(var(--accent-rgb),.1);}
+.charm2-mon-gif{width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;border-radius:6px;}
+.charm2-mon-name{font-size:.73rem;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t0);}
+.charm2-mon-chips{display:flex;gap:.15rem;margin-top:.1rem;flex-wrap:wrap;}
+.charm2-mon-chip{font-size:.5rem;font-weight:700;padding:.05rem .25rem;border-radius:4px;white-space:nowrap;}
+.charm2-mon-chip.maj{background:rgba(var(--accent-rgb),.15);color:var(--gold);}
+.charm2-mon-chip.min{background:rgba(139,92,246,.15);color:#a78bfa;}
+.charm2-picker{background:var(--c3);border-radius:11px;border:1px solid var(--c4);padding:.7rem;overflow-y:auto;max-height:420px;}
 .step6-mon-card{background:var(--c3);border-radius:10px;border:1px solid var(--c4);padding:.75rem;margin-bottom:.6rem;}
 .step6-mon-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:.55rem;}
 .step6-mon-hdr-gif{width:44px;height:44px;border-radius:8px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
@@ -637,53 +650,15 @@ input[type=number]{-moz-appearance:textfield;}
       <input class="inp wiz-name-inp" id="wHuntName" placeholder="Dê um nome à sua nova hunt...">
     </div>
     <div class="wiz-steps">
-      <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> Poções</div>
-      <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Runas</div>
-      <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Imbuimentos</div>
-      <div class="wdot" id="wd4" onclick="goStep(4)"><span class="wnum">4</span> Magias</div>
-      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Monstros</div>
-      <div class="wdot" id="wd6" onclick="goStep(6)"><span class="wnum">6</span> Charms</div>
-      <div class="wdot" id="wd7" onclick="goStep(7)"><span class="wnum">7</span> Loot</div>
+      <div class="wdot" id="wd1" onclick="goStep(1)"><span class="wnum">1</span> Monstros</div>
+      <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Charms</div>
+      <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Runas & Poções</div>
+      <div class="wdot" id="wd4" onclick="goStep(4)"><span class="wnum">4</span> Magias & Imbu</div>
+      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Loot</div>
     </div>
 
-    <!-- Step 1: Poções -->
+    <!-- Step 1: Monstros -->
     <div class="wpanel" id="wp1">
-      <div class="sec-lbl">💊 Poções <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
-      <div class="charm-grid" id="potGrid"></div>
-      <div id="potSel" style="margin-top:.4rem;"></div>
-    </div>
-
-    <!-- Step 2: Runas -->
-    <div class="wpanel" id="wp2">
-      <div class="sec-lbl">📜 Runas <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">clique para selecionar</span></div>
-      <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
-      <div id="runaSel" style="margin-top:.4rem;"></div>
-    </div>
-
-    <!-- Step 3: Imbuimentos -->
-    <div class="wpanel" id="wp3">
-      <div class="sec-lbl">🛡️ Imbuimentos <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">Proteção elemental</span> <span id="imbuCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
-      <div style="font-size:.67rem;color:var(--t1);margin-bottom:.45rem;">Máx. 2 — clique para ciclar 0→1→2</div>
-      <div class="charm-grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));max-width:580px;" id="imbuGrid"></div>
-    </div>
-
-    <!-- Step 4: Magias -->
-    <div class="wpanel" id="wp4">
-      <div class="sec-lbl">✨ Magias <span style="font-weight:400;font-size:.65rem;text-transform:none;letter-spacing:0;color:var(--t1);">escolha sua vocação</span> <span id="spellCount" style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
-      <div class="voc-bar" id="vocBar" style="margin-bottom:.6rem;">
-        <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
-        <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
-        <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
-        <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
-        <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
-      </div>
-      <div id="spellGridWrap">
-        <div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>
-      </div>
-    </div>
-
-    <!-- Step 5: Monstros -->
-    <div class="wpanel" id="wp5">
       <div class="step3-wrap">
         <!-- LEFT: add form -->
         <div class="step3-form">
@@ -758,14 +733,56 @@ input[type=number]{-moz-appearance:textfield;}
       </div>
     </div>
 
-    <!-- Step 6: Charms -->
-    <div class="wpanel" id="wp6">
-      <div class="sec-lbl">✨ Charms <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">atribua charms a cada monstro — os cinzas já foram usados</span></div>
-      <div id="step6CharmList"></div>
+    <!-- Step 2: Charms -->
+    <div class="wpanel" id="wp2">
+      <div class="sec-lbl">✨ Charms <span style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">selecione um monstro e atribua charms — cinzas já usados</span></div>
+      <div class="charm2-layout">
+        <div class="charm2-monlist" id="charmMonList"></div>
+        <div class="charm2-picker" id="charmPicker">
+          <div style="color:var(--t2);font-size:.82rem;text-align:center;padding:2.5rem 0;">← Selecione um monstro para atribuir charms</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Step 7: Loot -->
-    <div class="wpanel" id="wp7">
+    <!-- Step 3: Runas & Poções -->
+    <div class="wpanel" id="wp3">
+      <div class="sec-lbl">📜 Runas &amp; 💊 Poções</div>
+      <div style="margin-bottom:1.25rem;">
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">📜 Runas <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">clique para selecionar</span></div>
+        <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
+        <div id="runaSel" style="margin-top:.4rem;"></div>
+      </div>
+      <div>
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">💊 Poções <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">clique para selecionar</span></div>
+        <div class="charm-grid" id="potGrid"></div>
+        <div id="potSel" style="margin-top:.4rem;"></div>
+      </div>
+    </div>
+
+    <!-- Step 4: Magias & Imbuimentos -->
+    <div class="wpanel" id="wp4">
+      <div class="sec-lbl">✨ Magias &amp; 🛡️ Imbuimentos</div>
+      <div style="margin-bottom:1.4rem;">
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">✨ Magias <span id="spellCount" style="font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
+        <div class="voc-bar" id="vocBar" style="margin-bottom:.6rem;">
+          <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
+          <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
+          <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
+          <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
+          <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
+        </div>
+        <div id="spellGridWrap">
+          <div style="color:var(--t1);font-size:.8rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">🛡️ Imbuimentos <span id="imbuCount" style="font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span> <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">Máx. 2 slots — clique para ciclar 0→1→2</span></div>
+        <div class="charm-grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));max-width:580px;" id="imbuGrid"></div>
+      </div>
+    </div>
+
+    <!-- Step 5: Loot -->
+    <div class="wpanel" id="wp5">
       <div class="sec-lbl">📦 Loot <span id="lootSubLbl" style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">puxando dados da wiki...</span></div>
       <div class="loot-fetch-prog" id="lootFetchProg" style="display:none;"><div class="loot-fetch-prog-bar" id="lootFetchProgBar" style="width:0%"></div></div>
       <div id="lootList" class="loot-cats"></div>
@@ -1509,39 +1526,54 @@ function renderStep4MonWeaknesses(){
 }
 
 // ══════════════════════════════════════════════════════
-// STEP 6 — CHARMS (per-monster)
+// STEP 2 — CHARMS (unified panel)
 // ══════════════════════════════════════════════════════
-function renderStep6Charms(){
-  const el=document.getElementById('step6CharmList'); if(!el) return;
+function renderStep2Charms(){
+  const monList=document.getElementById('charmMonList'); if(!monList) return;
   if(!wiz.monsters.length){
-    el.innerHTML='<div style="color:var(--t2);font-size:.85rem;text-align:center;padding:2rem 0;">Nenhum monstro adicionado.<br><span style="font-size:.75rem;">Volte ao passo 5 para adicionar monstros.</span></div>';
+    monList.innerHTML='<div style="color:var(--t2);font-size:.82rem;text-align:center;padding:1.5rem 0;">Nenhum monstro adicionado.<br><span style="font-size:.72rem;">Volte ao passo 1.</span></div>';
+    const picker=document.getElementById('charmPicker'); if(picker) picker.innerHTML='';
     return;
   }
-  el.innerHTML='';
+  monList.innerHTML='';
   wiz.monsters.forEach(m=>{
-    const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="width:44px;height:44px;object-fit:contain;image-rendering:pixelated;border-radius:8px;">`:'<div style="width:44px;height:44px;border-radius:8px;background:var(--c4);display:flex;align-items:center;justify-content:center;font-size:1.4rem;opacity:.5;">🐉</div>';
-    const res=m.resistances?buildResistRow(m.resistances,false,true):'';
-    const card=document.createElement('div'); card.className='step6-mon-card';
-    card.innerHTML=`
-      <div class="step6-mon-hdr">
-        ${gif}
-        <div>
-          <div class="step6-mon-hdr-name">${m.name}</div>
-          ${res?`<div style="margin-top:.15rem;">${res}</div>`:''}
-        </div>
-      </div>
-      <div class="step6-charm-cols">
-        <div>
-          <div class="step6-charm-sect">⚔️ Charm Principal</div>
-          ${_buildStep6CharmGrid(m.id,'major')}
-        </div>
-        <div>
-          <div class="step6-charm-sect">🛡️ Charm Secundário</div>
-          ${_buildStep6CharmGrid(m.id,'minor')}
-        </div>
-      </div>`;
-    el.appendChild(card);
+    const btn=document.createElement('button'); btn.className='charm2-mon-btn'+(wiz._charmSelMon===m.id?' on':'');
+    const gif=m.gifUrl?`<img class="charm2-mon-gif" src="${m.gifUrl}" alt="${m.name}">`:'<div class="charm2-mon-gif" style="display:flex;align-items:center;justify-content:center;font-size:1.5rem;opacity:.4;background:var(--c4);">🐉</div>';
+    const majChip=m.majorCharm?`<span class="charm2-mon-chip maj">⚔️ ${m.majorCharm.name}</span>`:'';
+    const minChip=m.minorCharm?`<span class="charm2-mon-chip min">🛡️ ${m.minorCharm.name}</span>`:'';
+    btn.innerHTML=`${gif}<div style="min-width:0;flex:1;"><div class="charm2-mon-name">${m.name}</div><div class="charm2-mon-chips">${majChip}${minChip}</div></div>`;
+    btn.onclick=()=>selectCharmMon(m.id);
+    monList.appendChild(btn);
   });
+  _renderCharmPicker(wiz._charmSelMon);
+}
+function selectCharmMon(monId){
+  wiz._charmSelMon=monId;
+  renderStep2Charms();
+}
+function _renderCharmPicker(monId){
+  const picker=document.getElementById('charmPicker'); if(!picker) return;
+  if(!monId){
+    picker.innerHTML='<div style="color:var(--t2);font-size:.82rem;text-align:center;padding:2.5rem 0;">← Selecione um monstro para atribuir charms</div>';
+    return;
+  }
+  const mon=wiz.monsters.find(m=>m.id===monId);
+  if(!mon){ picker.innerHTML=''; return; }
+  picker.innerHTML=`
+    <div style="font-size:.85rem;font-weight:800;margin-bottom:.65rem;display:flex;align-items:center;gap:.45rem;">
+      ${mon.gifUrl?`<img src="${mon.gifUrl}" style="width:34px;height:34px;object-fit:contain;image-rendering:pixelated;border-radius:6px;">`:'🐉'}
+      ${mon.name}
+    </div>
+    <div class="step6-charm-cols">
+      <div>
+        <div class="step6-charm-sect">⚔️ Charm Principal</div>
+        ${_buildStep6CharmGrid(monId,'major')}
+      </div>
+      <div>
+        <div class="step6-charm-sect">🛡️ Charm Secundário</div>
+        ${_buildStep6CharmGrid(monId,'minor')}
+      </div>
+    </div>`;
 }
 function _buildStep6CharmGrid(monId,type){
   const charms=type==='major'?MAJOR_CHARMS:MINOR_CHARMS;
@@ -1568,7 +1600,7 @@ function setMonCharmStep6(monId,type,charmId){
   const charm=charmId?(type==='major'?MAJOR_CHARMS:MINOR_CHARMS).find(c=>c.id===charmId):null;
   if(type==='major') mon.majorCharm=charm||null;
   else mon.minorCharm=charm||null;
-  renderStep6Charms();
+  renderStep2Charms();
 }
 
 // ══════════════════════════════════════════════════════
@@ -2363,7 +2395,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{}};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_charmSelMon:null};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -2390,37 +2422,35 @@ function openWizard(editId=null){
 function closeWizard(){ _lootFetchActive=false; document.getElementById('wizOv').classList.remove('on'); }
 function setStep(n){
   wiz.step=n;
-  [1,2,3,4,5,6,7].forEach(i=>{
+  [1,2,3,4,5].forEach(i=>{
     document.getElementById('wp'+i).classList.toggle('on',i===n);
     const d=document.getElementById('wd'+i);
     d.classList.toggle('on',i===n);
     d.classList.toggle('done',i<n);
   });
   document.getElementById('wizBack').style.display=n>1?'':'none';
-  document.getElementById('wizNext').textContent=n===7?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
-  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 7`;
-  // show sticky name bar on steps 2+
+  document.getElementById('wizNext').textContent=n===5?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
+  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 5`;
   const bar=document.getElementById('wizNameBar');
   if(bar){
     const name=document.getElementById('wHuntName').value.trim();
     document.getElementById('wizNameBarVal').textContent=name||'(sem nome)';
     bar.classList.toggle('on',n>1);
   }
-  if(n===1){ renderPotGrid(); }
-  if(n===2){ renderRunaGrid(); }
-  if(n===3){ renderImbuGrid(); }
+  if(n===1){ setMonMode('single'); }
+  if(n===2){ if(!wiz._charmSelMon&&wiz.monsters.length) wiz._charmSelMon=wiz.monsters[0].id; renderStep2Charms(); }
+  if(n===3){ renderRunaGrid(); renderPotGrid(); }
   if(n===4){
+    renderImbuGrid();
     document.querySelectorAll('.voc-btn').forEach(b=>b.classList.remove('on'));
     if(wiz.vocation){ const b=document.getElementById('vbtn_'+wiz.vocation); if(b) b.classList.add('on'); }
     renderSpellGrid();
   }
-  if(n===5){ setMonMode('single'); }
-  if(n===6){ renderStep6Charms(); }
-  if(n===7){ startLootFetch(); }
+  if(n===5){ startLootFetch(); }
 }
-function goStep(n){ if(n<1||n>7)return; setStep(n); }
+function goStep(n){ if(n<1||n>5)return; setStep(n); }
 function wizNext(){
-  if(wiz.step<7){
+  if(wiz.step<5){
     if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('⚠️ Insira o nome da hunt');return;}
     setStep(wiz.step+1);
   } else saveHunt();
@@ -3322,6 +3352,17 @@ function closeThemePicker(){
 
 // ── ESC to close modals (with confirm when wizard has unsaved data)
 document.addEventListener('keydown', e=>{
+  const _isTyping=()=>{ const t=document.activeElement?.tagName; return t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||document.activeElement?.isContentEditable; };
+  // R = open wizard (when no modal open and not typing)
+  if((e.key==='r'||e.key==='R')&&!e.ctrlKey&&!e.metaKey&&!_isTyping()){
+    const anyOpen=['wizOv','sessOv','summaryOv','themeOv','profileOv','compareOv'].some(id=>document.getElementById(id)?.classList.contains('on'));
+    if(!anyOpen){ openWizard(); return; }
+  }
+  // 1-5 = navigate wizard steps (when wizard open)
+  if(document.getElementById('wizOv')?.classList.contains('on')&&!_isTyping()){
+    const n=parseInt(e.key);
+    if(n>=1&&n<=5&&!isNaN(n)){ goStep(n); return; }
+  }
   if(e.key!=='Escape') return;
   // Determine which overlay is open (priority order)
   if(document.getElementById('themeOv')?.classList.contains('on')){
