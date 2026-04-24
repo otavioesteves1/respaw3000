@@ -350,7 +350,12 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-fetch-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
 .loot-empty{font-size:.8rem;color:var(--t2);text-align:center;padding:2rem 0;}
 /* compact monster card for wizard step 3 */
-.mon-card{background:var(--c3);border-radius:9px;border:1px solid var(--c4);display:grid;grid-template-columns:52px 1fr;gap:.45rem;padding:.42rem .6rem;margin-bottom:.3rem;position:relative;transition:border-color .15s;}
+.mon-card{background:var(--c3);border-radius:9px;border:1px solid var(--c4);display:grid;grid-template-columns:14px 52px 1fr;gap:.45rem;padding:.42rem .6rem;margin-bottom:.3rem;position:relative;transition:border-color .15s;}
+.mon-drag-handle{display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:.8rem;cursor:grab;opacity:.3;user-select:none;transition:opacity .12s;padding:0 2px;align-self:center;}
+.mon-drag-handle:active{cursor:grabbing;}
+.mon-card:hover .mon-drag-handle{opacity:.8;}
+.mon-card.dragging{opacity:.32;border-color:rgba(var(--accent-rgb),.4);box-shadow:0 6px 24px rgba(0,0,0,.45);}
+.mon-card.drag-over{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--accent-rgb),.24);}
 .mon-gif{width:52px;height:52px;border-radius:7px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
 .mon-name{font-size:.82rem;font-weight:700;margin-bottom:.12rem;}
 .mon-charms{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.2rem;}
@@ -2113,6 +2118,7 @@ function editMonster(id){
   toast(`✏️ Editando: ${m.name}`);
 }
 function rmMon(id){ wiz.monsters=wiz.monsters.filter(m=>m.id!==id); renderMonList(); }
+let _dragIdx=null;
 function renderMonList(){
   const el=document.getElementById('monList'); el.innerHTML='';
   const badge=document.getElementById('monCount');
@@ -2122,15 +2128,43 @@ function renderMonList(){
     return;
   }
   if(badge) badge.textContent=`${wiz.monsters.length} monstro${wiz.monsters.length>1?'s':''}`;
-  wiz.monsters.forEach(m=>{
+  wiz.monsters.forEach((m,idx)=>{
     const c=document.createElement('div'); c.className='mon-card';
+    c.draggable=true;
     const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:`<span class="ph">🐉</span>`;
     const wl=m.wikiUrl?`<a class="mon-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
     const maj=m.majorCharm?`<span class="charm-badge major"><img src="${m.majorCharm.img}">${m.majorCharm.name}</span>`:'';
     const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
     const resRow=buildResistRow(m.resistances);
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
-    c.innerHTML=`<div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
+    c.innerHTML=`<div class="mon-drag-handle" title="Arrastar para reordenar">⠿</div><div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
+    c.addEventListener('dragstart',e=>{
+      _dragIdx=idx;
+      e.dataTransfer.effectAllowed='move';
+      setTimeout(()=>c.classList.add('dragging'),0);
+    });
+    c.addEventListener('dragend',()=>{
+      c.classList.remove('dragging');
+      document.querySelectorAll('#monList .mon-card').forEach(x=>x.classList.remove('drag-over'));
+      _dragIdx=null;
+    });
+    c.addEventListener('dragover',e=>{
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      document.querySelectorAll('#monList .mon-card').forEach(x=>x.classList.remove('drag-over'));
+      if(_dragIdx!==null&&_dragIdx!==idx) c.classList.add('drag-over');
+    });
+    c.addEventListener('dragleave',()=>c.classList.remove('drag-over'));
+    c.addEventListener('drop',e=>{
+      e.preventDefault();
+      c.classList.remove('drag-over');
+      if(_dragIdx===null||_dragIdx===idx){_dragIdx=null;return;}
+      const moved=wiz.monsters.splice(_dragIdx,1)[0];
+      wiz.monsters.splice(idx,0,moved);
+      _dragIdx=null;
+      renderMonList();
+      if(wiz._charmSelMon) renderStep2Charms();
+    });
     el.appendChild(c);
   });
 }
