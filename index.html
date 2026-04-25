@@ -121,7 +121,7 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .charm-badge.major{background:rgba(var(--accent-rgb),.12);border:1px solid rgba(var(--accent-rgb),.3);color:var(--gold);}
 .charm-badge.minor{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:#c4b5fd;}
 .charm-badge img{width:14px;height:14px;object-fit:contain;image-rendering:pixelated;}
-.mon-rm{position:absolute;top:.4rem;right:.4rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.mon-rm{width:22px;height:22px;border-radius:5px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
 .mon-rm:hover{background:rgba(239,68,68,.25);}
 
 /* ── Hunt card ── */
@@ -324,7 +324,7 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-cat-semirare{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.25);}
 .loot-cat-rare{background:rgba(236,72,153,.12);color:#f9a8d4;border:1px solid rgba(236,72,153,.25);}
 .loot-cat-veryrare{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
-.loot-items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.28rem;}
+.loot-items-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.35rem;}
 .loot-item{display:flex;align-items:center;gap:.45rem;padding:.32rem .55rem;border-radius:8px;border:1px solid var(--c4);background:var(--c3);cursor:pointer;user-select:none;transition:all .12s;min-height:34px;}
 .loot-item:hover{border-color:rgba(var(--accent-rgb),.35);}
 .loot-item.loot-excluded{opacity:.4;text-decoration:line-through;}
@@ -339,23 +339,30 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-total-val{font-size:.72rem;font-weight:700;color:var(--gold);}
 .loot-mon-filter{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center;margin-bottom:.55rem;padding:.45rem .55rem;background:var(--c3);border-radius:10px;border:1px solid var(--c4);}
 .loot-mon-filter-lbl{font-size:.6rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-right:.15rem;white-space:nowrap;}
-.loot-mon-filt-btn{display:flex;flex-direction:column;align-items:center;gap:.1rem;cursor:pointer;padding:.2rem .35rem;border-radius:8px;border:2px solid transparent;transition:all .15s;background:none;}
+.loot-mon-filt-btn{display:flex;flex-direction:column;align-items:center;gap:.1rem;cursor:pointer;padding:.2rem .3rem;border-radius:8px;border:2px solid transparent;transition:all .15s;background:none;}
 .loot-mon-filt-btn:hover{border-color:rgba(var(--accent-rgb),.4);background:rgba(var(--accent-rgb),.06);}
 .loot-mon-filt-btn.on{border-color:var(--gold);background:rgba(var(--accent-rgb),.1);}
-.loot-mon-filt-btn img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated;}
-.loot-mon-filt-name{font-size:.5rem;font-weight:700;color:var(--t1);max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.loot-mon-filt-btn img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated;}
+.loot-mon-filt-name{display:none;}
+.loot-item-wiki{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:3px;color:var(--blue);font-size:.55rem;flex-shrink:0;opacity:.38;transition:opacity .12s;text-decoration:none;line-height:1;}
+.loot-item-wiki:hover{opacity:1;}
 .loot-item.loot-dim{opacity:.18;filter:saturate(0);}
 .loot-item.loot-filter-hi{border-color:rgba(var(--accent-rgb),.5)!important;background:rgba(var(--accent-rgb),.07)!important;}
 .loot-fetch-prog{height:3px;border-radius:2px;background:var(--c4);margin:.4rem 0;overflow:hidden;}
 .loot-fetch-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
 .loot-empty{font-size:.8rem;color:var(--t2);text-align:center;padding:2rem 0;}
 /* compact monster card for wizard step 3 */
-.mon-card{background:var(--c3);border-radius:9px;border:1px solid var(--c4);display:grid;grid-template-columns:14px 52px 1fr;gap:.45rem;padding:.42rem .6rem;margin-bottom:.3rem;position:relative;transition:border-color .15s;}
-.mon-drag-handle{display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:.8rem;cursor:grab;opacity:.3;user-select:none;transition:opacity .12s;padding:0 2px;align-self:center;}
+.mon-card{background:var(--c3);border-radius:9px;border:1px solid var(--c4);display:grid;grid-template-columns:22px 52px 1fr 22px 22px 22px;gap:.35rem;padding:.42rem .6rem;margin-bottom:.3rem;align-items:center;transition:border-color .15s;}
+.mon-drag-handle{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--t2);font-size:.72rem;cursor:grab;opacity:.4;user-select:none;transition:opacity .12s;gap:1px;}
+.mon-pri-num{font-size:.52rem;font-weight:900;color:var(--gold);line-height:1;}
 .mon-drag-handle:active{cursor:grabbing;}
-.mon-card:hover .mon-drag-handle{opacity:.8;}
+.mon-card:hover .mon-drag-handle{opacity:.85;}
 .mon-card.dragging{opacity:.32;border-color:rgba(var(--accent-rgb),.4);box-shadow:0 6px 24px rgba(0,0,0,.45);}
 .mon-card.drag-over{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--accent-rgb),.24);}
+.mon-ord-btns{display:flex;flex-direction:column;gap:.1rem;align-items:center;justify-content:center;}
+.mon-ord-btn{background:none;border:1px solid var(--c4);color:var(--t1);border-radius:4px;width:20px;height:16px;font-size:.52rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .12s;}
+.mon-ord-btn:hover{border-color:var(--gold);color:var(--gold);}
+.mon-ord-btn:disabled{opacity:.2;cursor:default;pointer-events:none;}
 .mon-gif{width:52px;height:52px;border-radius:7px;background:#0d1520;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
 .mon-name{font-size:.82rem;font-weight:700;margin-bottom:.12rem;}
 .mon-charms{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.2rem;}
@@ -424,7 +431,7 @@ input[type=number]{-moz-appearance:textfield;}
 @media(max-width:680px){.sum-layout{grid-template-columns:1fr;}}
 
 /* ── Monster card edit button ── */
-.mon-edit{position:absolute;top:.4rem;right:1.9rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(59,130,246,.14);color:#93c5fd;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.mon-edit{width:22px;height:22px;border-radius:5px;border:none;background:rgba(59,130,246,.14);color:#93c5fd;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
 .mon-edit:hover{background:rgba(59,130,246,.28);}
 .mon-card.editing{border-color:rgba(59,130,246,.5);box-shadow:0 0 0 2px rgba(59,130,246,.15);}
 
@@ -535,7 +542,7 @@ input[type=number]{-moz-appearance:textfield;}
 .outfitter-helper-ext span{font-size:.65rem;color:var(--t2);}
 
 /* ── Step 6: Charms per monster ── */
-.charm2-layout{display:grid;grid-template-columns:170px 1fr;gap:.75rem;min-height:260px;}
+.charm2-layout{display:grid;grid-template-columns:240px 1fr;gap:.75rem;min-height:260px;}
 @media(max-width:600px){.charm2-layout{grid-template-columns:1fr;}}
 .charm2-monlist{display:flex;flex-direction:column;gap:.25rem;overflow-y:auto;max-height:420px;padding-right:.1rem;}
 .charm2-mon-btn{display:flex;align-items:center;gap:.45rem;padding:.35rem .5rem;border-radius:9px;border:2px solid var(--c4);background:var(--c3);cursor:pointer;transition:all .12s;text-align:left;width:100%;}
@@ -1779,12 +1786,11 @@ function renderLootList(ctx){
   // ── Monster filter bar (only if multiple monsters) ──
   if(monsters.length>1){
     const bar=document.createElement('div'); bar.className='loot-mon-filter';
-    const lbl=document.createElement('div'); lbl.className='loot-mon-filter-lbl'; lbl.textContent='🐉 Filtrar:';
-    bar.appendChild(lbl);
     monsters.forEach(m=>{
       const btn=document.createElement('button'); btn.className='loot-mon-filt-btn'+(filter===m.name?' on':'');
-      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}">`:'<span style="font-size:1.6rem;opacity:.4;">🐉</span>';
-      btn.innerHTML=`${gif}<span class="loot-mon-filt-name">${m.name}</span>`;
+      btn.title=m.name;
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}">`:'<span style="font-size:2rem;opacity:.4;">🐉</span>';
+      btn.innerHTML=gif;
       btn.onclick=()=>setFilter(filter===m.name?null:m.name);
       bar.appendChild(btn);
     });
@@ -1820,7 +1826,9 @@ function renderLootList(ctx){
       const iconUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${iconSlug}.gif`;
       const fromLabel=fromMonsters.length<=2?fromMonsters.join(', '):`${fromMonsters.length} monstros`;
       const priceHtml=price?`<span class="loot-item-price" style="color:${priceColor};">${fmtPrice(price)}</span>`:'';
-      div.innerHTML=`<div class="loot-item-cb">✓</div><img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<div class="loot-item-from" title="${fromMonsters.join(', ')}">${fromLabel}</div>`;
+      const wikiSlug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
+      const wikiHref=`https://www.tibiawiki.com.br/wiki/${wikiSlug}`;
+      div.innerHTML=`<div class="loot-item-cb">✓</div><img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<a class="loot-item-wiki" href="${wikiHref}" target="_blank" title="Ver no TibiaWiki" onclick="event.stopPropagation()">↗</a>`;
       div.onclick=()=>toggleLootItem(it.name,ctx);
       grid.appendChild(div);
     });
@@ -1955,6 +1963,14 @@ function moveSpell(id,dir){
   if(newIdx<0||newIdx>=wiz.spells.length) return;
   [wiz.spells[idx],wiz.spells[newIdx]]=[wiz.spells[newIdx],wiz.spells[idx]];
   renderSpellGrid();
+}
+function moveMon(id,dir){
+  const idx=wiz.monsters.findIndex(m=>m.id===id); if(idx<0) return;
+  const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=wiz.monsters.length) return;
+  [wiz.monsters[idx],wiz.monsters[newIdx]]=[wiz.monsters[newIdx],wiz.monsters[idx]];
+  renderMonList();
+  if(wiz._charmSelMon) renderStep2Charms();
 }
 
 // ══════════════════════════════════════════════════════
@@ -2133,7 +2149,9 @@ function renderMonList(){
     const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
     const resRow=buildResistRow(m.resistances);
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
-    c.innerHTML=`<div class="mon-drag-handle" title="Arrastar para reordenar">⠿</div><div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
+    const upBtn=idx>0?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',-1)" title="Subir">▲</button>`:'<button class="mon-ord-btn" disabled>▲</button>';
+    const dnBtn=idx<wiz.monsters.length-1?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',1)" title="Descer">▼</button>`:'<button class="mon-ord-btn" disabled>▼</button>';
+    c.innerHTML=`<div class="mon-drag-handle" title="Arrastar para reordenar"><span class="mon-pri-num">${idx+1}</span>⠿</div><div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}</div><div class="mon-ord-btns">${upBtn}${dnBtn}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
     c.addEventListener('dragstart',e=>{
       _dragIdx=idx;
       e.dataTransfer.effectAllowed='move';
