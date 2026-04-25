@@ -27,7 +27,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.2);padding:.875rem 1rem;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,.5);}
 .hdr{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:.875rem;flex-wrap:wrap;}
 .hdr-brand{display:flex;align-items:center;gap:.65rem;}
-.hdr-title{font-size:1.15rem;font-weight:800;background:var(--gold-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hdr-title{font-size:1.15rem;font-weight:800;background:linear-gradient(180deg,#c8860a 0%,#ffd700 18%,#fffbe0 42%,#f5a623 62%,#b8720a 82%,#ffd060 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hdr-sub{font-size:.68rem;color:var(--t1);font-weight:500;}
 .profiles-strip{display:flex;align-items:center;gap:.4rem;overflow-x:auto;flex:1;scrollbar-width:none;}
 .profiles-strip::-webkit-scrollbar{display:none;}
@@ -604,7 +604,7 @@ input[type=number]{-moz-appearance:textfield;}
   <div class="hdr">
     <div class="hdr-brand">
       <img src="assets/logo_respaw.png" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
-      <div><div class="hdr-title">RESPAW<span style="-webkit-text-fill-color:#fff;color:#fff;font-weight:900;opacity:.92;">3000</span></div><div class="hdr-sub">Second Brain for Hunting</div></div>
+      <div><div class="hdr-title">RESPAW<span style="background:linear-gradient(180deg,#4b5563 0%,#9ca3af 20%,#e5e7eb 40%,#f9fafb 50%,#9ca3af 68%,#4b5563 85%,#94a3b8 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;font-weight:900;">3000</span></div><div class="hdr-sub">Second Brain for Hunting</div></div>
     </div>
     <div class="profiles-strip" id="profilesStrip"></div>
     <button class="btn-addp" onclick="openProfileModal()" title="Novo perfil">+</button>
