@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RESPAW3000 — SECOND BRAIN FOR HUNTING</title>
-<link rel="icon" type="image/png" href="assets/logo_respaw.png">
+<link rel="icon" type="image/png" href="assets/logo_respaw.png?v=4">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -23,8 +23,8 @@
   --sh:0 2px 12px rgba(0,0,0,.55);--r:12px;
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);color:var(--t0);min-height:100vh;}
-header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.2);padding:.875rem 1rem;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,.5);}
-.hdr{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:.875rem;flex-wrap:wrap;}
+header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.2);padding:.875rem 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,.5);}
+.hdr{max-width:960px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;gap:.875rem;flex-wrap:wrap;}
 .hdr-brand{display:flex;align-items:center;gap:.65rem;}
 .hdr-title{font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:.4px;}
 .hdr-sub{font-size:.65rem;color:var(--t1);font-weight:500;}
@@ -593,7 +593,7 @@ input[type=number]{-moz-appearance:textfield;}
 <header>
   <div class="hdr">
     <div class="hdr-brand">
-      <img src="assets/logo_respaw.png?v=3" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
+      <img src="assets/logo_respaw.png?v=4" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
       <div><div class="hdr-title">RESPAW3000</div><div class="hdr-sub">Second Brain for Hunting</div></div>
     </div>
     <div class="profiles-strip" id="profilesStrip"></div>
@@ -611,7 +611,10 @@ input[type=number]{-moz-appearance:textfield;}
   <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;">
     <button class="btn btn-g" onclick="openWizard()">Nova Hunt</button>
     <span id="profileLabel" style="display:none;"></span>
-    <button class="btn btn-o" onclick="save()" style="margin-left:auto;">💾 Salvar</button>
+    <div style="margin-left:auto;display:flex;gap:.5rem;align-items:center;">
+      <button class="btn btn-o" onclick="openCompare()">📊 Comparar</button>
+      <button class="btn btn-o" onclick="save()">💾 Salvar</button>
+    </div>
   </div>
   <div class="hunt-layout">
     <div class="hunt-portrait" id="huntPortrait"></div>
@@ -624,7 +627,6 @@ input[type=number]{-moz-appearance:textfield;}
     <div class="exp-grid">
       <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📋</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Copia todas as hunts para o clipboard</div></div></button>
       <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">📂</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Cola um backup ou hunt compartilhada</div></div></button>
-      <button class="exp-btn" onclick="openCompare()"><span class="exp-ico">📊</span><div><div class="exp-ttl">Comparar Hunts</div><div class="exp-dsc">Gráfico comparativo de sessões</div></div></button>
       <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">🖨️</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">Versão visual para impressão</div></div></button>
       <button class="exp-btn" onclick="openDelProfile()" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04);"><span class="exp-ico">🗑️</span><div><div class="exp-ttl" style="color:#fca5a5;">Apagar Perfil</div><div class="exp-dsc">Remove o perfil e todas as suas hunts</div></div></button>
     </div>
@@ -636,7 +638,7 @@ input[type=number]{-moz-appearance:textfield;}
   <div class="modal" style="max-width:min(1240px,95vw);">
     <!-- Hunt name input — always visible, all steps -->
     <div class="wiz-header">
-      <img src="assets/logo_respaw.png?v=3" alt="" style="height:32px;width:auto;object-fit:contain;flex-shrink:0;">
+      <img src="assets/logo_respaw.png?v=4" alt="" style="height:32px;width:auto;object-fit:contain;flex-shrink:0;">
       <input class="inp wiz-name-inp" id="wHuntName" placeholder="Dê um nome à sua nova hunt...">
     </div>
     <div class="wiz-steps">
@@ -2681,7 +2683,7 @@ function buildSummaryHTML(h){
 function renderHunts(){
   const el=document.getElementById('huntList');
   const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
-  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico"><img src="assets/logo_respaw.png?v=3" style="height:52px;opacity:.5;"></div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.82rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
+  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico"><img src="assets/logo_respaw.png?v=4" style="height:52px;opacity:.5;"></div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.82rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
   el.innerHTML='';
   hunts.forEach(h=>{
     const p=state.profiles.find(x=>x.id===h.profileId);
