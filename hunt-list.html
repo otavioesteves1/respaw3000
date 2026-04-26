@@ -391,11 +391,12 @@ input[type=number]{-moz-appearance:textfield;}
 .hcard-pv-div{width:1px;height:28px;background:rgba(255,255,255,.13);margin:0 .05rem;flex-shrink:0;}
 .hcard-pv-more{font-size:.75rem;font-weight:800;color:var(--t1);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.2rem .45rem;flex-shrink:0;}
 .hunt-layout{display:flex;gap:1.25rem;align-items:flex-start;}
-.hunt-portrait{flex-shrink:0;width:120px;display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;position:sticky;top:74px;align-self:flex-start;min-height:calc(100vh - 90px);}
-.hunt-portrait-img{width:110px;height:110px;border-radius:14px;object-fit:contain;image-rendering:pixelated;background:rgba(var(--accent-rgb),.08);border:2px solid rgba(var(--accent-rgb),.2);}
-.hunt-portrait-name{font-size:.72rem;font-weight:700;color:var(--t1);text-align:center;word-break:break-word;}
+.hunt-portrait{flex-shrink:0;width:158px;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:sticky;top:74px;align-self:flex-start;min-height:calc(100vh - 90px);}
+.hunt-portrait-card{background:var(--c2);border:1.5px solid rgba(var(--accent-rgb),.28);border-radius:14px;padding:.7rem .6rem .65rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;width:100%;box-shadow:0 4px 18px rgba(0,0,0,.35);}
+.hunt-portrait-img{width:136px;height:136px;border-radius:10px;object-fit:contain;image-rendering:pixelated;background:rgba(0,0,0,.22);}
+.hunt-portrait-name{font-size:.73rem;font-weight:700;color:var(--t0);text-align:center;word-break:break-word;width:100%;}
 .hunt-list-col{flex:1;min-width:0;}
-@media(max-width:600px){.hunt-layout{flex-direction:column;}.hunt-portrait{width:100%;flex-direction:row;align-items:center;position:static;}.hunt-portrait-img{width:60px;height:60px;}}
+@media(max-width:600px){.hunt-layout{flex-direction:column;}.hunt-portrait{width:100%;flex-direction:row;align-items:center;position:static;}.hunt-portrait-img{width:64px;height:64px;}}
 .hcard-pv-sess{font-size:.7rem;font-weight:700;padding:.22rem .48rem;border-radius:20px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;white-space:nowrap;flex-shrink:0;}
 /* Expanded card item tags — bigger */
 .hd-tag{display:flex;align-items:center;gap:.3rem;font-size:.82rem;font-weight:600;padding:.3rem .55rem;border-radius:8px;}
@@ -1331,7 +1332,7 @@ function renderProfiles(){
   const portrait=document.getElementById('huntPortrait'); if(!portrait) return;
   const ap=state.profiles.find(x=>x.id===state.activeProfile);
   if(ap?.imgUrl){
-    portrait.innerHTML=`<img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}"><div class="hunt-portrait-name">${ap.name}</div>`;
+    portrait.innerHTML=`<div class="hunt-portrait-card"><img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}"><div class="hunt-portrait-name">${ap.name}</div></div>`;
     portrait.style.display='';
   } else {
     portrait.innerHTML='';
