@@ -166,8 +166,10 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .wpanel.on{display:block;}
 
 /* ── Modal ── */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:500;padding:1rem;}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:500;padding:1rem;overflow:hidden;}
 .ov.on{display:flex;}
+/* Lock body scroll when any overlay is open */
+body:has(.ov.on){overflow:hidden;}
 .modal{background:var(--c1);border-radius:16px;border:1px solid var(--c4);box-shadow:0 24px 60px rgba(0,0,0,.6);padding:1.5rem;width:100%;max-height:90vh;overflow-y:auto;}
 .mtitle{font-size:.95rem;font-weight:800;margin-bottom:1.1rem;display:flex;align-items:center;gap:.4rem;}
 .macts{margin-top:1.1rem;display:flex;justify-content:flex-end;gap:.4rem;flex-wrap:wrap;}
@@ -422,10 +424,10 @@ input[type=number]{-moz-appearance:textfield;}
 .sum-mon-c-info{flex:1;min-width:0;}
 .sum-mon-c-name{font-size:.82rem;font-weight:700;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sum-mon-c-link{font-size:.65rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.28rem;}
-.sum-charm-sm{display:flex;align-items:center;gap:.28rem;padding:.18rem .4rem;border-radius:6px;margin-bottom:.18rem;font-size:.65rem;font-weight:700;}
-.sum-charm-sm.major{background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.25);color:var(--gold);}
-.sum-charm-sm.minor{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#c4b5fd;}
-.sum-charm-sm img{width:15px;height:15px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-charm-sm{display:flex;align-items:center;gap:.5rem;padding:.42rem .75rem;border-radius:9px;margin-bottom:.3rem;font-size:.82rem;font-weight:700;}
+.sum-charm-sm.major{background:rgba(var(--accent-rgb),.12);border:1.5px solid rgba(var(--accent-rgb),.32);color:var(--gold);}
+.sum-charm-sm.minor{background:rgba(139,92,246,.12);border:1.5px solid rgba(139,92,246,.32);color:#c4b5fd;}
+.sum-charm-sm img{width:26px;height:26px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
 .sum-no-charm-sm{font-size:.65rem;color:var(--t2);font-style:italic;}
 
 /* ── Summary 2-column layout ── */
@@ -2625,7 +2627,8 @@ function buildSummaryHTML(h){
   const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length;
   if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.95rem;">Hunt vazia — nenhum item configurado.</div>';
 
-  const itm=(x,fallbackEmoji)=>`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:`<span style="font-size:1.3rem;">${fallbackEmoji}</span>`}<div><div class="sum-item-name">${x.name}</div>${x.sub?`<div class="sum-item-sub">${x.sub}</div>`:''}</div>${x.qty!=null?`<span class="sum-item-qty">×${x.qty}</span>`:x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`;
+  // Item row: no icon, just name + optional sub + qty
+  const itm=(x)=>`<div class="sum-item"><div style="flex:1;min-width:0;"><div class="sum-item-name">${x.name}</div>${x.sub?`<div class="sum-item-sub">${x.sub}</div>`:''}</div>${x.qty!=null?`<span class="sum-item-qty">×${x.qty}</span>`:x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`;
 
   let html='';
 
@@ -2639,8 +2642,8 @@ function buildSummaryHTML(h){
     // LEFT — REFIL
     if(hasRefil){
       html+=`<div class="sum-sec"><div class="sum-sec-lbl">🔁 Refil</div><div class="sum-items-col">`;
-      (h.pots||[]).forEach(x=>{ html+=itm(x,'💊'); });
-      (h.runas||[]).forEach(x=>{ html+=itm(x,'📜'); });
+      (h.pots||[]).forEach(x=>{ html+=itm(x); });
+      (h.runas||[]).forEach(x=>{ html+=itm(x); });
       html+='</div></div>';
     } else { html+='<div></div>'; }
 
@@ -2648,14 +2651,14 @@ function buildSummaryHTML(h){
     html+='<div>';
     if(hasMagias){
       html+=`<div class="sum-sec"><div class="sum-sec-lbl">✨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items-col">`;
-      h.spells.forEach(x=>{ html+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.3rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
+      h.spells.forEach(x=>{ html+=itm({name:x.name,sub:x.words||''}); });
       html+='</div></div>';
     }
     if(hasImbu){
       const imbuMap={};
       (h.imbu||[]).forEach(x=>{ if(!imbuMap[x.id]) imbuMap[x.id]={...x,cnt:0}; imbuMap[x.id].cnt++; });
       html+=`<div class="sum-sec"><div class="sum-sec-lbl">🛡️ Imbuements</div><div class="sum-items-col">`;
-      Object.values(imbuMap).forEach(x=>{ html+=itm(x,'🛡️'); });
+      Object.values(imbuMap).forEach(x=>{ html+=itm(x); });
       html+='</div></div>';
     }
     html+='</div>';
@@ -2674,7 +2677,8 @@ function buildSummaryHTML(h){
       const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">⭐ ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">🔮 ${m.minorCharm.name}</div>`:'';
       const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
-      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}</div></div>`;
+      const res=m.resistances?buildResistRow(m.resistances,false,true):'';
+      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}${res}</div></div>`;
     });
     html+='</div></div>';
   }
@@ -2716,7 +2720,8 @@ function renderHunts(){
       const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
-      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}</a>`;
+      const res=m.resistances?buildResistRow(m.resistances,false,true):'';
+      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${res}</a>`;
     }).join('');
 
     const bodyId='hb_'+h.id;
