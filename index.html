@@ -391,7 +391,7 @@ input[type=number]{-moz-appearance:textfield;}
 .mon-name{font-size:.82rem;font-weight:700;margin-bottom:.12rem;}
 .mon-charms{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.2rem;}
 .charm-badge{display:flex;align-items:center;gap:.2rem;padding:.12rem .38rem;border-radius:6px;font-size:.65rem;font-weight:700;}
-.charm-badge img{width:12px;height:12px;}
+.charm-badge img{width:12px;height:12px;object-fit:contain;image-rendering:pixelated;}
 
 /* ── Imbu badge & disabled state ── */
 .imbu-cnt-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;border-radius:8px;background:var(--gold);color:var(--btn-g-text);font-size:.65rem;font-weight:900;padding:0 3px;position:absolute;top:3px;right:3px;line-height:1;pointer-events:none;}
@@ -745,7 +745,7 @@ input[type=number]{-moz-appearance:textfield;}
               <div id="importStatus"></div>
               <div class="import-prog" id="importProg" style="display:none;"><div class="import-prog-bar" id="importProgBar" style="width:0%"></div></div>
               <div id="importResults" class="import-result"></div>
-              <div id="importActions" style="display:none;margin-top:.55rem;display:none;">
+              <div id="importActions" style="display:none;margin-top:.55rem;">
                 <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
                   <button class="btn btn-g btn-sm" onclick="confirmImport()">➕ Adicionar <span id="importSelCount">0</span> selecionados</button>
                   <button class="btn btn-o btn-sm" onclick="toggleAllImport()">☑️ Sel. todos</button>
@@ -2656,7 +2656,6 @@ function renderWheelStep(){
   // Domain totals
   const dp=[0,0,0,0];
   for(let i=0;i<36;i++) dp[_wdDomain(i)]+=slots[i]||0;
-  const totalPts=dp.reduce((a,b)=>a+b,0);
 
   // Revelation tier per domain
   const revTier=(d)=>dp[d]>=500?3:dp[d]>=250?2:dp[d]>=100?1:0;
@@ -2666,16 +2665,19 @@ function renderWheelStep(){
   window._whlReset=()=>{ wiz.wheel.slots=new Array(36).fill(0); wiz.wheel._selSlot=null; renderWheelStep(); };
   window._whlSetLevel=(v)=>{ const n=parseInt(v)||0; wiz.wheel._level=n; renderWheelStep(); };
   window._whlAdd=(i,delta)=>{
-    const ring=_wdRing(i); const mx=WD_SLOT_MAX[ring]; const cur=slots[i]||0;
+    const _slots=wiz.wheel.slots; const _level=wiz.wheel._level||0;
+    const _used=_slots.reduce((a,b)=>a+(b||0),0);
+    const _avail=Math.max(0,_level-50);
+    const ring=_wdRing(i); const mx=WD_SLOT_MAX[ring]; const cur=_slots[i]||0;
     let nv;
     if(delta>0){
-      const rem=level>0?(avail-used):9999; // if no level set, allow free distribution
+      const rem=_level>0?(_avail-_used):9999; // if no level set, allow free distribution
       const canAdd=Math.min(delta>=999?mx:delta, mx-cur, Math.max(0,rem));
       nv=cur+canAdd;
     } else {
       nv=Math.max(0,cur+(delta<=-999?-cur:delta));
     }
-    slots[i]=nv; renderWheelStep();
+    _slots[i]=nv; renderWheelStep();
   };
 
   // ── Build SVG ──────────────────────────────────────
@@ -2948,8 +2950,9 @@ function openSummary(huntId){
   _summLootFilter=null;
   document.getElementById('summaryContent').innerHTML=buildSummaryHTML(h);
   // Render rich interactive loot section
+  let summCtx=null;
   if(document.getElementById('summLootArea')){
-    const summCtx={
+    summCtx={
       loot:h.loot||[],
       monsters:h.monsters||[],
       prices:h.lootPrices||{},
@@ -3032,7 +3035,7 @@ function buildSummaryHTML(h){
       const revMap=h.vocation?WD_REV_MAP[h.vocation]:null;
       const domPts=[0,0,0,0];
       for(let i=0;i<36;i++) domPts[_wdDomain(i)]+=wslots[i]||0;
-      const revTier=(d)=>domPts[d]>=27?3:domPts[d]>=18?2:domPts[d]>=9?1:0;
+      const revTier=(d)=>domPts[d]>=500?3:domPts[d]>=250?2:domPts[d]>=100?1:0;
       if(totalPts>0||hasLink){
         html+=`<div class="sum-sec" style="margin-bottom:.55rem;"><div class="sum-sec-lbl">🔮 Wheel of Destiny <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${totalPts} pontos</span></div>`;
         if(revMap){
@@ -3767,7 +3770,7 @@ document.addEventListener('keydown', e=>{
   // 1-5 = navigate wizard steps (when wizard open)
   if(document.getElementById('wizOv')?.classList.contains('on')&&!_isTyping()){
     const n=parseInt(e.key);
-    if(n>=1&&n<=5&&!isNaN(n)){ goStep(n); return; }
+    if(n>=1&&n<=6&&!isNaN(n)){ goStep(n); return; }
   }
   if(e.key!=='Escape') return;
   // Determine which overlay is open (priority order)
