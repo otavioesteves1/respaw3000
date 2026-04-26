@@ -299,7 +299,7 @@ input[type=number]{-moz-appearance:textfield;}
 .wiz-name-inp::placeholder{color:var(--t2);font-weight:400;font-size:.88rem;font-style:italic;}
 
 /* ── Step 3 side panel layout ── */
-.step3-wrap{display:grid;grid-template-columns:1fr 310px;gap:.75rem;align-items:start;}
+.step3-wrap{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;align-items:start;}
 .step3-list{max-height:calc(90vh - 210px);overflow-y:auto;padding-right:3px;}
 @media(max-width:700px){.step3-wrap{grid-template-columns:1fr;}.step3-list{max-height:340px;}}
 
@@ -543,7 +543,7 @@ input[type=number]{-moz-appearance:textfield;}
 .outfitter-helper-ext span{font-size:.65rem;color:var(--t2);}
 
 /* ── Step 6: Charms per monster ── */
-.charm2-layout{display:grid;grid-template-columns:240px 1fr;gap:.75rem;min-height:260px;}
+.charm2-layout{display:grid;grid-template-columns:300px 1fr;gap:.75rem;min-height:260px;}
 @media(max-width:600px){.charm2-layout{grid-template-columns:1fr;}}
 .charm2-monlist{display:flex;flex-direction:column;gap:.25rem;overflow-y:auto;max-height:420px;padding-right:.1rem;}
 .charm2-mon-btn{display:flex;align-items:center;gap:.45rem;padding:.35rem .5rem;border-radius:9px;border:2px solid var(--c4);background:var(--c3);cursor:pointer;transition:all .12s;text-align:left;width:100%;}
@@ -611,7 +611,7 @@ input[type=number]{-moz-appearance:textfield;}
 <header>
   <div class="hdr">
     <div class="hdr-brand">
-      <img src="assets/logo_respaw.png" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
+      <img src="assets/logo_respaw.png?v=3" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
       <div><div class="hdr-title">RESPAW<span style="-webkit-text-fill-color:#fff;color:#fff;font-weight:900;">3000</span></div><div class="hdr-sub">Second Brain for Hunting</div></div>
     </div>
     <div class="profiles-strip" id="profilesStrip"></div>
@@ -640,8 +640,8 @@ input[type=number]{-moz-appearance:textfield;}
 <div class="wrap">
   <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;">
     <button class="btn btn-g" onclick="openWizard()">Nova Hunt</button>
-    <button class="btn btn-o" onclick="save()">💾 Salvar</button>
     <span id="profileLabel" style="display:none;"></span>
+    <button class="btn btn-o" onclick="save()" style="margin-left:auto;">💾 Salvar</button>
   </div>
   <div class="hunt-layout">
     <div class="hunt-portrait" id="huntPortrait"></div>
@@ -666,7 +666,7 @@ input[type=number]{-moz-appearance:textfield;}
   <div class="modal" style="max-width:min(1240px,95vw);">
     <!-- Hunt name input — always visible, all steps -->
     <div class="wiz-header">
-      <img src="assets/logo_respaw.png" alt="" style="height:32px;width:auto;object-fit:contain;flex-shrink:0;">
+      <img src="assets/logo_respaw.png?v=3" alt="" style="height:32px;width:auto;object-fit:contain;flex-shrink:0;">
       <input class="inp wiz-name-inp" id="wHuntName" placeholder="Dê um nome à sua nova hunt...">
     </div>
     <div class="wiz-steps">
@@ -773,9 +773,12 @@ input[type=number]{-moz-appearance:textfield;}
         <div id="runaSel" style="margin-top:.4rem;"></div>
       </div>
       <div>
-        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">💊 Poções <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">clique para selecionar</span></div>
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">💊 Poções de Vida/Mana <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">clique para selecionar</span></div>
         <div class="charm-grid" id="potGrid"></div>
         <div id="potSel" style="margin-top:.4rem;"></div>
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin:.75rem 0 .4rem;">⚗️ Skill Potions <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">berserk / bullseye / mastermind</span></div>
+        <div class="charm-grid" id="skillPotGrid"></div>
+        <div id="skillPotSel" style="margin-top:.4rem;"></div>
       </div>
     </div>
 
@@ -1073,6 +1076,11 @@ const POTIONS = [
   {id:'str_mp',   name:'Strong Mana',     img:'https://static.wikia.nocookie.net/tibia/images/3/3c/Strong_Mana_Potion.gif/revision/latest?cb=20171128183348&path-prefix=en'},
   {id:'hp',       name:'Health Potion',   img:'https://static.wikia.nocookie.net/tibia/images/e/e2/Health_Potion.gif/revision/latest?cb=20171128183347&path-prefix=en'},
   {id:'mp',       name:'Mana Potion',     img:'https://static.wikia.nocookie.net/tibia/images/4/43/Mana_Potion.gif/revision/latest?cb=20170904190239&path-prefix=en'},
+];
+const SKILL_POTIONS = [
+  {id:'berserk',    name:'Berserk Potion',    img:'https://static.wikia.nocookie.net/tibia/images/3/33/Berserk_Potion.gif/revision/latest?cb=20160601082614&path-prefix=en', voc:'Knight / Paladin'},
+  {id:'bullseye',   name:'Bullseye Potion',   img:'https://static.wikia.nocookie.net/tibia/images/a/a3/Bullseye_Potion.gif/revision/latest?cb=20160601082618&path-prefix=en', voc:'Paladin'},
+  {id:'mastermind', name:'Mastermind Potion', img:'https://static.wikia.nocookie.net/tibia/images/d/d5/Mastermind_Potion.gif/revision/latest?cb=20160601082621&path-prefix=en', voc:'Druid / Sorcerer'},
 ];
 const RUNES = [
   {id:'sd',   name:'Sudden Death',        img:'https://static.wikia.nocookie.net/tibia/images/c/c2/Sudden_Death_Rune.gif/revision/latest?cb=20150720234440&path-prefix=en'},
@@ -1424,12 +1432,23 @@ function renderPotGrid(){
     el.onclick=()=>togglePot(p.id);
     grid.appendChild(el);
   });
+  // Skill Potions grid
+  const sgrid=document.getElementById('skillPotGrid'); if(sgrid){ sgrid.innerHTML='';
+    SKILL_POTIONS.forEach(p=>{
+      const sel=wiz.pots.find(x=>x.id===p.id);
+      const el=document.createElement('div'); el.className='charm-opt'+(sel?' on':'');
+      el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.voc}</div>`;
+      el.onclick=()=>togglePot(p.id,'skill');
+      sgrid.appendChild(el);
+    });
+  }
   renderPotSel();
 }
-function togglePot(id){
-  const p=POTIONS.find(x=>x.id===id); if(!p) return;
+function togglePot(id, group){
+  const src=group==='skill'?SKILL_POTIONS:POTIONS;
+  const p=src.find(x=>x.id===id); if(!p) return;
   const idx=wiz.pots.findIndex(x=>x.id===id);
-  if(idx>=0) wiz.pots.splice(idx,1); else wiz.pots.push({...p,qty:200});
+  if(idx>=0) wiz.pots.splice(idx,1); else wiz.pots.push({...p,qty:50});
   renderPotGrid();
 }
 function renderPotSel(){
@@ -1784,18 +1803,52 @@ function renderLootList(ctx){
     list.innerHTML='<div class="loot-empty">Nenhum loot encontrado para estes monstros.</div>';
     return;
   }
-  // ── Monster filter bar (only if multiple monsters) ──
-  if(monsters.length>1){
-    const bar=document.createElement('div'); bar.className='loot-mon-filter';
-    monsters.forEach(m=>{
-      const btn=document.createElement('button'); btn.className='loot-mon-filt-btn'+(filter===m.name?' on':'');
-      btn.title=m.name;
-      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}">`:'<span style="font-size:2rem;opacity:.4;">🐉</span>';
-      btn.innerHTML=gif;
-      btn.onclick=()=>setFilter(filter===m.name?null:m.name);
-      bar.appendChild(btn);
-    });
-    list.appendChild(bar);
+  // ── Monster section ──
+  if(monsters.length){
+    if(!isWiz){
+      // Summary mode: rich monster cards grid (replaces tiny GIF filter)
+      const sec=document.createElement('div');
+      sec.style.cssText='margin-bottom:.75rem;';
+      const lbl=document.createElement('div');
+      lbl.style.cssText='font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);border-bottom:1px solid rgba(var(--accent-rgb),.18);padding-bottom:.35rem;margin-bottom:.55rem;';
+      lbl.textContent=`🐉 Monstros (${monsters.length})`;
+      sec.appendChild(lbl);
+      const mgrid=document.createElement('div');
+      mgrid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.45rem;';
+      monsters.forEach(m=>{
+        const isOn=filter===m.name;
+        const card=document.createElement('div');
+        card.style.cssText=`display:flex;gap:.55rem;align-items:flex-start;background:var(--c3);border:1.5px solid ${isOn?'var(--gold)':'var(--c4)'};border-radius:10px;padding:.5rem .6rem;cursor:pointer;transition:border-color .15s;`;
+        const gifHtml=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="width:44px;height:44px;object-fit:contain;image-rendering:pixelated;border-radius:6px;flex-shrink:0;">`:'<div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">🐉</div>';
+        const wl=m.wikiUrl?`<a href="${m.wikiUrl}" target="_blank" onclick="event.stopPropagation()" style="font-size:.6rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.2rem;">📖 TibiaWiki</a><br>`:'';
+        const maj=m.majorCharm?`<span style="display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;font-weight:700;padding:.1rem .35rem;border-radius:5px;background:rgba(var(--accent-rgb),.12);border:1px solid rgba(var(--accent-rgb),.28);color:var(--gold);margin-right:.2rem;"><img src="${m.majorCharm.img}" style="width:12px;height:12px;object-fit:contain;image-rendering:pixelated;">${m.majorCharm.name}</span>`:'';
+        const min=m.minorCharm?`<span style="display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;font-weight:700;padding:.1rem .35rem;border-radius:5px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.28);color:#c4b5fd;"><img src="${m.minorCharm.img}" style="width:12px;height:12px;object-fit:contain;image-rendering:pixelated;">${m.minorCharm.name}</span>`:'';
+        card.innerHTML=`${gifHtml}<div style="flex:1;min-width:0;"><div style="font-size:.8rem;font-weight:700;margin-bottom:.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.name}</div>${wl}<div style="display:flex;flex-wrap:wrap;gap:.2rem;">${maj}${min}</div></div>`;
+        card.onclick=()=>setFilter(isOn?null:m.name);
+        mgrid.appendChild(card);
+      });
+      sec.appendChild(mgrid);
+      if(filter){
+        const clr=document.createElement('div');
+        clr.style.cssText='font-size:.6rem;color:var(--t2);margin-top:.35rem;cursor:pointer;';
+        clr.innerHTML='✕ Mostrar loot de todos os monstros';
+        clr.onclick=()=>setFilter(null);
+        sec.appendChild(clr);
+      }
+      list.appendChild(sec);
+    } else if(monsters.length>1){
+      // Wizard mode: compact GIF filter
+      const bar=document.createElement('div'); bar.className='loot-mon-filter';
+      monsters.forEach(m=>{
+        const btn=document.createElement('button'); btn.className='loot-mon-filt-btn'+(filter===m.name?' on':'');
+        btn.title=m.name;
+        const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}">`:'<span style="font-size:2rem;opacity:.4;">🐉</span>';
+        btn.innerHTML=gif;
+        btn.onclick=()=>setFilter(filter===m.name?null:m.name);
+        bar.appendChild(btn);
+      });
+      list.appendChild(bar);
+    }
   }
   // ── Hint ──
   const hint=document.createElement('div'); hint.style.cssText='font-size:.6rem;color:var(--t2);margin-bottom:.35rem;';
@@ -1829,8 +1882,10 @@ function renderLootList(ctx){
       const priceHtml=price?`<span class="loot-item-price" style="color:${priceColor};">${fmtPrice(price)}</span>`:'';
       const wikiSlug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
       const wikiHref=`https://www.tibiawiki.com.br/wiki/${wikiSlug}`;
-      div.innerHTML=`<div class="loot-item-cb">✓</div><img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<a class="loot-item-wiki" href="${wikiHref}" target="_blank" title="Ver no TibiaWiki" onclick="event.stopPropagation()">↗</a>`;
-      div.onclick=()=>toggleLootItem(it.name,ctx);
+      const cbHtml=isWiz?`<div class="loot-item-cb">✓</div>`:'';
+      div.innerHTML=`${cbHtml}<img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<a class="loot-item-wiki" href="${wikiHref}" target="_blank" title="Ver no TibiaWiki" onclick="event.stopPropagation()">↗</a>`;
+      if(isWiz){ div.onclick=()=>toggleLootItem(it.name,ctx); }
+      else { div.style.cursor='pointer'; div.onclick=()=>window.open(wikiHref,'_blank'); div.title='Ver no TibiaWiki (clique para abrir)'; }
       grid.appendChild(div);
     });
     section.appendChild(grid);
@@ -2656,7 +2711,7 @@ function buildSummaryHTML(h){
 function renderHunts(){
   const el=document.getElementById('huntList');
   const hunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
-  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico"><img src="assets/logo_respaw.png" style="height:52px;opacity:.5;"></div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.83rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
+  if(!hunts.length){ el.innerHTML='<div class="empty"><div class="empty-ico"><img src="assets/logo_respaw.png?v=3" style="height:52px;opacity:.5;"></div><div class="empty-ttl">Nenhuma hunt ainda</div><div style="margin-top:.35rem;font-size:.83rem;">Clique em "Nova Hunt" para começar.</div></div>'; return; }
   el.innerHTML='';
   hunts.forEach(h=>{
     const p=state.profiles.find(x=>x.id===h.profileId);
