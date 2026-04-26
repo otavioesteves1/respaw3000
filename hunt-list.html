@@ -1862,10 +1862,14 @@ async function fetchLootPrices(ctx){
       Object.values(pages).forEach(page=>{
         const wt=page.revisions?.[0]?.['*']||'';
         const nameM=wt.match(/\|\s*name\s*=\s*([^\n|]+)/i);
-        const valM=wt.match(/\|\s*value\s*=\s*([\d,]+)/i);
-        if(valM){
+        // npcvalue = numeric NPC sell price (e.g. Rashid items show value=Negotiable but npcvalue=3000)
+        // value    = general value field, may be numeric or text like "Negotiable"
+        const npcValM=wt.match(/\|\s*npcvalue\s*=\s*([\d,]+)/i);
+        const valM   =wt.match(/\|\s*value\s*=\s*([\d,]+)/i);
+        const best=npcValM||valM;
+        if(best){
           const itemName=(nameM?nameM[1].trim():page.title).replace(/_/g,' ');
-          const val=parseInt(valM[1].replace(/,/g,''));
+          const val=parseInt(best[1].replace(/,/g,''));
           if(val>0) prices[itemName.toLowerCase()]=val;
         }
       });
