@@ -392,7 +392,9 @@ input[type=number]{-moz-appearance:textfield;}
 .hunt-layout{display:flex;gap:1.25rem;align-items:flex-start;}
 .hunt-portrait{flex-shrink:0;width:158px;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:sticky;top:74px;align-self:flex-start;min-height:calc(100vh - 90px);}
 .hunt-portrait-card{background:var(--c2);border:1.5px solid rgba(var(--accent-rgb),.28);border-radius:14px;padding:.7rem .6rem .65rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;width:100%;box-shadow:0 4px 18px rgba(0,0,0,.35);}
-.hunt-portrait-img{width:136px;height:136px;border-radius:10px;object-fit:contain;image-rendering:pixelated;background:rgba(0,0,0,.22);}
+.hunt-portrait-img{width:auto;max-width:100%;max-height:148px;border-radius:8px;object-fit:contain;image-rendering:pixelated;display:block;margin:0 auto;}
+.hunt-portrait-edit-btn{width:100%;padding:.3rem;border-radius:7px;border:1px solid var(--c4);background:none;color:var(--t1);font-size:.65rem;font-weight:600;cursor:pointer;transition:all .12s;margin-top:.2rem;text-align:center;}
+.hunt-portrait-edit-btn:hover{border-color:var(--gold);color:var(--gold);}
 .hunt-portrait-name{font-size:.75rem;font-weight:700;color:var(--t0);text-align:center;word-break:break-word;width:100%;}
 .hunt-list-col{flex:1;min-width:0;}
 @media(max-width:600px){.hunt-layout{flex-direction:column;}.hunt-portrait{width:100%;flex-direction:row;align-items:center;position:static;}.hunt-portrait-img{width:64px;height:64px;}}
@@ -429,6 +431,16 @@ input[type=number]{-moz-appearance:textfield;}
 /* ── Summary 2-column layout ── */
 .sum-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start;}
 @media(max-width:680px){.sum-layout{grid-template-columns:1fr;}}
+/* Summary modal — flex column so action bar sticks to bottom */
+.sum-modal{overflow-y:hidden!important;display:flex!important;flex-direction:column;}
+.sum-hdr{flex-shrink:0;padding-bottom:.75rem;border-bottom:1px solid rgba(var(--accent-rgb),.12);margin-bottom:1rem;}
+.sum-body{flex:1;overflow-y:auto;min-height:0;padding-right:.25rem;}
+.sum-actions{flex-shrink:0;display:flex;justify-content:flex-end;gap:.4rem;padding:.85rem 0 0;border-top:1px solid rgba(var(--accent-rgb),.12);}
+/* Summary top 2-col grid: REFIL | MAGIAS+IMBU */
+.sum-top-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.55rem;}
+@media(max-width:680px){.sum-top-grid{grid-template-columns:1fr;}}
+/* Vertical item list (REFIL) */
+.sum-items-col{display:flex;flex-direction:column;gap:.32rem;}
 
 /* ── Monster card edit button ── */
 .mon-edit{width:22px;height:22px;border-radius:5px;border:none;background:rgba(59,130,246,.14);color:#93c5fd;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
@@ -837,18 +849,19 @@ input[type=number]{-moz-appearance:textfield;}
 
 <!-- ══ SUMMARY MODAL ══ -->
 <div class="ov" id="summaryOv">
-  <div class="modal" style="max-width:min(1440px,97vw);">
-    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
+  <div class="modal sum-modal" style="max-width:min(1440px,97vw);">
+    <div class="sum-hdr" style="display:flex;align-items:center;gap:.6rem;">
       <span style="font-size:1.4rem;">📋</span>
-      <div>
+      <div style="flex:1;min-width:0;">
         <div style="font-size:.95rem;font-weight:800;" id="sumHuntName"></div>
         <div style="font-size:.75rem;color:var(--t1);" id="sumHuntMeta"></div>
       </div>
     </div>
-    <div id="summaryContent"></div>
-    <div class="macts">
+    <div id="summaryContent" class="sum-body"></div>
+    <div class="sum-actions">
       <button class="btn btn-o" onclick="closeSummary()">Fechar</button>
-      <button class="btn btn-o" id="sumCopyBtn" onclick="">📋 Copiar</button>
+      <button class="btn btn-o" id="sumCopyBtn">📋 Copiar</button>
+      <button class="btn btn-o" onclick="exportHuntJSON(_sumHuntId)">📤 Exportar</button>
       <button class="btn btn-g" onclick="exportPrint()">🖨️ Imprimir</button>
     </div>
   </div>
@@ -1312,7 +1325,7 @@ function renderProfiles(){
   const portrait=document.getElementById('huntPortrait'); if(!portrait) return;
   const ap=state.profiles.find(x=>x.id===state.activeProfile);
   if(ap?.imgUrl){
-    portrait.innerHTML=`<div class="hunt-portrait-card"><img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}"><div class="hunt-portrait-name">${ap.name}</div></div>`;
+    portrait.innerHTML=`<div class="hunt-portrait-card"><img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}"><div class="hunt-portrait-name">${ap.name}</div><button class="hunt-portrait-edit-btn" onclick="openProfileModal('${ap.id}')">✏️ Editar Perfil</button></div>`;
     portrait.style.display='';
   } else {
     portrait.innerHTML='';
@@ -1775,41 +1788,10 @@ function renderLootList(ctx){
     list.innerHTML='<div class="loot-empty">Nenhum loot encontrado para estes monstros.</div>';
     return;
   }
-  // ── Monster section ──
-  if(monsters.length){
-    if(!isWiz){
-      // Summary mode: rich monster cards grid (replaces tiny GIF filter)
-      const sec=document.createElement('div');
-      sec.style.cssText='margin-bottom:.75rem;';
-      const lbl=document.createElement('div');
-      lbl.style.cssText='font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);border-bottom:1px solid rgba(var(--accent-rgb),.18);padding-bottom:.35rem;margin-bottom:.55rem;';
-      lbl.textContent=`🐉 Monstros (${monsters.length})`;
-      sec.appendChild(lbl);
-      const mgrid=document.createElement('div');
-      mgrid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.45rem;';
-      monsters.forEach(m=>{
-        const isOn=filter===m.name;
-        const card=document.createElement('div');
-        card.style.cssText=`display:flex;gap:.55rem;align-items:flex-start;background:var(--c3);border:1.5px solid ${isOn?'var(--gold)':'var(--c4)'};border-radius:10px;padding:.5rem .6rem;cursor:pointer;transition:border-color .15s;`;
-        const gifHtml=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="width:44px;height:44px;object-fit:contain;image-rendering:pixelated;border-radius:6px;flex-shrink:0;">`:'<div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">🐉</div>';
-        const wl=m.wikiUrl?`<a href="${m.wikiUrl}" target="_blank" onclick="event.stopPropagation()" style="font-size:.65rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.2rem;">📖 TibiaWiki</a><br>`:'';
-        const maj=m.majorCharm?`<span style="display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;font-weight:700;padding:.1rem .35rem;border-radius:5px;background:rgba(var(--accent-rgb),.12);border:1px solid rgba(var(--accent-rgb),.28);color:var(--gold);margin-right:.2rem;"><img src="${m.majorCharm.img}" style="width:12px;height:12px;object-fit:contain;image-rendering:pixelated;">${m.majorCharm.name}</span>`:'';
-        const min=m.minorCharm?`<span style="display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;font-weight:700;padding:.1rem .35rem;border-radius:5px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.28);color:#c4b5fd;"><img src="${m.minorCharm.img}" style="width:12px;height:12px;object-fit:contain;image-rendering:pixelated;">${m.minorCharm.name}</span>`:'';
-        card.innerHTML=`${gifHtml}<div style="flex:1;min-width:0;"><div style="font-size:.82rem;font-weight:700;margin-bottom:.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.name}</div>${wl}<div style="display:flex;flex-wrap:wrap;gap:.2rem;">${maj}${min}</div></div>`;
-        card.onclick=()=>setFilter(isOn?null:m.name);
-        mgrid.appendChild(card);
-      });
-      sec.appendChild(mgrid);
-      if(filter){
-        const clr=document.createElement('div');
-        clr.style.cssText='font-size:.65rem;color:var(--t2);margin-top:.35rem;cursor:pointer;';
-        clr.innerHTML='✕ Mostrar loot de todos os monstros';
-        clr.onclick=()=>setFilter(null);
-        sec.appendChild(clr);
-      }
-      list.appendChild(sec);
-    } else if(monsters.length>1){
-      // Wizard mode: compact GIF filter
+  // ── Monster filter ──
+  if(monsters.length>1){
+    if(isWiz){
+      // Wizard mode: compact GIF buttons
       const bar=document.createElement('div'); bar.className='loot-mon-filter';
       monsters.forEach(m=>{
         const btn=document.createElement('button'); btn.className='loot-mon-filt-btn'+(filter===m.name?' on':'');
@@ -1820,12 +1802,21 @@ function renderLootList(ctx){
         bar.appendChild(btn);
       });
       list.appendChild(bar);
+    } else {
+      // Summary mode: hint only — clicking monster cards above filters loot
+      if(filter){
+        const clr=document.createElement('div');
+        clr.style.cssText='font-size:.65rem;color:var(--t2);margin-bottom:.35rem;cursor:pointer;';
+        clr.innerHTML=`🐉 Filtrando: <strong style="color:var(--gold);">${filter}</strong> — <span style="text-decoration:underline;">ver todos</span>`;
+        clr.onclick=()=>setFilter(null);
+        list.appendChild(clr);
+      } else {
+        const hint2=document.createElement('div'); hint2.style.cssText='font-size:.65rem;color:var(--t2);margin-bottom:.35rem;';
+        hint2.textContent='Clique num monstro acima para filtrar o loot';
+        list.appendChild(hint2);
+      }
     }
   }
-  // ── Hint ──
-  const hint=document.createElement('div'); hint.style.cssText='font-size:.65rem;color:var(--t2);margin-bottom:.35rem;';
-  hint.textContent=filter?`Loot de: ${filter} — clique no monstro novamente para ver todos`:'Clique num item para excluir/incluir · clique no monstro para filtrar';
-  list.appendChild(hint);
   // ── Group by rarity, sorted by price desc within group ──
   const groups={};
   LOOT_RARITY_ORDER.forEach(r=>groups[r]=[]);
@@ -2588,7 +2579,9 @@ function saveHunt(){
 // ══════════════════════════════════════════════════════
 // SUMMARY MODAL
 // ══════════════════════════════════════════════════════
+let _sumHuntId=null;
 function openSummary(huntId){
+  _sumHuntId=huntId;
   const h=state.hunts.find(x=>x.id===huntId); if(!h) return;
   document.getElementById('sumHuntName').textContent=h.name;
   const p=state.profiles.find(x=>x.id===h.profileId);
@@ -2613,68 +2606,86 @@ function openSummary(huntId){
   }
   const copyBtn=document.getElementById('sumCopyBtn');
   if(copyBtn) copyBtn.onclick=()=>copySummaryToClipboard(huntId);
+  // Wire monster card clicks → loot filter
+  window._summMonFilter=(name)=>{
+    _summLootFilter=(_summLootFilter===name)?null:name;
+    renderLootList(summCtx);
+    // Update monster card visual state
+    document.querySelectorAll('[data-sum-mon]').forEach(c=>{
+      const active=!_summLootFilter||c.dataset.sumMon===_summLootFilter;
+      c.style.opacity=active?'':'0.35';
+      c.style.borderColor=c.dataset.sumMon===_summLootFilter?'var(--gold)':'';
+    });
+  };
   document.getElementById('summaryOv').classList.add('on');
 }
 function closeSummary(){ document.getElementById('summaryOv').classList.remove('on'); }
 
 function buildSummaryHTML(h){
-  const activeLoot=(h.loot||[]).filter(x=>!x.excluded);
-  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||activeLoot.length;
+  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length;
   if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.95rem;">Hunt vazia — nenhum item configurado.</div>';
 
-  let leftCol='';
-  // Potions
-  if((h.pots||[]).length){
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">💊 Poções</div><div class="sum-items">`;
-    h.pots.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">💊</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">×${x.qty}</span></div>`; });
-    leftCol+='</div></div>';
-  }
-  // Runas
-  if((h.runas||[]).length){
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">📜 Runas</div><div class="sum-items">`;
-    h.runas.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">📜</span>'}<div><div class="sum-item-name">${x.name}</div></div><span class="sum-item-qty">×${x.qty}</span></div>`; });
-    leftCol+='</div></div>';
-  }
-  // Imbuements (deduplicated, with ×2 badge when doubled)
-  if((h.imbu||[]).length){
-    const imbuMap={};
-    (h.imbu||[]).forEach(x=>{ if(!imbuMap[x.id]) imbuMap[x.id]={...x,cnt:0}; imbuMap[x.id].cnt++; });
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">🛡️ Imbuements de Defesa</div><div class="sum-items">`;
-    Object.values(imbuMap).forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">🛡️</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub">${x.sub||''}</div></div>${x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`; });
-    leftCol+='</div></div>';
-  }
-  // Spells
-  if((h.spells||[]).length){
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">✨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items">`;
-    h.spells.forEach(x=>{ leftCol+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.4rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
-    leftCol+='</div></div>';
-  }
-  // Loot — rich interactive section rendered after HTML insertion
-  const allLoot=h.loot||[];
-  if(allLoot.length){
-    const activeCnt=allLoot.filter(x=>!x.excluded).length;
-    leftCol+=`<div class="sum-sec"><div class="sum-sec-lbl">📦 Loot <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${activeCnt} de ${allLoot.length} itens selecionados</span></div><div id="summLootArea" class="loot-cats"></div></div>`;
+  const itm=(x,fallbackEmoji)=>`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:`<span style="font-size:1.3rem;">${fallbackEmoji}</span>`}<div><div class="sum-item-name">${x.name}</div>${x.sub?`<div class="sum-item-sub">${x.sub}</div>`:''}</div>${x.qty!=null?`<span class="sum-item-qty">×${x.qty}</span>`:x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`;
+
+  let html='';
+
+  // ── TOP 2-COL: REFIL | MAGIAS + IMBU ──
+  const hasRefil=(h.pots||[]).length||(h.runas||[]).length;
+  const hasMagias=(h.spells||[]).length;
+  const hasImbu=(h.imbu||[]).length;
+  if(hasRefil||hasMagias||hasImbu){
+    html+='<div class="sum-top-grid">';
+
+    // LEFT — REFIL
+    if(hasRefil){
+      html+=`<div class="sum-sec"><div class="sum-sec-lbl">🔁 Refil</div><div class="sum-items-col">`;
+      (h.pots||[]).forEach(x=>{ html+=itm(x,'💊'); });
+      (h.runas||[]).forEach(x=>{ html+=itm(x,'📜'); });
+      html+='</div></div>';
+    } else { html+='<div></div>'; }
+
+    // RIGHT — MAGIAS then IMBU
+    html+='<div>';
+    if(hasMagias){
+      html+=`<div class="sum-sec"><div class="sum-sec-lbl">✨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items-col">`;
+      h.spells.forEach(x=>{ html+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.3rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
+      html+='</div></div>';
+    }
+    if(hasImbu){
+      const imbuMap={};
+      (h.imbu||[]).forEach(x=>{ if(!imbuMap[x.id]) imbuMap[x.id]={...x,cnt:0}; imbuMap[x.id].cnt++; });
+      html+=`<div class="sum-sec"><div class="sum-sec-lbl">🛡️ Imbuements</div><div class="sum-items-col">`;
+      Object.values(imbuMap).forEach(x=>{ html+=itm(x,'🛡️'); });
+      html+='</div></div>';
+    }
+    html+='</div>';
+
+    html+='</div>'; // end sum-top-grid
   }
 
-  // Right column — Monsters compact grid
-  let rightCol='';
+  // ── FULL WIDTH: MONSTROS (clicável para filtrar loot) ──
   if((h.monsters||[]).length){
-    rightCol+=`<div class="sum-sec"><div class="sum-sec-lbl">🐉 Monstros (${h.monsters.length})</div><div class="sum-mon-grid">`;
+    const hasLoot=(h.loot||[]).length>0;
+    html+=`<div class="sum-sec"><div class="sum-sec-lbl">🐉 Monstros (${h.monsters.length})${hasLoot?` <span style="font-weight:400;color:var(--t2);text-transform:none;letter-spacing:0;font-size:.65rem;">clique para filtrar loot</span>`:''}</div><div class="sum-mon-grid">`;
     h.monsters.forEach(m=>{
+      const safeN=m.name.replace(/'/g,"\\'");
       const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.8rem;opacity:.35;">🐉</span>';
       const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
       const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">⭐ ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">🔮 ${m.minorCharm.name}</div>`:'';
       const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
-      rightCol+=`<div class="sum-mon-compact"><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}</div></div>`;
+      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}</div></div>`;
     });
-    rightCol+='</div></div>';
+    html+='</div></div>';
   }
 
-  // If only monsters, show full width; otherwise 2-column
-  if(!leftCol) return rightCol;
-  if(!rightCol) return leftCol;
-  return `<div class="sum-layout"><div>${leftCol}</div><div>${rightCol}</div></div>`;
+  // ── FULL WIDTH: LOOT (filterable via renderLootList) ──
+  if((h.loot||[]).length){
+    const activeCnt=(h.loot||[]).filter(x=>!x.excluded).length;
+    html+=`<div class="sum-sec"><div class="sum-sec-lbl">📦 Loot <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${activeCnt} de ${h.loot.length} itens</span></div><div id="summLootArea" class="loot-cats"></div></div>`;
+  }
+
+  return html;
 }
 
 // ══════════════════════════════════════════════════════
@@ -2734,7 +2745,6 @@ function renderHunts(){
         <span style="flex:1"></span>
         <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">📊 Sessões${sessCount>0?` (${sessCount})`:''}</button>
         <button class="btn btn-o btn-sm" onclick="openSummary('${h.id}')">👁️ Resumo</button>
-        <button class="btn btn-o btn-sm" onclick="exportHuntJSON('${h.id}')" title="Copiar esta hunt para compartilhar">📤 Exportar</button>
         <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">📋 Duplicar</button>
       </div>`;
     el.appendChild(c);
