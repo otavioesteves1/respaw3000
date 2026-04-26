@@ -1034,8 +1034,10 @@ const WD_REV_NAMES=[
 const WD_REV_MAP={
   knight:[3,2,0,1], druid:[12,10,0,11], paladin:[6,5,0,4], sorcerer:[9,8,0,7],
 };
+const WD_SLOT_MAX=[50,75,100,150,200]; // max points per slot per ring
 // helpers
 function _wdDomain(i){let c=0;for(let r=0;r<5;r++){if(i<c+WD_RINGS[r])return Math.floor((i-c)/(WD_RINGS[r]/4));c+=WD_RINGS[r];}return 0;}
+function _wdRing(i){let c=0;for(let r=0;r<5;r++){if(i<c+WD_RINGS[r])return r;c+=WD_RINGS[r];}return 4;}
 function _wdAngles(i){let c=0;for(let r=0;r<5;r++){if(i<c+WD_RINGS[r]){const p=i-c,s=360/WD_RINGS[r];return{r,a0:p*s+WD_GAP/2,a1:p*s+s-WD_GAP/2};}c+=WD_RINGS[r];}return{r:0,a0:0,a1:90};}
 function _wdPt(r,a){const rad=(a-90)*Math.PI/180;return{x:WD_CX+r*Math.cos(rad),y:WD_CY+r*Math.sin(rad)};}
 function _wdArc(r1,r2,a0,a1){const s1=_wdPt(r1,a0),e1=_wdPt(r1,a1),s2=_wdPt(r2,a0),e2=_wdPt(r2,a1),lg=(a1-a0>180)?1:0;return`M${s1.x.toFixed(2)},${s1.y.toFixed(2)} A${r1},${r1} 0 ${lg} 1 ${e1.x.toFixed(2)},${e1.y.toFixed(2)} L${e2.x.toFixed(2)},${e2.y.toFixed(2)} A${r2},${r2} 0 ${lg} 0 ${s2.x.toFixed(2)},${s2.y.toFixed(2)}Z`;}
@@ -2641,22 +2643,40 @@ function renderWheelStep(){
   const voc=wiz.vocation;
   if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36)
     wiz.wheel={slots:new Array(36).fill(0),link:''};
+  if(wiz.wheel._level===undefined) wiz.wheel._level=0;
+  if(wiz.wheel._selSlot===undefined) wiz.wheel._selSlot=null;
   const slots=wiz.wheel.slots;
+  const selSlot=wiz.wheel._selSlot;
   const lnk=wiz.wheel.link||'';
+  const level=wiz.wheel._level||0;
+  const avail=Math.max(0,level-50);
+  const used=slots.reduce((a,b)=>a+(b||0),0);
+  const remaining=avail-used;
 
   // Domain totals
   const dp=[0,0,0,0];
   for(let i=0;i<36;i++) dp[_wdDomain(i)]+=slots[i]||0;
   const totalPts=dp.reduce((a,b)=>a+b,0);
 
-  // Revelation tier per domain (simplified: 9/18/27 pts thresholds)
-  const revTier=(d)=>dp[d]>=27?3:dp[d]>=18?2:dp[d]>=9?1:0;
+  // Revelation tier per domain
+  const revTier=(d)=>dp[d]>=500?3:dp[d]>=250?2:dp[d]>=100?1:0;
 
-  // Handlers
-  window._whlClick=(i)=>{ slots[i]=((slots[i]||0)+1)%5; renderWheelStep(); };
-  window._whlRClick=(i,e)=>{ e.preventDefault(); slots[i]=Math.max(0,(slots[i]||0)-1); renderWheelStep(); return false; };
+  // Handlers (defined early so they work in inline attrs for reset btn)
   window._whlLink=(v)=>{ wiz.wheel.link=v; };
-  window._whlReset=()=>{ wiz.wheel.slots=new Array(36).fill(0); renderWheelStep(); };
+  window._whlReset=()=>{ wiz.wheel.slots=new Array(36).fill(0); wiz.wheel._selSlot=null; renderWheelStep(); };
+  window._whlSetLevel=(v)=>{ const n=parseInt(v)||0; wiz.wheel._level=n; renderWheelStep(); };
+  window._whlAdd=(i,delta)=>{
+    const ring=_wdRing(i); const mx=WD_SLOT_MAX[ring]; const cur=slots[i]||0;
+    let nv;
+    if(delta>0){
+      const rem=level>0?(avail-used):9999; // if no level set, allow free distribution
+      const canAdd=Math.min(delta>=999?mx:delta, mx-cur, Math.max(0,rem));
+      nv=cur+canAdd;
+    } else {
+      nv=Math.max(0,cur+(delta<=-999?-cur:delta));
+    }
+    slots[i]=nv; renderWheelStep();
+  };
 
   // ── Build SVG ──────────────────────────────────────
   const convMap=voc?(WD_CONV_MAP[voc]||null):null;
@@ -2669,45 +2689,50 @@ function renderWheelStep(){
     svg+=`<path d="${_wdArc(WD_RADII[0][0]-2,WD_RADII[4][1]+4,a0,a1)}" fill="${WD_DOM_COLORS[d]}" fill-opacity="0.055" stroke="none"/>`;
   }
 
-  // Slots
+  // Slots with data-slot for event delegation
   for(let i=0;i<36;i++){
     const {r,a0,a1}=_wdAngles(i);
     const dom=_wdDomain(i);
     const lv=slots[i]||0;
+    const mx=WD_SLOT_MAX[r];
     const [ri,ro]=WD_RADII[r];
     const col=WD_DOM_COLORS[dom];
+    const isSel=selSlot===i;
     const fill=lv===0?'none':col;
-    const fop=lv===0?0:0.18+(lv/4)*0.72;
-    const sop=lv===0?0.2:0.65;
+    const fop=lv===0?0:0.15+(lv/mx)*0.75;
+    const sop=isSel?1:(lv===0?0.2:0.65);
+    const sw=isSel?2.5:0.9;
+    const selStroke=isSel?'#fff':col;
     const midA=(a0+a1)/2, midR=(ri+ro)/2;
     const tp=_wdPt(midR,midA);
     const di=WD_DEDIC_MAP[i];
     const icon=WD_DEDIC[di].i;
     const convIdx=convMap?convMap[i]:null;
     const convN=convIdx!=null?(WD_CONV[convIdx]||''):'';
-    const ttip=`${WD_DEDIC[di].l} (Nível ${lv}/4)${convN?' | '+convN:''}`;
+    const ttip=`${WD_DEDIC[di].l} (${lv}/${mx})${convN?' | '+convN:''}`;
 
-    svg+=`<path d="${_wdArc(ri,ro,a0,a1)}" fill="${fill}" fill-opacity="${fop}" stroke="${col}" stroke-width="0.9" stroke-opacity="${sop}" style="cursor:pointer;" onclick="window._whlClick(${i})" oncontextmenu="window._whlRClick(${i},event)"><title>${ttip}</title></path>`;
+    svg+=`<path data-slot="${i}" data-ring="${r}" d="${_wdArc(ri,ro,a0,a1)}" fill="${fill}" fill-opacity="${fop}" stroke="${selStroke}" stroke-width="${sw}" stroke-opacity="${sop}" style="cursor:pointer;"><title>${ttip}</title></path>`;
 
-    // Icon (only for rings 0,2,4 which have enough space)
+    // Icon
     if(r===0||r===4){
       svg+=`<text x="${tp.x.toFixed(1)}" y="${(tp.y+4).toFixed(1)}" text-anchor="middle" font-size="13" style="pointer-events:none;user-select:none;">${icon}</text>`;
     } else if(r===2){
       svg+=`<text x="${tp.x.toFixed(1)}" y="${(tp.y+3).toFixed(1)}" text-anchor="middle" font-size="9" style="pointer-events:none;user-select:none;">${icon}</text>`;
     }
 
-    // Level pip dots on outer edge of each filled slot
+    // Fill indicator dots (show up to 5 dots proportional to fill)
     if(lv>0){
+      const dotCount=Math.max(1,Math.round(lv/mx*5));
       const dotR=ro-5;
-      for(let l=0;l<lv;l++){
-        const dA=midA-(lv-1)*4+l*8;
+      for(let l=0;l<dotCount;l++){
+        const dA=midA-(dotCount-1)*4+l*8;
         const dp2=_wdPt(dotR,dA);
         svg+=`<circle cx="${dp2.x.toFixed(1)}" cy="${dp2.y.toFixed(1)}" r="2" fill="${col}" fill-opacity="0.9" style="pointer-events:none;"/>`;
       }
     }
   }
 
-  // Revelation perk icons at domain centers (outer label)
+  // Revelation perk icons at domain outer edge
   for(let d=0;d<4;d++){
     const a=d*90+45;
     const pr=_wdPt(WD_RADII[4][1]+16,a);
@@ -2716,8 +2741,7 @@ function renderWheelStep(){
     const revIdx=revMap?revMap[d]:null;
     const rn=revIdx!=null?(WD_REV_NAMES[revIdx]||''):'';
     const ri2=rn.includes('Avatar')?'👁️':rn.includes('Gift')?'💝':rn.includes('Exec')?'⚔️':rn.includes('Combat')?'🗡️':rn.includes('Grenade')?'💫':rn.includes('Empow')?'🌟':rn.includes('Beam')?'🔆':rn.includes('Drain')?'🧪':rn.includes('Twin')?'❄️':rn.includes('Blessing')?'🌿':'⭐';
-    svg+=`<text x="${pr.x.toFixed(1)}" y="${pr.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="${tc}" style="pointer-events:none;user-select:none;" title="${rn}">${ri2}</text>`;
-    // Tier badge
+    svg+=`<text x="${pr.x.toFixed(1)}" y="${pr.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="${tc}" style="pointer-events:none;user-select:none;">${ri2}</text>`;
     if(tier>0){
       const tb=_wdPt(WD_RADII[4][1]+28,a);
       svg+=`<text x="${tb.x.toFixed(1)}" y="${tb.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="${tc}" font-weight="700" style="pointer-events:none;user-select:none;">E${tier}</text>`;
@@ -2736,63 +2760,150 @@ function renderWheelStep(){
   svg+=`<circle cx="${WD_CX}" cy="${WD_CY}" r="20" fill="#110e2a" stroke="rgba(167,139,250,.4)" stroke-width="1.5"/>`;
   svg+=`<text x="${WD_CX}" y="${WD_CY+1}" text-anchor="middle" dominant-baseline="middle" font-size="18" style="pointer-events:none;">💝</text>`;
 
-  // ── Build panel HTML ───────────────────────────────
-  const vocLabel=voc?`${VOC_ICONS[voc]} ${VOC_LABELS[voc]}`:'Nenhuma';
-
-  let html=`<div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
-  <div style="flex:0 0 auto;">
-    <svg viewBox="0 0 ${WD_SVG} ${WD_SVG}" width="290" height="290" style="display:block;border-radius:50%;background:var(--c1);">${svg}</svg>
-    <div style="text-align:center;font-size:.6rem;color:var(--t2);margin-top:.3rem;">Clique: +nível &nbsp;|&nbsp; Botão direito: −nível</div>
-  </div>
-  <div style="flex:1;min-width:190px;">
-    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.65rem;">
-      <span style="font-size:.82rem;font-weight:700;color:var(--gold);">${vocLabel}</span>
-      <span style="margin-left:auto;font-size:.75rem;color:var(--t1);">Total <strong style="color:var(--gold);">${totalPts}</strong> pts</span>
-    </div>
-    ${!voc?'<div class="wheel-voc-note">⚠️ Selecione vocação no Passo 4 para ver as perks corretas.</div>':''}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-bottom:.65rem;">`;
-
-  for(let d=0;d<4;d++){
-    const col=WD_DOM_COLORS[d];
-    const tier=revTier(d);
-    const tc=tier===3?'#fbbf24':tier===2?'#a78bfa':tier===1?'#60a5fa':'var(--t2)';
-    const revIdx=revMap?revMap[d]:null;
-    const rn=revIdx!=null?(WD_REV_NAMES[revIdx]||'—'):'—';
-    html+=`<div style="background:var(--c2);border:1px solid ${col}44;border-radius:9px;padding:.42rem .55rem;">
-      <div style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:${col};">${WD_DOM_NAMES[d]}</div>
-      <div style="font-size:1.05rem;font-weight:800;color:${col};line-height:1.2;">${dp[d]} <span style="font-size:.6rem;font-weight:400;color:var(--t2);">pts</span></div>
-      <div style="font-size:.6rem;color:${tc};margin-top:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${rn}">${rn}</div>
-      <div style="font-size:.58rem;color:${tc};">${tier>0?'Estágio '+tier:'Bloqueado'}</div>
+  // ── Selected slot control panel ─────────────────────
+  let selInfo='';
+  if(selSlot!==null){
+    const sr=_wdRing(selSlot);
+    const mx=WD_SLOT_MAX[sr];
+    const cv=slots[selSlot]||0;
+    const di=WD_DEDIC_MAP[selSlot];
+    const ded=WD_DEDIC[di];
+    const convIdx=convMap?convMap[selSlot]:null;
+    const convN=convIdx!=null?(WD_CONV[convIdx]||''):'';
+    const dom=_wdDomain(selSlot);
+    const col=WD_DOM_COLORS[dom];
+    const pct=Math.round(cv/mx*100);
+    selInfo=`<div style="background:var(--c3);border:1.5px solid ${col}66;border-radius:10px;padding:.5rem .65rem;margin-bottom:.5rem;">
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;flex-wrap:wrap;">
+        <span style="font-size:.78rem;font-weight:700;color:${col};">${ded.i} ${ded.l}</span>
+        ${convN?`<span style="font-size:.6rem;color:var(--t1);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${convN}</span>`:'<span style="flex:1;"></span>'}
+        <span style="font-size:.78rem;font-weight:700;color:${cv>0?col:'var(--t2)'};">${cv}<span style="font-size:.6rem;font-weight:400;color:var(--t2);">/${mx}</span></span>
+      </div>
+      <div style="height:4px;border-radius:3px;background:var(--c4);margin-bottom:.4rem;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;gap:.28rem;align-items:center;">
+        <button class="qb" onclick="window._whlAdd(${selSlot},1)">+1</button>
+        <button class="qb" onclick="window._whlAdd(${selSlot},10)">+10</button>
+        <button class="qb" onclick="window._whlAdd(${selSlot},999)">+Max</button>
+        <span style="flex:1;"></span>
+        <button class="qb" onclick="window._whlAdd(${selSlot},-1)">−1</button>
+        <button class="qb" onclick="window._whlAdd(${selSlot},-10)">−10</button>
+        <button class="qb" onclick="window._whlAdd(${selSlot},-999)">−Max</button>
+      </div>
     </div>`;
+  } else {
+    selInfo=`<div style="text-align:center;color:var(--t2);font-size:.7rem;padding:.35rem;margin-bottom:.5rem;border:1px dashed var(--c4);border-radius:8px;">👆 Clique em um segmento para selecionar</div>`;
   }
 
-  html+=`</div>`;
+  // ── Conviction perks (active = slot has >0 pts) ──────
+  let convHtml='';
+  if(convMap&&voc){
+    const activeConvs=new Set();
+    for(let i=0;i<36;i++){ if((slots[i]||0)>0&&convMap[i]!=null) activeConvs.add(convMap[i]); }
+    const uniqueConvs=[];
+    const seenC=new Set();
+    for(let i=0;i<36;i++){ const ci=convMap[i]; if(ci!=null&&!seenC.has(ci)){seenC.add(ci);uniqueConvs.push(ci);} }
+    convHtml=`<div style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:.22rem;">⚡ Conviction</div>
+    <div style="display:flex;flex-direction:column;gap:.12rem;max-height:110px;overflow-y:auto;margin-bottom:.45rem;padding-right:2px;">`;
+    for(const ci of uniqueConvs){
+      const active=activeConvs.has(ci);
+      convHtml+=`<div style="font-size:.63rem;display:flex;align-items:center;gap:.25rem;opacity:${active?1:0.28};">
+        <span style="color:${active?'#34d399':'var(--t2)'};font-size:.55rem;">${active?'●':'○'}</span>
+        <span>${WD_CONV[ci]||''}</span>
+      </div>`;
+    }
+    convHtml+=`</div>`;
+  }
 
-  // Active revelations list
+  // ── Revelation perks ─────────────────────────────────
+  let revHtml='';
   if(revMap){
-    html+=`<div style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:.3rem;">✨ Revelações</div><div style="display:flex;flex-direction:column;gap:.2rem;margin-bottom:.6rem;">`;
+    revHtml=`<div style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:.22rem;">✨ Revelation</div>
+    <div style="display:flex;flex-direction:column;gap:.15rem;margin-bottom:.45rem;">`;
     for(let d=0;d<4;d++){
       const tier=revTier(d);
       const revIdx=revMap[d];
       const rn=WD_REV_NAMES[revIdx]||'?';
       const col=WD_DOM_COLORS[d];
       const tc=tier===3?'#fbbf24':tier===2?'#a78bfa':tier===1?'#60a5fa':'var(--t2)';
-      html+=`<div style="display:flex;align-items:center;gap:.32rem;opacity:${tier>0?1:0.38};">
-        <span style="font-size:.58rem;font-weight:700;padding:.06rem .28rem;border-radius:3px;background:${col}33;color:${col};">D${d+1}</span>
-        <span style="font-size:.72rem;">${rn}</span>
-        <span style="margin-left:auto;font-size:.6rem;font-weight:700;color:${tc};">${tier>0?'Est.'+tier:'—'}</span>
+      revHtml+=`<div style="display:flex;align-items:center;gap:.3rem;opacity:${tier>0?1:0.35};">
+        <span style="font-size:.56rem;font-weight:700;padding:.03rem .2rem;border-radius:3px;background:${col}33;color:${col};flex-shrink:0;">D${d+1}</span>
+        <span style="font-size:.66rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${rn}</span>
+        <span style="font-size:.58rem;font-weight:700;color:${tc};flex-shrink:0;">${tier>0?'Est.'+tier:'—'}</span>
       </div>`;
     }
-    html+=`</div>`;
+    revHtml+=`</div>`;
   }
 
-  html+=`<button class="btn btn-o" style="font-size:.62rem;padding:.18rem .45rem;margin-bottom:.6rem;" onclick="window._whlReset()">🔄 Resetar</button>
-  <div>
-    <label style="font-size:.65rem;color:var(--t1);display:block;margin-bottom:.22rem;">🔗 Link do planner <span style="color:var(--t2);">(opcional)</span></label>
-    <input class="wheel-link-inp" type="url" value="${lnk.replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" placeholder="https://www.tibia.com/community/?subtopic=wheelofdestinyplanner&code=...">
-  </div></div></div>`;
+  // ── Full HTML ────────────────────────────────────────
+  const vocLabel=voc?`${VOC_ICONS[voc]} ${VOC_LABELS[voc]}`:'Nenhuma';
+  const ptColor=level>0?(remaining<0?'#ef4444':remaining===0?'#34d399':'var(--gold)'):'var(--t2)';
+
+  let html=`
+  <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.65rem;background:var(--c3);border-radius:10px;padding:.5rem .75rem;border:1px solid var(--c4);">
+    <label style="font-size:.65rem;font-weight:700;color:var(--t1);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;">Level do personagem</label>
+    <input id="whlLevelInp" type="number" min="50" max="9999" value="${level||''}" placeholder="ex: 300"
+      style="width:88px;padding:.3rem .5rem;border:1.5px solid var(--c4);border-radius:8px;background:var(--c2);color:var(--t0);font-size:.88rem;font-weight:700;outline:none;"
+      onblur="window._whlSetLevel(this.value)"
+      onkeydown="if(event.key==='Enter'){window._whlSetLevel(this.value);}">
+    <span style="font-size:.75rem;font-weight:700;color:${ptColor};">
+      ${level>50?`${Math.max(0,remaining)} <span style="font-weight:400;color:var(--t2);">pts restantes / ${avail} total (${used} usados)</span>`:'Insira o level para calcular pontos disponíveis'}
+    </span>
+  </div>
+  <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+    <div style="flex:0 0 auto;">
+      <svg id="whlSvg" viewBox="0 0 ${WD_SVG} ${WD_SVG}" width="300" height="300" style="display:block;border-radius:50%;background:var(--c1);cursor:pointer;">${svg}</svg>
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.45rem;">
+        <span style="font-size:.8rem;font-weight:700;color:var(--gold);">${vocLabel}</span>
+        ${!voc?'<span style="font-size:.62rem;color:var(--t2);">⚠️ Selecione vocação no Passo 4</span>':''}
+        <button class="qb" style="margin-left:auto;font-size:.6rem;padding:.2rem .4rem;" onclick="window._whlReset()">🔄 Reset</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem;margin-bottom:.45rem;">
+        ${[0,1,2,3].map(d=>{
+          const col=WD_DOM_COLORS[d];
+          const tier=revTier(d);
+          const tc=tier===3?'#fbbf24':tier===2?'#a78bfa':tier===1?'#60a5fa':'var(--t2)';
+          return `<div style="background:var(--c2);border:1px solid ${col}44;border-radius:8px;padding:.32rem .42rem;">
+            <div style="font-size:.56rem;font-weight:800;text-transform:uppercase;color:${col};">${WD_DOM_NAMES[d]}</div>
+            <div style="font-size:.92rem;font-weight:800;color:${col};line-height:1.2;">${dp[d]} <span style="font-size:.52rem;font-weight:400;color:var(--t2);">pts</span></div>
+            <div style="font-size:.54rem;color:${tc};">${tier>0?'Est. '+tier:'Bloqueado'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      ${selInfo}
+      ${convHtml}
+      ${revHtml}
+      <div style="margin-top:.35rem;">
+        <label style="font-size:.6rem;color:var(--t1);display:block;margin-bottom:.18rem;">🔗 Link do planner <span style="color:var(--t2);">(opcional)</span></label>
+        <input class="wheel-link-inp" type="url" value="${lnk.replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" placeholder="https://www.tibia.com/community/?subtopic=wheelofdestinyplanner&code=...">
+      </div>
+    </div>
+  </div>`;
 
   el.innerHTML=html;
+
+  // ── Event delegation on SVG (must run AFTER innerHTML set) ──
+  const svgEl=document.getElementById('whlSvg');
+  if(svgEl){
+    svgEl.addEventListener('click',function(e){
+      const path=e.target.closest('[data-slot]');
+      if(!path) return;
+      const idx=parseInt(path.dataset.slot,10);
+      wiz.wheel._selSlot=(wiz.wheel._selSlot===idx)?null:idx;
+      renderWheelStep();
+    });
+    svgEl.addEventListener('contextmenu',function(e){
+      const path=e.target.closest('[data-slot]');
+      if(!path) return;
+      e.preventDefault();
+      const idx=parseInt(path.dataset.slot,10);
+      wiz.wheel._selSlot=idx;
+      window._whlAdd(idx,-1);
+    });
+  }
 }
 // ─────────────────────────────────────────────────────
 
