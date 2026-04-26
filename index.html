@@ -166,8 +166,10 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .wpanel.on{display:block;}
 
 /* ── Modal ── */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:500;padding:1rem;}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:500;padding:1rem;overflow:hidden;}
 .ov.on{display:flex;}
+/* Lock body scroll when any overlay is open */
+body:has(.ov.on){overflow:hidden;}
 .modal{background:var(--c1);border-radius:16px;border:1px solid var(--c4);box-shadow:0 24px 60px rgba(0,0,0,.6);padding:1.5rem;width:100%;max-height:90vh;overflow-y:auto;}
 .mtitle{font-size:.95rem;font-weight:800;margin-bottom:1.1rem;display:flex;align-items:center;gap:.4rem;}
 .macts{margin-top:1.1rem;display:flex;justify-content:flex-end;gap:.4rem;flex-wrap:wrap;}
@@ -313,7 +315,30 @@ input[type=number]{-moz-appearance:textfield;}
 .step4-mon-info{flex:1;min-width:0;}
 .step4-mon-name{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:.18rem;}
 
-/* ── Step 5 (Loot) ── */
+/* ── Step 5 (Wheel of Destiny) ── */
+.wheel-step-wrap{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+@media(max-width:700px){.wheel-step-wrap{grid-template-columns:1fr;}}
+.wheel-section{background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.75rem;}
+.wheel-section-lbl{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:.55rem;}
+.wheel-perk-row{display:flex;align-items:flex-start;gap:.5rem;padding:.45rem .5rem;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all .12s;}
+.wheel-perk-row:hover{background:rgba(var(--accent-rgb),.07);border-color:rgba(var(--accent-rgb),.2);}
+.wheel-perk-row.on{background:rgba(var(--accent-rgb),.12);border-color:rgba(var(--accent-rgb),.35);}
+.wheel-perk-chk{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--c4);background:var(--c3);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:.6rem;transition:all .12s;}
+.wheel-perk-row.on .wheel-perk-chk{background:var(--gold);border-color:var(--gold);color:var(--btn-g-text);}
+.wheel-perk-icon{font-size:1.1rem;flex-shrink:0;line-height:1;}
+.wheel-perk-info{flex:1;min-width:0;}
+.wheel-perk-name{font-size:.82rem;font-weight:700;color:var(--t0);}
+.wheel-perk-desc{font-size:.65rem;color:var(--t2);margin-top:.1rem;line-height:1.4;}
+.wheel-perk-tag{display:inline-flex;align-items:center;gap:.25rem;padding:.15rem .45rem;border-radius:20px;font-size:.65rem;font-weight:700;margin-bottom:.2rem;}
+.wheel-perk-tag.rev{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.3);color:var(--gold);}
+.wheel-perk-tag.conv{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.28);color:var(--blue);}
+.wheel-pts-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;}
+.wheel-pts-inp{background:var(--c3);border:1.5px solid var(--c4);border-radius:8px;color:var(--t0);padding:.4rem .65rem;font-size:.95rem;font-weight:700;width:100px;text-align:center;}
+.wheel-pts-inp:focus{outline:none;border-color:var(--gold);}
+.wheel-link-inp{background:var(--c3);border:1.5px solid var(--c4);border-radius:8px;color:var(--t0);padding:.4rem .65rem;font-size:.75rem;width:100%;box-sizing:border-box;}
+.wheel-link-inp:focus{outline:none;border-color:var(--gold);}
+.wheel-voc-note{font-size:.75rem;color:var(--t1);padding:.4rem 0;margin-bottom:.35rem;}
+/* ── Step 6 (Loot) ── */
 .loot-status{font-size:.75rem;color:var(--t1);padding:.4rem 0;display:flex;align-items:center;gap:.5rem;}
 .loot-cats{display:flex;flex-direction:column;gap:.55rem;}
 .loot-cat-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:.18rem .55rem;border-radius:20px;display:inline-flex;align-items:center;gap:.25rem;margin-bottom:.3rem;}
@@ -422,10 +447,10 @@ input[type=number]{-moz-appearance:textfield;}
 .sum-mon-c-info{flex:1;min-width:0;}
 .sum-mon-c-name{font-size:.82rem;font-weight:700;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sum-mon-c-link{font-size:.65rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.28rem;}
-.sum-charm-sm{display:flex;align-items:center;gap:.28rem;padding:.18rem .4rem;border-radius:6px;margin-bottom:.18rem;font-size:.65rem;font-weight:700;}
-.sum-charm-sm.major{background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.25);color:var(--gold);}
-.sum-charm-sm.minor{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#c4b5fd;}
-.sum-charm-sm img{width:15px;height:15px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-charm-sm{display:flex;align-items:center;gap:.5rem;padding:.42rem .75rem;border-radius:9px;margin-bottom:.3rem;font-size:.82rem;font-weight:700;}
+.sum-charm-sm.major{background:rgba(var(--accent-rgb),.12);border:1.5px solid rgba(var(--accent-rgb),.32);color:var(--gold);}
+.sum-charm-sm.minor{background:rgba(139,92,246,.12);border:1.5px solid rgba(139,92,246,.32);color:#c4b5fd;}
+.sum-charm-sm img{width:26px;height:26px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
 .sum-no-charm-sm{font-size:.65rem;color:var(--t2);font-style:italic;}
 
 /* ── Summary 2-column layout ── */
@@ -658,7 +683,8 @@ input[type=number]{-moz-appearance:textfield;}
       <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Charms</div>
       <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Runas & Poções</div>
       <div class="wdot" id="wd4" onclick="goStep(4)"><span class="wnum">4</span> Magias & Imbu</div>
-      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Loot</div>
+      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Wheel</div>
+      <div class="wdot" id="wd6" onclick="goStep(6)"><span class="wnum">6</span> Loot</div>
     </div>
 
     <!-- Step 1: Monstros -->
@@ -788,8 +814,14 @@ input[type=number]{-moz-appearance:textfield;}
       </div>
     </div>
 
-    <!-- Step 5: Loot -->
+    <!-- Step 5: Wheel of Destiny -->
     <div class="wpanel" id="wp5">
+      <div class="sec-lbl">🔮 Wheel of Destiny</div>
+      <div id="wheelStepContent"></div>
+    </div>
+
+    <!-- Step 6: Loot -->
+    <div class="wpanel" id="wp6">
       <div class="sec-lbl">📦 Loot <span id="lootSubLbl" style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">puxando dados da wiki...</span></div>
       <div class="loot-fetch-prog" id="lootFetchProg" style="display:none;"><div class="loot-fetch-prog-bar" id="lootFetchProgBar" style="width:0%"></div></div>
       <div id="lootList" class="loot-cats"></div>
@@ -957,6 +989,59 @@ const VOC_LABELS = {druid:'Druid',sorcerer:'Sorcerer',knight:'Knight',paladin:'P
 // ══════════════════════════════════════════════════════
 // ELEMENT RESISTANCE SYSTEM
 // ══════════════════════════════════════════════════════
+// ── Wheel of Destiny perk data ──
+// ── Wheel of Destiny data (source: gitlab.com/klhio/tibia-wheel, CC BY-SA 3.0) ──
+const WD_RINGS=[4,8,12,8,4]; // slices per ring (5 rings, 36 total)
+const WD_RADII=[[22,60],[62,100],[102,142],[144,180],[182,200]]; // [innerR, outerR] per ring
+const WD_SVG=430; const WD_CX=215; const WD_CY=215; const WD_GAP=1.2;
+const WD_DOM_COLORS=['#8b5cf6','#3b82f6','#10b981','#f59e0b'];
+const WD_DOM_NAMES=['Domínio I','Domínio II','Domínio III','Domínio IV'];
+const WD_DEDIC=[
+  {k:'hp',   l:'HP',    i:'❤️'},{k:'mana',  l:'MP',    i:'💧'},
+  {k:'both', l:'HP+MP', i:'⚡'},{k:'cap',   l:'Cap',   i:'🎒'},
+  {k:'hprg', l:'HPReg', i:'💚'},{k:'mprg', l:'MPReg', i:'🔷'},
+  {k:'fam',  l:'Fam',   i:'🐾'},{k:'famc', l:'FamCD', i:'⏱️'},
+  {k:'mit',  l:'Mit',   i:'🛡️'},
+];
+const WD_DEDIC_MAP=[0,1,3,8, 8,8,0,0,1,1,3,3, 3,3,3,8,8,8,0,0,0,1,1,1, 1,1,3,3,8,8,0,0, 2,2,2,2];
+const WD_CONV=[
+  'Fire Resistance','Energy Resistance','Ice Resistance','Earth Resistance',
+  'Holy/Death Res.','Mana Leech','Life Leech','Sword/Axe/Club Fgt.',
+  'Battle Instinct','Battle Healing',
+  'Aug. Fierce Berserk','Aug. Wound Cleansing','Aug. Front Sweep',
+  'Aug. Groundshaker','Aug. Chiv. Challenge',
+  'Distance Fighting','Ballistic Mastery','Positional Tactics',
+  'Aug. Divine Caldera','Aug. Swift Foot','Aug. Divine Dazzle',
+  'Aug. Strong Eth. Spear','Aug. Sharpshooter',
+  'Focus Mastery','Aug. Great Fire Wave','Aug. Energy Wave',
+  'Aug. Sap Strength','Aug. Focus Spells',
+  'Healing Link','Aug. Heal Friend','Aug. Terra Wave',
+  "Aug. Strong Ice Wave",'Aug. Mass Healing',"Aug. Nature's Embrace",
+  '+Magic Level','Runic Mastery','Aug. Magic Shield',
+];
+const WD_CONV_MAP={
+  knight:  [2,12,3,10, 7,4,0,5,7,4,1,6, 13,11,5,7,14,1,11,13,6,7,14,0, 6,3,6,4,5,2,5,4, 9,10,8,12],
+  druid:   [2,31,3,29, 34,4,0,5,34,4,1,6, 32,30,5,34,33,1,30,32,6,34,33,0, 6,3,6,4,5,2,5,4, 35,29,28,31],
+  paladin: [2,22,3,18, 15,4,0,5,15,4,1,6, 21,19,5,15,20,1,19,21,6,15,20,0, 6,3,6,4,5,2,5,4, 16,18,17,22],
+  sorcerer:[2,27,3,24, 34,4,0,5,34,4,1,6, 36,25,5,34,26,1,25,36,6,34,26,0, 6,3,6,4,5,2,5,4, 23,24,35,27],
+};
+const WD_REV_NAMES=[
+  'Gift of Life',"Executioner's Throw",'Combat Mastery','Avatar of Steel',
+  'Divine Grenade','Divine Empowerment','Avatar of Light',
+  'Beam Mastery','Drain Body','Avatar of Storm',
+  'Twin Bursts','Blessing of the Grove','Avatar of Nature',
+];
+const WD_REV_MAP={
+  knight:[3,2,0,1], druid:[12,10,0,11], paladin:[6,5,0,4], sorcerer:[9,8,0,7],
+};
+// helpers
+function _wdDomain(i){let c=0;for(let r=0;r<5;r++){if(i<c+WD_RINGS[r])return Math.floor((i-c)/(WD_RINGS[r]/4));c+=WD_RINGS[r];}return 0;}
+function _wdAngles(i){let c=0;for(let r=0;r<5;r++){if(i<c+WD_RINGS[r]){const p=i-c,s=360/WD_RINGS[r];return{r,a0:p*s+WD_GAP/2,a1:p*s+s-WD_GAP/2};}c+=WD_RINGS[r];}return{r:0,a0:0,a1:90};}
+function _wdPt(r,a){const rad=(a-90)*Math.PI/180;return{x:WD_CX+r*Math.cos(rad),y:WD_CY+r*Math.sin(rad)};}
+function _wdArc(r1,r2,a0,a1){const s1=_wdPt(r1,a0),e1=_wdPt(r1,a1),s2=_wdPt(r2,a0),e2=_wdPt(r2,a1),lg=(a1-a0>180)?1:0;return`M${s1.x.toFixed(2)},${s1.y.toFixed(2)} A${r1},${r1} 0 ${lg} 1 ${e1.x.toFixed(2)},${e1.y.toFixed(2)} L${e2.x.toFixed(2)},${e2.y.toFixed(2)} A${r2},${r2} 0 ${lg} 0 ${s2.x.toFixed(2)},${s2.y.toFixed(2)}Z`;}
+// ── (WHEEL_PERKS alias kept for summary backward compat) ──
+const WHEEL_PERKS=null; // replaced by WD_* constants above
+
 // Direct CDN URLs — hardcoded from tibia.fandom.com API (no redirect, no CORS issue)
 const ELEM_TYPES = [
   {key:'physical',  label:'Physical',   wikiField:'physicalDmgMod',  icon:'https://static.wikia.nocookie.net/tibia/images/3/37/Physical_Damage_Icon.gif/revision/latest?cb=20210531030930&path-prefix=en'},
@@ -2490,7 +2575,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_charmSelMon:null};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_charmSelMon:null,wheel:{slots:new Array(36).fill(0),link:''}};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -2506,6 +2591,7 @@ function openWizard(editId=null){
       wiz.vocation=h.vocation||null;
       wiz.loot=JSON.parse(JSON.stringify(h.loot||[]));
       wiz._lootPrices=JSON.parse(JSON.stringify(h.lootPrices||{}));
+      const hw=h.wheel||{}; wiz.wheel={slots:hw.slots&&hw.slots.length===36?[...hw.slots]:new Array(36).fill(0),link:hw.link||''};
     }
   } else {
     document.getElementById('wHuntName').value='';
@@ -2517,15 +2603,13 @@ function openWizard(editId=null){
 function closeWizard(){ _lootFetchActive=false; document.getElementById('wizOv').classList.remove('on'); }
 function setStep(n){
   wiz.step=n;
-  [1,2,3,4,5].forEach(i=>{
-    document.getElementById('wp'+i).classList.toggle('on',i===n);
-    const d=document.getElementById('wd'+i);
-    d.classList.toggle('on',i===n);
-    d.classList.toggle('done',i<n);
+  [1,2,3,4,5,6].forEach(i=>{
+    const wp=document.getElementById('wp'+i); if(wp) wp.classList.toggle('on',i===n);
+    const d=document.getElementById('wd'+i); if(d){ d.classList.toggle('on',i===n); d.classList.toggle('done',i<n); }
   });
   document.getElementById('wizBack').style.display=n>1?'':'none';
-  document.getElementById('wizNext').textContent=n===5?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
-  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 5`;
+  document.getElementById('wizNext').textContent=n===6?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
+  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 6`;
   const bar=document.getElementById('wizNameBar');
   if(bar){
     const name=document.getElementById('wHuntName').value.trim();
@@ -2541,15 +2625,177 @@ function setStep(n){
     if(wiz.vocation){ const b=document.getElementById('vbtn_'+wiz.vocation); if(b) b.classList.add('on'); }
     renderSpellGrid();
   }
-  if(n===5){ startLootFetch(); }
+  if(n===5){ renderWheelStep(); }
+  if(n===6){ startLootFetch(); }
 }
-function goStep(n){ if(n<1||n>5)return; setStep(n); }
+function goStep(n){ if(n<1||n>6)return; setStep(n); }
 function wizNext(){
-  if(wiz.step<5){
+  if(wiz.step<6){
     if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('⚠️ Insira o nome da hunt');return;}
     setStep(wiz.step+1);
   } else saveHunt();
 }
+// ── Wheel of Destiny Step (SVG interactive planner) ───
+function renderWheelStep(){
+  const el=document.getElementById('wheelStepContent'); if(!el) return;
+  const voc=wiz.vocation;
+  if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36)
+    wiz.wheel={slots:new Array(36).fill(0),link:''};
+  const slots=wiz.wheel.slots;
+  const lnk=wiz.wheel.link||'';
+
+  // Domain totals
+  const dp=[0,0,0,0];
+  for(let i=0;i<36;i++) dp[_wdDomain(i)]+=slots[i]||0;
+  const totalPts=dp.reduce((a,b)=>a+b,0);
+
+  // Revelation tier per domain (simplified: 9/18/27 pts thresholds)
+  const revTier=(d)=>dp[d]>=27?3:dp[d]>=18?2:dp[d]>=9?1:0;
+
+  // Handlers
+  window._whlClick=(i)=>{ slots[i]=((slots[i]||0)+1)%5; renderWheelStep(); };
+  window._whlRClick=(i,e)=>{ e.preventDefault(); slots[i]=Math.max(0,(slots[i]||0)-1); renderWheelStep(); return false; };
+  window._whlLink=(v)=>{ wiz.wheel.link=v; };
+  window._whlReset=()=>{ wiz.wheel.slots=new Array(36).fill(0); renderWheelStep(); };
+
+  // ── Build SVG ──────────────────────────────────────
+  const convMap=voc?(WD_CONV_MAP[voc]||null):null;
+  const revMap=voc?(WD_REV_MAP[voc]||null):null;
+  let svg='';
+
+  // Domain background glow
+  for(let d=0;d<4;d++){
+    const a0=d*90,a1=a0+89.5;
+    svg+=`<path d="${_wdArc(WD_RADII[0][0]-2,WD_RADII[4][1]+4,a0,a1)}" fill="${WD_DOM_COLORS[d]}" fill-opacity="0.055" stroke="none"/>`;
+  }
+
+  // Slots
+  for(let i=0;i<36;i++){
+    const {r,a0,a1}=_wdAngles(i);
+    const dom=_wdDomain(i);
+    const lv=slots[i]||0;
+    const [ri,ro]=WD_RADII[r];
+    const col=WD_DOM_COLORS[dom];
+    const fill=lv===0?'none':col;
+    const fop=lv===0?0:0.18+(lv/4)*0.72;
+    const sop=lv===0?0.2:0.65;
+    const midA=(a0+a1)/2, midR=(ri+ro)/2;
+    const tp=_wdPt(midR,midA);
+    const di=WD_DEDIC_MAP[i];
+    const icon=WD_DEDIC[di].i;
+    const convIdx=convMap?convMap[i]:null;
+    const convN=convIdx!=null?(WD_CONV[convIdx]||''):'';
+    const ttip=`${WD_DEDIC[di].l} (Nível ${lv}/4)${convN?' | '+convN:''}`;
+
+    svg+=`<path d="${_wdArc(ri,ro,a0,a1)}" fill="${fill}" fill-opacity="${fop}" stroke="${col}" stroke-width="0.9" stroke-opacity="${sop}" style="cursor:pointer;" onclick="window._whlClick(${i})" oncontextmenu="window._whlRClick(${i},event)"><title>${ttip}</title></path>`;
+
+    // Icon (only for rings 0,2,4 which have enough space)
+    if(r===0||r===4){
+      svg+=`<text x="${tp.x.toFixed(1)}" y="${(tp.y+4).toFixed(1)}" text-anchor="middle" font-size="13" style="pointer-events:none;user-select:none;">${icon}</text>`;
+    } else if(r===2){
+      svg+=`<text x="${tp.x.toFixed(1)}" y="${(tp.y+3).toFixed(1)}" text-anchor="middle" font-size="9" style="pointer-events:none;user-select:none;">${icon}</text>`;
+    }
+
+    // Level pip dots on outer edge of each filled slot
+    if(lv>0){
+      const dotR=ro-5;
+      for(let l=0;l<lv;l++){
+        const dA=midA-(lv-1)*4+l*8;
+        const dp2=_wdPt(dotR,dA);
+        svg+=`<circle cx="${dp2.x.toFixed(1)}" cy="${dp2.y.toFixed(1)}" r="2" fill="${col}" fill-opacity="0.9" style="pointer-events:none;"/>`;
+      }
+    }
+  }
+
+  // Revelation perk icons at domain centers (outer label)
+  for(let d=0;d<4;d++){
+    const a=d*90+45;
+    const pr=_wdPt(WD_RADII[4][1]+16,a);
+    const tier=revTier(d);
+    const tc=tier===3?'#fbbf24':tier===2?'#a78bfa':tier===1?'#60a5fa':'#4b5563';
+    const revIdx=revMap?revMap[d]:null;
+    const rn=revIdx!=null?(WD_REV_NAMES[revIdx]||''):'';
+    const ri2=rn.includes('Avatar')?'👁️':rn.includes('Gift')?'💝':rn.includes('Exec')?'⚔️':rn.includes('Combat')?'🗡️':rn.includes('Grenade')?'💫':rn.includes('Empow')?'🌟':rn.includes('Beam')?'🔆':rn.includes('Drain')?'🧪':rn.includes('Twin')?'❄️':rn.includes('Blessing')?'🌿':'⭐';
+    svg+=`<text x="${pr.x.toFixed(1)}" y="${pr.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="${tc}" style="pointer-events:none;user-select:none;" title="${rn}">${ri2}</text>`;
+    // Tier badge
+    if(tier>0){
+      const tb=_wdPt(WD_RADII[4][1]+28,a);
+      svg+=`<text x="${tb.x.toFixed(1)}" y="${tb.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="${tc}" font-weight="700" style="pointer-events:none;user-select:none;">E${tier}</text>`;
+    }
+  }
+
+  // Domain dividers
+  for(let d=0;d<4;d++){
+    const a=d*90;
+    const p0=_wdPt(WD_RADII[0][0]-2,a);
+    const p1=_wdPt(WD_RADII[4][1]+4,a);
+    svg+=`<line x1="${p0.x.toFixed(1)}" y1="${p0.y.toFixed(1)}" x2="${p1.x.toFixed(1)}" y2="${p1.y.toFixed(1)}" stroke="#1a1535" stroke-width="2" style="pointer-events:none;"/>`;
+  }
+
+  // Center circle
+  svg+=`<circle cx="${WD_CX}" cy="${WD_CY}" r="20" fill="#110e2a" stroke="rgba(167,139,250,.4)" stroke-width="1.5"/>`;
+  svg+=`<text x="${WD_CX}" y="${WD_CY+1}" text-anchor="middle" dominant-baseline="middle" font-size="18" style="pointer-events:none;">💝</text>`;
+
+  // ── Build panel HTML ───────────────────────────────
+  const vocLabel=voc?`${VOC_ICONS[voc]} ${VOC_LABELS[voc]}`:'Nenhuma';
+
+  let html=`<div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+  <div style="flex:0 0 auto;">
+    <svg viewBox="0 0 ${WD_SVG} ${WD_SVG}" width="290" height="290" style="display:block;border-radius:50%;background:var(--c1);">${svg}</svg>
+    <div style="text-align:center;font-size:.6rem;color:var(--t2);margin-top:.3rem;">Clique: +nível &nbsp;|&nbsp; Botão direito: −nível</div>
+  </div>
+  <div style="flex:1;min-width:190px;">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.65rem;">
+      <span style="font-size:.82rem;font-weight:700;color:var(--gold);">${vocLabel}</span>
+      <span style="margin-left:auto;font-size:.75rem;color:var(--t1);">Total <strong style="color:var(--gold);">${totalPts}</strong> pts</span>
+    </div>
+    ${!voc?'<div class="wheel-voc-note">⚠️ Selecione vocação no Passo 4 para ver as perks corretas.</div>':''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-bottom:.65rem;">`;
+
+  for(let d=0;d<4;d++){
+    const col=WD_DOM_COLORS[d];
+    const tier=revTier(d);
+    const tc=tier===3?'#fbbf24':tier===2?'#a78bfa':tier===1?'#60a5fa':'var(--t2)';
+    const revIdx=revMap?revMap[d]:null;
+    const rn=revIdx!=null?(WD_REV_NAMES[revIdx]||'—'):'—';
+    html+=`<div style="background:var(--c2);border:1px solid ${col}44;border-radius:9px;padding:.42rem .55rem;">
+      <div style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:${col};">${WD_DOM_NAMES[d]}</div>
+      <div style="font-size:1.05rem;font-weight:800;color:${col};line-height:1.2;">${dp[d]} <span style="font-size:.6rem;font-weight:400;color:var(--t2);">pts</span></div>
+      <div style="font-size:.6rem;color:${tc};margin-top:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${rn}">${rn}</div>
+      <div style="font-size:.58rem;color:${tc};">${tier>0?'Estágio '+tier:'Bloqueado'}</div>
+    </div>`;
+  }
+
+  html+=`</div>`;
+
+  // Active revelations list
+  if(revMap){
+    html+=`<div style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:.3rem;">✨ Revelações</div><div style="display:flex;flex-direction:column;gap:.2rem;margin-bottom:.6rem;">`;
+    for(let d=0;d<4;d++){
+      const tier=revTier(d);
+      const revIdx=revMap[d];
+      const rn=WD_REV_NAMES[revIdx]||'?';
+      const col=WD_DOM_COLORS[d];
+      const tc=tier===3?'#fbbf24':tier===2?'#a78bfa':tier===1?'#60a5fa':'var(--t2)';
+      html+=`<div style="display:flex;align-items:center;gap:.32rem;opacity:${tier>0?1:0.38};">
+        <span style="font-size:.58rem;font-weight:700;padding:.06rem .28rem;border-radius:3px;background:${col}33;color:${col};">D${d+1}</span>
+        <span style="font-size:.72rem;">${rn}</span>
+        <span style="margin-left:auto;font-size:.6rem;font-weight:700;color:${tc};">${tier>0?'Est.'+tier:'—'}</span>
+      </div>`;
+    }
+    html+=`</div>`;
+  }
+
+  html+=`<button class="btn btn-o" style="font-size:.62rem;padding:.18rem .45rem;margin-bottom:.6rem;" onclick="window._whlReset()">🔄 Resetar</button>
+  <div>
+    <label style="font-size:.65rem;color:var(--t1);display:block;margin-bottom:.22rem;">🔗 Link do planner <span style="color:var(--t2);">(opcional)</span></label>
+    <input class="wheel-link-inp" type="url" value="${lnk.replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" placeholder="https://www.tibia.com/community/?subtopic=wheelofdestinyplanner&code=...">
+  </div></div></div>`;
+
+  el.innerHTML=html;
+}
+// ─────────────────────────────────────────────────────
+
 function saveHunt(){
   const name=document.getElementById('wHuntName').value.trim(); if(!name){toast('⚠️ Insira o nome da hunt');return;}
   const isEdit=!!wiz.editId;
@@ -2565,6 +2811,7 @@ function saveHunt(){
     monsters:wiz.monsters.map(x=>({...x})),
     loot:wiz.loot.map(x=>({...x})),
     lootPrices:{...(wiz._lootPrices||{})},
+    wheel:{slots:[...(wiz.wheel?.slots||new Array(36).fill(0))],link:wiz.wheel?.link||''},
     createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
     updatedAt:Date.now()
   };
@@ -2625,7 +2872,8 @@ function buildSummaryHTML(h){
   const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length;
   if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.95rem;">Hunt vazia — nenhum item configurado.</div>';
 
-  const itm=(x,fallbackEmoji)=>`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:`<span style="font-size:1.3rem;">${fallbackEmoji}</span>`}<div><div class="sum-item-name">${x.name}</div>${x.sub?`<div class="sum-item-sub">${x.sub}</div>`:''}</div>${x.qty!=null?`<span class="sum-item-qty">×${x.qty}</span>`:x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`;
+  // Item row: no icon, just name + optional sub + qty
+  const itm=(x)=>`<div class="sum-item"><div style="flex:1;min-width:0;"><div class="sum-item-name">${x.name}</div>${x.sub?`<div class="sum-item-sub">${x.sub}</div>`:''}</div>${x.qty!=null?`<span class="sum-item-qty">×${x.qty}</span>`:x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`;
 
   let html='';
 
@@ -2639,8 +2887,8 @@ function buildSummaryHTML(h){
     // LEFT — REFIL
     if(hasRefil){
       html+=`<div class="sum-sec"><div class="sum-sec-lbl">🔁 Refil</div><div class="sum-items-col">`;
-      (h.pots||[]).forEach(x=>{ html+=itm(x,'💊'); });
-      (h.runas||[]).forEach(x=>{ html+=itm(x,'📜'); });
+      (h.pots||[]).forEach(x=>{ html+=itm(x); });
+      (h.runas||[]).forEach(x=>{ html+=itm(x); });
       html+='</div></div>';
     } else { html+='<div></div>'; }
 
@@ -2648,19 +2896,48 @@ function buildSummaryHTML(h){
     html+='<div>';
     if(hasMagias){
       html+=`<div class="sum-sec"><div class="sum-sec-lbl">✨ Magias${h.vocation?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">(${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]})</span>`:''}</div><div class="sum-items-col">`;
-      h.spells.forEach(x=>{ html+=`<div class="sum-item">${x.img?`<img class="sum-item-img" src="${x.img}" alt="">`:'<span style="font-size:1.3rem;">✨</span>'}<div><div class="sum-item-name">${x.name}</div><div class="sum-item-sub" style="font-style:italic;">${x.words||''}</div></div></div>`; });
+      h.spells.forEach(x=>{ html+=itm({name:x.name,sub:x.words||''}); });
       html+='</div></div>';
     }
     if(hasImbu){
       const imbuMap={};
       (h.imbu||[]).forEach(x=>{ if(!imbuMap[x.id]) imbuMap[x.id]={...x,cnt:0}; imbuMap[x.id].cnt++; });
       html+=`<div class="sum-sec"><div class="sum-sec-lbl">🛡️ Imbuements</div><div class="sum-items-col">`;
-      Object.values(imbuMap).forEach(x=>{ html+=itm(x,'🛡️'); });
+      Object.values(imbuMap).forEach(x=>{ html+=itm(x); });
       html+='</div></div>';
     }
     html+='</div>';
 
     html+='</div>'; // end sum-top-grid
+  }
+
+  // ── WHEEL OF DESTINY ──
+  {
+    const wh=h.wheel||{};
+    const wslots=Array.isArray(wh.slots)&&wh.slots.length===36?wh.slots:null;
+    const hasLink=!!(wh.link||'').trim();
+    if(wslots){
+      const totalPts=wslots.reduce((a,b)=>a+(b||0),0);
+      const revMap=h.vocation?WD_REV_MAP[h.vocation]:null;
+      const domPts=[0,0,0,0];
+      for(let i=0;i<36;i++) domPts[_wdDomain(i)]+=wslots[i]||0;
+      const revTier=(d)=>domPts[d]>=27?3:domPts[d]>=18?2:domPts[d]>=9?1:0;
+      if(totalPts>0||hasLink){
+        html+=`<div class="sum-sec" style="margin-bottom:.55rem;"><div class="sum-sec-lbl">🔮 Wheel of Destiny <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${totalPts} pontos</span></div>`;
+        if(revMap){
+          const tags=revMap.map((ri,d)=>{
+            const tier=revTier(d);
+            if(!tier) return '';
+            const rn=WD_REV_NAMES[ri]||'';
+            const col=WD_DOM_COLORS[d];
+            return `<span class="wheel-perk-tag rev" style="background:${col}22;border-color:${col}55;color:${col};">${rn} <span style="opacity:.7">Est.${tier}</span></span>`;
+          }).filter(Boolean).join('');
+          if(tags) html+=`<div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem;">${tags}</div>`;
+        }
+        if(hasLink) html+=`<a href="${wh.link}" target="_blank" style="font-size:.65rem;color:var(--blue);text-decoration:none;">🔗 Ver planner completo</a>`;
+        html+=`</div>`;
+      }
+    }
   }
 
   // ── FULL WIDTH: MONSTROS (clicável para filtrar loot) ──
@@ -2674,7 +2951,8 @@ function buildSummaryHTML(h){
       const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">⭐ ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">🔮 ${m.minorCharm.name}</div>`:'';
       const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
-      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}</div></div>`;
+      const res=m.resistances?buildResistRow(m.resistances,false,true):'';
+      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}${res}</div></div>`;
     });
     html+='</div></div>';
   }
@@ -2716,7 +2994,8 @@ function renderHunts(){
       const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
-      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}</a>`;
+      const res=m.resistances?buildResistRow(m.resistances,false,true):'';
+      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${res}</a>`;
     }).join('');
 
     const bodyId='hb_'+h.id;
