@@ -315,7 +315,30 @@ input[type=number]{-moz-appearance:textfield;}
 .step4-mon-info{flex:1;min-width:0;}
 .step4-mon-name{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:.18rem;}
 
-/* ── Step 5 (Loot) ── */
+/* ── Step 5 (Wheel of Destiny) ── */
+.wheel-step-wrap{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+@media(max-width:700px){.wheel-step-wrap{grid-template-columns:1fr;}}
+.wheel-section{background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.75rem;}
+.wheel-section-lbl{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:.55rem;}
+.wheel-perk-row{display:flex;align-items:flex-start;gap:.5rem;padding:.45rem .5rem;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all .12s;}
+.wheel-perk-row:hover{background:rgba(var(--accent-rgb),.07);border-color:rgba(var(--accent-rgb),.2);}
+.wheel-perk-row.on{background:rgba(var(--accent-rgb),.12);border-color:rgba(var(--accent-rgb),.35);}
+.wheel-perk-chk{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--c4);background:var(--c3);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:.6rem;transition:all .12s;}
+.wheel-perk-row.on .wheel-perk-chk{background:var(--gold);border-color:var(--gold);color:var(--btn-g-text);}
+.wheel-perk-icon{font-size:1.1rem;flex-shrink:0;line-height:1;}
+.wheel-perk-info{flex:1;min-width:0;}
+.wheel-perk-name{font-size:.82rem;font-weight:700;color:var(--t0);}
+.wheel-perk-desc{font-size:.65rem;color:var(--t2);margin-top:.1rem;line-height:1.4;}
+.wheel-perk-tag{display:inline-flex;align-items:center;gap:.25rem;padding:.15rem .45rem;border-radius:20px;font-size:.65rem;font-weight:700;margin-bottom:.2rem;}
+.wheel-perk-tag.rev{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.3);color:var(--gold);}
+.wheel-perk-tag.conv{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.28);color:var(--blue);}
+.wheel-pts-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;}
+.wheel-pts-inp{background:var(--c3);border:1.5px solid var(--c4);border-radius:8px;color:var(--t0);padding:.4rem .65rem;font-size:.95rem;font-weight:700;width:100px;text-align:center;}
+.wheel-pts-inp:focus{outline:none;border-color:var(--gold);}
+.wheel-link-inp{background:var(--c3);border:1.5px solid var(--c4);border-radius:8px;color:var(--t0);padding:.4rem .65rem;font-size:.75rem;width:100%;box-sizing:border-box;}
+.wheel-link-inp:focus{outline:none;border-color:var(--gold);}
+.wheel-voc-note{font-size:.75rem;color:var(--t1);padding:.4rem 0;margin-bottom:.35rem;}
+/* ── Step 6 (Loot) ── */
 .loot-status{font-size:.75rem;color:var(--t1);padding:.4rem 0;display:flex;align-items:center;gap:.5rem;}
 .loot-cats{display:flex;flex-direction:column;gap:.55rem;}
 .loot-cat-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:.18rem .55rem;border-radius:20px;display:inline-flex;align-items:center;gap:.25rem;margin-bottom:.3rem;}
@@ -660,7 +683,8 @@ input[type=number]{-moz-appearance:textfield;}
       <div class="wdot" id="wd2" onclick="goStep(2)"><span class="wnum">2</span> Charms</div>
       <div class="wdot" id="wd3" onclick="goStep(3)"><span class="wnum">3</span> Runas & Poções</div>
       <div class="wdot" id="wd4" onclick="goStep(4)"><span class="wnum">4</span> Magias & Imbu</div>
-      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Loot</div>
+      <div class="wdot" id="wd5" onclick="goStep(5)"><span class="wnum">5</span> Wheel</div>
+      <div class="wdot" id="wd6" onclick="goStep(6)"><span class="wnum">6</span> Loot</div>
     </div>
 
     <!-- Step 1: Monstros -->
@@ -790,8 +814,14 @@ input[type=number]{-moz-appearance:textfield;}
       </div>
     </div>
 
-    <!-- Step 5: Loot -->
+    <!-- Step 5: Wheel of Destiny -->
     <div class="wpanel" id="wp5">
+      <div class="sec-lbl">🔮 Wheel of Destiny</div>
+      <div id="wheelStepContent"></div>
+    </div>
+
+    <!-- Step 6: Loot -->
+    <div class="wpanel" id="wp6">
       <div class="sec-lbl">📦 Loot <span id="lootSubLbl" style="font-weight:400;color:var(--t1);font-size:.65rem;text-transform:none;letter-spacing:0;">puxando dados da wiki...</span></div>
       <div class="loot-fetch-prog" id="lootFetchProg" style="display:none;"><div class="loot-fetch-prog-bar" id="lootFetchProgBar" style="width:0%"></div></div>
       <div id="lootList" class="loot-cats"></div>
@@ -959,6 +989,70 @@ const VOC_LABELS = {druid:'Druid',sorcerer:'Sorcerer',knight:'Knight',paladin:'P
 // ══════════════════════════════════════════════════════
 // ELEMENT RESISTANCE SYSTEM
 // ══════════════════════════════════════════════════════
+// ── Wheel of Destiny perk data ──
+const WHEEL_PERKS = {
+  knight:{
+    label:'Elite Knight',
+    revelation:[
+      {id:'avatar_steel',  icon:'🛡️', name:'Avatar of Steel',      desc:'Avatar defensivo — ataques críticos + redução de dano'},
+      {id:'exec_throw',    icon:'⚔️', name:"Executioner's Throw",  desc:'Arremessa arma em cadeia (bônus vs. <30% HP)'},
+      {id:'pow_impact_ek', icon:'💥', name:'Powerful Impact',       desc:'Próximo ataque após exori/gran causa dano extra'},
+      {id:'battle_inst',   icon:'⚡', name:'Battle Instinct',       desc:'+Shielding e skill por cada criatura adjacente'},
+    ],
+    conviction:[
+      {id:'combat_mast',   icon:'🗡️', name:'Combat Mastery',        desc:'+Defesa de escudo e +crit extra com arma 2H'},
+    ]
+  },
+  paladin:{
+    label:'Royal Paladin',
+    revelation:[
+      {id:'avatar_light',  icon:'✨', name:'Avatar of Light',       desc:'Avatar sagrado — ataques críticos + redução de dano'},
+      {id:'divine_gren',   icon:'💫', name:'Divine Grenade',         desc:'Granada sagrada de área (cooldown reduzido por estágio)'},
+      {id:'pow_impact_rp', icon:'💥', name:'Powerful Impact',        desc:'Ataques à distância com dano extra'},
+      {id:'div_empower',   icon:'🌟', name:'Divine Empowerment',     desc:'+Dano ao ficar em campo sagrado a cada Nth ataque'},
+    ],
+    conviction:[
+      {id:'chained_pen',   icon:'🔗', name:'Chained Penance',        desc:'Ataques encadeiam em até 4 criaturas próximas'},
+    ]
+  },
+  druid:{
+    label:'Elder Druid',
+    revelation:[
+      {id:'avatar_nat',    icon:'🌿', name:'Avatar of Nature',       desc:'Avatar natural — ataques críticos + redução de dano'},
+      {id:'twin_bursts',   icon:'❄️', name:'Twin Bursts',            desc:'Magia em área terra ou gelo (cooldown compartilhado)'},
+      {id:'pow_impact_ed', icon:'💥', name:'Powerful Impact',         desc:'+Cura e dano elemental'},
+      {id:'heal_link',     icon:'💚', name:'Healing Link',            desc:'+10% autocura ao curar aliados com Nature\'s Embrace ou Heal Friend'},
+    ],
+    conviction:[
+      {id:'bless_grove',   icon:'🌳', name:'Blessing of the Grove',  desc:'+Cura proporcional ao HP faltante do alvo'},
+    ]
+  },
+  sorcerer:{
+    label:'Master Sorcerer',
+    revelation:[
+      {id:'avatar_storm',  icon:'⛈️', name:'Avatar of Storm',        desc:'Avatar tempestade — ataques críticos + redução de dano'},
+      {id:'beam_mast',     icon:'🔆', name:'Beam Mastery',            desc:'+Dano de beams e -cooldown de outras magias por alvo atingido'},
+      {id:'pow_impact_ms', icon:'💥', name:'Powerful Impact',         desc:'+Dano mágico extra'},
+      {id:'drain_body',    icon:'🧪', name:'Drain Body',              desc:'Life/mana leech em alvos com Expose Weakness ou Sap Strength'},
+    ],
+    conviction:[
+      {id:'rune_mast',     icon:'📜', name:'Rune Mastery',            desc:'+Magic Level ao usar runas'},
+    ]
+  },
+  monk:{
+    label:'Monk',
+    revelation:[
+      {id:'avatar_equil',  icon:'☯️', name:'Avatar of Equilibrium',  desc:'Avatar monástico — ataques críticos + redução de dano'},
+      {id:'dev_knockout',  icon:'🥊', name:'Devastating Knockout',    desc:'Ataque especial de alta explosão'},
+      {id:'pow_impact_mk', icon:'💥', name:'Powerful Impact',         desc:'Bônus de dano em ataques físicos'},
+      {id:'chain_penance', icon:'🔗', name:'Chained Penance',         desc:'Dano em cadeia a até 4 criaturas (+Harmonia)'},
+    ],
+    conviction:[
+      {id:'inner_peace',   icon:'🧘', name:'Inner Peace',             desc:'Melhora regeneração de Harmonia e cura'},
+    ]
+  }
+};
+
 // Direct CDN URLs — hardcoded from tibia.fandom.com API (no redirect, no CORS issue)
 const ELEM_TYPES = [
   {key:'physical',  label:'Physical',   wikiField:'physicalDmgMod',  icon:'https://static.wikia.nocookie.net/tibia/images/3/37/Physical_Damage_Icon.gif/revision/latest?cb=20210531030930&path-prefix=en'},
@@ -2492,7 +2586,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_charmSelMon:null};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_charmSelMon:null,wheel:{perks:[],points:0,link:''}};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -2508,6 +2602,7 @@ function openWizard(editId=null){
       wiz.vocation=h.vocation||null;
       wiz.loot=JSON.parse(JSON.stringify(h.loot||[]));
       wiz._lootPrices=JSON.parse(JSON.stringify(h.lootPrices||{}));
+      wiz.wheel=JSON.parse(JSON.stringify(h.wheel||{perks:[],points:0,link:''}));
     }
   } else {
     document.getElementById('wHuntName').value='';
@@ -2519,15 +2614,13 @@ function openWizard(editId=null){
 function closeWizard(){ _lootFetchActive=false; document.getElementById('wizOv').classList.remove('on'); }
 function setStep(n){
   wiz.step=n;
-  [1,2,3,4,5].forEach(i=>{
-    document.getElementById('wp'+i).classList.toggle('on',i===n);
-    const d=document.getElementById('wd'+i);
-    d.classList.toggle('on',i===n);
-    d.classList.toggle('done',i<n);
+  [1,2,3,4,5,6].forEach(i=>{
+    const wp=document.getElementById('wp'+i); if(wp) wp.classList.toggle('on',i===n);
+    const d=document.getElementById('wd'+i); if(d){ d.classList.toggle('on',i===n); d.classList.toggle('done',i<n); }
   });
   document.getElementById('wizBack').style.display=n>1?'':'none';
-  document.getElementById('wizNext').textContent=n===5?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
-  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 5`;
+  document.getElementById('wizNext').textContent=n===6?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
+  document.getElementById('wizPgLbl').textContent=`Passo ${n} de 6`;
   const bar=document.getElementById('wizNameBar');
   if(bar){
     const name=document.getElementById('wHuntName').value.trim();
@@ -2543,15 +2636,84 @@ function setStep(n){
     if(wiz.vocation){ const b=document.getElementById('vbtn_'+wiz.vocation); if(b) b.classList.add('on'); }
     renderSpellGrid();
   }
-  if(n===5){ startLootFetch(); }
+  if(n===5){ renderWheelStep(); }
+  if(n===6){ startLootFetch(); }
 }
-function goStep(n){ if(n<1||n>5)return; setStep(n); }
+function goStep(n){ if(n<1||n>6)return; setStep(n); }
 function wizNext(){
-  if(wiz.step<5){
+  if(wiz.step<6){
     if(wiz.step===1&&!document.getElementById('wHuntName').value.trim()){toast('⚠️ Insira o nome da hunt');return;}
     setStep(wiz.step+1);
   } else saveHunt();
 }
+// ── Wheel of Destiny Step ─────────────────────────────
+function renderWheelStep(){
+  const el=document.getElementById('wheelStepContent'); if(!el) return;
+  const voc=wiz.vocation;
+  const vdata=voc?WHEEL_PERKS[voc]:null;
+  const pts=wiz.wheel?.points||0;
+  const selPerks=wiz.wheel?.perks||[];
+  const lnk=wiz.wheel?.link||'';
+
+  const togglePerk=(id)=>{
+    if(!wiz.wheel) wiz.wheel={perks:[],points:0,link:''};
+    const idx=wiz.wheel.perks.indexOf(id);
+    if(idx>=0) wiz.wheel.perks.splice(idx,1); else wiz.wheel.perks.push(id);
+    renderWheelStep();
+  };
+
+  const perkRow=(p,type)=>{
+    const on=selPerks.includes(p.id);
+    return `<div class="wheel-perk-row${on?' on':''}" onclick="window._whlToggle('${p.id}')">
+      <div class="wheel-perk-chk">${on?'✓':''}</div>
+      <div class="wheel-perk-icon">${p.icon}</div>
+      <div class="wheel-perk-info">
+        <div class="wheel-perk-name">${p.name} <span class="wheel-perk-tag ${type}" style="vertical-align:middle;">${type==='rev'?'Revelação':'Convicção'}</span></div>
+        <div class="wheel-perk-desc">${p.desc}</div>
+      </div>
+    </div>`;
+  };
+
+  window._whlToggle=togglePerk;
+  window._whlPts=(v)=>{ if(!wiz.wheel) wiz.wheel={perks:[],points:0,link:''}; wiz.wheel.points=parseInt(v)||0; };
+  window._whlLink=(v)=>{ if(!wiz.wheel) wiz.wheel={perks:[],points:0,link:''}; wiz.wheel.link=v; };
+
+  let html='';
+
+  // Points row
+  html+=`<div class="wheel-pts-row">
+    <label style="font-size:.82rem;color:var(--t1);">🔮 Pontos na roda:</label>
+    <input class="wheel-pts-inp" type="number" min="0" value="${pts}" oninput="window._whlPts(this.value)" placeholder="0">
+    ${vdata?`<span style="font-size:.75rem;color:var(--gold);font-weight:700;">${VOC_ICONS[voc]} ${vdata.label}</span>`:''}
+  </div>`;
+
+  if(!vdata){
+    html+=`<div class="wheel-voc-note">⚠️ Selecione sua vocação no <strong>Passo 4</strong> para ver os perks disponíveis.</div>`;
+  } else {
+    // 2-column grid: left = revelation, right = conviction
+    html+=`<div class="wheel-step-wrap">`;
+    // Revelation column
+    html+=`<div class="wheel-section">
+      <div class="wheel-section-lbl">✨ Perks de Revelação</div>`;
+    vdata.revelation.forEach(p=>{ html+=perkRow(p,'rev'); });
+    html+=`</div>`;
+    // Conviction column
+    html+=`<div class="wheel-section">
+      <div class="wheel-section-lbl">🔑 Perks de Convicção</div>`;
+    vdata.conviction.forEach(p=>{ html+=perkRow(p,'conv'); });
+    html+=`</div></div>`;
+  }
+
+  // Link row
+  html+=`<div style="margin-top:.75rem;">
+    <label style="font-size:.75rem;color:var(--t1);display:block;margin-bottom:.3rem;">🔗 Link do seu planner oficial <span style="color:var(--t2);font-weight:400;">(opcional — cole a URL do tibia.com)</span></label>
+    <input class="wheel-link-inp" type="url" value="${lnk.replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" placeholder="https://www.tibia.com/community/?subtopic=wheelofdestinyplanner&code=...">
+  </div>`;
+
+  el.innerHTML=html;
+}
+// ─────────────────────────────────────────────────────
+
 function saveHunt(){
   const name=document.getElementById('wHuntName').value.trim(); if(!name){toast('⚠️ Insira o nome da hunt');return;}
   const isEdit=!!wiz.editId;
@@ -2567,6 +2729,7 @@ function saveHunt(){
     monsters:wiz.monsters.map(x=>({...x})),
     loot:wiz.loot.map(x=>({...x})),
     lootPrices:{...(wiz._lootPrices||{})},
+    wheel:{...(wiz.wheel||{perks:[],points:0,link:''})},
     createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
     updatedAt:Date.now()
   };
@@ -2664,6 +2827,30 @@ function buildSummaryHTML(h){
     html+='</div>';
 
     html+='</div>'; // end sum-top-grid
+  }
+
+  // ── WHEEL OF DESTINY ──
+  const wheel=h.wheel||{};
+  const hasWheelPerks=(wheel.perks||[]).length>0;
+  const hasWheelPts=(wheel.points||0)>0;
+  const hasWheelLink=!!(wheel.link||'').trim();
+  if(hasWheelPerks||hasWheelPts||hasWheelLink){
+    const vdata=h.vocation?WHEEL_PERKS[h.vocation]:null;
+    // Build perk tag list from selected perk ids
+    const perkTags=(wheel.perks||[]).map(id=>{
+      let found=null,type='';
+      if(vdata){
+        found=vdata.revelation.find(p=>p.id===id); if(found) type='rev';
+        if(!found){ found=vdata.conviction.find(p=>p.id===id); if(found) type='conv'; }
+      }
+      if(!found) return '';
+      return `<span class="wheel-perk-tag ${type}">${found.icon} ${found.name}</span>`;
+    }).filter(Boolean).join(' ');
+
+    html+=`<div class="sum-sec" style="margin-bottom:.55rem;"><div class="sum-sec-lbl">🔮 Wheel of Destiny${hasWheelPts?` <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${wheel.points} pontos</span>`:''}</div>`;
+    if(perkTags) html+=`<div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem;">${perkTags}</div>`;
+    if(hasWheelLink) html+=`<a href="${wheel.link}" target="_blank" style="font-size:.65rem;color:var(--blue);text-decoration:none;">🔗 Ver planner completo</a>`;
+    html+=`</div>`;
   }
 
   // ── FULL WIDTH: MONSTROS (clicável para filtrar loot) ──
