@@ -2661,7 +2661,45 @@ function wizNext(){
 // ── Wheel of Destiny Step — pixel-perfect tibia-wheel port ───
 function renderWheelStep(){
   const el=document.getElementById('wheelStepContent'); if(!el) return;
-  const voc=wiz.vocation||'knight';
+  const voc=wiz.vocation; // may be null/undefined
+
+  // ── No vocation selected: show static placeholder ───
+  if(!voc){
+    el.innerHTML=`
+    <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem;">
+      <div style="position:relative;width:300px;max-width:100%;aspect-ratio:1/1;">
+        <svg viewBox="0 0 522 522" xmlns="http://www.w3.org/2000/svg" fill="transparent" style="width:100%;height:100%;display:block;">
+          <image href="${WD_A}backdrop_skillwheel.webp" x="0" y="0" width="522" height="522"/>
+          <g transform="translate(261,261)">
+            ${[0,1,2,3].map(d=>{
+              // draw all 4 domain quadrants in greyscale (neutral colour)
+              const qA=d*90, qB=qA+89;
+              const arcPath=(r1,r2)=>{
+                const[x1,y1]=_wdRot(r1,0,_wdDeg2Rad(qA)),[x2,y2]=_wdRot(r1,0,_wdDeg2Rad(qB));
+                const[x3,y3]=_wdRot(r2,0,_wdDeg2Rad(qB)),[x4,y4]=_wdRot(r2,0,_wdDeg2Rad(qA));
+                return `M${x1} ${y1} A${r1} ${r1} 0 0 1 ${x2} ${y2} L${x3} ${y3} A${r2} ${r2} 0 0 0 ${x4} ${y4}Z`;
+              };
+              return [0,1,2,3,4].map(r=>{
+                const ri=r*52,ro=ri+50;
+                return `<path d="${arcPath(ri===0?4:ri,ro)}" fill="#3a3560" fill-opacity="0.45" style="mix-blend-mode:screen;"/>`;
+              }).join('');
+            }).join('')}
+          </g>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;pointer-events:none;">
+          <div style="background:rgba(10,8,32,.82);border:1px solid rgba(167,139,250,.35);border-radius:10px;padding:.55rem .9rem;text-align:center;backdrop-filter:blur(4px);">
+            <div style="font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:.2rem;">🔮 Wheel of Destiny</div>
+            <div style="font-size:.72rem;color:var(--t1);">Selecione uma <b style="color:var(--gold);">vocação</b> no<br>Passo 4 para ativar o planejador</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:.7rem;color:var(--t2);text-align:center;">
+        A roda será liberada após escolher a vocação do personagem
+      </div>
+    </div>`;
+    return;
+  }
+
   if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36)
     wiz.wheel={slots:new Array(36).fill(0),link:''};
   if(wiz.wheel._level===undefined) wiz.wheel._level=0;
