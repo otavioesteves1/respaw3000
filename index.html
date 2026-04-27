@@ -136,6 +136,13 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 @keyframes bst-hl{0%,100%{box-shadow:none;}25%,75%{box-shadow:0 0 0 3px var(--gold),0 0 18px rgba(var(--accent-rgb),.4);}}
 /* Hunt list bestiary badge */
 .bst-hunt-badge{font-size:.72rem!important;padding:.2rem .5rem!important;color:var(--gold)!important;border-color:rgba(var(--accent-rgb),.3)!important;}
+.bst-search-inp{background:var(--c2);border:1px solid var(--c4);color:var(--t0);border-radius:8px;padding:.38rem .65rem;font-size:.82rem;min-width:150px;outline:none;transition:border-color .15s;}
+.bst-search-inp:focus{border-color:var(--accent);}
+.bst-sort-sel{background:var(--c2);border:1px solid var(--c4);color:var(--t0);border-radius:8px;padding:.38rem .55rem;font-size:.82rem;cursor:pointer;outline:none;}
+.bst-toggle-label{display:flex;align-items:center;gap:.32rem;font-size:.8rem;color:var(--t1);cursor:pointer;white-space:nowrap;user-select:none;}
+.bst-sel-bar{display:flex;align-items:center;gap:.6rem;background:rgba(var(--accent-rgb),.07);border:1px solid rgba(var(--accent-rgb),.22);border-radius:8px;padding:.42rem .75rem;margin-bottom:.6rem;font-size:.82rem;flex-wrap:wrap;}
+.bst-sel-chk{width:15px;height:15px;cursor:pointer;accent-color:var(--accent);flex-shrink:0;}
+.bst-charm-big{display:inline-flex;align-items:center;gap:.22rem;background:rgba(var(--accent-rgb),.13);border:1px solid rgba(var(--accent-rgb),.28);border-radius:5px;padding:.18rem .42rem;font-size:.78rem;font-weight:700;color:var(--gold);}
 /* Loot mini grid in hunt card */
 .hd-loot-grid{display:flex;flex-wrap:wrap;gap:.28rem;}
 .hd-loot-item{display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.3rem .3rem;background:var(--c2);border-radius:6px;border:1px solid var(--c4);min-width:46px;text-align:center;}
@@ -760,10 +767,22 @@ input[type=number]{-moz-appearance:textfield;}
   <div id="mainTabBestiary" class="main-tab-panel">
     <div class="bst-toolbar">
       <button class="btn btn-g" onclick="openBestiaryAdd()">+ Adicionar Monstro</button>
+      <input id="bstSearch" class="bst-search-inp" type="text" placeholder="🔍 Buscar por nome…" oninput="renderBestiary()">
+      <select id="bstSort" class="bst-sort-sel" onchange="renderBestiary()">
+        <option value="default">Ordem padrão</option>
+        <option value="kills_asc">Kills restantes ↑</option>
+        <option value="kills_desc">Kills restantes ↓</option>
+        <option value="difficulty">Dificuldade ↓</option>
+        <option value="charm_desc">Charm pts ↓</option>
+        <option value="group_size">Maior grupo</option>
+      </select>
+      <label class="bst-toggle-label"><input type="checkbox" id="bstShowDone" checked onchange="renderBestiary()"> Concluídos</label>
       <div style="margin-left:auto;display:flex;gap:.5rem;">
+        <button class="btn btn-o btn-sm" id="bstClearSelBtn" onclick="_bstClearSel()" style="display:none;">☐ Limpar seleção</button>
         <button class="btn btn-o" onclick="save()">💾 Salvar</button>
       </div>
     </div>
+    <div id="bstSelBar" class="bst-sel-bar" style="display:none;"></div>
     <div id="bstCounter" class="bst-counter" style="display:none;"></div>
     <div id="bstList"></div>
   </div>
@@ -4051,6 +4070,51 @@ async function fetchBestiaryData(name){
 // ── Drag state ──
 let _bstDragId=null;
 let _bstWiz={pending:[],mode:'url'};
+// ── Selection state ──
+let _bstSelected=new Set();
+
+// ── Sort / filter helpers ──
+const DIFF_ORDER={Harmless:1,Trivial:2,Easy:3,Medium:4,Hard:5,Challenging:6};
+function _bstRemaining(b){
+  if(b.isGroup)return b.monsters.reduce((s,m)=>s+Math.max(0,(m.killsNeeded||0)-(m.currentKills||0)),0);
+  return Math.max(0,(b.killsNeeded||0)-(b.currentKills||0));
+}
+function _bstCharmTotal(b){
+  if(b.isGroup)return b.monsters.reduce((s,m)=>s+(m.charmPoints||0),0);
+  return b.charmPoints||0;
+}
+function _bstDiffNum(b){
+  const OLD_MAP={trivial:'Trivial',easy:'Easy',medium:'Medium',hard:'Hard',legendary:'Hard',harmless:'Harmless'};
+  const lv=b.isGroup?(b.monsters[0]?.bestiarylevel||'Medium'):(b.bestiarylevel||(OLD_MAP[b.difficulty])||'Medium');
+  return DIFF_ORDER[lv]||4;
+}
+
+// ── Selection actions ──
+function _bstToggleSel(id,checked){
+  if(checked)_bstSelected.add(id);else _bstSelected.delete(id);
+  _bstUpdateSelBar();
+}
+function _bstClearSel(){_bstSelected.clear();renderBestiary();}
+function _bstUpdateSelBar(){
+  const bs=state.bestiary||[];
+  let selCharm=0,selCount=0,selMons=0;
+  _bstSelected.forEach(id=>{
+    const entry=bs.find(x=>x.id===id);if(!entry)return;
+    selCount++;
+    if(entry.isGroup){selMons+=entry.monsters.length;selCharm+=entry.monsters.reduce((s,m)=>s+(m.charmPoints||0),0);}
+    else{selMons++;selCharm+=entry.charmPoints||0;}
+  });
+  const bar=document.getElementById('bstSelBar');
+  const btn=document.getElementById('bstClearSelBtn');
+  if(bar){
+    if(selCount>0){
+      bar.style.display='flex';
+      bar.innerHTML=`<span>☑️ <strong>${selCount}</strong> selecionado${selCount!==1?'s':''} · <strong>${selMons}</strong> monstro${selMons!==1?'s':''}</span>`
+        +`<span style="margin-left:auto;color:var(--gold);font-weight:700;font-size:.88rem;">✨ ${selCharm} charm pts</span>`;
+    }else{bar.style.display='none';}
+  }
+  if(btn)btn.style.display=selCount?'':'none';
+}
 
 // ── Drag handlers ──
 function _bstOnDragStart(id,e){
@@ -4108,33 +4172,63 @@ function renderBestiary(){
   const counter=document.getElementById('bstCounter');
   if(!el) return;
   const bs=state.bestiary||[];
-  const active=bs.filter(b=>!b.completed);
-  const done=bs.filter(b=>b.completed);
 
-  const totalRem=active.reduce((s,b)=>{
-    if(b.isGroup) return s+b.monsters.reduce((ms,m)=>ms+Math.max(0,(m.killsNeeded||0)-(m.currentKills||0)),0);
-    return s+Math.max(0,(b.killsNeeded||0)-(b.currentKills||0));
-  },0);
-  const charmPend=active.reduce((s,b)=>{
-    if(b.isGroup) return s+b.monsters.reduce((ms,m)=>ms+(m.charmPoints||0),0);
-    return s+(b.charmPoints||0);
-  },0);
-  const charmEarned=done.reduce((s,b)=>{
-    if(b.isGroup) return s+b.monsters.reduce((ms,m)=>ms+(m.charmPoints||0),0);
-    return s+(b.charmPoints||0);
-  },0);
-
+  // ── Counter totals (always from full list) ──
+  const allActive=bs.filter(b=>!b.completed);
+  const allDone=bs.filter(b=>b.completed);
+  const totalRem=allActive.reduce((s,b)=>s+_bstRemaining(b),0);
+  const charmPend=allActive.reduce((s,b)=>s+_bstCharmTotal(b),0);
+  const charmEarned=allDone.reduce((s,b)=>s+_bstCharmTotal(b),0);
+  const charmTotal=charmPend+charmEarned;
   if(bs.length){
     counter.style.display='flex';
-    counter.innerHTML=`<span>⚔️ Em progresso: <strong>${active.length}</strong></span><span>✅ Concluídos: <strong>${done.length}</strong></span>${totalRem?`<span>🎯 Kills restantes: <strong>${totalRem.toLocaleString('pt-BR')}</strong></span>`:''}${charmEarned?`<span>✨ Charm: <strong>${charmEarned}</strong>${charmPend?` <span style="color:var(--t2);font-weight:400;">(+${charmPend} pend.)</span>`:''}</span>`:''}`;
+    counter.innerHTML=
+      `<span>⚔️ Em progresso: <strong>${allActive.length}</strong></span>`
+      +`<span>✅ Concluídos: <strong>${allDone.length}</strong></span>`
+      +(totalRem?`<span>🎯 Kills restantes: <strong>${totalRem.toLocaleString('pt-BR')}</strong></span>`:'')
+      +`<span>✨ Charm total: <strong>${charmTotal}</strong>`
+        +(charmEarned?` <span style="color:var(--green);font-weight:400;">(${charmEarned} ganhos)</span>`:'')+`</span>`;
   }else{
     counter.style.display='none';
   }
 
   if(!bs.length){
     el.innerHTML=`<div class="bst-empty"><div class="bst-empty-ico">📖</div><div style="font-weight:700;font-size:.95rem;color:var(--t0);">Nenhum monstro no Bestiary</div><div style="margin-top:.4rem;font-size:.82rem;">Clique em "+ Adicionar Monstro" para começar.</div></div>`;
+    _bstUpdateSelBar();
     return;
   }
+
+  // ── Filters ──
+  const search=(document.getElementById('bstSearch')?.value||'').toLowerCase().trim();
+  const sortMode=document.getElementById('bstSort')?.value||'default';
+  const showDone=document.getElementById('bstShowDone')?.checked??true;
+
+  let filtered=bs.filter(b=>{
+    if(!showDone&&b.completed)return false;
+    if(!search)return true;
+    if(b.isGroup)return b.groupName.toLowerCase().includes(search)||b.monsters.some(m=>m.name.toLowerCase().includes(search));
+    return b.name.toLowerCase().includes(search);
+  });
+
+  // ── Sort ──
+  const sortFn=(x,y)=>{
+    if(sortMode==='kills_asc'){
+      if(x.completed&&!y.completed)return 1;if(!x.completed&&y.completed)return -1;
+      return _bstRemaining(x)-_bstRemaining(y);
+    }
+    if(sortMode==='kills_desc'){
+      if(x.completed&&!y.completed)return 1;if(!x.completed&&y.completed)return -1;
+      return _bstRemaining(y)-_bstRemaining(x);
+    }
+    if(sortMode==='difficulty')return _bstDiffNum(y)-_bstDiffNum(x);
+    if(sortMode==='charm_desc')return _bstCharmTotal(y)-_bstCharmTotal(x);
+    if(sortMode==='group_size'){const sx=x.isGroup?x.monsters.length:1,sy=y.isGroup?y.monsters.length:1;return sy-sx;}
+    return 0;
+  };
+
+  const active=filtered.filter(b=>!b.completed);
+  const done=filtered.filter(b=>b.completed);
+  if(sortMode!=='default'){active.sort(sortFn);done.sort(sortFn);}
 
   let html='';
   if(active.length){
@@ -4147,7 +4241,11 @@ function renderBestiary(){
     done.forEach(b=>{html+=b.isGroup?_buildBstGroupCard(b):_buildBstCard(b);});
     html+=`</div>`;
   }
+  if(!active.length&&!done.length&&search){
+    html=`<div class="bst-empty"><div class="bst-empty-ico">🔍</div><div style="font-weight:700;font-size:.9rem;color:var(--t0);">Nenhum resultado para "${search}"</div></div>`;
+  }
   el.innerHTML=html;
+  _bstUpdateSelBar();
 }
 
 function _buildBstCard(b){
@@ -4163,9 +4261,11 @@ function _buildBstCard(b){
     ?`<img class="bst-gif" src="${b.gifUrl}" alt="${b.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="bst-gif-ph" style="display:none;">🐉</div>`
     :`<div class="bst-gif-ph">🐉</div>`;
   const weakHtml=b.weaknesses?buildResistRow(b.weaknesses,false,true):'';
+  // Only show bestiaryclass (Humanoid, etc.) — not occurrence
   const classHtml=b.bestiaryclass?`<span class="bst-badge" style="background:rgba(255,255,255,.05);color:var(--t1);border:1px solid var(--c4);">${b.bestiaryclass}</span>`:'';
   const safeId=b.id.replace(/'/g,"\\'");
   const safeName=(b.name||'').replace(/"/g,'&quot;');
+  const isSel=_bstSelected.has(b.id);
   return `<div class="bst-card${b.completed?' completed':''}" data-bst-id="${b.id}" data-bst-name="${safeName}"
     draggable="true"
     ondragstart="_bstOnDragStart('${safeId}',event)" ondragend="_bstOnDragEnd()"
@@ -4176,10 +4276,12 @@ function _buildBstCard(b){
         <div class="bst-name">${b.name}</div>
         <div class="bst-badges">
           <span class="bst-badge bst-lv-${_bstLvCls(level)}">${level}</span>
-          <span class="bst-badge bst-oc-${_bstOccCls(occ)}">${occ}</span>
           ${classHtml}
-          ${charmPts?`<span class="bst-badge bst-charm">✨ ${charmPts} pts</span>`:''}
         </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;flex-shrink:0;">
+        <input type="checkbox" class="bst-sel-chk" ${isSel?'checked':''} onchange="_bstToggleSel('${safeId}',this.checked)" title="Selecionar" onclick="event.stopPropagation()">
+        ${charmPts?`<span class="bst-charm-big">✨ ${charmPts} pts</span>`:''}
       </div>
     </div>
     ${weakHtml?`<div>${weakHtml}</div>`:''}
@@ -4210,16 +4312,19 @@ function _buildBstGroupCard(g){
   const rem=Math.max(0,totalNeeded-totalCur);
   const safeGId=g.id.replace(/'/g,"\\'");
   const safeName=(g.groupName||'').replace(/"/g,'&quot;');
+  const isSel=_bstSelected.has(g.id);
 
   const memberRows=g.monsters.map(m=>{
     const mKN=m.killsNeeded||0;
     const mCur=m.currentKills||0;
     const mPct=mKN>0?Math.min(100,Math.round((mCur/mKN)*100)):0;
+    const mRem=Math.max(0,mKN-mCur);
     const mSafeId=m.id.replace(/'/g,"\\'");
     const gifHtml=m.gifUrl
       ?`<img src="${m.gifUrl}" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;border-radius:4px;" onerror="this.style.display='none'">`
       :`<span style="font-size:1rem;">🐉</span>`;
     const lvCls=_bstLvCls(m.bestiarylevel||'Medium');
+    const mCharm=m.charmPoints||0;
     return `<div class="bst-group-member${m.completed?' completed':''}"
       draggable="true" ondragstart="_bstOnDragStart('${mSafeId}',event)" ondragend="_bstOnDragEnd()">
       ${gifHtml}
@@ -4227,8 +4332,9 @@ function _buildBstGroupCard(g){
         <div style="font-size:.78rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.name}</div>
         <div style="display:flex;align-items:center;gap:.3rem;margin-top:.12rem;">
           <span class="bst-badge bst-lv-${lvCls}" style="font-size:.6rem;padding:.08rem .3rem;">${m.bestiarylevel||'?'}</span>
+          ${mCharm?`<span style="font-size:.6rem;color:var(--gold);font-weight:700;">✨${mCharm}</span>`:''}
           <div style="flex:1;height:3px;background:var(--c4);border-radius:2px;overflow:hidden;"><div style="width:${mPct}%;height:100%;background:var(--gold-g);"></div></div>
-          <span style="font-size:.65rem;color:var(--t2);flex-shrink:0;">${mPct}%</span>
+          <span style="font-size:.65rem;color:var(--t2);flex-shrink:0;">${mPct}%${!m.completed&&mRem?' (~'+mRem.toLocaleString('pt-BR')+')'  :''}</span>
         </div>
       </div>
       <input class="bst-kills-inp" type="number" min="0" value="${mCur}" style="width:58px;font-size:.75rem;"
@@ -4242,7 +4348,9 @@ function _buildBstGroupCard(g){
     <div style="display:flex;align-items:center;gap:.5rem;">
       <span style="font-size:.9rem;">📎</span>
       <div class="bst-group-name" onclick="_bstGroupRename('${safeGId}')" title="Clique para renomear">${g.groupName}</div>
-      ${totalCharm?`<span class="bst-badge bst-charm">✨ ${totalCharm}</span>`:''}
+      <span style="font-size:.72rem;color:var(--t2);">${g.monsters.length} monstros</span>
+      ${totalCharm?`<span class="bst-charm-big" style="margin-left:auto;">✨ ${totalCharm} pts</span>`:''}
+      <input type="checkbox" class="bst-sel-chk" ${isSel?'checked':''} onchange="_bstToggleSel('${safeGId}',this.checked)" title="Selecionar grupo" onclick="event.stopPropagation()" style="margin-left:${totalCharm?'.3rem':'.3rem'};">
     </div>
     <div>
       <div class="bst-progress"><div class="bst-progress-fill" style="width:${pct}%"></div></div>
