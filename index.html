@@ -69,6 +69,45 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .tab-panel{display:none;}
 .tab-panel.on{display:block;}
 
+/* ── Main tab navigation ── */
+.main-tab-bar{display:flex;gap:.5rem;margin-bottom:1.3rem;border-bottom:1px solid var(--c3);padding-bottom:.7rem;}
+.main-tab-btn{padding:.42rem 1.1rem;border-radius:20px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s;}
+.main-tab-btn:hover{border-color:var(--gold);color:var(--gold);}
+.main-tab-btn.on{background:var(--gold-g);color:var(--btn-g-text);border-color:var(--gold);}
+.main-tab-panel{display:none;}
+.main-tab-panel.on{display:block;}
+
+/* ── Bestiary ── */
+.bst-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;}
+.bst-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;}
+.bst-card{background:var(--c2);border:1px solid var(--c4);border-radius:10px;padding:.75rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .15s;}
+.bst-card:hover{border-color:var(--gold);}
+.bst-card.completed{opacity:.55;border-style:dashed;}
+.bst-head{display:flex;align-items:center;gap:.6rem;}
+.bst-gif{width:52px;height:52px;object-fit:contain;image-rendering:pixelated;background:rgba(0,0,0,.25);border-radius:6px;flex-shrink:0;}
+.bst-gif-ph{width:52px;height:52px;background:rgba(255,255,255,.05);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.bst-name{font-weight:700;font-size:.92rem;color:var(--t0);}
+.bst-diff{display:inline-block;padding:.15rem .5rem;border-radius:10px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:.2rem;}
+.bst-diff-trivial{background:rgba(148,163,184,.15);color:#94a3b8;border:1px solid rgba(148,163,184,.3);}
+.bst-diff-easy{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3);}
+.bst-diff-medium{background:rgba(234,179,8,.12);color:#fbbf24;border:1px solid rgba(234,179,8,.3);}
+.bst-diff-hard{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3);}
+.bst-diff-legendary{background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid rgba(167,139,250,.4);}
+.bst-progress{height:5px;background:var(--c3);border-radius:3px;overflow:hidden;margin-bottom:.3rem;}
+.bst-progress-fill{height:100%;background:var(--gold-g);border-radius:3px;transition:width .3s;}
+.bst-kills-row{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--t1);}
+.bst-kills-inp{width:72px;background:var(--c3);border:1px solid var(--c4);border-radius:6px;color:var(--t0);font-size:.8rem;padding:.22rem .4rem;text-align:center;}
+.bst-kills-inp:focus{outline:none;border-color:var(--gold);}
+.bst-actions{display:flex;gap:.4rem;margin-top:.15rem;}
+.bst-section-lbl{font-size:.78rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.08em;margin:1.3rem 0 .55rem;display:flex;align-items:center;gap:.5rem;}
+.bst-section-lbl::after{content:'';flex:1;height:1px;background:var(--c3);}
+.bst-empty{text-align:center;padding:3rem 1rem;color:var(--t2);}
+.bst-empty-ico{font-size:2.8rem;margin-bottom:.6rem;}
+.bst-counter{background:var(--c2);border:1px solid var(--c3);border-radius:10px;padding:.65rem 1rem;display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.82rem;}
+.bst-counter span{color:var(--t1);}
+.bst-counter strong{color:var(--t0);}
+.bst-mon-preview{background:var(--c2);border:1px solid var(--c3);border-radius:10px;padding:.75rem;display:flex;gap:.75rem;align-items:center;}
+
 /* ── Vocation selector ── */
 .voc-bar{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.75rem;}
 .voc-btn{padding:.32rem .7rem;border-radius:20px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;}
@@ -645,27 +684,97 @@ input[type=number]{-moz-appearance:textfield;}
 </div>
 
 <div class="wrap">
-  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;">
-    <button class="btn btn-g" onclick="openWizard()">Nova Hunt</button>
-    <span id="profileLabel" style="display:none;"></span>
-    <div style="margin-left:auto;display:flex;gap:.5rem;align-items:center;">
-      <button class="btn btn-o" onclick="openCompare()">📊 Comparar</button>
-      <button class="btn btn-o" onclick="save()">💾 Salvar</button>
+  <!-- ── Main tabs ── -->
+  <div class="main-tab-bar">
+    <button class="main-tab-btn on" id="mainTabBtnHunts" onclick="switchMainTab('hunts')">🏹 Hunts</button>
+    <button class="main-tab-btn" id="mainTabBtnBestiary" onclick="switchMainTab('bestiary')">📖 Bestiary</button>
+  </div>
+
+  <!-- ── Hunts panel ── -->
+  <div id="mainTabHunts" class="main-tab-panel on">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;">
+      <button class="btn btn-g" onclick="openWizard()">Nova Hunt</button>
+      <span id="profileLabel" style="display:none;"></span>
+      <div style="margin-left:auto;display:flex;gap:.5rem;align-items:center;">
+        <button class="btn btn-o" onclick="openCompare()">📊 Comparar</button>
+        <button class="btn btn-o" onclick="save()">💾 Salvar</button>
+      </div>
+    </div>
+    <div class="hunt-layout">
+      <div class="hunt-portrait" id="huntPortrait"></div>
+      <div class="hunt-list-col">
+        <div id="huntList"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5rem;">
+      <div class="ctitle">⚙️ Ferramentas</div>
+      <div class="exp-grid">
+        <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📋</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Copia todas as hunts para o clipboard</div></div></button>
+        <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">📂</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Cola um backup ou hunt compartilhada</div></div></button>
+        <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">🖨️</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">Versão visual para impressão</div></div></button>
+        <button class="exp-btn" onclick="openDelProfile()" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04);"><span class="exp-ico">🗑️</span><div><div class="exp-ttl" style="color:#fca5a5;">Apagar Perfil</div><div class="exp-dsc">Remove o perfil e todas as suas hunts</div></div></button>
+      </div>
     </div>
   </div>
-  <div class="hunt-layout">
-    <div class="hunt-portrait" id="huntPortrait"></div>
-    <div class="hunt-list-col">
-      <div id="huntList"></div>
+
+  <!-- ── Bestiary panel ── -->
+  <div id="mainTabBestiary" class="main-tab-panel">
+    <div class="bst-toolbar">
+      <button class="btn btn-g" onclick="openBestiaryAdd()">+ Adicionar Monstro</button>
+      <div style="margin-left:auto;display:flex;gap:.5rem;">
+        <button class="btn btn-o" onclick="save()">💾 Salvar</button>
+      </div>
     </div>
+    <div id="bstCounter" class="bst-counter" style="display:none;"></div>
+    <div id="bstList"></div>
   </div>
-  <div class="card" style="margin-top:1.5rem;">
-    <div class="ctitle">⚙️ Ferramentas</div>
-    <div class="exp-grid">
-      <button class="exp-btn" onclick="exportJSON()"><span class="exp-ico">📋</span><div><div class="exp-ttl">Exportar Backup</div><div class="exp-dsc">Copia todas as hunts para o clipboard</div></div></button>
-      <button class="exp-btn" onclick="importJSON()"><span class="exp-ico">📂</span><div><div class="exp-ttl">Importar Backup</div><div class="exp-dsc">Cola um backup ou hunt compartilhada</div></div></button>
-      <button class="exp-btn" onclick="exportPrint()"><span class="exp-ico">🖨️</span><div><div class="exp-ttl">Imprimir / PDF</div><div class="exp-dsc">Versão visual para impressão</div></div></button>
-      <button class="exp-btn" onclick="openDelProfile()" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04);"><span class="exp-ico">🗑️</span><div><div class="exp-ttl" style="color:#fca5a5;">Apagar Perfil</div><div class="exp-dsc">Remove o perfil e todas as suas hunts</div></div></button>
+</div>
+
+<!-- ══ BESTIARY ADD ══ -->
+<div class="ov" id="bstAddOv" style="display:none;">
+  <div class="modal" style="max-width:520px;">
+    <div class="wiz-header" style="border-bottom:1px solid var(--c3);padding-bottom:.75rem;margin-bottom:.75rem;">
+      <span style="font-weight:700;font-size:1.05rem;">📖 Adicionar ao Bestiary</span>
+      <button class="close-btn" onclick="closeBestiaryAdd()">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.9rem;padding:.25rem 0;">
+      <!-- Search -->
+      <div>
+        <label class="lbl">Nome do Monstro</label>
+        <div style="display:flex;gap:.4rem;">
+          <input class="inp" id="bstSearchInp" placeholder="ex: Dragon Lord" onkeydown="if(event.key==='Enter')bestiarySearch()" style="flex:1;">
+          <button class="btn btn-o" onclick="bestiarySearch()" id="bstSearchBtn" style="white-space:nowrap;">🔍 Buscar</button>
+        </div>
+      </div>
+      <!-- Monster preview -->
+      <div id="bstMonPreview" class="bst-mon-preview" style="display:none;">
+        <img id="bstMonGif" src="" alt="" class="bst-gif" style="width:64px;height:64px;">
+        <div style="flex:1;min-width:0;">
+          <div id="bstMonName" style="font-weight:700;font-size:.98rem;margin-bottom:.35rem;"></div>
+          <div id="bstMonWeakRow"></div>
+        </div>
+      </div>
+      <!-- Difficulty -->
+      <div>
+        <label class="lbl">Dificuldade do Bestiary</label>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+          <button class="voc-btn" onclick="bstSelectDiff('trivial')" id="bstDiff-trivial">Trivial <span style="opacity:.6">(25)</span></button>
+          <button class="voc-btn" onclick="bstSelectDiff('easy')" id="bstDiff-easy">Fácil <span style="opacity:.6">(250)</span></button>
+          <button class="voc-btn" onclick="bstSelectDiff('medium')" id="bstDiff-medium">Médio <span style="opacity:.6">(500)</span></button>
+          <button class="voc-btn" onclick="bstSelectDiff('hard')" id="bstDiff-hard">Difícil <span style="opacity:.6">(1000)</span></button>
+          <button class="voc-btn" onclick="bstSelectDiff('legendary')" id="bstDiff-legendary">Lendário <span style="opacity:.6">(2500)</span></button>
+        </div>
+      </div>
+      <!-- Current kills -->
+      <div>
+        <label class="lbl">Kills já realizadas <span style="font-weight:400;color:var(--t2);">(opcional)</span></label>
+        <input class="inp" id="bstCurrentKills" type="number" min="0" placeholder="0" style="max-width:130px;">
+      </div>
+      <!-- Actions -->
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;padding-top:.25rem;border-top:1px solid var(--c3);">
+        <button class="btn btn-o" onclick="closeBestiaryAdd()">Cancelar</button>
+        <button class="btn btn-g" onclick="bestiaryConfirmAdd()" id="bstConfirmBtn" disabled>Adicionar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1294,7 +1403,7 @@ const SPELLS = [
 // STATE
 // ══════════════════════════════════════════════════════
 const KEY = 'respaw3000_v4';
-let state = { profiles:[], activeProfile:null, hunts:[] };
+let state = { profiles:[], activeProfile:null, hunts:[], bestiary:[] };
 let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null, loot:[] };
 let _activeTab = 'pot';
 
@@ -1304,10 +1413,10 @@ let _activeTab = 'pot';
 function load(){
   try {
     const r=localStorage.getItem(KEY);
-    if(r){ state=JSON.parse(r); }
+    if(r){ state=JSON.parse(r); if(!state.bestiary) state.bestiary=[]; }
     else {
       const old=localStorage.getItem('respaw3000_v3');
-      if(old){ const d=JSON.parse(old); state.profiles=d.profiles||[]; state.activeProfile=d.activeProfile||null; state.hunts=d.hunts||[]; }
+      if(old){ const d=JSON.parse(old); state.profiles=d.profiles||[]; state.activeProfile=d.activeProfile||null; state.hunts=d.hunts||[]; state.bestiary=[]; }
     }
   } catch(e){}
 }
@@ -3784,6 +3893,9 @@ document.addEventListener('keydown', e=>{
   if(document.getElementById('profileOv')?.classList.contains('on')){
     closeProfileModal(); return;
   }
+  if(document.getElementById('bstAddOv')?.style.display==='flex'){
+    closeBestiaryAdd(); return;
+  }
   if(document.getElementById('wizOv')?.classList.contains('on')){
     const hasData = wiz.monsters.length||wiz.pots.length||wiz.runas.length||wiz.imbu.length||wiz.spells.length;
     if(hasData){
@@ -3797,6 +3909,218 @@ document.addEventListener('keydown', e=>{
   const clPanel = document.querySelector('.cl-panel.open');
   if(clPanel) clPanel.classList.remove('open');
 });
+
+// ══════════════════════════════════════════════════════
+// MAIN TAB SWITCH
+// ══════════════════════════════════════════════════════
+function switchMainTab(tab){
+  ['Hunts','Bestiary'].forEach(t=>{
+    const key=t.toLowerCase();
+    document.getElementById('mainTabBtn'+t).classList.toggle('on', key===tab);
+    document.getElementById('mainTab'+t).classList.toggle('on', key===tab);
+  });
+  if(tab==='bestiary') renderBestiary();
+}
+
+// ══════════════════════════════════════════════════════
+// BESTIARY
+// ══════════════════════════════════════════════════════
+const BESTIARY_DIFF={
+  trivial:  {label:'Trivial',  kills:25,   cls:'trivial'},
+  easy:     {label:'Fácil',    kills:250,  cls:'easy'},
+  medium:   {label:'Médio',    kills:500,  cls:'medium'},
+  hard:     {label:'Difícil',  kills:1000, cls:'hard'},
+  legendary:{label:'Lendário', kills:2500, cls:'legendary'}
+};
+
+let _bstWiz={monster:null, diff:null};
+
+function renderBestiary(){
+  const el=document.getElementById('bstList');
+  const counter=document.getElementById('bstCounter');
+  if(!el) return;
+  const bs=state.bestiary||[];
+  const active=bs.filter(b=>!b.completed);
+  const done=bs.filter(b=>b.completed);
+
+  if(active.length){
+    const totalRem=active.reduce((s,b)=>{
+      const d=BESTIARY_DIFF[b.difficulty];
+      return s+(d?Math.max(0,d.kills-(b.currentKills||0)):0);
+    },0);
+    counter.style.display='flex';
+    counter.innerHTML=`
+      <span>📋 Em progresso: <strong>${active.length}</strong></span>
+      <span>✅ Concluídos: <strong>${done.length}</strong></span>
+      <span>⚔️ Kills restantes: <strong>${totalRem.toLocaleString('pt-BR')}</strong></span>`;
+  } else if(done.length){
+    counter.style.display='flex';
+    counter.innerHTML=`<span>✅ Concluídos: <strong>${done.length}</strong></span>`;
+  } else {
+    counter.style.display='none';
+  }
+
+  if(!bs.length){
+    el.innerHTML=`<div class="bst-empty"><div class="bst-empty-ico">📖</div><div style="font-weight:700;font-size:.95rem;color:var(--t0);">Nenhum monstro no Bestiary</div><div style="margin-top:.4rem;font-size:.82rem;">Clique em "+ Adicionar Monstro" para começar.</div></div>`;
+    return;
+  }
+
+  let html='';
+  if(active.length){
+    html+=`<div class="bst-section-lbl">⚔️ Em progresso (${active.length})</div><div class="bst-grid">`;
+    active.forEach(b=>{html+=_buildBstCard(b);});
+    html+=`</div>`;
+  }
+  if(done.length){
+    html+=`<div class="bst-section-lbl">✅ Concluídos (${done.length})</div><div class="bst-grid">`;
+    done.forEach(b=>{html+=_buildBstCard(b);});
+    html+=`</div>`;
+  }
+  el.innerHTML=html;
+}
+
+function _buildBstCard(b){
+  const d=BESTIARY_DIFF[b.difficulty]||BESTIARY_DIFF.medium;
+  const cur=b.currentKills||0;
+  const pct=Math.min(100,Math.round((cur/d.kills)*100));
+  const rem=Math.max(0,d.kills-cur);
+  const gifHtml=b.gifUrl
+    ?`<img class="bst-gif" src="${b.gifUrl}" alt="${b.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="bst-gif-ph" style="display:none;">🐉</div>`
+    :`<div class="bst-gif-ph">🐉</div>`;
+  const weakHtml=b.weaknesses?buildResistRow(b.weaknesses,false,true):'';
+  return `<div class="bst-card${b.completed?' completed':''}">
+    <div class="bst-head">
+      ${gifHtml}
+      <div style="flex:1;min-width:0;">
+        <div class="bst-name">${b.name}</div>
+        <span class="bst-diff bst-diff-${d.cls}">${d.label}</span>
+      </div>
+    </div>
+    ${weakHtml?`<div style="margin-top:.1rem;">${weakHtml}</div>`:''}
+    <div>
+      <div class="bst-progress"><div class="bst-progress-fill" style="width:${pct}%"></div></div>
+      <div class="bst-kills-row">
+        <input class="bst-kills-inp" type="number" min="0" value="${cur}"
+          onchange="bestiaryUpdateKills('${b.id}',this.value)"
+          ${b.completed?'disabled':''}>
+        <span>/ ${d.kills.toLocaleString('pt-BR')}</span>
+        <span style="margin-left:auto;font-weight:700;color:var(--t0);">${pct}%</span>
+      </div>
+      ${!b.completed?`<div style="font-size:.74rem;color:var(--t2);margin-top:.15rem;">~${rem.toLocaleString('pt-BR')} restantes</div>`:''}
+    </div>
+    <div class="bst-actions">
+      ${!b.completed
+        ?`<button class="btn btn-g" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryComplete('${b.id}',true)">✅ Concluir</button>`
+        :`<button class="btn btn-o" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryComplete('${b.id}',false)">↩️ Reabrir</button>`}
+      <button class="btn" style="font-size:.78rem;padding:.3rem .55rem;background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.25);" onclick="bestiaryDelete('${b.id}')">🗑️</button>
+    </div>
+  </div>`;
+}
+
+function openBestiaryAdd(){
+  _bstWiz={monster:null,diff:null};
+  document.getElementById('bstSearchInp').value='';
+  document.getElementById('bstMonPreview').style.display='none';
+  document.getElementById('bstCurrentKills').value='';
+  document.getElementById('bstConfirmBtn').disabled=true;
+  Object.keys(BESTIARY_DIFF).forEach(k=>document.getElementById('bstDiff-'+k).classList.remove('on'));
+  document.getElementById('bstAddOv').style.display='flex';
+}
+
+function closeBestiaryAdd(){
+  document.getElementById('bstAddOv').style.display='none';
+}
+
+async function bestiarySearch(){
+  const name=document.getElementById('bstSearchInp').value.trim();
+  if(!name) return;
+  const btn=document.getElementById('bstSearchBtn');
+  btn.textContent='⏳';
+  btn.disabled=true;
+  try{
+    const res=await fetchMonsterResistances(name);
+    // Try Tibia Fandom GIF (canonical approach)
+    const gifUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(name.replace(/\s+/g,'_'))}.gif`;
+    _bstWiz.monster={name,gifUrl,weaknesses:res};
+    document.getElementById('bstMonGif').src=gifUrl;
+    document.getElementById('bstMonName').textContent=name;
+    document.getElementById('bstMonWeakRow').innerHTML=res
+      ?buildResistRow(res,false,true)
+      :'<span style="font-size:.75rem;color:var(--t2);">Fraquezas não encontradas</span>';
+    document.getElementById('bstMonPreview').style.display='flex';
+    _bstCheckConfirm();
+  } catch(e){
+    toast('❌ Monstro não encontrado');
+  } finally{
+    btn.textContent='🔍 Buscar';
+    btn.disabled=false;
+  }
+}
+
+function bstSelectDiff(key){
+  _bstWiz.diff=key;
+  Object.keys(BESTIARY_DIFF).forEach(k=>document.getElementById('bstDiff-'+k).classList.toggle('on',k===key));
+  _bstCheckConfirm();
+}
+
+function _bstCheckConfirm(){
+  document.getElementById('bstConfirmBtn').disabled=!(_bstWiz.monster&&_bstWiz.diff);
+}
+
+function bestiaryConfirmAdd(){
+  if(!_bstWiz.monster||!_bstWiz.diff) return;
+  const cur=Math.max(0,parseInt(document.getElementById('bstCurrentKills').value)||0);
+  if(!state.bestiary) state.bestiary=[];
+  const d=BESTIARY_DIFF[_bstWiz.diff];
+  const completed=cur>=d.kills;
+  state.bestiary.push({
+    id:'b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+    name:_bstWiz.monster.name,
+    gifUrl:_bstWiz.monster.gifUrl,
+    weaknesses:_bstWiz.monster.weaknesses,
+    difficulty:_bstWiz.diff,
+    currentKills:cur,
+    completed,
+    completedAt:completed?Date.now():null,
+    addedAt:Date.now()
+  });
+  dirty(); save(false);
+  closeBestiaryAdd();
+  renderBestiary();
+  toast('📖 '+(completed?'Monstro adicionado como concluído!':'Monstro adicionado ao Bestiary!'));
+}
+
+function bestiaryComplete(id,completed){
+  const b=(state.bestiary||[]).find(x=>x.id===id);
+  if(!b) return;
+  b.completed=completed;
+  b.completedAt=completed?Date.now():null;
+  if(completed){
+    const d=BESTIARY_DIFF[b.difficulty];
+    if(d&&(b.currentKills||0)<d.kills) b.currentKills=d.kills;
+  }
+  dirty(); save(false); renderBestiary();
+}
+
+function bestiaryDelete(id){
+  if(!confirm('Remover este monstro do Bestiary?')) return;
+  state.bestiary=(state.bestiary||[]).filter(x=>x.id!==id);
+  dirty(); save(false); renderBestiary();
+  toast('🗑️ Removido do Bestiary');
+}
+
+function bestiaryUpdateKills(id,val){
+  const b=(state.bestiary||[]).find(x=>x.id===id);
+  if(!b) return;
+  b.currentKills=Math.max(0,parseInt(val)||0);
+  const d=BESTIARY_DIFF[b.difficulty];
+  // Auto-complete when kills reached
+  if(d&&b.currentKills>=d.kills&&!b.completed){
+    b.completed=true; b.completedAt=Date.now();
+    toast('✅ Bestiary completo: '+b.name+'!');
+  }
+  dirty(); save(false); renderBestiary();
+}
 
 function initApp(){
   load(); clLoad(); clUpdateBadge();
