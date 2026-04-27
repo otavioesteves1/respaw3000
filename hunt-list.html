@@ -119,6 +119,31 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .bst-preview-error{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.55rem .7rem;font-size:.8rem;color:#f87171;display:flex;align-items:center;gap:.5rem;}
 .bst-textarea{background:var(--c3);border:1px solid var(--c4);border-radius:8px;color:var(--t0);font-size:.83rem;padding:.5rem .65rem;resize:vertical;font-family:inherit;width:100%;box-sizing:border-box;}
 .bst-textarea:focus{outline:none;border-color:var(--gold);}
+/* Drag and drop */
+.bst-card[draggable]{cursor:grab;}.bst-card[draggable]:active{cursor:grabbing;}
+.bst-card.bst-dragging{opacity:.3;pointer-events:none;}
+.bst-card.bst-drop-target,.bst-group-card.bst-drop-target{border-color:var(--gold)!important;background:rgba(var(--accent-rgb),.07)!important;box-shadow:0 0 0 2px rgba(var(--accent-rgb),.22);}
+/* Group cards */
+.bst-group-card{background:var(--c2);border:2px solid rgba(var(--accent-rgb),.28);border-radius:12px;padding:.75rem;display:flex;flex-direction:column;gap:.45rem;transition:border-color .15s;}
+.bst-group-card.completed{opacity:.55;border-style:dashed;}
+.bst-group-name{font-weight:800;font-size:.88rem;color:var(--gold);flex:1;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;}
+.bst-group-name:hover{color:var(--t0);}
+.bst-group-members{display:flex;flex-direction:column;gap:.3rem;}
+.bst-group-member{display:flex;align-items:center;gap:.5rem;background:var(--c3);border-radius:7px;padding:.38rem .5rem;}
+.bst-group-member.completed{opacity:.5;}
+/* Bestiary highlight */
+.bst-highlight{animation:bst-hl 2s ease;}
+@keyframes bst-hl{0%,100%{box-shadow:none;}25%,75%{box-shadow:0 0 0 3px var(--gold),0 0 18px rgba(var(--accent-rgb),.4);}}
+/* Hunt list bestiary badge */
+.bst-hunt-badge{font-size:.72rem!important;padding:.2rem .5rem!important;color:var(--gold)!important;border-color:rgba(var(--accent-rgb),.3)!important;}
+/* Loot mini grid in hunt card */
+.hd-loot-grid{display:flex;flex-wrap:wrap;gap:.28rem;}
+.hd-loot-item{display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.3rem .3rem;background:var(--c2);border-radius:6px;border:1px solid var(--c4);min-width:46px;text-align:center;}
+.hd-loot-item img{width:22px;height:22px;object-fit:contain;image-rendering:pixelated;}
+.hd-loot-item-name{font-size:.58rem;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:58px;}
+.hd-loot-item-price{font-size:.62rem;font-weight:700;}
+/* Wheel mini in summary */
+.sum-wheel-mini{display:flex;align-items:center;gap:.75rem;margin-bottom:.35rem;}
 
 /* ── Vocation selector ── */
 .voc-bar{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.75rem;}
@@ -491,7 +516,9 @@ input[type=number]{-moz-appearance:textfield;}
 .mon-mini-charm{display:flex;align-items:center;gap:.2rem;font-size:.65rem;font-weight:600;padding:.08rem .28rem;border-radius:5px;margin-bottom:.12rem;justify-content:center;}
 
 /* ── Summary monsters compact grid ── */
-.sum-mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.48rem;}
+.sum-mon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.48rem;}
+@media(max-width:780px){.sum-mon-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.sum-mon-grid{grid-template-columns:1fr;}}
 .sum-mon-compact{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.6rem;display:flex;gap:.55rem;align-items:flex-start;}
 .sum-mon-c-gif{width:50px;height:50px;border-radius:8px;background:#0a0820;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
 .sum-mon-c-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
@@ -1284,9 +1311,9 @@ const POTIONS = [
   {id:'mp',       name:'Mana Potion',     img:'https://static.wikia.nocookie.net/tibia/images/4/43/Mana_Potion.gif/revision/latest?cb=20170904190239&path-prefix=en'},
 ];
 const SKILL_POTIONS = [
-  {id:'berserk',    name:'Berserk Potion',    img:'https://static.wikia.nocookie.net/tibia/images/3/33/Berserk_Potion.gif/revision/latest?cb=20160601082614&path-prefix=en', voc:'Knight / Paladin'},
-  {id:'bullseye',   name:'Bullseye Potion',   img:'https://static.wikia.nocookie.net/tibia/images/a/a3/Bullseye_Potion.gif/revision/latest?cb=20160601082618&path-prefix=en', voc:'Paladin'},
-  {id:'mastermind', name:'Mastermind Potion', img:'https://static.wikia.nocookie.net/tibia/images/d/d5/Mastermind_Potion.gif/revision/latest?cb=20160601082621&path-prefix=en', voc:'Druid / Sorcerer'},
+  {id:'berserk',    name:'Berserk Potion',    img:'https://tibia.fandom.com/wiki/Special:FilePath/Berserk_Potion.gif',    voc:'Knight / Paladin'},
+  {id:'bullseye',   name:'Bullseye Potion',   img:'https://tibia.fandom.com/wiki/Special:FilePath/Bullseye_Potion.gif',   voc:'Paladin'},
+  {id:'mastermind', name:'Mastermind Potion', img:'https://tibia.fandom.com/wiki/Special:FilePath/Mastermind_Potion.gif', voc:'Druid / Sorcerer'},
 ];
 const RUNES = [
   {id:'sd',   name:'Sudden Death',        img:'https://static.wikia.nocookie.net/tibia/images/c/c2/Sudden_Death_Rune.gif/revision/latest?cb=20150720234440&path-prefix=en'},
@@ -3106,8 +3133,8 @@ function buildSummaryHTML(h){
   const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length;
   if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.95rem;">Hunt vazia — nenhum item configurado.</div>';
 
-  // Item row: no icon, just name + optional sub + qty
-  const itm=(x)=>`<div class="sum-item"><div style="flex:1;min-width:0;"><div class="sum-item-name">${x.name}</div>${x.sub?`<div class="sum-item-sub">${x.sub}</div>`:''}</div>${x.qty!=null?`<span class="sum-item-qty">×${x.qty}</span>`:x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`;
+  // Item row: icon + name + optional sub + qty
+  const itm=(x)=>`<div class="sum-item">${(x.img||x.imgUrl)?`<img class="sum-item-img" src="${x.img||x.imgUrl}" alt="" onerror="this.style.display='none'">`:''}<div style="flex:1;min-width:0;"><div class="sum-item-name">${x.name}</div>${x.sub?`<div class="sum-item-sub">${x.sub}</div>`:''}</div>${x.qty!=null?`<span class="sum-item-qty">×${x.qty}</span>`:x.cnt>1?`<span class="sum-item-qty">×${x.cnt}</span>`:''}</div>`;
 
   let html='';
 
@@ -3158,15 +3185,30 @@ function buildSummaryHTML(h){
       const revTier=(d)=>domPts[d]>=500?3:domPts[d]>=250?2:domPts[d]>=100?1:0;
       if(totalPts>0||hasLink){
         html+=`<div class="sum-sec" style="margin-bottom:.55rem;"><div class="sum-sec-lbl">🔮 Wheel of Destiny <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${totalPts} pontos</span></div>`;
-        if(revMap){
-          const tags=revMap.map((ri,d)=>{
-            const tier=revTier(d);
-            if(!tier) return '';
-            const rn=WD_REV_NAMES[ri]||'';
-            const col=WD_DOM_COLORS[d];
-            return `<span class="wheel-perk-tag rev" style="background:${col}22;border-color:${col}55;color:${col};">${rn} <span style="opacity:.7">Est.${tier}</span></span>`;
-          }).filter(Boolean).join('');
-          if(tags) html+=`<div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem;">${tags}</div>`;
+        // ── mini donut chart for domain distribution ──
+        const miniSvg=(()=>{
+          const tot=domPts.reduce((a,b)=>a+b,0);if(!tot)return '';
+          const S=58,C=S/2,R=C-3,r=R*0.52;
+          let sa=-Math.PI/2,paths='';
+          domPts.forEach((pts,d)=>{
+            if(!pts)return;
+            const a=(pts/tot)*Math.PI*2,ea=sa+a;
+            const arc=(n,rd)=>[C+rd*Math.cos(n),C+rd*Math.sin(n)];
+            const[x1,y1]=arc(sa,R),[x2,y2]=arc(ea,R),[xi1,yi1]=arc(sa,r),[xi2,yi2]=arc(ea,r);
+            const lg=a>Math.PI?1:0;
+            paths+=`<path d="M${xi1} ${yi1}L${x1} ${y1}A${R} ${R},0,${lg},1,${x2} ${y2}L${xi2} ${yi2}A${r} ${r},0,${lg},0,${xi1} ${yi1}Z" fill="${WD_SECT_INNER[d]}" opacity=".88"/>`;
+            sa=ea;
+          });
+          return `<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" style="border-radius:50%;flex-shrink:0;">${paths}</svg>`;
+        })();
+        const revTags=revMap?revMap.map((ri,d)=>{
+          const tier=revTier(d);if(!tier)return '';
+          const rn=WD_REV_NAMES[ri]||'',col=WD_DOM_COLORS[d];
+          return `<span class="wheel-perk-tag rev" style="background:${col}22;border-color:${col}55;color:${col};">${rn} <span style="opacity:.7">Est.${tier}</span></span>`;
+        }).filter(Boolean).join(''):null;
+        if(miniSvg||revTags){
+          html+=`<div class="sum-wheel-mini">${miniSvg||''}${revTags?`<div style="display:flex;flex-wrap:wrap;gap:.3rem;">${revTags}</div>`:''}`;
+          html+=`</div>`;
         }
         if(hasLink) html+=`<a href="${wh.link}" target="_blank" style="font-size:.65rem;color:var(--blue);text-decoration:none;">🔗 Ver planner completo</a>`;
         html+=`</div>`;
@@ -3182,8 +3224,8 @@ function buildSummaryHTML(h){
       const safeN=m.name.replace(/'/g,"\\'");
       const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.8rem;opacity:.35;">🐉</span>';
       const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
-      const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">⭐ ${m.majorCharm.name}</div>`:'';
-      const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">🔮 ${m.minorCharm.name}</div>`:'';
+      const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">${m.majorCharm.name}</div>`:'';
+      const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">${m.minorCharm.name}</div>`:'';
       const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
       html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}${res}</div></div>`;
@@ -3216,10 +3258,10 @@ function renderHunts(){
     const pills=buildPreviewStrip(h,sessCount);
 
     function mkTags(arr,bg,bc,hasQty){
-      return (arr||[]).map(x=>`<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${(x.img||x.imgUrl)?`<img src="${x.img||x.imgUrl}" alt="" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;">`:''}${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">×${x.qty}</strong>`:''}</div>`).join('');
+      return (arr||[]).map(x=>`<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${(x.img||x.imgUrl)?`<img src="${x.img||x.imgUrl}" alt="" style="width:22px;height:22px;object-fit:contain;image-rendering:pixelated;">`:''}${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">×${x.qty}</strong>`:''}</div>`).join('');
     }
-    const potTags  =mkTags(h.pots,  'rgba(16,185,129,.1)','rgba(16,185,129,.3)',true);
-    const runaTags =mkTags(h.runas, 'rgba(59,130,246,.1)', 'rgba(59,130,246,.3)',true);
+    // Refil: pots + runas merged
+    const refilTags=mkTags(h.pots,'rgba(16,185,129,.1)','rgba(16,185,129,.3)',true)+mkTags(h.runas,'rgba(59,130,246,.1)','rgba(59,130,246,.3)',true);
     const imbuTags =mkTags(h.imbu,  'rgba(139,92,246,.1)','rgba(139,92,246,.3)',false);
     const spellTags=mkTags(h.spells,'rgba(var(--accent-rgb),.1)','rgba(var(--accent-rgb),.3)',false);
 
@@ -3232,6 +3274,22 @@ function renderHunts(){
       return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${res}</a>`;
     }).join('');
 
+    // Loot with fandom icons + stored prices
+    const activeLoot=(h.loot||[]).filter(x=>!x.excluded);
+    const lootGrid=activeLoot.slice(0,40).map(it=>{
+      const slug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
+      const iconUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif`;
+      const price=(h.lootPrices||{})[it.name.toLowerCase()]||0;
+      const pf=fmtPrice(price);
+      const{priceColor}=price?_priceStyle(price):{priceColor:''};
+      return `<div class="hd-loot-item" title="${it.name}"><img src="${iconUrl}" alt="" onerror="this.style.display='none'"><div class="hd-loot-item-name">${it.name}</div>${pf?`<div class="hd-loot-item-price" style="color:${priceColor};">${pf}</div>`:''}</div>`;
+    }).join('');
+
+    // Bestiary badge
+    const allBstNames=new Set((state.bestiary||[]).flatMap(b=>b.isGroup?b.monsters.map(m=>m.name.toLowerCase()):[b.name.toLowerCase()]));
+    const huntBstMons=(h.monsters||[]).filter(m=>allBstNames.has(m.name.toLowerCase()));
+    const bstBadge=huntBstMons.length?`<button class="btn btn-o btn-sm bst-hunt-badge" onclick="goBstFromHunt(${JSON.stringify(huntBstMons.map(m=>m.name))})">📖 ${huntBstMons.length} no Bestiary</button>`:'';
+
     const bodyId='hb_'+h.id;
     const vocChip=h.vocation?`<span class="hcard-voc-chip">${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]}</span>`:'';
     c.innerHTML=`
@@ -3241,16 +3299,15 @@ function renderHunts(){
           <div class="hcard-name-row"><span class="hcard-name">${h.name}</span>${vocChip}</div>
           <div class="hcard-sub">${p?p.name:'Sem perfil'} · ${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
         </div>
-        ${pills}
+        ${pills}${bstBadge}
         <span style="color:var(--t1);font-size:.95rem;flex-shrink:0;">▾</span>
       </div>
       <div class="hcard-body" id="${bodyId}">
-        ${potTags?`<div class="hd-block"><div class="hd-lbl">💊 Poções</div><div class="hd-tags">${potTags}</div></div>`:''}
-        ${runaTags?`<div class="hd-block"><div class="hd-lbl">📜 Runas</div><div class="hd-tags">${runaTags}</div></div>`:''}
+        ${refilTags?`<div class="hd-block"><div class="hd-lbl">🔁 Refil</div><div class="hd-tags">${refilTags}</div></div>`:''}
         ${imbuTags?`<div class="hd-block"><div class="hd-lbl">🛡️ Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
         ${spellTags?`<div class="hd-block"><div class="hd-lbl">✨ Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
         ${monGrid?`<div class="hd-block"><div class="hd-lbl">🐉 Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
-        ${(h.loot||[]).filter(x=>!x.excluded).length?`<div class="hd-block"><div class="hd-lbl">📦 Loot <span style="font-weight:400;font-size:.65rem;color:var(--t1);">(${(h.loot||[]).filter(x=>!x.excluded).length} itens)</span></div><div style="display:flex;flex-wrap:wrap;gap:.25rem;">${(h.loot||[]).filter(x=>!x.excluded).slice(0,20).map(it=>`<span style="font-size:.75rem;font-weight:600;padding:.15rem .45rem;border-radius:5px;background:var(--c2);border:1px solid var(--c4);">${it.name}</span>`).join('')}${(h.loot||[]).filter(x=>!x.excluded).length>20?`<span style="font-size:.75rem;color:var(--t2);padding:.15rem .35rem;">+${(h.loot||[]).filter(x=>!x.excluded).length-20} mais</span>`:''}</div></div>`:''}
+        ${activeLoot.length?`<div class="hd-block"><div class="hd-lbl">📦 Loot <span style="font-weight:400;font-size:.65rem;color:var(--t1);">(${activeLoot.length} itens)</span></div><div class="hd-loot-grid">${lootGrid}${activeLoot.length>40?`<div style="font-size:.72rem;color:var(--t2);align-self:center;">+${activeLoot.length-40} itens</div>`:''}</div></div>`:''}
       </div>
       <div class="hcard-acts">
         <button class="btn btn-o btn-sm" onclick="openWizard('${h.id}')">✏️ Editar</button>
@@ -3916,6 +3973,7 @@ document.addEventListener('keydown', e=>{
 
 // ══════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // MAIN TAB SWITCH
 // ══════════════════════════════════════════════════════
 function switchMainTab(tab){
@@ -3927,12 +3985,28 @@ function switchMainTab(tab){
   if(tab==='bestiary') renderBestiary();
 }
 
+// Navigate to bestiary tab and highlight a monster from a hunt
+function goBstFromHunt(names){
+  switchMainTab('bestiary');
+  setTimeout(()=>{
+    const firstName=(names||[])[0];
+    if(!firstName) return;
+    const lower=firstName.toLowerCase();
+    // Find the card with matching data-bst-name
+    const el=document.querySelector(`[data-bst-name="${firstName}"]`)||
+              document.querySelector(`[data-bst-name="${lower}"]`);
+    if(el){
+      el.scrollIntoView({behavior:'smooth',block:'center'});
+      el.classList.remove('bst-highlight');
+      void el.offsetWidth; // reflow to restart animation
+      el.classList.add('bst-highlight');
+    }
+  },120);
+}
+
 // ══════════════════════════════════════════════════════
 // BESTIARY – constants & helpers
 // ══════════════════════════════════════════════════════
-// Kill counts and charm points sourced from:
-//   Template:Kills_to_Unlock  and  Template:Charm_Points  (tibia.fandom.com)
-// Final-stage kills: Very Rare = always 5; Common/Uncommon/Rare = per difficulty
 const BESTIARY_LEVELS={
   Harmless:    {kills:{def:25,   vr:5}, charm:{def:1,  vr:5  }, cls:'harmless'},
   Trivial:     {kills:{def:250,  vr:5}, charm:{def:5,  vr:10 }, cls:'trivial'},
@@ -3941,32 +4015,15 @@ const BESTIARY_LEVELS={
   Hard:        {kills:{def:2500, vr:5}, charm:{def:50, vr:100}, cls:'hard'},
   Challenging: {kills:{def:5000, vr:5}, charm:{def:100,vr:200}, cls:'challenging'}
 };
-function _bstKills(level,occ){
-  const l=BESTIARY_LEVELS[level]; if(!l) return 0;
-  return occ==='Very Rare'?l.kills.vr:l.kills.def;
-}
-function _bstCharm(level,occ){
-  const l=BESTIARY_LEVELS[level]; if(!l) return 0;
-  return occ==='Very Rare'?l.charm.vr:l.charm.def;
-}
-function _bstLvCls(level){
-  return (BESTIARY_LEVELS[level]?.cls)||'medium';
-}
-function _bstOccCls(occ){
-  const m={'Common':'common','Uncommon':'uncommon','Rare':'rare','Very Rare':'veryrare'};
-  return m[occ]||'common';
-}
-// Extract monster name from a raw line (URL or plain name)
+function _bstKills(level,occ){const l=BESTIARY_LEVELS[level];if(!l)return 0;return occ==='Very Rare'?l.kills.vr:l.kills.def;}
+function _bstCharm(level,occ){const l=BESTIARY_LEVELS[level];if(!l)return 0;return occ==='Very Rare'?l.charm.vr:l.charm.def;}
+function _bstLvCls(level){return(BESTIARY_LEVELS[level]?.cls)||'medium';}
+function _bstOccCls(occ){return({'Common':'common','Uncommon':'uncommon','Rare':'rare','Very Rare':'veryrare'}[occ])||'common';}
 function _bstExtractName(line){
-  line=(line||'').trim(); if(!line) return null;
-  try{
-    const u=new URL(line);
-    const m=u.pathname.match(/\/wiki\/(.+)/);
-    if(m) return decodeURIComponent(m[1]).replace(/_/g,' ');
-  }catch(e){}
+  line=(line||'').trim();if(!line)return null;
+  try{const u=new URL(line);const m=u.pathname.match(/\/wiki\/(.+)/);if(m)return decodeURIComponent(m[1]).replace(/_/g,' ');}catch(e){}
   return line;
 }
-// Fetch full bestiary data for one monster name from fandom / BR wiki
 async function fetchBestiaryData(name){
   const slug=name.trim().replace(/\s+/g,'_');
   const apis=[
@@ -3975,34 +4032,73 @@ async function fetchBestiaryData(name){
   ];
   for(const url of apis){
     try{
-      const r=await fetch(url);
-      const d=await r.json();
-      const wt=d.parse?.wikitext?.['*'];
-      if(!wt) continue;
+      const r=await fetch(url);const d=await r.json();const wt=d.parse?.wikitext?.['*'];if(!wt)continue;
       const level=(wt.match(/\|\s*bestiarylevel\s*=\s*([^\n|{}]+)/i)?.[1]||'').trim();
       const occ=(wt.match(/\|\s*occurrence\s*=\s*([^\n|{}]+)/i)?.[1]||'Common').trim();
       const bclass=(wt.match(/\|\s*bestiaryclass\s*=\s*([^\n|{}]+)/i)?.[1]||'').trim();
       const weaknesses=parseWikiResistances(wt);
       if(level&&BESTIARY_LEVELS[level]){
-        const realName=d.parse?.title||name;
-        return{
-          name:realName,
-          bestiarylevel:level,
-          occurrence:occ,
-          bestiaryclass:bclass,
-          killsNeeded:_bstKills(level,occ),
-          charmPoints:_bstCharm(level,occ),
-          weaknesses,
-          gifUrl:`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(realName.replace(/\s+/g,'_'))}.gif`
-        };
+        const rn=d.parse?.title||name;
+        return{name:rn,bestiarylevel:level,occurrence:occ,bestiaryclass:bclass,
+          killsNeeded:_bstKills(level,occ),charmPoints:_bstCharm(level,occ),weaknesses,
+          gifUrl:`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(rn.replace(/\s+/g,'_'))}.gif`};
       }
     }catch(e){}
   }
   throw new Error('Not found: '+name);
 }
 
-// ── State ──
-let _bstWiz={pending:[],mode:'url'}; // pending = array of fetched monster data
+// ── Drag state ──
+let _bstDragId=null;
+let _bstWiz={pending:[],mode:'url'};
+
+// ── Drag handlers ──
+function _bstOnDragStart(id,e){
+  _bstDragId=id; e.dataTransfer.effectAllowed='move';
+  setTimeout(()=>document.querySelector(`[data-bst-id="${id}"]`)?.classList.add('bst-dragging'),0);
+}
+function _bstOnDragOver(id,e){
+  if(_bstDragId===id)return; e.preventDefault(); e.dataTransfer.dropEffect='move';
+  document.querySelector(`[data-bst-id="${id}"]`)?.classList.add('bst-drop-target');
+}
+function _bstOnDragLeave(id){
+  document.querySelector(`[data-bst-id="${id}"]`)?.classList.remove('bst-drop-target');
+}
+function _bstOnDrop(targetId,e){
+  e.preventDefault();
+  document.querySelector(`[data-bst-id="${targetId}"]`)?.classList.remove('bst-drop-target');
+  if(!_bstDragId||_bstDragId===targetId){_bstDragId=null;return;}
+  _bstMergeOrGroup(_bstDragId,targetId);
+  _bstDragId=null;
+}
+function _bstOnDragEnd(){
+  _bstDragId=null;
+  document.querySelectorAll('.bst-dragging,.bst-drop-target').forEach(el=>el.classList.remove('bst-dragging','bst-drop-target'));
+}
+
+function _bstMergeOrGroup(dragId,targetId){
+  const bs=state.bestiary;
+  const drag=bs.find(x=>x.id===dragId);
+  const target=bs.find(x=>x.id===targetId);
+  if(!drag||!target) return;
+  // Drop onto group → add to group
+  if(target.isGroup){
+    if(!drag.isGroup) target.monsters.push({...drag});
+    else target.monsters.push(...drag.monsters);
+    state.bestiary=bs.filter(x=>x.id!==dragId);
+    dirty();save(false);renderBestiary();
+    toast(`📎 Adicionado ao grupo "${target.groupName}"`);
+    return;
+  }
+  // Both individual → create group
+  const suggestName=drag.name.split(' ')[0]+' / '+target.name.split(' ')[0];
+  const groupName=prompt('Nome do grupo:',suggestName)||suggestName;
+  const group={id:'bg_'+Date.now(),isGroup:true,groupName,completed:false,monsters:[{...drag},{...target}]};
+  state.bestiary=bs.filter(x=>x.id!==dragId&&x.id!==targetId);
+  state.bestiary.push(group);
+  dirty();save(false);renderBestiary();
+  toast(`📎 Grupo "${groupName}" criado!`);
+}
 
 // ══════════════════════════════════════════════════════
 // RENDER
@@ -4015,17 +4111,22 @@ function renderBestiary(){
   const active=bs.filter(b=>!b.completed);
   const done=bs.filter(b=>b.completed);
 
-  // Counter
-  const totalRem=active.reduce((s,b)=>s+Math.max(0,(b.killsNeeded||0)-(b.currentKills||0)),0);
-  const charmPending=active.reduce((s,b)=>s+(b.charmPoints||0),0);
-  const charmEarned=done.reduce((s,b)=>s+(b.charmPoints||0),0);
+  const totalRem=active.reduce((s,b)=>{
+    if(b.isGroup) return s+b.monsters.reduce((ms,m)=>ms+Math.max(0,(m.killsNeeded||0)-(m.currentKills||0)),0);
+    return s+Math.max(0,(b.killsNeeded||0)-(b.currentKills||0));
+  },0);
+  const charmPend=active.reduce((s,b)=>{
+    if(b.isGroup) return s+b.monsters.reduce((ms,m)=>ms+(m.charmPoints||0),0);
+    return s+(b.charmPoints||0);
+  },0);
+  const charmEarned=done.reduce((s,b)=>{
+    if(b.isGroup) return s+b.monsters.reduce((ms,m)=>ms+(m.charmPoints||0),0);
+    return s+(b.charmPoints||0);
+  },0);
+
   if(bs.length){
     counter.style.display='flex';
-    counter.innerHTML=`
-      <span>⚔️ Em progresso: <strong>${active.length}</strong></span>
-      <span>✅ Concluídos: <strong>${done.length}</strong></span>
-      ${totalRem?`<span>🎯 Kills restantes: <strong>${totalRem.toLocaleString('pt-BR')}</strong></span>`:''}
-      ${charmEarned?`<span>✨ Charm points: <strong>${charmEarned}</strong>${charmPending?` <span style="color:var(--t2);font-weight:400;">(+${charmPending} pendentes)</span>`:''}</span>`:''}`;
+    counter.innerHTML=`<span>⚔️ Em progresso: <strong>${active.length}</strong></span><span>✅ Concluídos: <strong>${done.length}</strong></span>${totalRem?`<span>🎯 Kills restantes: <strong>${totalRem.toLocaleString('pt-BR')}</strong></span>`:''}${charmEarned?`<span>✨ Charm: <strong>${charmEarned}</strong>${charmPend?` <span style="color:var(--t2);font-weight:400;">(+${charmPend} pend.)</span>`:''}</span>`:''}`;
   }else{
     counter.style.display='none';
   }
@@ -4038,19 +4139,18 @@ function renderBestiary(){
   let html='';
   if(active.length){
     html+=`<div class="bst-section-lbl">⚔️ Em progresso (${active.length})</div><div class="bst-grid">`;
-    active.forEach(b=>{html+=_buildBstCard(b);});
+    active.forEach(b=>{html+=b.isGroup?_buildBstGroupCard(b):_buildBstCard(b);});
     html+=`</div>`;
   }
   if(done.length){
     html+=`<div class="bst-section-lbl">✅ Concluídos (${done.length})</div><div class="bst-grid">`;
-    done.forEach(b=>{html+=_buildBstCard(b);});
+    done.forEach(b=>{html+=b.isGroup?_buildBstGroupCard(b):_buildBstCard(b);});
     html+=`</div>`;
   }
   el.innerHTML=html;
 }
 
 function _buildBstCard(b){
-  // Support both new format (bestiarylevel) and old format (difficulty → fallback map)
   const OLD_MAP={trivial:'Trivial',easy:'Easy',medium:'Medium',hard:'Hard',legendary:'Hard',harmless:'Harmless'};
   const level=b.bestiarylevel||(OLD_MAP[b.difficulty])||'Medium';
   const occ=b.occurrence||'Common';
@@ -4063,18 +4163,20 @@ function _buildBstCard(b){
     ?`<img class="bst-gif" src="${b.gifUrl}" alt="${b.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="bst-gif-ph" style="display:none;">🐉</div>`
     :`<div class="bst-gif-ph">🐉</div>`;
   const weakHtml=b.weaknesses?buildResistRow(b.weaknesses,false,true):'';
-  const lvCls=_bstLvCls(level);
-  const occCls=_bstOccCls(occ);
   const classHtml=b.bestiaryclass?`<span class="bst-badge" style="background:rgba(255,255,255,.05);color:var(--t1);border:1px solid var(--c4);">${b.bestiaryclass}</span>`:'';
-
-  return `<div class="bst-card${b.completed?' completed':''}">
+  const safeId=b.id.replace(/'/g,"\\'");
+  const safeName=(b.name||'').replace(/"/g,'&quot;');
+  return `<div class="bst-card${b.completed?' completed':''}" data-bst-id="${b.id}" data-bst-name="${safeName}"
+    draggable="true"
+    ondragstart="_bstOnDragStart('${safeId}',event)" ondragend="_bstOnDragEnd()"
+    ondragover="_bstOnDragOver('${safeId}',event)" ondragleave="_bstOnDragLeave('${safeId}')" ondrop="_bstOnDrop('${safeId}',event)">
     <div class="bst-head">
       ${gifHtml}
       <div style="flex:1;min-width:0;">
         <div class="bst-name">${b.name}</div>
         <div class="bst-badges">
-          <span class="bst-badge bst-lv-${lvCls}">${level}</span>
-          <span class="bst-badge bst-oc-${occCls}">${occ}</span>
+          <span class="bst-badge bst-lv-${_bstLvCls(level)}">${level}</span>
+          <span class="bst-badge bst-oc-${_bstOccCls(occ)}">${occ}</span>
           ${classHtml}
           ${charmPts?`<span class="bst-badge bst-charm">✨ ${charmPts} pts</span>`:''}
         </div>
@@ -4084,19 +4186,78 @@ function _buildBstCard(b){
     <div>
       <div class="bst-progress"><div class="bst-progress-fill" style="width:${pct}%"></div></div>
       <div class="bst-kills-row">
-        <input class="bst-kills-inp" type="number" min="0" value="${cur}"
-          onchange="bestiaryUpdateKills('${b.id}',this.value)"
-          ${b.completed?'disabled':''}>
-        <span>/ ${killsNeeded.toLocaleString('pt-BR')} kills</span>
+        <input class="bst-kills-inp" type="number" min="0" value="${cur}" onchange="bestiaryUpdateKills('${safeId}',this.value)" ${b.completed?'disabled':''}>
+        <span>/ ${killsNeeded.toLocaleString('pt-BR')}</span>
         <span style="margin-left:auto;font-weight:700;color:var(--t0);">${pct}%</span>
       </div>
       ${!b.completed?`<div style="font-size:.74rem;color:var(--t2);margin-top:.15rem;">~${rem.toLocaleString('pt-BR')} restantes</div>`:''}
     </div>
     <div class="bst-actions">
       ${!b.completed
-        ?`<button class="btn btn-g" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryComplete('${b.id}',true)">✅ Concluir</button>`
-        :`<button class="btn btn-o" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryComplete('${b.id}',false)">↩️ Reabrir</button>`}
-      <button class="btn" style="font-size:.78rem;padding:.3rem .55rem;background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.25);" onclick="bestiaryDelete('${b.id}')">🗑️</button>
+        ?`<button class="btn btn-g" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryComplete('${safeId}',true)">✅ Concluir</button>`
+        :`<button class="btn btn-o" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryComplete('${safeId}',false)">↩️ Reabrir</button>`}
+      <button class="btn" style="font-size:.78rem;padding:.3rem .55rem;background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.25);" onclick="bestiaryDelete('${safeId}')">🗑️</button>
+    </div>
+  </div>`;
+}
+
+function _buildBstGroupCard(g){
+  const allDone=g.monsters.every(m=>m.completed);
+  const totalNeeded=g.monsters.reduce((s,m)=>s+(m.killsNeeded||0),0);
+  const totalCur=g.monsters.reduce((s,m)=>s+(m.currentKills||0),0);
+  const totalCharm=g.monsters.reduce((s,m)=>s+(m.charmPoints||0),0);
+  const pct=totalNeeded>0?Math.min(100,Math.round((totalCur/totalNeeded)*100)):0;
+  const rem=Math.max(0,totalNeeded-totalCur);
+  const safeGId=g.id.replace(/'/g,"\\'");
+  const safeName=(g.groupName||'').replace(/"/g,'&quot;');
+
+  const memberRows=g.monsters.map(m=>{
+    const mKN=m.killsNeeded||0;
+    const mCur=m.currentKills||0;
+    const mPct=mKN>0?Math.min(100,Math.round((mCur/mKN)*100)):0;
+    const mSafeId=m.id.replace(/'/g,"\\'");
+    const gifHtml=m.gifUrl
+      ?`<img src="${m.gifUrl}" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;border-radius:4px;" onerror="this.style.display='none'">`
+      :`<span style="font-size:1rem;">🐉</span>`;
+    const lvCls=_bstLvCls(m.bestiarylevel||'Medium');
+    return `<div class="bst-group-member${m.completed?' completed':''}"
+      draggable="true" ondragstart="_bstOnDragStart('${mSafeId}',event)" ondragend="_bstOnDragEnd()">
+      ${gifHtml}
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:.78rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.name}</div>
+        <div style="display:flex;align-items:center;gap:.3rem;margin-top:.12rem;">
+          <span class="bst-badge bst-lv-${lvCls}" style="font-size:.6rem;padding:.08rem .3rem;">${m.bestiarylevel||'?'}</span>
+          <div style="flex:1;height:3px;background:var(--c4);border-radius:2px;overflow:hidden;"><div style="width:${mPct}%;height:100%;background:var(--gold-g);"></div></div>
+          <span style="font-size:.65rem;color:var(--t2);flex-shrink:0;">${mPct}%</span>
+        </div>
+      </div>
+      <input class="bst-kills-inp" type="number" min="0" value="${mCur}" style="width:58px;font-size:.75rem;"
+        onchange="bestiaryGroupMemberKills('${safeGId}','${mSafeId}',this.value)" ${m.completed?'disabled':''}>
+      <button style="background:none;border:none;color:var(--t2);cursor:pointer;font-size:.85rem;padding:.1rem .2rem;line-height:1;" onclick="bestiaryGroupRemoveMember('${safeGId}','${mSafeId}')" title="Remover do grupo">✕</button>
+    </div>`;
+  }).join('');
+
+  return `<div class="bst-group-card${allDone?' completed':''}" data-bst-id="${g.id}" data-bst-name="${safeName}"
+    ondragover="_bstOnDragOver('${safeGId}',event)" ondragleave="_bstOnDragLeave('${safeGId}')" ondrop="_bstOnDrop('${safeGId}',event)">
+    <div style="display:flex;align-items:center;gap:.5rem;">
+      <span style="font-size:.9rem;">📎</span>
+      <div class="bst-group-name" onclick="_bstGroupRename('${safeGId}')" title="Clique para renomear">${g.groupName}</div>
+      ${totalCharm?`<span class="bst-badge bst-charm">✨ ${totalCharm}</span>`:''}
+    </div>
+    <div>
+      <div class="bst-progress"><div class="bst-progress-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--t1);margin-top:.2rem;">
+        <span>${totalCur.toLocaleString('pt-BR')} / ${totalNeeded.toLocaleString('pt-BR')} kills</span>
+        <span style="font-weight:700;color:var(--t0);">${pct}%</span>
+      </div>
+      ${!allDone&&rem?`<div style="font-size:.72rem;color:var(--t2);margin-top:.1rem;">~${rem.toLocaleString('pt-BR')} restantes</div>`:''}
+    </div>
+    <div class="bst-group-members">${memberRows}</div>
+    <div class="bst-actions">
+      ${!allDone
+        ?`<button class="btn btn-g" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryGroupComplete('${safeGId}',true)">✅ Concluir grupo</button>`
+        :`<button class="btn btn-o" style="flex:1;font-size:.78rem;padding:.3rem .55rem;" onclick="bestiaryGroupComplete('${safeGId}',false)">↩️ Reabrir</button>`}
+      <button class="btn" style="font-size:.78rem;padding:.3rem .55rem;background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.25);" onclick="bestiaryGroupDelete('${safeGId}')">🗑️</button>
     </div>
   </div>`;
 }
@@ -4106,32 +4267,23 @@ function _buildBstCard(b){
 // ══════════════════════════════════════════════════════
 function openBestiaryAdd(){
   _bstWiz={pending:[],mode:'url'};
-  const el=document.getElementById('bstAddOv'); if(!el) return;
-  // Reset UI
-  const urlInp=document.getElementById('bstUrlInput');
-  if(urlInp) urlInp.value='';
+  const el=document.getElementById('bstAddOv');if(!el)return;
+  const urlInp=document.getElementById('bstUrlInput');if(urlInp)urlInp.value='';
   document.getElementById('bstPreviewWrap').style.display='none';
   document.getElementById('bstPreviewGrid').innerHTML='';
-  const ki=document.getElementById('bstCurrentKills'); if(ki) ki.value='';
-  // Populate hunt select
+  const ki=document.getElementById('bstCurrentKills');if(ki)ki.value='';
   const sel=document.getElementById('bstHuntSelect');
   sel.innerHTML='<option value="">-- Selecione uma hunt --</option>';
-  const myHunts=state.activeProfile
-    ?state.hunts.filter(h=>h.profileId===state.activeProfile)
-    :state.hunts;
+  const myHunts=state.activeProfile?state.hunts.filter(h=>h.profileId===state.activeProfile):state.hunts;
   myHunts.forEach(h=>{
     const opt=document.createElement('option');
-    opt.value=h.id; opt.textContent=h.name||(h.monsters||[]).map(m=>m.name).join(', ').slice(0,40)||'Hunt sem nome';
+    opt.value=h.id;opt.textContent=h.name||(h.monsters||[]).map(m=>m.name).join(', ').slice(0,40)||'Hunt sem nome';
     sel.appendChild(opt);
   });
-  // Tab: URL mode by default
   bstSetMode('url');
   el.style.display='flex';
 }
-
-function closeBestiaryAdd(){
-  document.getElementById('bstAddOv').style.display='none';
-}
+function closeBestiaryAdd(){document.getElementById('bstAddOv').style.display='none';}
 
 function bstSetMode(mode){
   _bstWiz.mode=mode;
@@ -4139,151 +4291,151 @@ function bstSetMode(mode){
   document.getElementById('bstModeHuntBtn').classList.toggle('on',mode==='hunt');
   document.getElementById('bstPanelUrl').classList.toggle('on',mode==='url');
   document.getElementById('bstPanelHunt').classList.toggle('on',mode==='hunt');
-  // Reset preview
   _bstWiz.pending=[];
   document.getElementById('bstPreviewWrap').style.display='none';
   document.getElementById('bstPreviewGrid').innerHTML='';
 }
 
-// Fetch all from textarea (URL mode)
 async function bstFetchAll(){
   const raw=document.getElementById('bstUrlInput').value;
   const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
   if(!lines.length){toast('Cole pelo menos um nome ou URL.');return;}
   const btn=document.getElementById('bstFetchBtn');
-  btn.textContent='⏳ Buscando...'; btn.disabled=true;
+  btn.textContent='⏳ Buscando...';btn.disabled=true;
   _bstWiz.pending=[];
   const results=await Promise.allSettled(lines.map(async line=>{
-    const name=_bstExtractName(line);
-    if(!name) throw new Error('Linha inválida: '+line);
-    // Skip if already in bestiary
-    const already=(state.bestiary||[]).find(b=>b.name.toLowerCase()===name.toLowerCase()&&!b.completed);
-    if(already) return{...await fetchBestiaryData(name),_skip:true,_skipReason:'Já no Bestiary'};
+    const name=_bstExtractName(line);if(!name)throw new Error('Linha inválida');
     return await fetchBestiaryData(name);
   }));
   _bstWiz.pending=results.map((r,i)=>r.status==='fulfilled'?r.value:{_error:true,_name:_bstExtractName(lines[i]),_msg:r.reason?.message||'Erro'});
   _bstRenderPreview();
-  btn.textContent='🔍 Buscar dados'; btn.disabled=false;
+  btn.textContent='🔍 Buscar dados';btn.disabled=false;
 }
 
-// Import from hunt (Hunt mode)
 async function bstImportHunt(){
   const huntId=document.getElementById('bstHuntSelect').value;
   if(!huntId){toast('Selecione uma hunt.');return;}
   const hunt=state.hunts.find(h=>h.id===huntId);
-  if(!hunt||!(hunt.monsters||[]).length){toast('Hunt sem monstros.');return;}
+  if(!hunt||(hunt.monsters||[]).length===0){toast('Hunt sem monstros.');return;}
   const btn=document.getElementById('bstImportBtn');
-  btn.textContent='⏳ Carregando...'; btn.disabled=true;
+  btn.textContent='⏳ Carregando...';btn.disabled=true;
   const names=[...new Set((hunt.monsters||[]).map(m=>m.name).filter(Boolean))];
   const results=await Promise.allSettled(names.map(n=>fetchBestiaryData(n)));
   _bstWiz.pending=results.map((r,i)=>r.status==='fulfilled'?r.value:{_error:true,_name:names[i],_msg:r.reason?.message||'Erro'});
   _bstRenderPreview();
-  btn.textContent='📥 Carregar monstros'; btn.disabled=false;
+  btn.textContent='📥 Carregar monstros';btn.disabled=false;
 }
 
 function _bstRenderPreview(){
   const grid=document.getElementById('bstPreviewGrid');
   const wrap=document.getElementById('bstPreviewWrap');
-  const ok=_bstWiz.pending.filter(p=>!p._error&&!p._skip);
-  document.getElementById('bstPreviewCount').textContent=
-    `(${ok.length} para adicionar${_bstWiz.pending.length-ok.length?', '+((_bstWiz.pending.length-ok.length))+' com problema':''})`;
+  const ok=_bstWiz.pending.filter(p=>!p._error);
+  document.getElementById('bstPreviewCount').textContent=`(${ok.length} para adicionar${_bstWiz.pending.length-ok.length?', '+(_bstWiz.pending.length-ok.length)+' com erro':''})`;
   grid.innerHTML=_bstWiz.pending.map((p,i)=>{
-    if(p._error){
-      return `<div class="bst-preview-error">❌ <strong>${p._name}</strong> — ${p._msg}</div>`;
-    }
-    if(p._skip){
-      return `<div class="bst-preview-card" style="opacity:.5;">
-        ${p.gifUrl?`<img src="${p.gifUrl}" style="width:36px;height:36px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`:'<span style="width:36px;text-align:center;">🐉</span>'}
-        <div><div style="font-weight:700;font-size:.85rem;">${p.name}</div><div style="font-size:.75rem;color:var(--t2);">${p._skipReason}</div></div>
-      </div>`;
-    }
-    const lvCls=_bstLvCls(p.bestiarylevel);
-    const occCls=_bstOccCls(p.occurrence);
+    if(p._error) return `<div class="bst-preview-error">❌ <strong>${p._name}</strong> — ${p._msg}</div>`;
+    const lvCls=_bstLvCls(p.bestiarylevel),occCls=_bstOccCls(p.occurrence);
     return `<div class="bst-preview-card">
       ${p.gifUrl?`<img src="${p.gifUrl}" style="width:40px;height:40px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`:'<span style="width:40px;text-align:center;font-size:1.3rem;">🐉</span>'}
-      <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:.85rem;">${p.name}</div>
-        <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.2rem;">
-          <span class="bst-badge bst-lv-${lvCls}">${p.bestiarylevel}</span>
-          <span class="bst-badge bst-oc-${occCls}">${p.occurrence}</span>
-          <span class="bst-badge bst-charm">✨ ${p.charmPoints} pts</span>
-          <span style="font-size:.72rem;color:var(--t2);">🎯 ${p.killsNeeded.toLocaleString('pt-BR')} kills</span>
-        </div>
-      </div>
+      <div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:.85rem;">${p.name}</div>
+      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.2rem;">
+        <span class="bst-badge bst-lv-${lvCls}">${p.bestiarylevel}</span>
+        <span class="bst-badge bst-oc-${occCls}">${p.occurrence}</span>
+        <span class="bst-badge bst-charm">✨ ${p.charmPoints} pts</span>
+        <span style="font-size:.72rem;color:var(--t2);">🎯 ${p.killsNeeded.toLocaleString('pt-BR')} kills</span>
+      </div></div>
       <button class="bst-remove" onclick="_bstRemovePreview(${i})" title="Remover">✕</button>
     </div>`;
   }).join('');
   wrap.style.display=_bstWiz.pending.length?'block':'none';
 }
-
-function _bstRemovePreview(i){
-  _bstWiz.pending.splice(i,1);
-  _bstRenderPreview();
-}
+function _bstRemovePreview(i){_bstWiz.pending.splice(i,1);_bstRenderPreview();}
 
 function bestiaryConfirmAdd(){
-  if(!state.bestiary) state.bestiary=[];
+  if(!state.bestiary)state.bestiary=[];
   const cur=Math.max(0,parseInt(document.getElementById('bstCurrentKills')?.value)||0);
-  const toAdd=_bstWiz.pending.filter(p=>!p._error&&!p._skip);
+  const toAdd=_bstWiz.pending.filter(p=>!p._error);
   if(!toAdd.length){toast('Nenhum monstro válido para adicionar.');return;}
   let added=0;
   toAdd.forEach(p=>{
-    const already=(state.bestiary).find(b=>b.name.toLowerCase()===p.name.toLowerCase()&&!b.completed);
-    if(already) return;
+    const already=(state.bestiary).find(b=>!b.isGroup&&b.name.toLowerCase()===p.name.toLowerCase()&&!b.completed);
+    if(already)return;
     const completed=cur>0&&cur>=p.killsNeeded;
     state.bestiary.push({
       id:'b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
-      name:p.name,
-      gifUrl:p.gifUrl,
-      weaknesses:p.weaknesses,
-      bestiarylevel:p.bestiarylevel,
-      occurrence:p.occurrence,
-      bestiaryclass:p.bestiaryclass,
-      killsNeeded:p.killsNeeded,
-      charmPoints:p.charmPoints,
-      currentKills:cur,
-      completed,
-      completedAt:completed?Date.now():null,
-      addedAt:Date.now()
+      name:p.name,gifUrl:p.gifUrl,weaknesses:p.weaknesses,
+      bestiarylevel:p.bestiarylevel,occurrence:p.occurrence,bestiaryclass:p.bestiaryclass,
+      killsNeeded:p.killsNeeded,charmPoints:p.charmPoints,
+      currentKills:cur,completed,completedAt:completed?Date.now():null,addedAt:Date.now()
     });
     added++;
   });
-  dirty(); save(false);
-  closeBestiaryAdd();
-  renderBestiary();
+  dirty();save(false);closeBestiaryAdd();renderBestiary();
   toast(`📖 ${added} monstro${added!==1?'s':''} adicionado${added!==1?'s':''} ao Bestiary!`);
 }
 
-// ── Actions ──
-function bestiaryComplete(id,completed){
-  const b=(state.bestiary||[]).find(x=>x.id===id);
-  if(!b) return;
-  b.completed=completed;
-  b.completedAt=completed?Date.now():null;
-  if(completed){
-    const need=b.killsNeeded||_bstKills(b.bestiarylevel||b.difficulty,b.occurrence);
-    if((b.currentKills||0)<need) b.currentKills=need;
+// ── Group actions ──
+function bestiaryGroupComplete(gId,completed){
+  const g=(state.bestiary||[]).find(x=>x.id===gId);if(!g||!g.isGroup)return;
+  g.completed=completed;
+  g.monsters.forEach(m=>{
+    m.completed=completed;m.completedAt=completed?Date.now():null;
+    if(completed){const n=m.killsNeeded||0;if((m.currentKills||0)<n)m.currentKills=n;}
+  });
+  dirty();save(false);renderBestiary();
+}
+function bestiaryGroupDelete(gId){
+  if(!confirm('Remover este grupo e todos os seus monstros?'))return;
+  state.bestiary=(state.bestiary||[]).filter(x=>x.id!==gId);
+  dirty();save(false);renderBestiary();toast('🗑️ Grupo removido');
+}
+function bestiaryGroupRemoveMember(gId,mId){
+  const g=(state.bestiary||[]).find(x=>x.id===gId);if(!g||!g.isGroup)return;
+  const member=g.monsters.find(m=>m.id===mId);if(!member)return;
+  if(g.monsters.length<=2){
+    if(!confirm('O grupo ficará com apenas 1 monstro e será desfeito. Continuar?'))return;
+    const other=g.monsters.find(m=>m.id!==mId);
+    state.bestiary=state.bestiary.filter(x=>x.id!==gId);
+    if(other)state.bestiary.push({...other});
+  }else{
+    g.monsters=g.monsters.filter(m=>m.id!==mId);
+    state.bestiary.push({...member});
   }
-  dirty(); save(false); renderBestiary();
+  dirty();save(false);renderBestiary();
+}
+function bestiaryGroupMemberKills(gId,mId,val){
+  const g=(state.bestiary||[]).find(x=>x.id===gId);if(!g||!g.isGroup)return;
+  const m=g.monsters.find(x=>x.id===mId);if(!m)return;
+  m.currentKills=Math.max(0,parseInt(val)||0);
+  if(m.killsNeeded&&m.currentKills>=m.killsNeeded&&!m.completed){
+    m.completed=true;m.completedAt=Date.now();toast('✅ '+m.name+' concluído!');
+  }
+  if(g.monsters.every(x=>x.completed)){g.completed=true;}
+  dirty();save(false);renderBestiary();
+}
+function _bstGroupRename(gId){
+  const g=(state.bestiary||[]).find(x=>x.id===gId);if(!g)return;
+  const n=prompt('Novo nome do grupo:',g.groupName);
+  if(n&&n.trim()){g.groupName=n.trim();dirty();save(false);renderBestiary();}
 }
 
+// ── Individual actions ──
+function bestiaryComplete(id,completed){
+  const b=(state.bestiary||[]).find(x=>x.id===id);if(!b)return;
+  b.completed=completed;b.completedAt=completed?Date.now():null;
+  if(completed){const n=b.killsNeeded||_bstKills(b.bestiarylevel||b.difficulty,b.occurrence);if((b.currentKills||0)<n)b.currentKills=n;}
+  dirty();save(false);renderBestiary();
+}
 function bestiaryDelete(id){
-  if(!confirm('Remover este monstro do Bestiary?')) return;
+  if(!confirm('Remover este monstro do Bestiary?'))return;
   state.bestiary=(state.bestiary||[]).filter(x=>x.id!==id);
-  dirty(); save(false); renderBestiary();
-  toast('🗑️ Removido do Bestiary');
+  dirty();save(false);renderBestiary();toast('🗑️ Removido do Bestiary');
 }
-
 function bestiaryUpdateKills(id,val){
-  const b=(state.bestiary||[]).find(x=>x.id===id);
-  if(!b) return;
+  const b=(state.bestiary||[]).find(x=>x.id===id);if(!b)return;
   b.currentKills=Math.max(0,parseInt(val)||0);
   const need=b.killsNeeded||_bstKills(b.bestiarylevel||b.difficulty,b.occurrence||'Common');
-  if(need&&b.currentKills>=need&&!b.completed){
-    b.completed=true; b.completedAt=Date.now();
-    toast('✅ Bestiary completo: '+b.name+'!');
-  }
-  dirty(); save(false); renderBestiary();
+  if(need&&b.currentKills>=need&&!b.completed){b.completed=true;b.completedAt=Date.now();toast('✅ Bestiary completo: '+b.name+'!');}
+  dirty();save(false);renderBestiary();
 }
 
 function initApp(){
