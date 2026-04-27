@@ -541,6 +541,8 @@ input[type=number]{-moz-appearance:textfield;}
 .hd-block{background:var(--c3);border-radius:9px;padding:.55rem .65rem;margin-bottom:.45rem;}
 .hd-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.38rem;}
 .hd-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
+.hd-list{display:flex;flex-direction:column;gap:.22rem;}
+.hd-list .hd-tag{justify-content:flex-start;}
 .mon-mini{background:var(--c3);border-radius:9px;padding:.55rem .45rem;border:1px solid var(--c4);text-align:center;transition:border-color .15s;text-decoration:none;display:block;}
 .mon-mini:hover{border-color:rgba(var(--accent-rgb),.35);}
 .mon-mini-gif{height:48px;display:flex;align-items:center;justify-content:center;margin-bottom:.28rem;}
@@ -3355,9 +3357,9 @@ function renderHunts(){
         <span style="color:var(--t1);font-size:.95rem;flex-shrink:0;">&#x25BE;</span>
       </div>
       <div class="hcard-body" id="${bodyId}">
-        ${refilTags?`<div class="hd-block"><div class="hd-lbl">&#x1F501; Refil</div><div class="hd-tags">${refilTags}</div></div>`:''}
-        ${imbuTags?`<div class="hd-block"><div class="hd-lbl">&#x1F6E1;&#xFE0F; Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
-        ${spellTags?`<div class="hd-block"><div class="hd-lbl">&#x2728; Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
+        ${refilTags?`<div class="hd-block"><div class="hd-lbl">&#x1F501; Refil</div><div class="hd-list">${refilTags}</div></div>`:''}
+        ${spellTags?`<div class="hd-block"><div class="hd-lbl">&#x2728; Magias</div><div class="hd-list">${spellTags}</div></div>`:''}
+        ${imbuTags?`<div class="hd-block"><div class="hd-lbl">&#x1F6E1;&#xFE0F; Imbuements</div><div class="hd-list">${imbuTags}</div></div>`:''}
         ${monGrid?`<div class="hd-block"><div class="hd-lbl">&#x1F409; Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
         ${activeLoot.length?`<div class="hd-block"><div class="hd-lbl">&#x1F4E6; Loot <span style="font-weight:400;font-size:.65rem;color:var(--t1);">(${activeLoot.length} itens)</span></div>${lootToolbar}<div class="hd-loot-grid" id="lootGrid_${h.id}"></div></div>`:''}
       </div>
@@ -3366,7 +3368,6 @@ function renderHunts(){
         <button class="btn btn-del btn-sm" onclick="rmHunt('${h.id}')">&#x1F5D1;&#xFE0F; Remover</button>
         <span style="flex:1"></span>
         <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">&#x1F4CA; Sess&otilde;es${sessCount>0?` (${sessCount})`:''}</button>
-        <button class="btn btn-o btn-sm" onclick="copySummaryToClipboard('${h.id}')">&#x1F4CB; Copiar</button>
         <button class="btn btn-o btn-sm" onclick="exportHuntJSON('${h.id}')">&#x1F4E4; Exportar</button>
         <button class="btn btn-o btn-sm" onclick="printHunt('${h.id}')">&#x1F5A8;&#xFE0F; Imprimir</button>
         <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">&#x1F4CB; Duplicar</button>
