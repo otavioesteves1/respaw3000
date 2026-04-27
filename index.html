@@ -79,26 +79,33 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 
 /* ── Bestiary ── */
 .bst-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;}
-.bst-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;}
-.bst-card{background:var(--c2);border:1px solid var(--c4);border-radius:10px;padding:.75rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .15s;}
+.bst-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:.8rem;}
+.bst-card{background:var(--c2);border:1px solid var(--c4);border-radius:10px;padding:.75rem;display:flex;flex-direction:column;gap:.45rem;transition:border-color .15s;}
 .bst-card:hover{border-color:var(--gold);}
 .bst-card.completed{opacity:.55;border-style:dashed;}
 .bst-head{display:flex;align-items:center;gap:.6rem;}
-.bst-gif{width:52px;height:52px;object-fit:contain;image-rendering:pixelated;background:rgba(0,0,0,.25);border-radius:6px;flex-shrink:0;}
-.bst-gif-ph{width:52px;height:52px;background:rgba(255,255,255,.05);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
-.bst-name{font-weight:700;font-size:.92rem;color:var(--t0);}
-.bst-diff{display:inline-block;padding:.15rem .5rem;border-radius:10px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:.2rem;}
-.bst-diff-trivial{background:rgba(148,163,184,.15);color:#94a3b8;border:1px solid rgba(148,163,184,.3);}
-.bst-diff-easy{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3);}
-.bst-diff-medium{background:rgba(234,179,8,.12);color:#fbbf24;border:1px solid rgba(234,179,8,.3);}
-.bst-diff-hard{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3);}
-.bst-diff-legendary{background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid rgba(167,139,250,.4);}
-.bst-progress{height:5px;background:var(--c3);border-radius:3px;overflow:hidden;margin-bottom:.3rem;}
+.bst-gif{width:56px;height:56px;object-fit:contain;image-rendering:pixelated;background:rgba(0,0,0,.25);border-radius:6px;flex-shrink:0;}
+.bst-gif-ph{width:56px;height:56px;background:rgba(255,255,255,.05);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+.bst-name{font-weight:700;font-size:.92rem;color:var(--t0);margin-bottom:.2rem;}
+.bst-badges{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
+.bst-badge{display:inline-flex;align-items:center;gap:.2rem;padding:.12rem .45rem;border-radius:9px;font-size:.68rem;font-weight:700;letter-spacing:.03em;}
+.bst-lv-harmless{background:rgba(148,163,184,.14);color:#94a3b8;border:1px solid rgba(148,163,184,.28);}
+.bst-lv-trivial{background:rgba(74,222,128,.12);color:#4ade80;border:1px solid rgba(74,222,128,.28);}
+.bst-lv-easy{background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.28);}
+.bst-lv-medium{background:rgba(234,179,8,.12);color:#fbbf24;border:1px solid rgba(234,179,8,.28);}
+.bst-lv-hard{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.28);}
+.bst-lv-challenging{background:rgba(167,139,250,.15);color:#c084fc;border:1px solid rgba(167,139,250,.35);}
+.bst-oc-common{background:rgba(148,163,184,.1);color:#94a3b8;border:1px solid rgba(148,163,184,.22);}
+.bst-oc-uncommon{background:rgba(74,222,128,.09);color:#4ade80;border:1px solid rgba(74,222,128,.22);}
+.bst-oc-rare{background:rgba(56,189,248,.1);color:#38bdf8;border:1px solid rgba(56,189,248,.22);}
+.bst-oc-veryrare{background:rgba(167,139,250,.13);color:#c084fc;border:1px solid rgba(167,139,250,.3);}
+.bst-charm{background:rgba(250,204,21,.1);color:#fde047;border:1px solid rgba(250,204,21,.25);}
+.bst-progress{height:5px;background:var(--c3);border-radius:3px;overflow:hidden;margin-bottom:.28rem;}
 .bst-progress-fill{height:100%;background:var(--gold-g);border-radius:3px;transition:width .3s;}
 .bst-kills-row{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--t1);}
 .bst-kills-inp{width:72px;background:var(--c3);border:1px solid var(--c4);border-radius:6px;color:var(--t0);font-size:.8rem;padding:.22rem .4rem;text-align:center;}
 .bst-kills-inp:focus{outline:none;border-color:var(--gold);}
-.bst-actions{display:flex;gap:.4rem;margin-top:.15rem;}
+.bst-actions{display:flex;gap:.4rem;margin-top:.1rem;}
 .bst-section-lbl{font-size:.78rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.08em;margin:1.3rem 0 .55rem;display:flex;align-items:center;gap:.5rem;}
 .bst-section-lbl::after{content:'';flex:1;height:1px;background:var(--c3);}
 .bst-empty{text-align:center;padding:3rem 1rem;color:var(--t2);}
@@ -106,7 +113,12 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .bst-counter{background:var(--c2);border:1px solid var(--c3);border-radius:10px;padding:.65rem 1rem;display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.82rem;}
 .bst-counter span{color:var(--t1);}
 .bst-counter strong{color:var(--t0);}
-.bst-mon-preview{background:var(--c2);border:1px solid var(--c3);border-radius:10px;padding:.75rem;display:flex;gap:.75rem;align-items:center;}
+.bst-preview-card{background:var(--c3);border:1px solid var(--c4);border-radius:8px;padding:.6rem;display:flex;align-items:center;gap:.6rem;position:relative;}
+.bst-preview-card .bst-remove{position:absolute;top:.3rem;right:.35rem;background:none;border:none;color:var(--t2);cursor:pointer;font-size:.9rem;line-height:1;padding:.1rem;}
+.bst-preview-card .bst-remove:hover{color:#f87171;}
+.bst-preview-error{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.55rem .7rem;font-size:.8rem;color:#f87171;display:flex;align-items:center;gap:.5rem;}
+.bst-textarea{background:var(--c3);border:1px solid var(--c4);border-radius:8px;color:var(--t0);font-size:.83rem;padding:.5rem .65rem;resize:vertical;font-family:inherit;width:100%;box-sizing:border-box;}
+.bst-textarea:focus{outline:none;border-color:var(--gold);}
 
 /* ── Vocation selector ── */
 .voc-bar{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.75rem;}
@@ -732,48 +744,40 @@ input[type=number]{-moz-appearance:textfield;}
 
 <!-- ══ BESTIARY ADD ══ -->
 <div class="ov" id="bstAddOv" style="display:none;">
-  <div class="modal" style="max-width:520px;">
-    <div class="wiz-header" style="border-bottom:1px solid var(--c3);padding-bottom:.75rem;margin-bottom:.75rem;">
+  <div class="modal" style="max-width:560px;">
+    <div class="wiz-header" style="border-bottom:1px solid var(--c3);padding-bottom:.75rem;margin-bottom:.85rem;">
       <span style="font-weight:700;font-size:1.05rem;">📖 Adicionar ao Bestiary</span>
       <button class="close-btn" onclick="closeBestiaryAdd()">✕</button>
     </div>
-    <div style="display:flex;flex-direction:column;gap:.9rem;padding:.25rem 0;">
-      <!-- Search -->
-      <div>
-        <label class="lbl">Nome do Monstro</label>
-        <div style="display:flex;gap:.4rem;">
-          <input class="inp" id="bstSearchInp" placeholder="ex: Dragon Lord" onkeydown="if(event.key==='Enter')bestiarySearch()" style="flex:1;">
-          <button class="btn btn-o" onclick="bestiarySearch()" id="bstSearchBtn" style="white-space:nowrap;">🔍 Buscar</button>
-        </div>
+    <!-- Mode tabs -->
+    <div class="tab-bar" style="margin-bottom:.9rem;">
+      <button class="tab-btn on" id="bstModeUrlBtn" onclick="bstSetMode('url')">🔗 URL / Nome</button>
+      <button class="tab-btn" id="bstModeHuntBtn" onclick="bstSetMode('hunt')">🏹 Importar Hunt</button>
+    </div>
+    <!-- URL mode -->
+    <div id="bstPanelUrl" class="tab-panel on">
+      <label class="lbl">Cole URLs ou nomes <span style="font-weight:400;color:var(--t2);">(um por linha)</span></label>
+      <textarea class="bst-textarea" id="bstUrlInput" rows="5"
+        placeholder="Dragon Lord&#10;https://tibia.fandom.com/wiki/Behemoth&#10;https://www.tibiawiki.com.br/wiki/Hydra&#10;Orc Warlord"></textarea>
+      <button class="btn btn-g" onclick="bstFetchAll()" id="bstFetchBtn" style="margin-top:.6rem;">🔍 Buscar dados</button>
+    </div>
+    <!-- Hunt import mode -->
+    <div id="bstPanelHunt" class="tab-panel">
+      <label class="lbl">Selecione uma Hunt para importar os monstros</label>
+      <select class="inp" id="bstHuntSelect" style="margin-bottom:.6rem;"></select>
+      <button class="btn btn-g" onclick="bstImportHunt()" id="bstImportBtn">📥 Carregar monstros</button>
+    </div>
+    <!-- Preview area -->
+    <div id="bstPreviewWrap" style="display:none;margin-top:1rem;">
+      <div class="bst-section-lbl" style="margin-top:0;">Pré-visualização <span id="bstPreviewCount" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);"></span></div>
+      <div id="bstPreviewGrid" style="display:flex;flex-direction:column;gap:.4rem;max-height:280px;overflow-y:auto;"></div>
+      <div style="margin-top:.75rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
+        <label class="lbl" style="margin:0;">Kills iniciais (todos):</label>
+        <input class="inp" id="bstCurrentKills" type="number" min="0" placeholder="0" style="max-width:100px;">
       </div>
-      <!-- Monster preview -->
-      <div id="bstMonPreview" class="bst-mon-preview" style="display:none;">
-        <img id="bstMonGif" src="" alt="" class="bst-gif" style="width:64px;height:64px;">
-        <div style="flex:1;min-width:0;">
-          <div id="bstMonName" style="font-weight:700;font-size:.98rem;margin-bottom:.35rem;"></div>
-          <div id="bstMonWeakRow"></div>
-        </div>
-      </div>
-      <!-- Difficulty -->
-      <div>
-        <label class="lbl">Dificuldade do Bestiary</label>
-        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
-          <button class="voc-btn" onclick="bstSelectDiff('trivial')" id="bstDiff-trivial">Trivial <span style="opacity:.6">(25)</span></button>
-          <button class="voc-btn" onclick="bstSelectDiff('easy')" id="bstDiff-easy">Fácil <span style="opacity:.6">(250)</span></button>
-          <button class="voc-btn" onclick="bstSelectDiff('medium')" id="bstDiff-medium">Médio <span style="opacity:.6">(500)</span></button>
-          <button class="voc-btn" onclick="bstSelectDiff('hard')" id="bstDiff-hard">Difícil <span style="opacity:.6">(1000)</span></button>
-          <button class="voc-btn" onclick="bstSelectDiff('legendary')" id="bstDiff-legendary">Lendário <span style="opacity:.6">(2500)</span></button>
-        </div>
-      </div>
-      <!-- Current kills -->
-      <div>
-        <label class="lbl">Kills já realizadas <span style="font-weight:400;color:var(--t2);">(opcional)</span></label>
-        <input class="inp" id="bstCurrentKills" type="number" min="0" placeholder="0" style="max-width:130px;">
-      </div>
-      <!-- Actions -->
-      <div style="display:flex;gap:.5rem;justify-content:flex-end;padding-top:.25rem;border-top:1px solid var(--c3);">
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.75rem;padding-top:.65rem;border-top:1px solid var(--c3);">
         <button class="btn btn-o" onclick="closeBestiaryAdd()">Cancelar</button>
-        <button class="btn btn-g" onclick="bestiaryConfirmAdd()" id="bstConfirmBtn" disabled>Adicionar</button>
+        <button class="btn btn-g" onclick="bestiaryConfirmAdd()" id="bstConfirmBtn">✅ Adicionar todos</button>
       </div>
     </div>
   </div>
@@ -3911,30 +3915,98 @@ document.addEventListener('keydown', e=>{
 });
 
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // MAIN TAB SWITCH
 // ══════════════════════════════════════════════════════
 function switchMainTab(tab){
   ['Hunts','Bestiary'].forEach(t=>{
     const key=t.toLowerCase();
-    document.getElementById('mainTabBtn'+t).classList.toggle('on', key===tab);
-    document.getElementById('mainTab'+t).classList.toggle('on', key===tab);
+    document.getElementById('mainTabBtn'+t).classList.toggle('on',key===tab);
+    document.getElementById('mainTab'+t).classList.toggle('on',key===tab);
   });
   if(tab==='bestiary') renderBestiary();
 }
 
 // ══════════════════════════════════════════════════════
-// BESTIARY
+// BESTIARY – constants & helpers
 // ══════════════════════════════════════════════════════
-const BESTIARY_DIFF={
-  trivial:  {label:'Trivial',  kills:25,   cls:'trivial'},
-  easy:     {label:'Fácil',    kills:250,  cls:'easy'},
-  medium:   {label:'Médio',    kills:500,  cls:'medium'},
-  hard:     {label:'Difícil',  kills:1000, cls:'hard'},
-  legendary:{label:'Lendário', kills:2500, cls:'legendary'}
+// Kill counts and charm points sourced from:
+//   Template:Kills_to_Unlock  and  Template:Charm_Points  (tibia.fandom.com)
+// Final-stage kills: Very Rare = always 5; Common/Uncommon/Rare = per difficulty
+const BESTIARY_LEVELS={
+  Harmless:    {kills:{def:25,   vr:5}, charm:{def:1,  vr:5  }, cls:'harmless'},
+  Trivial:     {kills:{def:250,  vr:5}, charm:{def:5,  vr:10 }, cls:'trivial'},
+  Easy:        {kills:{def:500,  vr:5}, charm:{def:15, vr:30 }, cls:'easy'},
+  Medium:      {kills:{def:1000, vr:5}, charm:{def:25, vr:50 }, cls:'medium'},
+  Hard:        {kills:{def:2500, vr:5}, charm:{def:50, vr:100}, cls:'hard'},
+  Challenging: {kills:{def:5000, vr:5}, charm:{def:100,vr:200}, cls:'challenging'}
 };
+function _bstKills(level,occ){
+  const l=BESTIARY_LEVELS[level]; if(!l) return 0;
+  return occ==='Very Rare'?l.kills.vr:l.kills.def;
+}
+function _bstCharm(level,occ){
+  const l=BESTIARY_LEVELS[level]; if(!l) return 0;
+  return occ==='Very Rare'?l.charm.vr:l.charm.def;
+}
+function _bstLvCls(level){
+  return (BESTIARY_LEVELS[level]?.cls)||'medium';
+}
+function _bstOccCls(occ){
+  const m={'Common':'common','Uncommon':'uncommon','Rare':'rare','Very Rare':'veryrare'};
+  return m[occ]||'common';
+}
+// Extract monster name from a raw line (URL or plain name)
+function _bstExtractName(line){
+  line=(line||'').trim(); if(!line) return null;
+  try{
+    const u=new URL(line);
+    const m=u.pathname.match(/\/wiki\/(.+)/);
+    if(m) return decodeURIComponent(m[1]).replace(/_/g,' ');
+  }catch(e){}
+  return line;
+}
+// Fetch full bestiary data for one monster name from fandom / BR wiki
+async function fetchBestiaryData(name){
+  const slug=name.trim().replace(/\s+/g,'_');
+  const apis=[
+    `https://tibia.fandom.com/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
+    `https://www.tibiawiki.com.br/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
+  ];
+  for(const url of apis){
+    try{
+      const r=await fetch(url);
+      const d=await r.json();
+      const wt=d.parse?.wikitext?.['*'];
+      if(!wt) continue;
+      const level=(wt.match(/\|\s*bestiarylevel\s*=\s*([^\n|{}]+)/i)?.[1]||'').trim();
+      const occ=(wt.match(/\|\s*occurrence\s*=\s*([^\n|{}]+)/i)?.[1]||'Common').trim();
+      const bclass=(wt.match(/\|\s*bestiaryclass\s*=\s*([^\n|{}]+)/i)?.[1]||'').trim();
+      const weaknesses=parseWikiResistances(wt);
+      if(level&&BESTIARY_LEVELS[level]){
+        const realName=d.parse?.title||name;
+        return{
+          name:realName,
+          bestiarylevel:level,
+          occurrence:occ,
+          bestiaryclass:bclass,
+          killsNeeded:_bstKills(level,occ),
+          charmPoints:_bstCharm(level,occ),
+          weaknesses,
+          gifUrl:`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(realName.replace(/\s+/g,'_'))}.gif`
+        };
+      }
+    }catch(e){}
+  }
+  throw new Error('Not found: '+name);
+}
 
-let _bstWiz={monster:null, diff:null};
+// ── State ──
+let _bstWiz={pending:[],mode:'url'}; // pending = array of fetched monster data
 
+// ══════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════
 function renderBestiary(){
   const el=document.getElementById('bstList');
   const counter=document.getElementById('bstCounter');
@@ -3943,20 +4015,18 @@ function renderBestiary(){
   const active=bs.filter(b=>!b.completed);
   const done=bs.filter(b=>b.completed);
 
-  if(active.length){
-    const totalRem=active.reduce((s,b)=>{
-      const d=BESTIARY_DIFF[b.difficulty];
-      return s+(d?Math.max(0,d.kills-(b.currentKills||0)):0);
-    },0);
+  // Counter
+  const totalRem=active.reduce((s,b)=>s+Math.max(0,(b.killsNeeded||0)-(b.currentKills||0)),0);
+  const charmPending=active.reduce((s,b)=>s+(b.charmPoints||0),0);
+  const charmEarned=done.reduce((s,b)=>s+(b.charmPoints||0),0);
+  if(bs.length){
     counter.style.display='flex';
     counter.innerHTML=`
-      <span>📋 Em progresso: <strong>${active.length}</strong></span>
+      <span>⚔️ Em progresso: <strong>${active.length}</strong></span>
       <span>✅ Concluídos: <strong>${done.length}</strong></span>
-      <span>⚔️ Kills restantes: <strong>${totalRem.toLocaleString('pt-BR')}</strong></span>`;
-  } else if(done.length){
-    counter.style.display='flex';
-    counter.innerHTML=`<span>✅ Concluídos: <strong>${done.length}</strong></span>`;
-  } else {
+      ${totalRem?`<span>🎯 Kills restantes: <strong>${totalRem.toLocaleString('pt-BR')}</strong></span>`:''}
+      ${charmEarned?`<span>✨ Charm points: <strong>${charmEarned}</strong>${charmPending?` <span style="color:var(--t2);font-weight:400;">(+${charmPending} pendentes)</span>`:''}</span>`:''}`;
+  }else{
     counter.style.display='none';
   }
 
@@ -3980,30 +4050,44 @@ function renderBestiary(){
 }
 
 function _buildBstCard(b){
-  const d=BESTIARY_DIFF[b.difficulty]||BESTIARY_DIFF.medium;
+  // Support both new format (bestiarylevel) and old format (difficulty → fallback map)
+  const OLD_MAP={trivial:'Trivial',easy:'Easy',medium:'Medium',hard:'Hard',legendary:'Hard',harmless:'Harmless'};
+  const level=b.bestiarylevel||(OLD_MAP[b.difficulty])||'Medium';
+  const occ=b.occurrence||'Common';
+  const killsNeeded=b.killsNeeded||_bstKills(level,occ)||1000;
+  const charmPts=b.charmPoints??_bstCharm(level,occ);
   const cur=b.currentKills||0;
-  const pct=Math.min(100,Math.round((cur/d.kills)*100));
-  const rem=Math.max(0,d.kills-cur);
+  const pct=Math.min(100,Math.round((cur/killsNeeded)*100));
+  const rem=Math.max(0,killsNeeded-cur);
   const gifHtml=b.gifUrl
     ?`<img class="bst-gif" src="${b.gifUrl}" alt="${b.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="bst-gif-ph" style="display:none;">🐉</div>`
     :`<div class="bst-gif-ph">🐉</div>`;
   const weakHtml=b.weaknesses?buildResistRow(b.weaknesses,false,true):'';
+  const lvCls=_bstLvCls(level);
+  const occCls=_bstOccCls(occ);
+  const classHtml=b.bestiaryclass?`<span class="bst-badge" style="background:rgba(255,255,255,.05);color:var(--t1);border:1px solid var(--c4);">${b.bestiaryclass}</span>`:'';
+
   return `<div class="bst-card${b.completed?' completed':''}">
     <div class="bst-head">
       ${gifHtml}
       <div style="flex:1;min-width:0;">
         <div class="bst-name">${b.name}</div>
-        <span class="bst-diff bst-diff-${d.cls}">${d.label}</span>
+        <div class="bst-badges">
+          <span class="bst-badge bst-lv-${lvCls}">${level}</span>
+          <span class="bst-badge bst-oc-${occCls}">${occ}</span>
+          ${classHtml}
+          ${charmPts?`<span class="bst-badge bst-charm">✨ ${charmPts} pts</span>`:''}
+        </div>
       </div>
     </div>
-    ${weakHtml?`<div style="margin-top:.1rem;">${weakHtml}</div>`:''}
+    ${weakHtml?`<div>${weakHtml}</div>`:''}
     <div>
       <div class="bst-progress"><div class="bst-progress-fill" style="width:${pct}%"></div></div>
       <div class="bst-kills-row">
         <input class="bst-kills-inp" type="number" min="0" value="${cur}"
           onchange="bestiaryUpdateKills('${b.id}',this.value)"
           ${b.completed?'disabled':''}>
-        <span>/ ${d.kills.toLocaleString('pt-BR')}</span>
+        <span>/ ${killsNeeded.toLocaleString('pt-BR')} kills</span>
         <span style="margin-left:auto;font-weight:700;color:var(--t0);">${pct}%</span>
       </div>
       ${!b.completed?`<div style="font-size:.74rem;color:var(--t2);margin-top:.15rem;">~${rem.toLocaleString('pt-BR')} restantes</div>`:''}
@@ -4017,87 +4101,168 @@ function _buildBstCard(b){
   </div>`;
 }
 
+// ══════════════════════════════════════════════════════
+// ADD MODAL
+// ══════════════════════════════════════════════════════
 function openBestiaryAdd(){
-  _bstWiz={monster:null,diff:null};
-  document.getElementById('bstSearchInp').value='';
-  document.getElementById('bstMonPreview').style.display='none';
-  document.getElementById('bstCurrentKills').value='';
-  document.getElementById('bstConfirmBtn').disabled=true;
-  Object.keys(BESTIARY_DIFF).forEach(k=>document.getElementById('bstDiff-'+k).classList.remove('on'));
-  document.getElementById('bstAddOv').style.display='flex';
+  _bstWiz={pending:[],mode:'url'};
+  const el=document.getElementById('bstAddOv'); if(!el) return;
+  // Reset UI
+  const urlInp=document.getElementById('bstUrlInput');
+  if(urlInp) urlInp.value='';
+  document.getElementById('bstPreviewWrap').style.display='none';
+  document.getElementById('bstPreviewGrid').innerHTML='';
+  const ki=document.getElementById('bstCurrentKills'); if(ki) ki.value='';
+  // Populate hunt select
+  const sel=document.getElementById('bstHuntSelect');
+  sel.innerHTML='<option value="">-- Selecione uma hunt --</option>';
+  const myHunts=state.activeProfile
+    ?state.hunts.filter(h=>h.profileId===state.activeProfile)
+    :state.hunts;
+  myHunts.forEach(h=>{
+    const opt=document.createElement('option');
+    opt.value=h.id; opt.textContent=h.name||(h.monsters||[]).map(m=>m.name).join(', ').slice(0,40)||'Hunt sem nome';
+    sel.appendChild(opt);
+  });
+  // Tab: URL mode by default
+  bstSetMode('url');
+  el.style.display='flex';
 }
 
 function closeBestiaryAdd(){
   document.getElementById('bstAddOv').style.display='none';
 }
 
-async function bestiarySearch(){
-  const name=document.getElementById('bstSearchInp').value.trim();
-  if(!name) return;
-  const btn=document.getElementById('bstSearchBtn');
-  btn.textContent='⏳';
-  btn.disabled=true;
-  try{
-    const res=await fetchMonsterResistances(name);
-    // Try Tibia Fandom GIF (canonical approach)
-    const gifUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent(name.replace(/\s+/g,'_'))}.gif`;
-    _bstWiz.monster={name,gifUrl,weaknesses:res};
-    document.getElementById('bstMonGif').src=gifUrl;
-    document.getElementById('bstMonName').textContent=name;
-    document.getElementById('bstMonWeakRow').innerHTML=res
-      ?buildResistRow(res,false,true)
-      :'<span style="font-size:.75rem;color:var(--t2);">Fraquezas não encontradas</span>';
-    document.getElementById('bstMonPreview').style.display='flex';
-    _bstCheckConfirm();
-  } catch(e){
-    toast('❌ Monstro não encontrado');
-  } finally{
-    btn.textContent='🔍 Buscar';
-    btn.disabled=false;
-  }
+function bstSetMode(mode){
+  _bstWiz.mode=mode;
+  document.getElementById('bstModeUrlBtn').classList.toggle('on',mode==='url');
+  document.getElementById('bstModeHuntBtn').classList.toggle('on',mode==='hunt');
+  document.getElementById('bstPanelUrl').classList.toggle('on',mode==='url');
+  document.getElementById('bstPanelHunt').classList.toggle('on',mode==='hunt');
+  // Reset preview
+  _bstWiz.pending=[];
+  document.getElementById('bstPreviewWrap').style.display='none';
+  document.getElementById('bstPreviewGrid').innerHTML='';
 }
 
-function bstSelectDiff(key){
-  _bstWiz.diff=key;
-  Object.keys(BESTIARY_DIFF).forEach(k=>document.getElementById('bstDiff-'+k).classList.toggle('on',k===key));
-  _bstCheckConfirm();
+// Fetch all from textarea (URL mode)
+async function bstFetchAll(){
+  const raw=document.getElementById('bstUrlInput').value;
+  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length){toast('Cole pelo menos um nome ou URL.');return;}
+  const btn=document.getElementById('bstFetchBtn');
+  btn.textContent='⏳ Buscando...'; btn.disabled=true;
+  _bstWiz.pending=[];
+  const results=await Promise.allSettled(lines.map(async line=>{
+    const name=_bstExtractName(line);
+    if(!name) throw new Error('Linha inválida: '+line);
+    // Skip if already in bestiary
+    const already=(state.bestiary||[]).find(b=>b.name.toLowerCase()===name.toLowerCase()&&!b.completed);
+    if(already) return{...await fetchBestiaryData(name),_skip:true,_skipReason:'Já no Bestiary'};
+    return await fetchBestiaryData(name);
+  }));
+  _bstWiz.pending=results.map((r,i)=>r.status==='fulfilled'?r.value:{_error:true,_name:_bstExtractName(lines[i]),_msg:r.reason?.message||'Erro'});
+  _bstRenderPreview();
+  btn.textContent='🔍 Buscar dados'; btn.disabled=false;
 }
 
-function _bstCheckConfirm(){
-  document.getElementById('bstConfirmBtn').disabled=!(_bstWiz.monster&&_bstWiz.diff);
+// Import from hunt (Hunt mode)
+async function bstImportHunt(){
+  const huntId=document.getElementById('bstHuntSelect').value;
+  if(!huntId){toast('Selecione uma hunt.');return;}
+  const hunt=state.hunts.find(h=>h.id===huntId);
+  if(!hunt||!(hunt.monsters||[]).length){toast('Hunt sem monstros.');return;}
+  const btn=document.getElementById('bstImportBtn');
+  btn.textContent='⏳ Carregando...'; btn.disabled=true;
+  const names=[...new Set((hunt.monsters||[]).map(m=>m.name).filter(Boolean))];
+  const results=await Promise.allSettled(names.map(n=>fetchBestiaryData(n)));
+  _bstWiz.pending=results.map((r,i)=>r.status==='fulfilled'?r.value:{_error:true,_name:names[i],_msg:r.reason?.message||'Erro'});
+  _bstRenderPreview();
+  btn.textContent='📥 Carregar monstros'; btn.disabled=false;
+}
+
+function _bstRenderPreview(){
+  const grid=document.getElementById('bstPreviewGrid');
+  const wrap=document.getElementById('bstPreviewWrap');
+  const ok=_bstWiz.pending.filter(p=>!p._error&&!p._skip);
+  document.getElementById('bstPreviewCount').textContent=
+    `(${ok.length} para adicionar${_bstWiz.pending.length-ok.length?', '+((_bstWiz.pending.length-ok.length))+' com problema':''})`;
+  grid.innerHTML=_bstWiz.pending.map((p,i)=>{
+    if(p._error){
+      return `<div class="bst-preview-error">❌ <strong>${p._name}</strong> — ${p._msg}</div>`;
+    }
+    if(p._skip){
+      return `<div class="bst-preview-card" style="opacity:.5;">
+        ${p.gifUrl?`<img src="${p.gifUrl}" style="width:36px;height:36px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`:'<span style="width:36px;text-align:center;">🐉</span>'}
+        <div><div style="font-weight:700;font-size:.85rem;">${p.name}</div><div style="font-size:.75rem;color:var(--t2);">${p._skipReason}</div></div>
+      </div>`;
+    }
+    const lvCls=_bstLvCls(p.bestiarylevel);
+    const occCls=_bstOccCls(p.occurrence);
+    return `<div class="bst-preview-card">
+      ${p.gifUrl?`<img src="${p.gifUrl}" style="width:40px;height:40px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`:'<span style="width:40px;text-align:center;font-size:1.3rem;">🐉</span>'}
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:.85rem;">${p.name}</div>
+        <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.2rem;">
+          <span class="bst-badge bst-lv-${lvCls}">${p.bestiarylevel}</span>
+          <span class="bst-badge bst-oc-${occCls}">${p.occurrence}</span>
+          <span class="bst-badge bst-charm">✨ ${p.charmPoints} pts</span>
+          <span style="font-size:.72rem;color:var(--t2);">🎯 ${p.killsNeeded.toLocaleString('pt-BR')} kills</span>
+        </div>
+      </div>
+      <button class="bst-remove" onclick="_bstRemovePreview(${i})" title="Remover">✕</button>
+    </div>`;
+  }).join('');
+  wrap.style.display=_bstWiz.pending.length?'block':'none';
+}
+
+function _bstRemovePreview(i){
+  _bstWiz.pending.splice(i,1);
+  _bstRenderPreview();
 }
 
 function bestiaryConfirmAdd(){
-  if(!_bstWiz.monster||!_bstWiz.diff) return;
-  const cur=Math.max(0,parseInt(document.getElementById('bstCurrentKills').value)||0);
   if(!state.bestiary) state.bestiary=[];
-  const d=BESTIARY_DIFF[_bstWiz.diff];
-  const completed=cur>=d.kills;
-  state.bestiary.push({
-    id:'b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
-    name:_bstWiz.monster.name,
-    gifUrl:_bstWiz.monster.gifUrl,
-    weaknesses:_bstWiz.monster.weaknesses,
-    difficulty:_bstWiz.diff,
-    currentKills:cur,
-    completed,
-    completedAt:completed?Date.now():null,
-    addedAt:Date.now()
+  const cur=Math.max(0,parseInt(document.getElementById('bstCurrentKills')?.value)||0);
+  const toAdd=_bstWiz.pending.filter(p=>!p._error&&!p._skip);
+  if(!toAdd.length){toast('Nenhum monstro válido para adicionar.');return;}
+  let added=0;
+  toAdd.forEach(p=>{
+    const already=(state.bestiary).find(b=>b.name.toLowerCase()===p.name.toLowerCase()&&!b.completed);
+    if(already) return;
+    const completed=cur>0&&cur>=p.killsNeeded;
+    state.bestiary.push({
+      id:'b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+      name:p.name,
+      gifUrl:p.gifUrl,
+      weaknesses:p.weaknesses,
+      bestiarylevel:p.bestiarylevel,
+      occurrence:p.occurrence,
+      bestiaryclass:p.bestiaryclass,
+      killsNeeded:p.killsNeeded,
+      charmPoints:p.charmPoints,
+      currentKills:cur,
+      completed,
+      completedAt:completed?Date.now():null,
+      addedAt:Date.now()
+    });
+    added++;
   });
   dirty(); save(false);
   closeBestiaryAdd();
   renderBestiary();
-  toast('📖 '+(completed?'Monstro adicionado como concluído!':'Monstro adicionado ao Bestiary!'));
+  toast(`📖 ${added} monstro${added!==1?'s':''} adicionado${added!==1?'s':''} ao Bestiary!`);
 }
 
+// ── Actions ──
 function bestiaryComplete(id,completed){
   const b=(state.bestiary||[]).find(x=>x.id===id);
   if(!b) return;
   b.completed=completed;
   b.completedAt=completed?Date.now():null;
   if(completed){
-    const d=BESTIARY_DIFF[b.difficulty];
-    if(d&&(b.currentKills||0)<d.kills) b.currentKills=d.kills;
+    const need=b.killsNeeded||_bstKills(b.bestiarylevel||b.difficulty,b.occurrence);
+    if((b.currentKills||0)<need) b.currentKills=need;
   }
   dirty(); save(false); renderBestiary();
 }
@@ -4113,9 +4278,8 @@ function bestiaryUpdateKills(id,val){
   const b=(state.bestiary||[]).find(x=>x.id===id);
   if(!b) return;
   b.currentKills=Math.max(0,parseInt(val)||0);
-  const d=BESTIARY_DIFF[b.difficulty];
-  // Auto-complete when kills reached
-  if(d&&b.currentKills>=d.kills&&!b.completed){
+  const need=b.killsNeeded||_bstKills(b.bestiarylevel||b.difficulty,b.occurrence||'Common');
+  if(need&&b.currentKills>=need&&!b.completed){
     b.completed=true; b.completedAt=Date.now();
     toast('✅ Bestiary completo: '+b.name+'!');
   }
