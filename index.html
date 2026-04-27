@@ -149,6 +149,11 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .hd-loot-item img{width:22px;height:22px;object-fit:contain;image-rendering:pixelated;}
 .hd-loot-item-name{font-size:.58rem;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:58px;}
 .hd-loot-item-price{font-size:.62rem;font-weight:700;}
+.hd-loot-toolbar{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap;margin-bottom:.35rem;}
+.hd-loot-fil-btn{background:var(--c3);border:1px solid var(--c4);color:var(--t1);border-radius:5px;padding:.18rem .38rem;font-size:.66rem;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.hd-loot-fil-btn.on{background:rgba(var(--accent-rgb),.15);border-color:var(--accent);color:var(--t0);font-weight:700;}
+.hd-loot-sort-btn{background:var(--c3);border:1px solid var(--c4);color:var(--t1);border-radius:5px;padding:.18rem .38rem;font-size:.66rem;cursor:pointer;margin-left:auto;transition:all .12s;white-space:nowrap;}
+.hd-loot-sort-btn.on{background:rgba(var(--accent-rgb),.15);border-color:var(--accent);color:var(--gold);font-weight:700;}
 /* Wheel mini in summary */
 .sum-wheel-mini{display:flex;align-items:center;gap:.75rem;margin-bottom:.35rem;}
 
@@ -3099,7 +3104,6 @@ function saveHunt(){
   closeWizard(); renderHunts();
   save(false);
   toast(isEdit?'✅ Hunt atualizada!':'⚔️ Hunt criada!');
-  setTimeout(()=>openSummary(hunt.id),350);
 }
 
 // ══════════════════════════════════════════════════════
@@ -3276,8 +3280,16 @@ function renderHunts(){
     const sessCount=(h.sessions||[]).length;
     const pills=buildPreviewStrip(h,sessCount);
 
+    // Re-resolve img from source arrays (handles old hunts saved before img field existed)
     function mkTags(arr,bg,bc,hasQty){
-      return (arr||[]).map(x=>`<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${(x.img||x.imgUrl)?`<img src="${x.img||x.imgUrl}" alt="" style="width:22px;height:22px;object-fit:contain;image-rendering:pixelated;">`:''}${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">×${x.qty}</strong>`:''}</div>`).join('');
+      return (arr||[]).map(x=>{
+        let img=x.img||x.imgUrl||'';
+        if(!img&&x.id){
+          const src=SPELLS.find(s=>s.id===x.id)||SKILL_POTIONS.find(s=>s.id===x.id)||POTIONS.find(s=>s.id===x.id)||RUNES.find(s=>s.id===x.id);
+          if(src)img=src.img||src.imgUrl||'';
+        }
+        return `<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${img?`<img src="${img}" alt="" style="width:22px;height:22px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`:''} ${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">&times;${x.qty}</strong>`:''}</div>`;
+      }).join('');
     }
     // Refil: pots + runas merged
     const refilTags=mkTags(h.pots,'rgba(16,185,129,.1)','rgba(16,185,129,.3)',true)+mkTags(h.runas,'rgba(59,130,246,.1)','rgba(59,130,246,.3)',true);
@@ -3285,7 +3297,7 @@ function renderHunts(){
     const spellTags=mkTags(h.spells,'rgba(var(--accent-rgb),.1)','rgba(var(--accent-rgb),.3)',false);
 
     const monGrid=(h.monsters||[]).map(m=>{
-      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:'<span style="font-size:2rem;opacity:.35;">🐉</span>';
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:'<span style="font-size:2rem;opacity:.35;">\u{1F409}</span>';
       const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
@@ -3293,21 +3305,20 @@ function renderHunts(){
       return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${res}</a>`;
     }).join('');
 
-    // Loot with fandom icons + stored prices
+    // Loot toolbar: rarity filters + price sort
     const activeLoot=(h.loot||[]).filter(x=>!x.excluded);
-    const lootGrid=activeLoot.slice(0,40).map(it=>{
-      const slug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
-      const iconUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif`;
-      const price=(h.lootPrices||{})[it.name.toLowerCase()]||0;
-      const pf=fmtPrice(price);
-      const{priceColor}=price?_priceStyle(price):{priceColor:''};
-      return `<div class="hd-loot-item" title="${it.name}"><img src="${iconUrl}" alt="" onerror="this.style.display='none'"><div class="hd-loot-item-name">${it.name}</div>${pf?`<div class="hd-loot-item-price" style="color:${priceColor};">${pf}</div>`:''}</div>`;
-    }).join('');
+    const lootRars=[...new Set(activeLoot.map(x=>x.rarity||'unknown'))];
+    const lootRarBtns=LOOT_RARITY_ORDER.filter(r=>lootRars.includes(r));
+    const lootToolbar=activeLoot.length?`<div class="hd-loot-toolbar">
+      <button class="hd-loot-fil-btn on" onclick="_setLootRar('${h.id}','all',this)">Todos</button>
+      ${lootRarBtns.map(r=>`<button class="hd-loot-fil-btn" onclick="_setLootRar('${h.id}','${r}',this)">${LOOT_RARITY_LABELS[r]||r}</button>`).join('')}
+      <button class="hd-loot-sort-btn" id="lootSortBtn_${h.id}" onclick="_toggleLootSort('${h.id}')">&#x1F4B0; Pre&ccedil;o &darr;</button>
+    </div>`:'';
 
     // Bestiary badge
     const allBstNames=new Set((state.bestiary||[]).flatMap(b=>b.isGroup?b.monsters.map(m=>m.name.toLowerCase()):[b.name.toLowerCase()]));
     const huntBstMons=(h.monsters||[]).filter(m=>allBstNames.has(m.name.toLowerCase()));
-    const bstBadge=huntBstMons.length?`<button class="btn btn-o btn-sm bst-hunt-badge" onclick="goBstFromHunt(${JSON.stringify(huntBstMons.map(m=>m.name))})">📖 ${huntBstMons.length} no Bestiary</button>`:'';
+    const bstBadge=huntBstMons.length?`<button class="btn btn-o btn-sm bst-hunt-badge" onclick="goBstFromHunt(${JSON.stringify(huntBstMons.map(m=>m.name))})">&#x1F4D6; ${huntBstMons.length} no Bestiary</button>`:'';
 
     const bodyId='hb_'+h.id;
     const vocChip=h.vocation?`<span class="hcard-voc-chip">${VOC_ICONS[h.vocation]} ${VOC_LABELS[h.vocation]}</span>`:'';
@@ -3316,32 +3327,97 @@ function renderHunts(){
         ${pIcon}
         <div class="hcard-info">
           <div class="hcard-name-row"><span class="hcard-name">${h.name}</span>${vocChip}</div>
-          <div class="hcard-sub">${p?p.name:'Sem perfil'} · ${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
+          <div class="hcard-sub">${p?p.name:'Sem perfil'} &middot; ${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
         </div>
         ${pills}${bstBadge}
-        <span style="color:var(--t1);font-size:.95rem;flex-shrink:0;">▾</span>
+        <span style="color:var(--t1);font-size:.95rem;flex-shrink:0;">&#x25BE;</span>
       </div>
       <div class="hcard-body" id="${bodyId}">
-        ${refilTags?`<div class="hd-block"><div class="hd-lbl">🔁 Refil</div><div class="hd-tags">${refilTags}</div></div>`:''}
-        ${imbuTags?`<div class="hd-block"><div class="hd-lbl">🛡️ Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
-        ${spellTags?`<div class="hd-block"><div class="hd-lbl">✨ Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
-        ${monGrid?`<div class="hd-block"><div class="hd-lbl">🐉 Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
-        ${activeLoot.length?`<div class="hd-block"><div class="hd-lbl">📦 Loot <span style="font-weight:400;font-size:.65rem;color:var(--t1);">(${activeLoot.length} itens)</span></div><div class="hd-loot-grid">${lootGrid}${activeLoot.length>40?`<div style="font-size:.72rem;color:var(--t2);align-self:center;">+${activeLoot.length-40} itens</div>`:''}</div></div>`:''}
+        ${refilTags?`<div class="hd-block"><div class="hd-lbl">&#x1F501; Refil</div><div class="hd-tags">${refilTags}</div></div>`:''}
+        ${imbuTags?`<div class="hd-block"><div class="hd-lbl">&#x1F6E1;&#xFE0F; Imbuements</div><div class="hd-tags">${imbuTags}</div></div>`:''}
+        ${spellTags?`<div class="hd-block"><div class="hd-lbl">&#x2728; Magias</div><div class="hd-tags">${spellTags}</div></div>`:''}
+        ${monGrid?`<div class="hd-block"><div class="hd-lbl">&#x1F409; Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
+        ${activeLoot.length?`<div class="hd-block"><div class="hd-lbl">&#x1F4E6; Loot <span style="font-weight:400;font-size:.65rem;color:var(--t1);">(${activeLoot.length} itens)</span></div>${lootToolbar}<div class="hd-loot-grid" id="lootGrid_${h.id}"></div></div>`:''}
       </div>
       <div class="hcard-acts">
-        <button class="btn btn-o btn-sm" onclick="openWizard('${h.id}')">✏️ Editar</button>
-        <button class="btn btn-del btn-sm" onclick="rmHunt('${h.id}')">🗑️ Remover</button>
+        <button class="btn btn-o btn-sm" onclick="openWizard('${h.id}')">&#x270F;&#xFE0F; Editar</button>
+        <button class="btn btn-del btn-sm" onclick="rmHunt('${h.id}')">&#x1F5D1;&#xFE0F; Remover</button>
         <span style="flex:1"></span>
-        <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">📊 Sessões${sessCount>0?` (${sessCount})`:''}</button>
-        <button class="btn btn-o btn-sm" onclick="openSummary('${h.id}')">👁️ Resumo</button>
-        <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">📋 Duplicar</button>
+        <button class="btn btn-o btn-sm" onclick="openSessModal('${h.id}')" style="${sessCount>0?'color:var(--green);border-color:rgba(16,185,129,.4);':''}">&#x1F4CA; Sess&otilde;es${sessCount>0?` (${sessCount})`:''}</button>
+        <button class="btn btn-o btn-sm" onclick="copySummaryToClipboard('${h.id}')">&#x1F4CB; Copiar</button>
+        <button class="btn btn-o btn-sm" onclick="exportHuntJSON('${h.id}')">&#x1F4E4; Exportar</button>
+        <button class="btn btn-o btn-sm" onclick="printHunt('${h.id}')">&#x1F5A8;&#xFE0F; Imprimir</button>
+        <button class="btn btn-o btn-sm" onclick="dupHunt('${h.id}')">&#x1F4CB; Duplicar</button>
       </div>`;
+    // Populate loot grid immediately
+    if(activeLoot.length) _renderLootGrid(h.id);
+    el.appendChild(c);
     el.appendChild(c);
   });
 }
 function toggleBody(id){ document.getElementById(id).classList.toggle('on'); }
 function rmHunt(id){ if(!confirm('Remover esta hunt?'))return; state.hunts=state.hunts.filter(h=>h.id!==id); renderHunts(); dirty(); toast('🗑️ Hunt removida'); }
 function dupHunt(id){ const h=state.hunts.find(x=>x.id===id); if(!h)return; const copy=JSON.parse(JSON.stringify(h)); copy.id='h_'+Date.now(); copy.name=h.name+' (cópia)'; copy.createdAt=copy.updatedAt=Date.now(); state.hunts.unshift(copy); renderHunts(); dirty(); toast('📋 Duplicada!'); }
+
+// ── Loot grid filter/sort (expanded card) ──
+const _hdLootSt={};
+function _renderLootGrid(huntId){
+  const h=state.hunts.find(x=>x.id===huntId); if(!h)return;
+  const el=document.getElementById('lootGrid_'+huntId); if(!el)return;
+  const st=_hdLootSt[huntId]||{rar:'all',sort:'default'};
+  let items=(h.loot||[]).filter(x=>!x.excluded);
+  if(st.rar&&st.rar!=='all') items=items.filter(x=>(x.rarity||'unknown')===st.rar);
+  if(st.sort==='price'){
+    const prices=h.lootPrices||{};
+    items=[...items].sort((a,b)=>(prices[b.name.toLowerCase()]||0)-(prices[a.name.toLowerCase()]||0));
+  }
+  const shown=items.slice(0,60);
+  el.innerHTML=shown.map(it=>{
+    const slug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
+    const iconUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif`;
+    const price=(h.lootPrices||{})[it.name.toLowerCase()]||0;
+    const pf=fmtPrice(price);
+    const{priceColor}=price?_priceStyle(price):{priceColor:''};
+    return `<div class="hd-loot-item" title="${it.name}"><img src="${iconUrl}" alt="" onerror="this.style.display='none'"><div class="hd-loot-item-name">${it.name}</div>${pf?`<div class="hd-loot-item-price" style="color:${priceColor};">${pf}</div>`:''}</div>`;
+  }).join('')+(items.length>60?`<div style="font-size:.72rem;color:var(--t2);align-self:center;padding:.3rem;">+${items.length-60} itens</div>`:'');
+}
+function _setLootRar(huntId,rar,btn){
+  if(!_hdLootSt[huntId])_hdLootSt[huntId]={rar:'all',sort:'default'};
+  _hdLootSt[huntId].rar=rar;
+  btn.closest('.hd-loot-toolbar').querySelectorAll('.hd-loot-fil-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  _renderLootGrid(huntId);
+}
+function _toggleLootSort(huntId){
+  if(!_hdLootSt[huntId])_hdLootSt[huntId]={rar:'all',sort:'default'};
+  _hdLootSt[huntId].sort=_hdLootSt[huntId].sort==='price'?'default':'price';
+  const btn=document.getElementById('lootSortBtn_'+huntId);
+  if(btn)btn.classList.toggle('on',_hdLootSt[huntId].sort==='price');
+  _renderLootGrid(huntId);
+}
+
+// ── Per-hunt print ──
+function printHunt(huntId){
+  const h=state.hunts.find(x=>x.id===huntId); if(!h){toast('Hunt não encontrada');return;}
+  const p=state.profiles.find(x=>x.id===h.profileId);
+  const _ri=(arr)=>[...(SPELLS||[]),...(SKILL_POTIONS||[]),...(POTIONS||[]),...(RUNES||[])].find(s=>s.id===arr);
+  const pot=(h.pots||[]).map(x=>{const r=_ri(x.id);const img=x.img||r?.img||'';return `<span class="item">${img?`<img src="${img}" alt="">`:'💊'} ${x.name}<span class="qty">×${x.qty}</span></span>`;}).join('');
+  const run=(h.runas||[]).map(x=>{const r=_ri(x.id);const img=x.img||r?.img||'';return `<span class="item">${img?`<img src="${img}" alt="">`:'📜'} ${x.name}<span class="qty">×${x.qty}</span></span>`;}).join('');
+  const imb=(h.imbu||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'🛡️'} ${x.name}</span>`).join('');
+  const sp=(h.spells||[]).map(x=>{const r=_ri(x.id);const img=x.img||r?.img||'';return `<span class="item">${img?`<img src="${img}" alt="">`:'✨'} ${x.name}</span>`;}).join('');
+  const mons=(h.monsters||[]).map(m=>`<div class="mon">${m.gifUrl?`<img class="gif" src="${m.gifUrl}" alt="">`:'🐉'}<div class="monname">${m.name}</div><div class="mcharms">${m.majorCharm?`<span class="charm-lbl charm-maj">${m.majorCharm.name}</span>`:''} ${m.minorCharm?`<span class="charm-lbl charm-min">${m.minorCharm.name}</span>`:''}</div></div>`).join('');
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${h.name}</title>
+<style>body{font-family:Arial,sans-serif;padding:2rem;max-width:820px;margin:0 auto;color:#111;}h1{font-size:1.3rem;margin-bottom:.2rem;}.sub{color:#666;font-size:.82rem;margin-bottom:1.5rem;}.sec{margin-bottom:.6rem;}.lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#666;font-weight:700;margin-bottom:.3rem;}.items{display:flex;gap:.3rem;flex-wrap:wrap;}.item{display:flex;align-items:center;gap:.25rem;padding:.22rem .5rem;border-radius:6px;background:#f5f5f5;font-size:.75rem;font-weight:600;}.item img{height:18px;object-fit:contain;}.qty{color:#b45309;font-weight:800;margin-left:.15rem;}.mons{display:flex;gap:.5rem;flex-wrap:wrap;}.mon{text-align:center;border:1px solid #eee;border-radius:8px;padding:.5rem;min-width:90px;}.mon img.gif{height:52px;display:block;margin:0 auto .3rem;object-fit:contain;}.monname{font-size:.75rem;font-weight:700;}.mcharms{font-size:.65rem;margin-top:.2rem;}.charm-lbl{display:inline-block;padding:.1rem .3rem;border-radius:4px;font-size:.65rem;font-weight:700;margin:.1rem;background:#fef3c7;color:#92400e;}@media print{body{padding:.5rem;}}</style></head><body>
+<h1>⚔️ ${h.name}${h.vocation?` <span style="font-size:.85rem;font-weight:400;color:#666;">(${VOC_LABELS[h.vocation]})</span>`:''}</h1>
+<div class="sub">${p?`Perfil: ${p.name} · `:''}${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
+${pot?`<div class="sec"><div class="lbl">Poções</div><div class="items">${pot}</div></div>`:''}
+${run?`<div class="sec"><div class="lbl">Runas</div><div class="items">${run}</div></div>`:''}
+${imb?`<div class="sec"><div class="lbl">Imbuements</div><div class="items">${imb}</div></div>`:''}
+${sp?`<div class="sec"><div class="lbl">Magias</div><div class="items">${sp}</div></div>`:''}
+${mons?`<div class="sec"><div class="lbl">Monstros</div><div class="mons">${mons}</div></div>`:''}
+</body></html>`;
+  const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); setTimeout(()=>w.print(),400);
+}
 
 // ══════════════════════════════════════════════════════
 // EXPORT / IMPORT
