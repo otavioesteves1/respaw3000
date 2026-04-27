@@ -141,7 +141,27 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .bst-sort-sel{background:var(--c2);border:1px solid var(--c4);color:var(--t0);border-radius:8px;padding:.38rem .55rem;font-size:.82rem;cursor:pointer;outline:none;}
 .bst-toggle-label{display:flex;align-items:center;gap:.32rem;font-size:.8rem;color:var(--t1);cursor:pointer;white-space:nowrap;user-select:none;}
 .bst-sel-bar{display:flex;align-items:center;gap:.6rem;background:rgba(var(--accent-rgb),.07);border:1px solid rgba(var(--accent-rgb),.22);border-radius:8px;padding:.42rem .75rem;margin-bottom:.6rem;font-size:.82rem;flex-wrap:wrap;}
-.bst-sel-chk{width:15px;height:15px;cursor:pointer;accent-color:var(--accent);flex-shrink:0;}
+/* Custom checkbox */
+.bst-chk-wrap{display:inline-flex;cursor:pointer;flex-shrink:0;line-height:1;}
+.bst-chk-real{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
+.bst-chk-box{width:17px;height:17px;border:2px solid var(--c4);border-radius:5px;background:var(--c3);display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s;flex-shrink:0;}
+.bst-chk-wrap:hover .bst-chk-box{border-color:var(--accent);}
+.bst-chk-real:checked+.bst-chk-box{background:var(--accent);border-color:var(--accent);}
+.bst-chk-real:checked+.bst-chk-box::after{content:'';width:4px;height:8px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(42deg) translate(1px,-1px);display:block;}
+/* Favorite */
+.bst-fav-btn{background:none;border:none;cursor:pointer;font-size:1rem;line-height:1;padding:.1rem .15rem;color:var(--c4);transition:color .15s;border-radius:4px;}
+.bst-fav-btn:hover{color:#f59e0b;}
+.bst-fav-btn.active{color:#f59e0b;}
+/* Mini action links/buttons on card */
+.bst-mini-act{background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--t2);padding:.1rem .2rem;border-radius:4px;transition:all .12s;line-height:1;text-decoration:none;display:inline-flex;align-items:center;}
+.bst-mini-act:hover{color:var(--t0);background:var(--c3);}
+/* Fav filter button */
+.bst-fav-filter{background:var(--c3);border:1px solid var(--c4);color:var(--t1);border-radius:8px;padding:.38rem .55rem;font-size:.82rem;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.bst-fav-filter.on{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.5);color:#f59e0b;font-weight:700;}
+/* Member action buttons */
+.bst-mem-btn{background:none;border:1px solid var(--c4);border-radius:5px;color:var(--t1);cursor:pointer;font-size:.7rem;padding:.18rem .3rem;line-height:1;transition:all .12s;white-space:nowrap;}
+.bst-mem-btn:hover{border-color:var(--accent);color:var(--t0);}
+.bst-mem-btn.done{border-color:rgba(16,185,129,.35);color:var(--green);}
 .bst-charm-big{display:inline-flex;align-items:center;gap:.22rem;background:rgba(var(--accent-rgb),.13);border:1px solid rgba(var(--accent-rgb),.28);border-radius:5px;padding:.18rem .42rem;font-size:.78rem;font-weight:700;color:var(--gold);}
 /* Loot mini grid in hunt card */
 .hd-loot-grid{display:flex;flex-wrap:wrap;gap:.28rem;}
@@ -782,6 +802,7 @@ input[type=number]{-moz-appearance:textfield;}
         <option value="group_size">Maior grupo</option>
       </select>
       <label class="bst-toggle-label"><input type="checkbox" id="bstShowDone" checked onchange="renderBestiary()"> Concluídos</label>
+      <button class="bst-fav-filter" id="bstFavFilterBtn" onclick="_bstToggleFavFilter()">⭐ Favoritos</button>
       <div style="margin-left:auto;display:flex;gap:.5rem;">
         <button class="btn btn-o btn-sm" id="bstClearSelBtn" onclick="_bstClearSel()" style="display:none;">☐ Limpar seleção</button>
         <button class="btn btn-o" onclick="save()">💾 Salvar</button>
@@ -4148,6 +4169,18 @@ let _bstDragId=null;
 let _bstWiz={pending:[],mode:'url'};
 // ── Selection state ──
 let _bstSelected=new Set();
+// ── Favorite filter state ──
+let _bstFavFilter=false;
+function _bstToggleFavFilter(){
+  _bstFavFilter=!_bstFavFilter;
+  const btn=document.getElementById('bstFavFilterBtn');
+  if(btn)btn.classList.toggle('on',_bstFavFilter);
+  renderBestiary();
+}
+// ── Copy name to clipboard ──
+function _bstCopyName(name){
+  navigator.clipboard.writeText(name).then(()=>toast('📋 '+name+' copiado!'));
+}
 
 // ── Sort / filter helpers ──
 const DIFF_ORDER={Harmless:1,Trivial:2,Easy:3,Medium:4,Hard:5,Challenging:6};
@@ -4281,6 +4314,10 @@ function renderBestiary(){
 
   let filtered=bs.filter(b=>{
     if(!showDone&&b.completed)return false;
+    if(_bstFavFilter){
+      const hasFav=b.isGroup?b.monsters.some(m=>m.favorite):b.favorite;
+      if(!hasFav)return false;
+    }
     if(!search)return true;
     if(b.isGroup)return b.groupName.toLowerCase().includes(search)||b.monsters.some(m=>m.name.toLowerCase().includes(search));
     return b.name.toLowerCase().includes(search);
@@ -4337,11 +4374,13 @@ function _buildBstCard(b){
     ?`<img class="bst-gif" src="${b.gifUrl}" alt="${b.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="bst-gif-ph" style="display:none;">🐉</div>`
     :`<div class="bst-gif-ph">🐉</div>`;
   const weakHtml=b.weaknesses?buildResistRow(b.weaknesses,false,true):'';
-  // Only show bestiaryclass (Humanoid, etc.) — not occurrence
   const classHtml=b.bestiaryclass?`<span class="bst-badge" style="background:rgba(255,255,255,.05);color:var(--t1);border:1px solid var(--c4);">${b.bestiaryclass}</span>`:'';
   const safeId=b.id.replace(/'/g,"\\'");
   const safeName=(b.name||'').replace(/"/g,'&quot;');
+  const safeNameJ=JSON.stringify(b.name||'');
   const isSel=_bstSelected.has(b.id);
+  const isFav=b.favorite||false;
+  const wikiSlug=encodeURIComponent((b.name||'').replace(/\s+/g,'_'));
   return `<div class="bst-card${b.completed?' completed':''}" data-bst-id="${b.id}" data-bst-name="${safeName}"
     draggable="true"
     ondragstart="_bstOnDragStart('${safeId}',event)" ondragend="_bstOnDragEnd()"
@@ -4350,17 +4389,27 @@ function _buildBstCard(b){
       ${gifHtml}
       <div style="flex:1;min-width:0;">
         <div class="bst-name">${b.name}</div>
-        <div class="bst-badges">
+        <div class="bst-badges" style="margin-bottom:.22rem;">
           <span class="bst-badge bst-lv-${_bstLvCls(level)}">${level}</span>
           ${classHtml}
         </div>
+        <div style="display:flex;align-items:center;gap:.15rem;flex-wrap:wrap;">
+          <a class="bst-mini-act" href="https://tibia.fandom.com/wiki/${wikiSlug}" target="_blank" onclick="event.stopPropagation()" title="Ver na Wiki">🔗 Wiki</a>
+          <button class="bst-mini-act" onclick="_bstCopyName(${safeNameJ});event.stopPropagation()" title="Copiar nome">📋 Copiar</button>
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;flex-shrink:0;">
-        <input type="checkbox" class="bst-sel-chk" ${isSel?'checked':''} onchange="_bstToggleSel('${safeId}',this.checked)" title="Selecionar" onclick="event.stopPropagation()">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.28rem;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:.2rem;">
+          <button class="bst-fav-btn${isFav?' active':''}" onclick="bestiaryFavorite('${safeId}');event.stopPropagation()" title="${isFav?'Remover dos favoritos':'Adicionar aos favoritos'}">★</button>
+          <label class="bst-chk-wrap" onclick="event.stopPropagation()">
+            <input type="checkbox" class="bst-chk-real" ${isSel?'checked':''} onchange="_bstToggleSel('${safeId}',this.checked)">
+            <span class="bst-chk-box"></span>
+          </label>
+        </div>
         ${charmPts?`<span class="bst-charm-big">✨ ${charmPts} pts</span>`:''}
       </div>
     </div>
-    ${weakHtml?`<div>${weakHtml}</div>`:''}
+    ${weakHtml?`<div style="margin-top:.1rem;">${weakHtml}</div>`:''}
     <div>
       <div class="bst-progress"><div class="bst-progress-fill" style="width:${pct}%"></div></div>
       <div class="bst-kills-row">
@@ -4410,23 +4459,27 @@ function _buildBstGroupCard(g){
           <span class="bst-badge bst-lv-${lvCls}" style="font-size:.6rem;padding:.08rem .3rem;">${m.bestiarylevel||'?'}</span>
           ${mCharm?`<span style="font-size:.6rem;color:var(--gold);font-weight:700;">✨${mCharm}</span>`:''}
           <div style="flex:1;height:3px;background:var(--c4);border-radius:2px;overflow:hidden;"><div style="width:${mPct}%;height:100%;background:var(--gold-g);"></div></div>
-          <span style="font-size:.65rem;color:var(--t2);flex-shrink:0;">${mPct}%${!m.completed&&mRem?' (~'+mRem.toLocaleString('pt-BR')+')'  :''}</span>
+          <span style="font-size:.65rem;color:var(--t2);flex-shrink:0;">${mPct}%</span>
         </div>
       </div>
-      <input class="bst-kills-inp" type="number" min="0" value="${mCur}" style="width:58px;font-size:.75rem;"
+      <input class="bst-kills-inp" type="number" min="0" value="${mCur}" style="width:52px;font-size:.75rem;"
         onchange="bestiaryGroupMemberKills('${safeGId}','${mSafeId}',this.value)" ${m.completed?'disabled':''}>
-      <button style="background:none;border:none;color:var(--t2);cursor:pointer;font-size:.85rem;padding:.1rem .2rem;line-height:1;" onclick="bestiaryGroupRemoveMember('${safeGId}','${mSafeId}')" title="Remover do grupo">✕</button>
+      <button class="bst-mem-btn${m.completed?' done':''}" onclick="bestiaryGroupMemberComplete('${safeGId}','${mSafeId}',${!m.completed})" title="${m.completed?'Reabrir':'Concluir este monstro'}">${m.completed?'↩️':'✅'}</button>
+      <button class="bst-mem-btn" onclick="bestiaryGroupMemberExtract('${safeGId}','${mSafeId}')" title="Tirar do grupo (volta como individual)">📤</button>
     </div>`;
   }).join('');
 
   return `<div class="bst-group-card${allDone?' completed':''}" data-bst-id="${g.id}" data-bst-name="${safeName}"
     ondragover="_bstOnDragOver('${safeGId}',event)" ondragleave="_bstOnDragLeave('${safeGId}')" ondrop="_bstOnDrop('${safeGId}',event)">
-    <div style="display:flex;align-items:center;gap:.5rem;">
+    <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
       <span style="font-size:.9rem;">📎</span>
       <div class="bst-group-name" onclick="_bstGroupRename('${safeGId}')" title="Clique para renomear">${g.groupName}</div>
       <span style="font-size:.72rem;color:var(--t2);">${g.monsters.length} monstros</span>
-      ${totalCharm?`<span class="bst-charm-big" style="margin-left:auto;">✨ ${totalCharm} pts</span>`:''}
-      <input type="checkbox" class="bst-sel-chk" ${isSel?'checked':''} onchange="_bstToggleSel('${safeGId}',this.checked)" title="Selecionar grupo" onclick="event.stopPropagation()" style="margin-left:${totalCharm?'.3rem':'.3rem'};">
+      ${totalCharm?`<span class="bst-charm-big" style="margin-left:auto;">✨ ${totalCharm} pts</span>`:'<span style="flex:1"></span>'}
+      <label class="bst-chk-wrap" onclick="event.stopPropagation()">
+        <input type="checkbox" class="bst-chk-real" ${isSel?'checked':''} onchange="_bstToggleSel('${safeGId}',this.checked)">
+        <span class="bst-chk-box"></span>
+      </label>
     </div>
     <div>
       <div class="bst-progress"><div class="bst-progress-fill" style="width:${pct}%"></div></div>
@@ -4600,6 +4653,48 @@ function _bstGroupRename(gId){
   const g=(state.bestiary||[]).find(x=>x.id===gId);if(!g)return;
   const n=prompt('Novo nome do grupo:',g.groupName);
   if(n&&n.trim()){g.groupName=n.trim();dirty();save(false);renderBestiary();}
+}
+// ── Extract member from group → standalone entry ──
+function bestiaryGroupMemberExtract(gId,mId){
+  const g=(state.bestiary||[]).find(x=>x.id===gId);if(!g||!g.isGroup)return;
+  const m=g.monsters.find(x=>x.id===mId);if(!m)return;
+  g.monsters=g.monsters.filter(x=>x.id!==mId);
+  if(g.monsters.length===0){
+    state.bestiary=state.bestiary.filter(x=>x.id!==gId);
+  } else if(g.monsters.length===1){
+    const last=g.monsters[0];
+    state.bestiary=state.bestiary.filter(x=>x.id!==gId);
+    state.bestiary.push({...last});
+  } else {
+    g.completed=g.monsters.every(x=>x.completed);
+  }
+  state.bestiary.push({...m});
+  dirty();save(false);renderBestiary();
+  toast(`📤 ${m.name} retirado do grupo`);
+}
+// ── Complete/reopen a single member inside a group ──
+function bestiaryGroupMemberComplete(gId,mId,completed){
+  const g=(state.bestiary||[]).find(x=>x.id===gId);if(!g||!g.isGroup)return;
+  const m=g.monsters.find(x=>x.id===mId);if(!m)return;
+  m.completed=completed;m.completedAt=completed?Date.now():null;
+  if(completed&&m.killsNeeded&&(m.currentKills||0)<m.killsNeeded)m.currentKills=m.killsNeeded;
+  g.completed=g.monsters.every(x=>x.completed);
+  dirty();save(false);renderBestiary();
+  toast(completed?`✅ ${m.name} concluído!`:`↩️ ${m.name} reaberto`);
+}
+// ── Favorite toggle ──
+function bestiaryFavorite(id){
+  // Check top-level entries
+  let entry=(state.bestiary||[]).find(x=>x.id===id);
+  if(!entry){
+    // Check inside groups
+    for(const g of (state.bestiary||[])){
+      if(g.isGroup){const mm=g.monsters.find(x=>x.id===id);if(mm){entry=mm;break;}}
+    }
+  }
+  if(!entry)return;
+  entry.favorite=!entry.favorite;
+  dirty();save(false);renderBestiary();
 }
 
 // ── Individual actions ──
