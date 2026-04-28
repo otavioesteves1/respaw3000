@@ -737,6 +737,11 @@ input[type=number]{-moz-appearance:textfield;}
 .charm-opt-badge{position:absolute;top:2px;right:2px;font-size:.65rem;font-weight:900;background:var(--gold);color:var(--btn-g-text);border-radius:4px;padding:1px 3px;line-height:1;pointer-events:none;}
 
 /* ══ IMBUEMENTS TAB ══ */
+.imbu-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;padding:.55rem .75rem;background:var(--c2);border:1px solid var(--c4);border-radius:10px;}
+.imbu-tb-left{display:flex;align-items:center;gap:.65rem;}
+.imbu-tb-title{font-size:.88rem;font-weight:800;color:var(--t0);}
+.imbu-tb-profile{font-size:.75rem;color:var(--t2);padding:.2rem .55rem;border-radius:20px;background:var(--c3);border:1px solid var(--c4);}
+.imbu-tb-right{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
 .imbu-layout{display:grid;grid-template-columns:1fr 270px;gap:1.2rem;align-items:start;}
 @media(max-width:820px){.imbu-layout{grid-template-columns:1fr;}}
 /* Piece rows */
@@ -1711,7 +1716,7 @@ function renderProfiles(){
     portrait.style.display='none';
   }
 }
-function setProfile(id){ state.activeProfile=id; renderProfiles(); renderHunts(); dirty(); }
+function setProfile(id){ state.activeProfile=id; renderProfiles(); renderHunts(); if(document.getElementById('mainTabImbu').classList.contains('on')) renderImbu(); dirty(); }
 function openProfileModal(editId=null){
   document.getElementById('profileName').value='';
   document.getElementById('profileImgUrl').value='';
@@ -4805,6 +4810,7 @@ function bestiaryUpdateKills(id,val){
 
 // ══════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // IMBUEMENTS — data, state, render
 // Verified against tibia.fandom.com & tibiaduality.com
 // ══════════════════════════════════════════════════════
@@ -5073,28 +5079,47 @@ const _IMBU_CAT_BAR={skill:'cb-skill',elemdmg:'cb-elemdmg',elemprot:'cb-elemprot
 // ── Picker state ──
 let _imbuPickPiece=null, _imbuPickSlot=null;
 
-// ── State init ──
+// ── Profile helpers ──
+function _imbuPid(){ return state.activeProfile||'__default__'; }
+function _imbuProfileName(){
+  const p=(state.profiles||[]).find(x=>x.id===state.activeProfile);
+  return p?p.name:'Sem perfil';
+}
+
+// ── State init (per-profile, with migration from old flat format) ──
 function _imbuInitState(){
   if(!state.imbu) state.imbu={};
+  // Migrate old flat format {helmet:[...], armor:[...], ...} → {[pid]:{helmet:[...], ...}}
+  const pieceIds=IMBU_PIECES.map(p=>p.id);
+  const keys=Object.keys(state.imbu);
+  if(keys.length>0 && keys.every(k=>pieceIds.includes(k))){
+    const old={...state.imbu};
+    state.imbu={};
+    state.imbu[_imbuPid()]=old;
+  }
+  const pid=_imbuPid();
+  if(!state.imbu[pid]) state.imbu[pid]={};
+  const prof=state.imbu[pid];
   IMBU_PIECES.forEach(p=>{
-    if(!Array.isArray(state.imbu[p.id])||state.imbu[p.id].length!==p.slots){
-      const old=Array.isArray(state.imbu[p.id])?state.imbu[p.id]:[];
-      state.imbu[p.id]=Array.from({length:p.slots},(_,i)=>old[i]||{imbuId:null,tier:2,active:false});
+    if(!Array.isArray(prof[p.id])||prof[p.id].length!==p.slots){
+      const old=Array.isArray(prof[p.id])?prof[p.id]:[];
+      prof[p.id]=Array.from({length:p.slots},(_,i)=>old[i]||{imbuId:null,tier:2,active:false});
     }
   });
+  return prof;
 }
 
 // ── Main render ──
 function renderImbu(){
-  _imbuInitState();
+  const prof=_imbuInitState();
   const el=document.getElementById('imbuMain'); if(!el) return;
 
   // Count filled slots for header
   let filled=0,total=0;
-  IMBU_PIECES.forEach(p=>{ total+=p.slots; (state.imbu[p.id]||[]).forEach(s=>{ if(s.imbuId) filled++; }); });
+  IMBU_PIECES.forEach(p=>{ total+=p.slots; (prof[p.id]||[]).forEach(s=>{ if(s.imbuId) filled++; }); });
 
   const piecesHtml=IMBU_PIECES.map(p=>{
-    const slotsHtml=state.imbu[p.id].map((s,i)=>{
+    const slotsHtml=prof[p.id].map((s,i)=>{
       if(!s.imbuId){
         return `<div class="imbu-slot-box" onclick="openImbuPicker('${p.id}',${i})">
           <span class="imbu-slot-add">+</span>
@@ -5131,7 +5156,21 @@ function renderImbu(){
     </div>`;
   }).join('');
 
-  el.innerHTML=`<div class="imbu-layout">
+  const profileName=_imbuProfileName();
+  el.innerHTML=`
+  <div class="imbu-toolbar">
+    <div class="imbu-tb-left">
+      <span class="imbu-tb-title">⚗️ Imbuements</span>
+      <span class="imbu-tb-profile">👤 ${profileName}</span>
+    </div>
+    <div class="imbu-tb-right">
+      <button class="btn btn-o btn-sm" onclick="imbuImport()" title="Importar configuração">📂 Importar</button>
+      <button class="btn btn-o btn-sm" onclick="imbuExport()" title="Exportar configuração">📤 Exportar</button>
+      <button class="btn btn-o btn-sm" onclick="imbuPrint()" title="Imprimir / PDF">🖨️ Imprimir</button>
+      <button class="btn btn-g btn-sm" onclick="save()">💾 Salvar</button>
+    </div>
+  </div>
+  <div class="imbu-layout">
     <div style="background:var(--c2);border:1px solid var(--c4);border-radius:12px;padding:.9rem 1rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;">
         <span style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);">⚗️ Equipamento</span>
@@ -5146,10 +5185,11 @@ function renderImbu(){
 
 function _renderImbuShop(){
   const el=document.getElementById('imbuShop'); if(!el) return;
+  const prof=state.imbu[_imbuPid()]||{};
   const totals={};
   let tobuyCnt=0;
   IMBU_PIECES.forEach(p=>{
-    (state.imbu[p.id]||[]).forEach(s=>{
+    (prof[p.id]||[]).forEach(s=>{
       if(s.active||!s.imbuId) return;
       tobuyCnt++;
       const imbu=IMBU_DATA.find(x=>x.id===s.imbuId); if(!imbu) return;
@@ -5183,18 +5223,18 @@ function _renderImbuShop(){
 
 // ── Slot actions ──
 function imbuClearSlot(piece,slot){
-  _imbuInitState();
-  state.imbu[piece][slot]={imbuId:null,tier:2,active:false};
+  const prof=_imbuInitState();
+  prof[piece][slot]={imbuId:null,tier:2,active:false};
   dirty();save(false);renderImbu();
 }
 function imbuSetTier(piece,slot,tier){
-  _imbuInitState();
-  state.imbu[piece][slot].tier=tier;
+  const prof=_imbuInitState();
+  prof[piece][slot].tier=tier;
   dirty();save(false);renderImbu();
 }
 function imbuToggleActive(piece,slot){
-  _imbuInitState();
-  state.imbu[piece][slot].active=!state.imbu[piece][slot].active;
+  const prof=_imbuInitState();
+  prof[piece][slot].active=!prof[piece][slot].active;
   dirty();save(false);renderImbu();
 }
 
@@ -5203,7 +5243,8 @@ function openImbuPicker(piece,slot){
   _imbuPickPiece=piece; _imbuPickSlot=slot;
   const ov=document.getElementById('imbuPickerOv'); if(!ov) return;
   const pInfo=IMBU_PIECES.find(p=>p.id===piece);
-  const curId=(state.imbu[piece]&&state.imbu[piece][slot])?state.imbu[piece][slot].imbuId:null;
+  const prof=state.imbu[_imbuPid()]||{};
+  const curId=(prof[piece]&&prof[piece][slot])?prof[piece][slot].imbuId:null;
   const badge=document.getElementById('imbuPickerSlotBadge');
   if(badge) badge.textContent=pInfo?pInfo.emoji+' '+pInfo.label:piece;
   document.getElementById('imbuPickerSearch').value='';
@@ -5215,7 +5256,7 @@ function closeImbuPicker(){
   document.getElementById('imbuPickerOv').style.display='none';
 }
 function _renderImbuPickerList(search,curId){
-  if(curId===undefined) curId=(state.imbu[_imbuPickPiece]&&state.imbu[_imbuPickPiece][_imbuPickSlot])?state.imbu[_imbuPickPiece][_imbuPickSlot].imbuId:null;
+  if(curId===undefined){const prof=state.imbu[_imbuPid()]||{};curId=(prof[_imbuPickPiece]&&prof[_imbuPickPiece][_imbuPickSlot])?prof[_imbuPickPiece][_imbuPickSlot].imbuId:null;}
   const q=search.trim().toLowerCase();
   const list=IMBU_DATA.filter(im=>
     im.slots.includes(_imbuPickPiece)&&
@@ -5258,13 +5299,151 @@ function _renderImbuPickerList(search,curId){
   }).join('');
 }
 function imbuPickSelect(imbuId){
-  _imbuInitState();
-  state.imbu[_imbuPickPiece][_imbuPickSlot]={imbuId,tier:2,active:false};
+  const prof=_imbuInitState();
+  prof[_imbuPickPiece][_imbuPickSlot]={imbuId,tier:2,active:false};
   dirty();save(false);closeImbuPicker();renderImbu();
 }
 // ESC + backdrop close
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const ov=document.getElementById('imbuPickerOv');if(ov&&ov.style.display==='flex')closeImbuPicker();}});
 document.addEventListener('click',e=>{const ov=document.getElementById('imbuPickerOv');if(ov&&e.target===ov)closeImbuPicker();});
+
+// ── Export ──
+function imbuExport(){
+  const prof=_imbuInitState();
+  const payload={
+    type:'respaw_imbu',
+    version:1,
+    profile:_imbuProfileName(),
+    profileId:_imbuPid(),
+    exportedAt:new Date().toISOString(),
+    data:prof
+  };
+  const json=JSON.stringify(payload,null,2);
+  navigator.clipboard.writeText(json).then(()=>toast('📋 Imbuements copiados para o clipboard!')).catch(()=>{
+    // Fallback: show in textarea modal
+    _imbuShowTextModal('📤 Exportar Imbuements','Copie o JSON abaixo:',json,false);
+  });
+}
+
+// ── Import ──
+function imbuImport(){
+  _imbuShowTextModal('📂 Importar Imbuements','Cole o JSON exportado aqui:','',true,function(text){
+    let obj;
+    try{ obj=JSON.parse(text); }catch(e){ toast('❌ JSON inválido'); return; }
+    if(obj.type!=='respaw_imbu'||!obj.data){ toast('❌ Formato não reconhecido'); return; }
+    const prof=obj.data;
+    // Validate & filter pieces
+    const validPieces=IMBU_PIECES.map(p=>p.id);
+    const clean={};
+    validPieces.forEach(pid=>{
+      if(Array.isArray(prof[pid])){
+        const piece=IMBU_PIECES.find(p=>p.id===pid);
+        clean[pid]=Array.from({length:piece.slots},(_,i)=>{
+          const s=prof[pid][i];
+          if(!s||!s.imbuId) return {imbuId:null,tier:2,active:false};
+          if(!IMBU_DATA.find(x=>x.id===s.imbuId)) return {imbuId:null,tier:2,active:false};
+          return {imbuId:s.imbuId,tier:Number(s.tier)||2,active:!!s.active};
+        });
+      }
+    });
+    if(!state.imbu) state.imbu={};
+    state.imbu[_imbuPid()]=clean;
+    dirty();save(false);renderImbu();
+    toast('✅ Imbuements importados!');
+  });
+}
+
+// ── Print ──
+function imbuPrint(){
+  const prof=_imbuInitState();
+  const profileName=_imbuProfileName();
+  const TIER_LABEL=['Básico','Elaborado','Poderoso'];
+
+  // Build rows
+  const rows=IMBU_PIECES.map(p=>{
+    const cells=prof[p.id].map((s,i)=>{
+      if(!s.imbuId) return `<td style="color:#888;font-size:11px;text-align:center;">—</td>`;
+      const imbu=IMBU_DATA.find(x=>x.id===s.imbuId);
+      if(!imbu) return `<td>—</td>`;
+      const tier=imbu.tiers[Math.min(s.tier,imbu.tiers.length-1)];
+      const status=s.active?'✅ Ativo':'⏳ Comprar';
+      const mats=tier.mats.map(m=>`${m.q}× ${m.n}`).join(', ');
+      return `<td style="padding:6px 10px;vertical-align:top;">
+        <b>${imbu.name}</b> <span style="color:#666;">(${TIER_LABEL[s.tier]||'Poderoso'})</span><br>
+        <span style="color:#555;font-size:11px;">${tier.eff}</span><br>
+        <span style="font-size:10px;color:#777;">${mats}</span><br>
+        <span style="font-size:11px;">${status}</span>
+      </td>`;
+    }).join('');
+    return `<tr><td style="padding:6px 10px;font-weight:bold;white-space:nowrap;">${p.emoji} ${p.label}</td>${cells}</tr>`;
+  }).join('');
+
+  // Build shopping list
+  const totals={};
+  IMBU_PIECES.forEach(p=>{
+    (prof[p.id]||[]).forEach(s=>{
+      if(s.active||!s.imbuId) return;
+      const imbu=IMBU_DATA.find(x=>x.id===s.imbuId); if(!imbu) return;
+      const tier=imbu.tiers[Math.min(s.tier,imbu.tiers.length-1)];
+      tier.mats.forEach(m=>{
+        const k=m.n.toLowerCase();
+        if(!totals[k]) totals[k]={name:m.n,qty:0};
+        totals[k].qty+=m.q;
+      });
+    });
+  });
+  const shopRows=Object.values(totals).sort((a,b)=>b.qty-a.qty)
+    .map(it=>`<tr><td style="padding:4px 8px;">${it.name}</td><td style="padding:4px 8px;font-weight:bold;text-align:right;">×${it.qty}</td></tr>`).join('');
+
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>Imbuements — ${profileName}</title>
+  <style>
+    body{font-family:system-ui,sans-serif;padding:24px;color:#111;max-width:900px;margin:0 auto;}
+    h1{font-size:18px;margin-bottom:4px;}
+    .sub{color:#666;font-size:13px;margin-bottom:20px;}
+    table{border-collapse:collapse;width:100%;}
+    td,th{border:1px solid #ddd;}
+    th{background:#f5f5f5;font-size:12px;text-align:left;padding:5px 10px;}
+    .shop-table{width:300px;}
+    @media print{button{display:none!important;}}
+  </style>
+  </head><body>
+  <button onclick="window.print()" style="margin-bottom:16px;padding:6px 16px;cursor:pointer;">🖨️ Imprimir</button>
+  <h1>⚗️ Imbuements — ${profileName}</h1>
+  <div class="sub">Exportado em ${new Date().toLocaleString('pt-BR')}</div>
+  <h3 style="font-size:14px;margin-bottom:8px;">Configuração do Set</h3>
+  <table><thead><tr><th>Peça</th>${IMBU_PIECES.map(p=>`<th colspan="1">Slot ${p.slots>1?'1':''}</th>`).join('')}</tr></thead>
+  <tbody>${rows}</tbody></table>
+  ${shopRows?`<h3 style="font-size:14px;margin:20px 0 8px;">🛒 Lista de Compras (slots ⏳ Comprar)</h3>
+  <table class="shop-table"><thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+  <tbody>${shopRows}</tbody></table>`:'<p style="margin-top:16px;color:#555;">Nenhum item para comprar (todos os imbuements estão ativos).</p>'}
+  </body></html>`;
+
+  const w=window.open('','_blank','width=900,height=700');
+  if(w){ w.document.write(html); w.document.close(); }
+}
+
+// ── Helper: generic text modal for import/export fallback ──
+function _imbuShowTextModal(title,subtitle,content,editable,onConfirm){
+  const existing=document.getElementById('imbuTextModal');
+  if(existing) existing.remove();
+  const ov=document.createElement('div');
+  ov.id='imbuTextModal';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;display:flex;align-items:center;justify-content:center;';
+  ov.innerHTML=`<div style="background:var(--c1);border:1px solid var(--c3);border-radius:14px;width:min(520px,96vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.6);">
+    <div style="padding:.85rem 1rem;border-bottom:1px solid var(--c3);display:flex;align-items:center;justify-content:space-between;">
+      <div><div style="font-weight:800;font-size:.95rem;">${title}</div><div style="font-size:.72rem;color:var(--t1);">${subtitle}</div></div>
+      <button onclick="document.getElementById('imbuTextModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.1rem;cursor:pointer;padding:.2rem;">✕</button>
+    </div>
+    <div style="padding:.8rem 1rem;display:flex;flex-direction:column;gap:.65rem;overflow-y:auto;flex:1;">
+      <textarea id="imbuTextArea" style="width:100%;height:220px;background:var(--c2);border:1.5px solid var(--c4);color:var(--t0);border-radius:8px;padding:.6rem;font-size:.75rem;font-family:monospace;outline:none;resize:vertical;"${editable?'':' readonly'}>${content}</textarea>
+      ${editable?`<button class="btn btn-g" onclick="(function(){const t=document.getElementById('imbuTextArea').value.trim();if(!t){toast('⚠️ Cole o JSON primeiro');return;}document.getElementById('imbuTextModal').remove();(${onConfirm.toString()})(t)})()">✅ Importar</button>`:''}
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+  if(!editable) setTimeout(()=>{const ta=document.getElementById('imbuTextArea');if(ta){ta.select();}},80);
+}
 
 function initApp(){
   load(); clLoad(); clUpdateBadge();
