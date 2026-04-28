@@ -736,6 +736,50 @@ input[type=number]{-moz-appearance:textfield;}
 .spell-priority-btn:hover{border-color:var(--gold);color:var(--gold);}
 .charm-opt-badge{position:absolute;top:2px;right:2px;font-size:.65rem;font-weight:900;background:var(--gold);color:var(--btn-g-text);border-radius:4px;padding:1px 3px;line-height:1;pointer-events:none;}
 
+/* ══ IMBUEMENTS TAB ══ */
+.imbu-layout{display:grid;grid-template-columns:1fr 300px;gap:1.2rem;align-items:start;}
+@media(max-width:820px){.imbu-layout{grid-template-columns:1fr;}}
+.imbu-piece-row{display:flex;align-items:center;gap:.7rem;padding:.6rem 0;border-bottom:1px solid var(--c3);}
+.imbu-piece-row:last-child{border-bottom:none;}
+.imbu-piece-icon{font-size:1.4rem;width:2rem;text-align:center;flex-shrink:0;}
+.imbu-piece-name{font-size:.78rem;font-weight:800;color:var(--t0);width:66px;flex-shrink:0;text-transform:uppercase;letter-spacing:.3px;}
+.imbu-slots-row{display:flex;gap:.5rem;flex:1;}
+.imbu-slot-box{flex:1;min-height:72px;border:2px dashed var(--c4);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--c2);position:relative;}
+.imbu-slot-box:hover{border-color:var(--accent);background:rgba(var(--accent-rgb),.05);}
+.imbu-slot-add{font-size:1.6rem;color:var(--c4);transition:color .15s;line-height:1;}
+.imbu-slot-box:hover .imbu-slot-add{color:var(--accent);}
+.imbu-slot-box.filled{border-style:solid;border-color:var(--c4);flex-direction:column;align-items:flex-start;padding:.45rem .5rem;cursor:default;}
+.imbu-slot-hdr{display:flex;align-items:flex-start;gap:.2rem;width:100%;}
+.imbu-slot-name{font-size:.72rem;font-weight:800;color:var(--t0);line-height:1.2;flex:1;min-width:0;}
+.imbu-slot-eff{font-size:.62rem;color:var(--accent);margin-top:.15rem;font-weight:700;}
+.imbu-slot-del{background:none;border:none;color:var(--t2);cursor:pointer;font-size:.72rem;padding:.05rem .1rem;line-height:1;flex-shrink:0;}
+.imbu-slot-del:hover{color:#f87171;}
+.imbu-slot-footer{display:flex;align-items:center;gap:.25rem;margin-top:.35rem;width:100%;flex-wrap:wrap;}
+.imbu-tier-btn{font-size:.56rem;padding:.08rem .22rem;border-radius:3px;border:1px solid var(--c4);background:none;color:var(--t2);cursor:pointer;font-weight:800;transition:all .12s;white-space:nowrap;}
+.imbu-tier-btn.on{background:rgba(var(--accent-rgb),.18);border-color:var(--accent);color:var(--t0);}
+.imbu-toggle{margin-left:auto;display:inline-flex;align-items:center;gap:.2rem;border-radius:20px;padding:.1rem .32rem;font-size:.58rem;font-weight:800;cursor:pointer;transition:all .15s;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#f87171;white-space:nowrap;}
+.imbu-toggle.on{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.1);color:var(--green);}
+/* Shopping list */
+.imbu-shop-panel{background:var(--c2);border:1px solid var(--c4);border-radius:12px;padding:.8rem;position:sticky;top:1rem;}
+.imbu-shop-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.65rem;display:flex;align-items:center;gap:.35rem;}
+.imbu-shop-empty{text-align:center;color:var(--t2);font-size:.8rem;padding:1.2rem 0;}
+.imbu-shop-item{display:flex;align-items:center;gap:.5rem;padding:.3rem .4rem;border-radius:7px;background:var(--c3);margin-bottom:.28rem;}
+.imbu-shop-item img{width:22px;height:22px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.imbu-shop-item-name{font-size:.76rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.imbu-shop-qty{font-size:.8rem;font-weight:800;color:var(--gold);flex-shrink:0;}
+/* Picker overlay */
+.imbu-picker-ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:210;display:none;align-items:center;justify-content:center;}
+.imbu-picker-modal{background:var(--c1);border:1px solid var(--c3);border-radius:14px;width:min(540px,96vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden;}
+.imbu-picker-hdr{padding:.8rem 1rem;border-bottom:1px solid var(--c3);display:flex;align-items:center;gap:.6rem;}
+.imbu-picker-body{overflow-y:auto;padding:.75rem 1rem;flex:1;}
+.imbu-picker-search{background:var(--c2);border:1px solid var(--c4);color:var(--t0);border-radius:8px;padding:.4rem .65rem;font-size:.85rem;width:100%;outline:none;box-sizing:border-box;margin-bottom:.6rem;transition:border-color .15s;}
+.imbu-picker-search:focus{border-color:var(--accent);}
+.imbu-cat-lbl{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--t2);margin:.55rem 0 .2rem;}
+.imbu-pick-item{display:flex;align-items:center;gap:.55rem;padding:.48rem .5rem;border-radius:8px;cursor:pointer;transition:background .12s;}
+.imbu-pick-item:hover{background:var(--c3);}
+.imbu-pick-name{font-size:.83rem;font-weight:700;color:var(--t0);}
+.imbu-pick-eff{font-size:.7rem;color:var(--accent);font-weight:700;}
+.imbu-pick-mats{font-size:.65rem;color:var(--t2);margin-top:.1rem;}
 </style>
 </head>
 <body>
@@ -762,6 +806,7 @@ input[type=number]{-moz-appearance:textfield;}
   <div class="main-tab-bar">
     <button class="main-tab-btn on" id="mainTabBtnHunts" onclick="switchMainTab('hunts')">🏹 Hunts</button>
     <button class="main-tab-btn" id="mainTabBtnBestiary" onclick="switchMainTab('bestiary')">📖 Bestiary</button>
+    <button class="main-tab-btn" id="mainTabBtnImbu" onclick="switchMainTab('imbu')">⚗️ Imbuements</button>
   </div>
 
   <!-- ── Hunts panel ── -->
@@ -814,6 +859,30 @@ input[type=number]{-moz-appearance:textfield;}
     <div id="bstSelBar" class="bst-sel-bar" style="display:none;"></div>
     <div id="bstCounter" class="bst-counter" style="display:none;"></div>
     <div id="bstList"></div>
+  </div>
+</div>
+
+  <!-- ── Imbuements panel ── -->
+  <div id="mainTabImbu" class="main-tab-panel">
+    <div id="imbuMain"></div>
+  </div>
+</div>
+
+<!-- ══ IMBU PICKER ══ -->
+<div class="imbu-picker-ov" id="imbuPickerOv">
+  <div class="imbu-picker-modal">
+    <div class="imbu-picker-hdr">
+      <span style="font-size:1.1rem;">⚗️</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:800;font-size:.95rem;" id="imbuPickerTitle">Escolher Imbuement</div>
+        <div style="font-size:.72rem;color:var(--t1);">Filtrado para este slot</div>
+      </div>
+      <button class="close-btn" onclick="closeImbuPicker()">✕</button>
+    </div>
+    <div class="imbu-picker-body">
+      <input class="imbu-picker-search" id="imbuPickerSearch" type="text" placeholder="🔍 Buscar imbuement..." oninput="_renderImbuPickerList(this.value.toLowerCase())">
+      <div id="imbuPickerList"></div>
+    </div>
   </div>
 </div>
 
@@ -1492,7 +1561,7 @@ let _activeTab = 'pot';
 function load(){
   try {
     const r=localStorage.getItem(KEY);
-    if(r){ state=JSON.parse(r); if(!state.bestiary) state.bestiary=[]; }
+    if(r){ state=JSON.parse(r); if(!state.bestiary) state.bestiary=[]; if(!state.imbu) state.imbu={}; }
     else {
       const old=localStorage.getItem('respaw3000_v3');
       if(old){ const d=JSON.parse(old); state.profiles=d.profiles||[]; state.activeProfile=d.activeProfile||null; state.hunts=d.hunts||[]; state.bestiary=[]; }
@@ -4095,12 +4164,13 @@ document.addEventListener('keydown', e=>{
 // MAIN TAB SWITCH
 // ══════════════════════════════════════════════════════
 function switchMainTab(tab){
-  ['Hunts','Bestiary'].forEach(t=>{
+  ['Hunts','Bestiary','Imbu'].forEach(t=>{
     const key=t.toLowerCase();
     document.getElementById('mainTabBtn'+t).classList.toggle('on',key===tab);
     document.getElementById('mainTab'+t).classList.toggle('on',key===tab);
   });
   if(tab==='bestiary') renderBestiary();
+  if(tab==='imbu') renderImbu();
 }
 
 // Navigate to bestiary tab and highlight a monster from a hunt
@@ -4717,6 +4787,328 @@ function bestiaryUpdateKills(id,val){
   const need=b.killsNeeded||_bstKills(b.bestiarylevel||b.difficulty,b.occurrence||'Common');
   if(need&&b.currentKills>=need&&!b.completed){b.completed=true;b.completedAt=Date.now();toast('✅ Bestiary completo: '+b.name+'!');}
   dirty();save(false);renderBestiary();
+}
+
+// ══════════════════════════════════════════════════════
+// IMBUEMENTS — data, state, render
+// ══════════════════════════════════════════════════════
+
+const IMBU_PIECES=[
+  {id:'helmet',  label:'Helmet',  emoji:'⛑️',  slots:2},
+  {id:'armor',   label:'Armor',   emoji:'🥋',  slots:2},
+  {id:'shield',  label:'Shield',  emoji:'🔰',  slots:1},
+  {id:'weapon',  label:'Weapon',  emoji:'⚔️',  slots:2},
+  {id:'boots',   label:'Boots',   emoji:'👢',  slots:1},
+  {id:'backpack',label:'Backpack',emoji:'🎒',  slots:1},
+];
+
+const IMBU_DATA=[
+  // ── Aumento de Skill ──
+  {id:'epiphany',name:'Epiphany',cat:'skill',catLabel:'Aumento de Skill',effLabel:'Magic Level',
+   slots:['helmet','armor','weapon','shield'],
+   tiers:[
+     {label:'Básico',   eff:'+1 Magic Level', mats:[{n:'Elvish Talisman',q:25},{n:'Broken Shamanic Staff',q:15},{n:'Strand of Medusa Hair',q:15}]},
+     {label:'Elaborado',eff:'+2 Magic Level', mats:[{n:'Elvish Talisman',q:50},{n:'Broken Shamanic Staff',q:25},{n:'Strand of Medusa Hair',q:25}]},
+     {label:'Poderoso', eff:'+3 Magic Level', mats:[{n:'Elvish Talisman',q:100},{n:'Broken Shamanic Staff',q:50},{n:'Strand of Medusa Hair',q:50}]},
+   ]},
+  {id:'precision',name:'Precision',cat:'skill',catLabel:'Aumento de Skill',effLabel:'Distance Fighting',
+   slots:['helmet','armor','weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+3 Distance', mats:[{n:'Elven Scouting Glass',q:25},{n:'Root of Time',q:15},{n:'Wyvern Talisman',q:15}]},
+     {label:'Elaborado',eff:'+5 Distance', mats:[{n:'Elven Scouting Glass',q:50},{n:'Root of Time',q:25},{n:'Wyvern Talisman',q:25}]},
+     {label:'Poderoso', eff:'+8 Distance', mats:[{n:'Elven Scouting Glass',q:100},{n:'Root of Time',q:50},{n:'Wyvern Talisman',q:50}]},
+   ]},
+  {id:'onslaught',name:'Onslaught',cat:'skill',catLabel:'Aumento de Skill',effLabel:'Melee Fighting',
+   slots:['helmet','armor','weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+3 Melee', mats:[{n:'Protective Charm',q:25},{n:'Sabretooth',q:15},{n:'Peacock Feather Fan',q:15}]},
+     {label:'Elaborado',eff:'+5 Melee', mats:[{n:'Protective Charm',q:50},{n:'Sabretooth',q:25},{n:'Peacock Feather Fan',q:25}]},
+     {label:'Poderoso', eff:'+8 Melee', mats:[{n:'Protective Charm',q:100},{n:'Sabretooth',q:50},{n:'Peacock Feather Fan',q:50}]},
+   ]},
+  {id:'swiftness',name:'Swiftness',cat:'skill',catLabel:'Aumento de Skill',effLabel:'Velocidade',
+   slots:['boots'],
+   tiers:[
+     {label:'Básico',   eff:'+10 Speed', mats:[{n:'Orc Trophy',q:25},{n:'Tiger Eye',q:15},{n:'Brown Piece of Cloth',q:15}]},
+     {label:'Elaborado',eff:'+20 Speed', mats:[{n:'Orc Trophy',q:50},{n:'Tiger Eye',q:25},{n:'Brown Piece of Cloth',q:25}]},
+     {label:'Poderoso', eff:'+30 Speed', mats:[{n:'Orc Trophy',q:100},{n:'Tiger Eye',q:50},{n:'Brown Piece of Cloth',q:50}]},
+   ]},
+  {id:'featherweight',name:'Featherweight',cat:'skill',catLabel:'Aumento de Skill',effLabel:'Capacidade de Carga',
+   slots:['backpack'],
+   tiers:[
+     {label:'Básico',   eff:'+150 oz', mats:[{n:'Petrified Scream',q:25},{n:'Haunted Piece of Wood',q:15},{n:'Broken Key Ring',q:15}]},
+     {label:'Elaborado',eff:'+250 oz', mats:[{n:'Petrified Scream',q:50},{n:'Haunted Piece of Wood',q:25},{n:'Broken Key Ring',q:25}]},
+     {label:'Poderoso', eff:'+400 oz', mats:[{n:'Petrified Scream',q:100},{n:'Haunted Piece of Wood',q:50},{n:'Broken Key Ring',q:50}]},
+   ]},
+  // ── Dano Elemental ──
+  {id:'electrify',name:'Electrify',cat:'elemdmg',catLabel:'Dano Elemental',effLabel:'Dano Energy',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+5% Energy',  mats:[{n:'Piece of Scarab Shell',q:25},{n:'Piece of Dead Brain',q:15},{n:'Energy Vein Stem',q:15}]},
+     {label:'Elaborado',eff:'+10% Energy', mats:[{n:'Piece of Scarab Shell',q:50},{n:'Piece of Dead Brain',q:25},{n:'Energy Vein Stem',q:25}]},
+     {label:'Poderoso', eff:'+15% Energy', mats:[{n:'Piece of Scarab Shell',q:100},{n:'Piece of Dead Brain',q:50},{n:'Energy Vein Stem',q:50}]},
+   ]},
+  {id:'scorching',name:'Scorching',cat:'elemdmg',catLabel:'Dano Elemental',effLabel:'Dano Fire',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+5% Fire',  mats:[{n:'Brimstone Bug Carapace',q:25},{n:'Red Dragon Scale',q:15},{n:'Wyrm Scale',q:15}]},
+     {label:'Elaborado',eff:'+10% Fire', mats:[{n:'Brimstone Bug Carapace',q:50},{n:'Red Dragon Scale',q:25},{n:'Wyrm Scale',q:25}]},
+     {label:'Poderoso', eff:'+15% Fire', mats:[{n:'Brimstone Bug Carapace',q:100},{n:'Red Dragon Scale',q:50},{n:'Wyrm Scale',q:50}]},
+   ]},
+  {id:'poisoning',name:'Poisoning',cat:'elemdmg',catLabel:'Dano Elemental',effLabel:'Dano Earth',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+5% Earth',  mats:[{n:'Werewolf Fur',q:25},{n:'Mutated Bat Ear',q:15},{n:'Piece of Swampling Wood',q:15}]},
+     {label:'Elaborado',eff:'+10% Earth', mats:[{n:'Werewolf Fur',q:50},{n:'Mutated Bat Ear',q:25},{n:'Piece of Swampling Wood',q:25}]},
+     {label:'Poderoso', eff:'+15% Earth', mats:[{n:'Werewolf Fur',q:100},{n:'Mutated Bat Ear',q:50},{n:'Piece of Swampling Wood',q:50}]},
+   ]},
+  {id:'chilling',name:'Chilling',cat:'elemdmg',catLabel:'Dano Elemental',effLabel:'Dano Ice',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+5% Ice',  mats:[{n:'Frosty Heart',q:25},{n:'Piece of Hellfire Armor',q:15},{n:'Glacier Chunk',q:15}]},
+     {label:'Elaborado',eff:'+10% Ice', mats:[{n:'Frosty Heart',q:50},{n:'Piece of Hellfire Armor',q:25},{n:'Glacier Chunk',q:25}]},
+     {label:'Poderoso', eff:'+15% Ice', mats:[{n:'Frosty Heart',q:100},{n:'Piece of Hellfire Armor',q:50},{n:'Glacier Chunk',q:50}]},
+   ]},
+  {id:'demon_presence',name:'Demon Presence',cat:'elemdmg',catLabel:'Dano Elemental',effLabel:'Dano Death',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+5% Death',  mats:[{n:'Demonic Essence',q:25},{n:'Silver Brooch',q:15},{n:'Vampire Teeth',q:15}]},
+     {label:'Elaborado',eff:'+10% Death', mats:[{n:'Demonic Essence',q:50},{n:'Silver Brooch',q:25},{n:'Vampire Teeth',q:25}]},
+     {label:'Poderoso', eff:'+15% Death', mats:[{n:'Demonic Essence',q:100},{n:'Silver Brooch',q:50},{n:'Vampire Teeth',q:50}]},
+   ]},
+  {id:'holy_spark',name:'Holy Spark',cat:'elemdmg',catLabel:'Dano Elemental',effLabel:'Dano Holy',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'+5% Holy',  mats:[{n:'Holy Orchid',q:25},{n:'Piece of Draconian Steel',q:15},{n:'Pegasus Crystal',q:15}]},
+     {label:'Elaborado',eff:'+10% Holy', mats:[{n:'Holy Orchid',q:50},{n:'Piece of Draconian Steel',q:25},{n:'Pegasus Crystal',q:25}]},
+     {label:'Poderoso', eff:'+15% Holy', mats:[{n:'Holy Orchid',q:100},{n:'Piece of Draconian Steel',q:50},{n:'Pegasus Crystal',q:50}]},
+   ]},
+  // ── Proteção Elemental ──
+  {id:'lich_shroud',name:'Lich Shroud',cat:'elemprot',catLabel:'Proteção Elemental',effLabel:'Prot. Death',
+   slots:['helmet','armor','shield'],
+   tiers:[
+     {label:'Básico',   eff:'3% Death Prot.', mats:[{n:'Piece of Dead Brain',q:25},{n:'Bat Wing',q:15},{n:'Vampire Dust',q:15}]},
+     {label:'Elaborado',eff:'5% Death Prot.', mats:[{n:'Piece of Dead Brain',q:50},{n:'Bat Wing',q:25},{n:'Vampire Dust',q:25}]},
+     {label:'Poderoso', eff:'8% Death Prot.', mats:[{n:'Piece of Dead Brain',q:100},{n:'Bat Wing',q:50},{n:'Vampire Dust',q:50}]},
+   ]},
+  {id:'chrome_ward',name:'Chrome Ward',cat:'elemprot',catLabel:'Proteção Elemental',effLabel:'Prot. Energy',
+   slots:['helmet','armor','shield'],
+   tiers:[
+     {label:'Básico',   eff:'3% Energy Prot.', mats:[{n:'Piece of Scarab Shell',q:25},{n:'Behemoth Claw',q:15},{n:'Rorc Egg',q:15}]},
+     {label:'Elaborado',eff:'5% Energy Prot.', mats:[{n:'Piece of Scarab Shell',q:50},{n:'Behemoth Claw',q:25},{n:'Rorc Egg',q:25}]},
+     {label:'Poderoso', eff:'8% Energy Prot.', mats:[{n:'Piece of Scarab Shell',q:100},{n:'Behemoth Claw',q:50},{n:'Rorc Egg',q:50}]},
+   ]},
+  {id:'dragon_hide',name:'Dragon Hide',cat:'elemprot',catLabel:'Proteção Elemental',effLabel:'Prot. Fire',
+   slots:['helmet','armor','shield'],
+   tiers:[
+     {label:'Básico',   eff:'3% Fire Prot.', mats:[{n:'Glacial Scale',q:25},{n:'Red Dragon Leather',q:15},{n:'Piece of Dragon Shield',q:15}]},
+     {label:'Elaborado',eff:'5% Fire Prot.', mats:[{n:'Glacial Scale',q:50},{n:'Red Dragon Leather',q:25},{n:'Piece of Dragon Shield',q:25}]},
+     {label:'Poderoso', eff:'8% Fire Prot.', mats:[{n:'Glacial Scale',q:100},{n:'Red Dragon Leather',q:50},{n:'Piece of Dragon Shield',q:50}]},
+   ]},
+  {id:'quara_scale',name:'Quara Scale',cat:'elemprot',catLabel:'Proteção Elemental',effLabel:'Prot. Ice',
+   slots:['helmet','armor','shield'],
+   tiers:[
+     {label:'Básico',   eff:'3% Ice Prot.', mats:[{n:'Frosty Heart',q:25},{n:'Quara Bone',q:15},{n:'Piece of Quara Tentacle',q:15}]},
+     {label:'Elaborado',eff:'5% Ice Prot.', mats:[{n:'Frosty Heart',q:50},{n:'Quara Bone',q:25},{n:'Piece of Quara Tentacle',q:25}]},
+     {label:'Poderoso', eff:'8% Ice Prot.', mats:[{n:'Frosty Heart',q:100},{n:'Quara Bone',q:50},{n:'Piece of Quara Tentacle',q:50}]},
+   ]},
+  {id:'snake_tongue',name:'Snake Tongue',cat:'elemprot',catLabel:'Proteção Elemental',effLabel:'Prot. Earth',
+   slots:['helmet','armor','shield'],
+   tiers:[
+     {label:'Básico',   eff:'3% Earth Prot.', mats:[{n:'Piece of Swampling Wood',q:25},{n:'Marsh Stalker Feather',q:15},{n:'Cobra Tongue',q:15}]},
+     {label:'Elaborado',eff:'5% Earth Prot.', mats:[{n:'Piece of Swampling Wood',q:50},{n:'Marsh Stalker Feather',q:25},{n:'Cobra Tongue',q:25}]},
+     {label:'Poderoso', eff:'8% Earth Prot.', mats:[{n:'Piece of Swampling Wood',q:100},{n:'Marsh Stalker Feather',q:50},{n:'Cobra Tongue',q:50}]},
+   ]},
+  {id:'holy_protection',name:'Holy Protection',cat:'elemprot',catLabel:'Proteção Elemental',effLabel:'Prot. Holy',
+   slots:['helmet','armor','shield'],
+   tiers:[
+     {label:'Básico',   eff:'3% Holy Prot.', mats:[{n:'Unicorn Figurine',q:25},{n:'Pegasus Crystal',q:15},{n:'Blessed Wooden Figurine',q:15}]},
+     {label:'Elaborado',eff:'5% Holy Prot.', mats:[{n:'Unicorn Figurine',q:50},{n:'Pegasus Crystal',q:25},{n:'Blessed Wooden Figurine',q:25}]},
+     {label:'Poderoso', eff:'8% Holy Prot.', mats:[{n:'Unicorn Figurine',q:100},{n:'Pegasus Crystal',q:50},{n:'Blessed Wooden Figurine',q:50}]},
+   ]},
+  // ── Suporte ──
+  {id:'void',name:'Void',cat:'support',catLabel:'Suporte',effLabel:'Mana Leech',
+   slots:['weapon','helmet'],
+   tiers:[
+     {label:'Básico',   eff:'3% Mana Leech', mats:[{n:'Piece of Dead Brain',q:25},{n:'Green Dragon Leather',q:15},{n:'Vampire Eye',q:15}]},
+     {label:'Elaborado',eff:'5% Mana Leech', mats:[{n:'Piece of Dead Brain',q:50},{n:'Green Dragon Leather',q:25},{n:'Vampire Eye',q:25}]},
+     {label:'Poderoso', eff:'8% Mana Leech', mats:[{n:'Piece of Dead Brain',q:100},{n:'Green Dragon Leather',q:50},{n:'Vampire Eye',q:50}]},
+   ]},
+  {id:'strike',name:'Strike',cat:'support',catLabel:'Suporte',effLabel:'Life Leech',
+   slots:['weapon','helmet','armor'],
+   tiers:[
+     {label:'Básico',   eff:'3% Life Leech', mats:[{n:'Bloody Pincers',q:25},{n:'Vampire Teeth',q:15},{n:'Piece of Hellfire Armor',q:15}]},
+     {label:'Elaborado',eff:'5% Life Leech', mats:[{n:'Bloody Pincers',q:50},{n:'Vampire Teeth',q:25},{n:'Piece of Hellfire Armor',q:25}]},
+     {label:'Poderoso', eff:'8% Life Leech', mats:[{n:'Bloody Pincers',q:100},{n:'Vampire Teeth',q:50},{n:'Piece of Hellfire Armor',q:50}]},
+   ]},
+  {id:'fortitude',name:'Fortitude',cat:'support',catLabel:'Suporte',effLabel:'HP Bonus',
+   slots:['helmet','armor','shield'],
+   tiers:[
+     {label:'Básico',   eff:'+150 HP', mats:[{n:'Crystal Bone',q:25},{n:'Ancient Stone',q:15},{n:'Protective Charm',q:15}]},
+     {label:'Elaborado',eff:'+300 HP', mats:[{n:'Crystal Bone',q:50},{n:'Ancient Stone',q:25},{n:'Protective Charm',q:25}]},
+     {label:'Poderoso', eff:'+500 HP', mats:[{n:'Crystal Bone',q:100},{n:'Ancient Stone',q:50},{n:'Protective Charm',q:50}]},
+   ]},
+  {id:'chop',name:'Chop',cat:'support',catLabel:'Suporte',effLabel:'Cleave',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'4% Cleave',  mats:[{n:"Lion's Mane",q:25},{n:'Werewolf Fur',q:15},{n:'Sabretooth',q:15}]},
+     {label:'Elaborado',eff:'7% Cleave',  mats:[{n:"Lion's Mane",q:50},{n:'Werewolf Fur',q:25},{n:'Sabretooth',q:25}]},
+     {label:'Poderoso', eff:'12% Cleave', mats:[{n:"Lion's Mane",q:100},{n:'Werewolf Fur',q:50},{n:'Sabretooth',q:50}]},
+   ]},
+  {id:'slash',name:'Slash',cat:'support',catLabel:'Suporte',effLabel:'Critical Hit',
+   slots:['weapon'],
+   tiers:[
+     {label:'Básico',   eff:'4% chance / +40% dano', mats:[{n:'Cobra Tongue',q:25},{n:'Sabretooth',q:15},{n:'Dagger of Lethargy',q:15}]},
+     {label:'Elaborado',eff:'8% chance / +50% dano', mats:[{n:'Cobra Tongue',q:50},{n:'Sabretooth',q:25},{n:'Dagger of Lethargy',q:25}]},
+     {label:'Poderoso', eff:'10% chance / +60% dano',mats:[{n:'Cobra Tongue',q:100},{n:'Sabretooth',q:50},{n:'Dagger of Lethargy',q:50}]},
+   ]},
+];
+
+// ── Picker state ──
+let _imbuPickPiece=null, _imbuPickSlot=null;
+
+// ── State init ──
+function _imbuInitState(){
+  if(!state.imbu) state.imbu={};
+  IMBU_PIECES.forEach(p=>{
+    if(!Array.isArray(state.imbu[p.id])||state.imbu[p.id].length!==p.slots){
+      const old=Array.isArray(state.imbu[p.id])?state.imbu[p.id]:[];
+      state.imbu[p.id]=Array.from({length:p.slots},(_,i)=>old[i]||{imbuId:null,tier:2,active:false});
+    }
+  });
+}
+
+// ── Main render ──
+function renderImbu(){
+  _imbuInitState();
+  const el=document.getElementById('imbuMain'); if(!el) return;
+
+  let piecesHtml=IMBU_PIECES.map(p=>{
+    const slotsHtml=state.imbu[p.id].map((s,i)=>{
+      if(!s.imbuId) return `<div class="imbu-slot-box" onclick="openImbuPicker('${p.id}',${i})" title="Adicionar imbuement"><span class="imbu-slot-add">+</span></div>`;
+      const imbu=IMBU_DATA.find(x=>x.id===s.imbuId);
+      if(!imbu) return `<div class="imbu-slot-box" onclick="openImbuPicker('${p.id}',${i})"><span class="imbu-slot-add">+</span></div>`;
+      const tier=imbu.tiers[s.tier]||imbu.tiers[imbu.tiers.length-1];
+      return `<div class="imbu-slot-box filled">
+        <div class="imbu-slot-hdr">
+          <div style="flex:1;min-width:0;">
+            <div class="imbu-slot-name">${imbu.name}</div>
+            <div class="imbu-slot-eff">${tier.eff}</div>
+          </div>
+          <button class="imbu-slot-del" onclick="imbuClearSlot('${p.id}',${i})" title="Remover">✕</button>
+        </div>
+        <div class="imbu-slot-footer">
+          ${imbu.tiers.map((t,ti)=>`<button class="imbu-tier-btn${ti===s.tier?' on':''}" onclick="imbuSetTier('${p.id}',${i},${ti})">${t.label.substring(0,3)}</button>`).join('')}
+          <button class="imbu-toggle${s.active?' on':''}" onclick="imbuToggleActive('${p.id}',${i})">${s.active?'✅ Ativo':'⏳ Comprar'}</button>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="imbu-piece-row">
+      <div class="imbu-piece-icon">${p.emoji}</div>
+      <div class="imbu-piece-name">${p.label}</div>
+      <div class="imbu-slots-row">${slotsHtml}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML=`<div class="imbu-layout">
+    <div style="background:var(--c2);border:1px solid var(--c4);border-radius:12px;padding:.9rem 1rem;">
+      <div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.6rem;">⚗️ Equipamento</div>
+      ${piecesHtml}
+    </div>
+    <div class="imbu-shop-panel" id="imbuShop"></div>
+  </div>`;
+  _renderImbuShop();
+}
+
+function _renderImbuShop(){
+  const el=document.getElementById('imbuShop'); if(!el) return;
+  // Aggregate materials from slots where active=false (needs buying)
+  const totals={};
+  IMBU_PIECES.forEach(p=>{
+    (state.imbu[p.id]||[]).forEach(s=>{
+      if(s.active||!s.imbuId) return;
+      const imbu=IMBU_DATA.find(x=>x.id===s.imbuId); if(!imbu) return;
+      const tier=imbu.tiers[s.tier]||imbu.tiers[imbu.tiers.length-1];
+      tier.mats.forEach(m=>{
+        const k=m.n.toLowerCase();
+        if(!totals[k]) totals[k]={name:m.n,qty:0};
+        totals[k].qty+=m.q;
+      });
+    });
+  });
+  const list=Object.values(totals).sort((a,b)=>b.qty-a.qty);
+  if(!list.length){
+    el.innerHTML=`<div class="imbu-shop-title">🛒 Lista de Compras</div><div class="imbu-shop-empty">Nenhum item para comprar.<br><span style="font-size:.72rem;opacity:.7;">Selecione imbuements e deixe em "⏳ Comprar".</span></div>`;
+    return;
+  }
+  el.innerHTML=`<div class="imbu-shop-title">🛒 Lista de Compras <span style="font-weight:400;color:var(--t2);">(${list.length} itens)</span></div>`
+    +list.map(it=>{
+      const slug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
+      return `<div class="imbu-shop-item"><img src="https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif" alt="" onerror="this.style.display='none'"><div class="imbu-shop-item-name">${it.name}</div><div class="imbu-shop-qty">×${it.qty}</div></div>`;
+    }).join('');
+}
+
+// ── Slot actions ──
+function imbuClearSlot(piece,slot){
+  _imbuInitState();
+  state.imbu[piece][slot]={imbuId:null,tier:2,active:false};
+  dirty();save(false);renderImbu();
+}
+function imbuSetTier(piece,slot,tier){
+  _imbuInitState();
+  state.imbu[piece][slot].tier=tier;
+  dirty();save(false);renderImbu();
+}
+function imbuToggleActive(piece,slot){
+  _imbuInitState();
+  state.imbu[piece][slot].active=!state.imbu[piece][slot].active;
+  dirty();save(false);renderImbu();
+}
+
+// ── Picker ──
+function openImbuPicker(piece,slot){
+  _imbuPickPiece=piece; _imbuPickSlot=slot;
+  const ov=document.getElementById('imbuPickerOv'); if(!ov) return;
+  const pInfo=IMBU_PIECES.find(p=>p.id===piece);
+  document.getElementById('imbuPickerTitle').textContent=`Imbuement → ${pInfo?pInfo.emoji+' '+pInfo.label:piece}`;
+  document.getElementById('imbuPickerSearch').value='';
+  _renderImbuPickerList('');
+  ov.style.display='flex';
+}
+function closeImbuPicker(){
+  document.getElementById('imbuPickerOv').style.display='none';
+}
+function _renderImbuPickerList(search){
+  const list=IMBU_DATA.filter(im=>
+    im.slots.includes(_imbuPickPiece)&&
+    (!search||im.name.toLowerCase().includes(search)||im.effLabel.toLowerCase().includes(search)||im.catLabel.toLowerCase().includes(search))
+  );
+  const el=document.getElementById('imbuPickerList'); if(!el) return;
+  if(!list.length){
+    el.innerHTML=`<div style="color:var(--t2);text-align:center;padding:1.5rem 0;font-size:.85rem;">Nenhum imbuement compatível${search?' com "'+search+'"':' com este slot'}.</div>`;
+    return;
+  }
+  const cats=[...new Set(list.map(im=>im.catLabel))];
+  el.innerHTML=cats.map(cat=>{
+    const items=list.filter(im=>im.catLabel===cat);
+    return `<div class="imbu-cat-lbl">${cat}</div>`+items.map(im=>{
+      const topTier=im.tiers[im.tiers.length-1];
+      return `<div class="imbu-pick-item" onclick="imbuPickSelect('${im.id}')">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;">
+            <span class="imbu-pick-name">${im.name}</span>
+            <span class="imbu-pick-eff">${im.effLabel}</span>
+          </div>
+          <div class="imbu-pick-mats">${topTier.mats.map(m=>`${m.q}× ${m.n}`).join(' · ')}</div>
+        </div>
+        <span style="color:var(--t2);font-size:.8rem;">▸</span>
+      </div>`;
+    }).join('');
+  }).join('');
+}
+function imbuPickSelect(imbuId){
+  _imbuInitState();
+  state.imbu[_imbuPickPiece][_imbuPickSlot]={imbuId,tier:2,active:false};
+  dirty();save(false);closeImbuPicker();renderImbu();
 }
 
 function initApp(){
