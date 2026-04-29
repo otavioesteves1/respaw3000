@@ -1834,8 +1834,11 @@ function togglePot(id, group){
 }
 function renderPotSel(){
   const el=document.getElementById('potSel'); el.innerHTML='';
+  const sel2=document.getElementById('skillPotSel'); if(sel2) sel2.innerHTML='';
+  const skillIds=new Set(SKILL_POTIONS.map(p=>p.id));
   if(!wiz.pots.length) return;
   wiz.pots.forEach(x=>{
+    const target=skillIds.has(x.id)?(sel2||el):el;
     const r=document.createElement('div'); r.className='sel-row';
     r.innerHTML=`<div class="sel-icon" style="align-self:center;"><img src="${x.img}" alt=""></div>
       <div style="flex:1;min-width:0;">
@@ -1852,7 +1855,7 @@ function renderPotSel(){
         <input class="qty-slider" type="range" min="0" max="5000" step="100" value="${x.qty}" oninput="syncPot('${x.id}',this)" style="--pct:${Math.round((x.qty/5000)*100)}%">
       </div>
       <button class="sel-rm" onclick="togglePot('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
-    el.appendChild(r);
+    target.appendChild(r);
   });
 }
 function adjPot(id,d){ const x=wiz.pots.find(i=>i.id===id); if(x) x.qty=Math.max(0,(x.qty||0)+d); renderPotSel(); }
