@@ -2339,7 +2339,10 @@ function toggleImbu(id){
 // VOCAÇÃO + SPELLS
 // ══════════════════════════════════════════════════════
 function selectVocation(voc){
-  // Drop spells that are not available for the new vocation (keep cross-voc ones if still valid)
+  if(wiz.vocation&&wiz.vocation!==voc&&wiz.wheel){
+    wiz.wheel.slots=new Array(36).fill(0);
+    wiz.wheel._selSlot=null;
+  }
   wiz.spells=wiz.spells.filter(s=>{ const sp=SPELLS.find(x=>x.id===s.id); return sp&&sp.vocs.includes(voc); });
   wiz.vocation=voc;
   document.querySelectorAll('.voc-btn').forEach(b=>b.classList.remove('on'));
