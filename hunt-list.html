@@ -1829,7 +1829,8 @@ function togglePot(id, group){
   const src=group==='skill'?SKILL_POTIONS:POTIONS;
   const p=src.find(x=>x.id===id); if(!p) return;
   const idx=wiz.pots.findIndex(x=>x.id===id);
-  if(idx>=0) wiz.pots.splice(idx,1); else wiz.pots.push({...p,qty:50});
+  const defQty=group==='skill'?10:100;
+  if(idx>=0) wiz.pots.splice(idx,1); else wiz.pots.push({...p,qty:defQty});
   renderPotGrid();
 }
 function renderPotSel(){
