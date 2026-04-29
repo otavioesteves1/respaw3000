@@ -1058,19 +1058,25 @@ input[type=number]{-moz-appearance:textfield;}
 
     <!-- Step 3: Runas & Poções -->
     <div class="wpanel" id="wp3">
-      <div class="sec-lbl">📜 Runas &amp; 💊 Poções</div>
-      <div style="margin-bottom:1.25rem;">
-        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">📜 Runas <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">clique para selecionar</span></div>
-        <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div>
-        <div id="runaSel" style="margin-top:.4rem;"></div>
-      </div>
-      <div>
-        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">💊 Poções de Vida/Mana <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">clique para selecionar</span></div>
-        <div class="charm-grid" id="potGrid"></div>
-        <div id="potSel" style="margin-top:.4rem;"></div>
-        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin:.75rem 0 .4rem;">⚗️ Skill Potions <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">berserk / bullseye / mastermind</span></div>
-        <div class="charm-grid" id="skillPotGrid"></div>
-        <div id="skillPotSel" style="margin-top:.4rem;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;align-items:start;">
+        <!-- BOX 1: Runas -->
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.5rem;">📜 Runas</div>
+          <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));"></div>
+          <div id="runaSel" style="margin-top:.4rem;"></div>
+        </div>
+        <!-- BOX 2: Poções -->
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.5rem;">💊 Potions</div>
+          <div class="charm-grid" id="potGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));"></div>
+          <div id="potSel" style="margin-top:.4rem;"></div>
+        </div>
+        <!-- BOX 3: Skill Potions -->
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.5rem;">⚗️ Skill Potions</div>
+          <div class="charm-grid" id="skillPotGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));"></div>
+          <div id="skillPotSel" style="margin-top:.4rem;"></div>
+        </div>
       </div>
     </div>
 
