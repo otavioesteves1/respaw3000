@@ -4144,17 +4144,6 @@ function confirmDeleteProfile(){
 // ══════════════════════════════════════════════════════
 // ── ESC to close modals (with confirm when wizard has unsaved data)
 document.addEventListener('keydown', e=>{
-  const _isTyping=()=>{ const t=document.activeElement?.tagName; return t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||document.activeElement?.isContentEditable; };
-  // R = open wizard (when no modal open and not typing)
-  if((e.key==='r'||e.key==='R')&&!e.ctrlKey&&!e.metaKey&&!_isTyping()){
-    const anyOpen=['wizOv','sessOv','summaryOv','profileOv','compareOv'].some(id=>document.getElementById(id)?.classList.contains('on'));
-    if(!anyOpen){ openWizard(); return; }
-  }
-  // 1-5 = navigate wizard steps (when wizard open)
-  if(document.getElementById('wizOv')?.classList.contains('on')&&!_isTyping()){
-    const n=parseInt(e.key);
-    if(n>=1&&n<=6&&!isNaN(n)){ goStep(n); return; }
-  }
   if(e.key!=='Escape') return;
   // Determine which overlay is open (priority order)
   if(document.getElementById('profileOv')?.classList.contains('on')){
