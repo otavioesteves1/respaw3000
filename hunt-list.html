@@ -627,7 +627,13 @@ input[type=number]{-moz-appearance:textfield;}
 .cl-toggle-badge{font-size:.65rem;font-weight:900;background:rgba(0,0,0,.22);color:var(--btn-g-text);border-radius:10px;padding:.05rem .3rem;min-width:18px;text-align:center;line-height:1.5;}
 .cl-panel{position:fixed;right:-360px;top:0;height:100vh;width:340px;background:var(--c1);border-left:1px solid rgba(var(--accent-rgb),.15);box-shadow:-10px 0 48px rgba(0,0,0,.65);z-index:450;transition:right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
 .cl-panel.open{right:0;}
-.cl-head{background:linear-gradient(135deg,#152232,#152a15);padding:.9rem 1rem;border-bottom:1px solid rgba(var(--accent-rgb),.18);display:flex;align-items:center;gap:.55rem;flex-shrink:0;}
+.cl-head{background:var(--c2);padding:.9rem 1rem;border-bottom:2px solid rgba(var(--accent-rgb),.3);display:flex;align-items:center;gap:.55rem;flex-shrink:0;}
+.cl-pin{width:20px;height:20px;border-radius:4px;border:none;background:none;color:var(--t2);font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;transition:all .15s;opacity:.45;}
+.cl-item:hover .cl-pin{opacity:1;}
+.cl-pin.pinned{color:var(--gold);opacity:1;}
+.sess-prey{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.35rem;}
+.sess-prey-item{display:inline-flex;align-items:center;gap:.3rem;background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.25);border-radius:20px;padding:.18rem .55rem;font-size:.72rem;font-weight:600;color:var(--t0);}
+.prey-slot{background:var(--c3);border:1px solid var(--c4);border-radius:9px;padding:.5rem .65rem;margin-bottom:.3rem;}
 .cl-head-title{font-size:.95rem;font-weight:800;flex:1;background:var(--gold-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .cl-close{width:26px;height:26px;border-radius:6px;border:none;background:rgba(255,255,255,.07);color:var(--t1);font-size:.82rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .cl-close:hover{background:rgba(239,68,68,.2);color:#fca5a5;}
@@ -3671,8 +3677,36 @@ function openSessModal(huntId){
 }
 function closeSessModal(){ document.getElementById('sessOv').classList.remove('on'); renderHunts(); }
 
+function _buildPreySlotsHTML(){
+  const h=state.hunts.find(x=>x.id===_sessHuntId);
+  const monsters=h?.monsters||[];
+  const slots=window._sessPreySlots||[{m:'',b:'',s:0},{m:'',b:'',s:0},{m:'',b:'',s:0}];
+  const BONUS=[{k:'attack',lbl:'⚔️ Attack'},{k:'defense',lbl:'🛡️ Def.'},{k:'loot',lbl:'💰 Loot'},{k:'xp',lbl:'✨ XP'}];
+  return slots.map((slot,i)=>`
+    <div class="prey-slot">
+      <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.32rem;">
+        <span style="font-size:.7rem;font-weight:700;color:var(--gold);min-width:44px;">Prey ${i+1}</span>
+        <select class="inp-sm" style="flex:1;min-width:120px;" onchange="window._sessPreySlots[${i}].m=this.value">
+          <option value="">— Monstro —</option>
+          ${monsters.map(m=>`<option value="${m.name.replace(/"/g,'&quot;')}"${slot.m===m.name?' selected':''}>${m.name}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:flex;gap:.2rem;flex-wrap:wrap;margin-bottom:.28rem;">
+        ${BONUS.map(b=>`<button type="button" class="btn btn-sm${slot.b===b.k?' btn-g':' btn-o'}" style="padding:.18rem .4rem;font-size:.7rem;" onclick="window._sessPreySlots[${i}].b='${b.k}';window._rerenderPrey()">${b.lbl}</button>`).join('')}
+      </div>
+      <div style="display:flex;align-items:center;gap:.15rem;flex-wrap:wrap;">
+        <span style="font-size:.68rem;color:var(--t1);margin-right:.1rem;">Estrelas:</span>
+        ${Array.from({length:10},(_,k)=>`<button type="button" style="background:none;border:none;cursor:pointer;font-size:.95rem;padding:.02rem;line-height:1;color:${k<slot.s?'#f59e0b':'rgba(255,255,255,0.15)'};" onclick="window._sessPreySlots[${i}].s=(window._sessPreySlots[${i}].s===${k+1}?0:${k+1});window._rerenderPrey()">★</button>`).join('')}
+        ${slot.s?`<span style="font-size:.68rem;color:var(--gold);font-weight:700;margin-left:.2rem;">${slot.s}/10</span>`:''}
+      </div>
+    </div>`).join('');
+}
+window._rerenderPrey=()=>{ const c=document.getElementById('sfPreySlotsContainer'); if(c) c.innerHTML=_buildPreySlotsHTML(); };
+window._togglePreySection=(on)=>{ const s=document.getElementById('sfPreySection'); if(s) s.style.display=on?'block':'none'; };
+
 function renderSessContent(){
   const h=state.hunts.find(x=>x.id===_sessHuntId); if(!h) return;
+  window._sessPreySlots=[{m:'',b:'',s:0},{m:'',b:'',s:0},{m:'',b:'',s:0}];
   const sessions=h.sessions||[];
 
   // ── KPI summary boxes ──
@@ -3726,6 +3760,16 @@ function renderSessContent(){
         <div class="f"><label class="lbl">⚔️ Kills</label><input class="inp-sm" type="number" id="sfKills" placeholder="Opcional" min="0"></div>
         <div class="f"><label class="lbl">💀 Mortes</label><input class="inp-sm" type="number" id="sfDeaths" placeholder="Opcional" min="0"></div>
       </div>
+      <div style="margin:.45rem 0 .2rem;">
+        <label style="display:flex;align-items:center;gap:.55rem;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--t0);user-select:none;">
+          <input type="checkbox" id="sfUsePrey" style="width:16px;height:16px;accent-color:var(--gold);cursor:pointer;" onchange="window._togglePreySection(this.checked)">
+          🎯 Usou Prey nesta sessão?
+        </label>
+      </div>
+      <div id="sfPreySection" style="display:none;margin-bottom:.3rem;">
+        <div class="lbl" style="margin-bottom:.3rem;">Prey ativa — até 3 monstros, cada um com bônus e estrelas</div>
+        <div id="sfPreySlotsContainer">${_buildPreySlotsHTML()}</div>
+      </div>
       <div class="f"><label class="lbl">📝 Comentário</label>
         <textarea class="inp" id="sfComment" placeholder="Notas sobre essa sessão — pull, estratégia, bugs, etc..."></textarea>
       </div>
@@ -3757,10 +3801,12 @@ function renderSessContent(){
         s.kills?`⚔️ <span>${s.kills} kills</span>`:null,
         s.deaths!=null&&s.deaths>=0?`💀 <span>${s.deaths} morte${s.deaths!==1?'s':''}</span>`:null,
       ].filter(Boolean);
+      const preyHtml=s.prey?.length?`<div class="sess-prey">${s.prey.map(p=>`<span class="sess-prey-item">${PREY_BONUS_ICO[p.bonus]||'🎯'} ${p.monster}${p.stars?' · '+p.stars+'★':''}</span>`).join('')}</div>`:'';
       return `<div class="sess-row">
         <button class="sess-rm" onclick="rmSession('${s.id}')" title="Remover sessão">✕</button>
         <div class="sess-date">📅 ${fmtDate(s.date)} &nbsp;·&nbsp; ${partyLbl}</div>
         ${stats.length?`<div class="sess-stats">${stats.map(x=>`<span class="sess-stat">${x}</span>`).join('')}</div>`:''}
+        ${preyHtml}
         ${s.comment?`<div class="sess-comment">${s.comment}</div>`:''}
       </div>`;
     }).join('');
@@ -3827,11 +3873,13 @@ function addSession(){
   const partySize=parseInt(document.getElementById('sfParty').value)||1;
   const companions=[];
   for(let i=0;i<partySize-1;i++){ const inp=document.getElementById('sfComp'+i); if(inp&&inp.value.trim()) companions.push({name:inp.value.trim()}); }
+  const usePrey=document.getElementById('sfUsePrey')?.checked;
+  const prey=usePrey?(window._sessPreySlots||[]).filter(s=>s.m).map(s=>({monster:s.m,bonus:s.b,stars:s.s})):[];
   h.sessions.push({
     id:'ks_'+Date.now(),
     date:document.getElementById('sfDate').value||new Date().toISOString().slice(0,10),
     duration:dur, gold, supplies, xpRaw, kills, deaths,
-    partySize, companions,
+    partySize, companions, prey,
     comment:document.getElementById('sfComment').value.trim()
   });
   save(false); renderSessContent(); toast('✅ Sessão salva!');
@@ -3983,10 +4031,14 @@ function updateCompanionFields(){
 // ══════════════════════════════════════════════════════
 const CL_KEY='respaw3000_cl';
 const CL_FIXED=[
-  {id:'f_charm',   label:'Charm',              icon:'⭐', hint:'Charms ativos nos monstros certos?'},
-  {id:'f_imbu',    label:'Imbuements',         icon:'🛡️', hint:'Slots de imbu ativos?'},
-  {id:'f_weaponp', label:'Weapon Proficiency', icon:'💪', hint:'Proficiência de arma verificada?'},
+  {id:'f_charm',   label:'Charm',               imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Charm_Points.gif',                 hint:'Charms ativos nos monstros certos?'},
+  {id:'f_imbu',    label:'Imbuements',          imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Imbuement_Shrine.gif',              hint:'Slots de imbu ativos?'},
+  {id:'f_weaponp', label:'Weapon Proficiency',  imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Weapon_Proficiency.gif',            hint:'Proficiência de arma verificada?'},
+  {id:'f_refil',   label:'Refil',               imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Ultimate_Mana_Potion.gif',          hint:'Poções e consumíveis reabastecidos?'},
+  {id:'f_amuleto', label:'Recarregar Amuletos', imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Charged_Arcanomancer_Sigil.gif',    hint:'Amuletos com carga antes de entrar?'},
 ];
+const PREY_BONUS_ICO={attack:'⚔️',defense:'🛡️',loot:'💰',xp:'✨'};
+const PREY_BONUS_LABEL={attack:'Attack',defense:'Defense',loot:'Loot',xp:'XP'};
 let cl={items:[],checks:{}};
 
 function clLoad(){ try{const r=localStorage.getItem(CL_KEY);if(r)cl=JSON.parse(r);}catch(e){} }
@@ -4020,7 +4072,6 @@ function clAddItem(){
   const label=document.getElementById('clNewLabel').value.trim();
   if(!label){toast('⚠️ Insira um nome');return;}
   const url=document.getElementById('clNewUrl').value.trim();
-  const emoji=document.getElementById('clNewEmoji').value.trim()||'📌';
   let imgUrl=null;
   if(url){
     if(url.match(/\.(gif|png|jpg|jpeg|webp)(\?|$)/i)){
@@ -4031,14 +4082,22 @@ function clAddItem(){
     }
   }
   const id='cl_'+Date.now();
-  cl.items.push({id,label,emoji,imgUrl});
+  cl.items.push({id,label,emoji:'📌',imgUrl,_custom:true});
   clSave();
   document.getElementById('clNewLabel').value='';
   document.getElementById('clNewUrl').value='';
-  document.getElementById('clNewEmoji').value='';
   const form=document.getElementById('clAddForm'); if(form) form.classList.remove('open');
   renderChecklist();
   toast(`✅ ${label} adicionado!`);
+}
+
+function clPinItem(id){
+  if(!cl.pinned) cl.pinned={};
+  cl.pinned[id]=!cl.pinned[id];
+  // mark item as _custom so it renders with ico/rm buttons in fixed section
+  const item=cl.items.find(x=>x.id===id);
+  if(item) item._custom=true;
+  clSave(); renderChecklist();
 }
 
 function clUpdateBadge(){
@@ -4064,30 +4123,39 @@ function renderChecklist(){
   if(txt){ txt.className='cl-prog-txt'+(allDone?' cl-ok':''); txt.innerHTML=allDone?'<strong>✅ Tudo pronto!</strong>':`<strong>${done}</strong>/${total} prontos`; }
   clUpdateBadge();
 
+  if(!cl.pinned) cl.pinned={};
+  const pinnedItems=cl.items.filter(x=>cl.pinned[x.id]);
+  const unpinnedItems=cl.items.filter(x=>!cl.pinned[x.id]);
+
+  const _fixedIco=(item)=>item.imgUrl
+    ?`<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`
+    :`<span style="font-size:1.1rem;">${item.icon||'📌'}</span>`;
+  const _custIco=(item)=>item.imgUrl
+    ?`<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" onerror="this.outerHTML='<span style=\\'font-size:1.1rem;\\'>📌</span>'">`
+    :`<span style="font-size:1.1rem;">${item.emoji||'📌'}</span>`;
+
   let html=`<div class="cl-sec">🔒 Fixos</div>`;
-  CL_FIXED.forEach(item=>{
+  [...CL_FIXED,...pinnedItems].forEach(item=>{
     const chk=!!cl.checks[item.id];
+    const isPinned=!!item._custom;
+    const hint=item.hint?`<div style="font-size:.65rem;color:var(--t2);margin-top:.05rem;">${item.hint}</div>`:'';
     html+=`<div class="cl-item${chk?' cl-done':''}" onclick="clToggleItem('${item.id}')">
       <div class="cl-cb">${chk?'✓':''}</div>
-      <div class="cl-ico">${item.icon}</div>
-      <div style="flex:1;min-width:0;">
-        <div class="cl-lbl">${item.label}</div>
-        <div style="font-size:.65rem;color:var(--t2);margin-top:.05rem;">${item.hint}</div>
-      </div>
+      <div class="cl-ico">${item._custom?_custIco(item):_fixedIco(item)}</div>
+      <div style="flex:1;min-width:0;"><div class="cl-lbl">${item.label}</div>${hint}</div>
+      ${item._custom?`<button class="cl-pin pinned" onclick="event.stopPropagation();clPinItem('${item.id}')" title="Remover dos fixos">📌</button><button class="cl-rm" onclick="event.stopPropagation();clRemoveItem('${item.id}')" title="Remover">✕</button>`:''}
     </div>`;
   });
 
-  if(cl.items.length){
+  if(unpinnedItems.length){
     html+=`<div class="cl-sec">📋 Personalizados</div>`;
-    cl.items.forEach(item=>{
+    unpinnedItems.forEach(item=>{
       const chk=!!cl.checks[item.id];
-      const icoHtml=item.imgUrl
-        ?`<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" data-fb="${item.emoji}" onerror="this.outerHTML=this.dataset.fb">`
-        :`<span style="font-size:1.1rem;">${item.emoji}</span>`;
       html+=`<div class="cl-item${chk?' cl-done':''}" onclick="clToggleItem('${item.id}')">
         <div class="cl-cb">${chk?'✓':''}</div>
-        <div class="cl-ico">${icoHtml}</div>
+        <div class="cl-ico">${_custIco(item)}</div>
         <div class="cl-lbl">${item.label}</div>
+        <button class="cl-pin${cl.pinned[item.id]?' pinned':''}" onclick="event.stopPropagation();clPinItem('${item.id}')" title="Fixar no topo">📍</button>
         <button class="cl-rm" onclick="event.stopPropagation();clRemoveItem('${item.id}')" title="Remover">✕</button>
       </div>`;
     });
@@ -4099,16 +4167,10 @@ function renderChecklist(){
       <label class="lbl">Nome</label>
       <input class="inp" id="clNewLabel" placeholder="Ex: Utito Tempo, Anel da cura..." style="padding:.42rem .65rem;font-size:.82rem;">
     </div>
-    <div style="margin-bottom:.42rem;">
+    <div style="margin-bottom:.52rem;">
       <label class="lbl">Link TibiaWiki (pega o ícone)</label>
       <input class="inp" id="clNewUrl" placeholder="https://tibia.fandom.com/wiki/..." style="padding:.42rem .65rem;font-size:.82rem;">
       <div style="font-size:.65rem;color:var(--t1);margin-top:.2rem;">Cole a URL da página do item para buscar o ícone automaticamente.</div>
-    </div>
-    <div style="margin-bottom:.52rem;display:flex;gap:.5rem;align-items:flex-end;">
-      <div style="flex:1">
-        <label class="lbl">Emoji (fallback)</label>
-        <input class="inp" id="clNewEmoji" placeholder="📌" style="padding:.42rem .65rem;font-size:.95rem;">
-      </div>
     </div>
     <button class="btn btn-g btn-sm" style="width:100%;justify-content:center;" onclick="clAddItem()">✓ Adicionar</button>
   </div>`;
