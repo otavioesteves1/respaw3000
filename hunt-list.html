@@ -2978,7 +2978,7 @@ function renderWheelStep(){
 
   if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36)
     wiz.wheel={slots:new Array(36).fill(0),link:''};
-  if(wiz.wheel._level===undefined) wiz.wheel._level=0;
+  if(wiz.wheel._level===undefined) wiz.wheel._level=state.wheelLevel||0;
   if(wiz.wheel._selSlot===undefined) wiz.wheel._selSlot=null;
   const slots=wiz.wheel.slots;
   const selSlot=wiz.wheel._selSlot;
@@ -2990,7 +2990,7 @@ function renderWheelStep(){
   // ── Handlers ────────────────────────────────────────
   window._whlLink=(v)=>{ wiz.wheel.link=v; };
   window._whlReset=()=>{ wiz.wheel.slots=new Array(36).fill(0); wiz.wheel._selSlot=null; renderWheelStep(); };
-  window._whlSetLevel=(v)=>{ wiz.wheel._level=Math.max(0,parseInt(v)||0); renderWheelStep(); setTimeout(()=>{ const _li=document.getElementById('whlLevelInp'); if(_li){_li.focus();const l=_li.value.length;_li.setSelectionRange(l,l);} },0); };
+  window._whlSetLevel=(v)=>{ const lv=Math.max(0,parseInt(v)||0); wiz.wheel._level=lv; state.wheelLevel=lv; save(false); renderWheelStep(); setTimeout(()=>{ const _li=document.getElementById('whlLevelInp'); if(_li){_li.focus();const l=_li.value.length;_li.setSelectionRange(l,l);} },0); };
   window._whlAdd=(i,delta)=>{
     const _s=wiz.wheel.slots,_lv=wiz.wheel._level||0,_u=_s.reduce((a,b)=>a+(b||0),0),_av=Math.max(0,_lv-50);
     const r=_wdRing(i),mx=WD_SLOT_MAX[r],cur=_s[i]||0;
@@ -3379,6 +3379,28 @@ function buildSummaryHTML(h){
 
 // ══════════════════════════════════════════════════════
 // HUNT LIST
+// ── Mini Wheel SVG ──────────────────────────────────
+function _miniWheelSVG(slots,size){
+  size=size||110;
+  const sc=size/420,cx=size/2,cy=size/2;
+  const rings=[4,8,12,8,4];
+  const radii=[[22,60],[62,100],[102,142],[144,180],[182,200]];
+  let paths='',si=0;
+  rings.forEach((n,ri)=>{
+    const ir=radii[ri][0]*sc,or=radii[ri][1]*sc,gap=0.07;
+    for(let k=0;k<n;k++){
+      const v=slots[si]||0;
+      const a1=(k/n)*2*Math.PI-Math.PI/2+gap/2;
+      const a2=((k+1)/n)*2*Math.PI-Math.PI/2-gap/2;
+      const c1=Math.cos(a1),s1=Math.sin(a1),c2=Math.cos(a2),s2=Math.sin(a2);
+      const d=`M${(cx+ir*c1).toFixed(2)},${(cy+ir*s1).toFixed(2)} L${(cx+or*c1).toFixed(2)},${(cy+or*s1).toFixed(2)} A${or.toFixed(2)},${or.toFixed(2)} 0 0 1 ${(cx+or*c2).toFixed(2)},${(cy+or*s2).toFixed(2)} L${(cx+ir*c2).toFixed(2)},${(cy+ir*s2).toFixed(2)} A${ir.toFixed(2)},${ir.toFixed(2)} 0 0 0 ${(cx+ir*c1).toFixed(2)},${(cy+ir*s1).toFixed(2)} Z`;
+      const fill=v===0?'rgba(255,255,255,0.05)':v<=2?'rgba(167,139,250,0.45)':v<=4?'rgba(167,139,250,0.75)':'rgba(167,139,250,1)';
+      paths+=`<path d="${d}" fill="${fill}" stroke="#0d0d18" stroke-width="0.8"/>`;
+      si++;
+    }
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block;flex-shrink:0;border-radius:50%;"><circle cx="${cx}" cy="${cy}" r="${cx}" fill="#12121e"/>${paths}</svg>`;
+}
 // ══════════════════════════════════════════════════════
 function renderHunts(){
   const el=document.getElementById('huntList');
@@ -3449,6 +3471,7 @@ function renderHunts(){
         ${spellTags?`<div class="hd-block"><div class="hd-lbl">&#x2728; Magias</div><div class="hd-list">${spellTags}</div></div>`:''}
         ${imbuTags?`<div class="hd-block"><div class="hd-lbl">&#x1F6E1;&#xFE0F; Imbuements</div><div class="hd-list">${imbuTags}</div></div>`:''}
         ${monGrid?`<div class="hd-block"><div class="hd-lbl">&#x1F409; Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
+        ${(()=>{const wh=h.wheel||{};const ws=wh.slots&&wh.slots.length===36?wh.slots:null;const wu=ws?ws.reduce((a,b)=>a+(b||0),0):0;if(!ws||wu===0)return '';const wlv=state.wheelLevel||0;const wav=Math.max(0,wlv-50);return `<div class="hd-block"><div class="hd-lbl">&#x1F3A1; Wheel of Destiny</div><div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;">${_miniWheelSVG(ws,110)}<div style="display:flex;flex-direction:column;gap:.3rem;">${wlv>0?`<div style="font-size:.78rem;font-weight:700;color:var(--t0);">Level ${wlv}<span style="font-weight:400;color:var(--t2);"> / ${wav} pts disponíveis</span></div>`:'<div style="font-size:.75rem;color:var(--t2);">Defina seu level no wizard</div>'}<div style="font-size:.8rem;font-weight:800;color:var(--gold);">⚡ ${wu} pontos distribuídos</div>${wh.link?`<a href="${encodeURI(wh.link)}" target="_blank" rel="noopener" style="font-size:.65rem;color:var(--blue);text-decoration:none;">&#x1F517; Ver planner completo</a>`:''}</div></div></div>`;})()}
         ${activeLoot.length?`<div class="hd-block"><div class="hd-lbl">&#x1F4E6; Loot <span style="font-weight:400;font-size:.65rem;color:var(--t1);">(${activeLoot.length} itens)</span></div>${lootToolbar}<div class="hd-loot-grid" id="lootGrid_${h.id}"></div></div>`:''}
       </div>
       <div class="hcard-acts">
