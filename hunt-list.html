@@ -3153,7 +3153,7 @@ function renderWheelStep(){
       ${revHtml}
       <div style="margin-top:.45rem;">
         <label style="font-size:.6rem;color:var(--t1);display:block;margin-bottom:.15rem;">🔗 Link do planner <span style="color:var(--t2);">(opcional)</span></label>
-        <input class="wheel-link-inp wi" type="url" value="${(wiz.wheel.link||'').replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" placeholder="https://tibia-wheel.vercel.app/...">
+        <input class="wheel-link-inp wi" type="url" value="${(wiz.wheel.link||'').replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" onkeydown="event.stopPropagation()" placeholder="https://tibia-wheel.vercel.app/...">
       </div>
     </div>
   </div>`;
