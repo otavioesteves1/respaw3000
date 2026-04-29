@@ -2990,7 +2990,7 @@ function renderWheelStep(){
   // ── Handlers ────────────────────────────────────────
   window._whlLink=(v)=>{ wiz.wheel.link=v; };
   window._whlReset=()=>{ wiz.wheel.slots=new Array(36).fill(0); wiz.wheel._selSlot=null; renderWheelStep(); };
-  window._whlSetLevel=(v)=>{ wiz.wheel._level=Math.max(0,parseInt(v)||0); renderWheelStep(); const _li=document.getElementById('whlLevelInp'); if(_li) _li.focus(); };
+  window._whlSetLevel=(v)=>{ wiz.wheel._level=Math.max(0,parseInt(v)||0); renderWheelStep(); setTimeout(()=>{ const _li=document.getElementById('whlLevelInp'); if(_li) _li.focus(); },0); };
   window._whlAdd=(i,delta)=>{
     const _s=wiz.wheel.slots,_lv=wiz.wheel._level||0,_u=_s.reduce((a,b)=>a+(b||0),0),_av=Math.max(0,_lv-50);
     const r=_wdRing(i),mx=WD_SLOT_MAX[r],cur=_s[i]||0;
