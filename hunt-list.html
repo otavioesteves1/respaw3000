@@ -1402,22 +1402,36 @@ function parseWikiResistances(wt){
   });
   return Object.keys(res).length?res:null;
 }
-// Fetch resistances from fandom wiki, then BR wiki as fallback
+function parseWikiAbilities(wt){
+  const m=wt.match(/\|\s*abilities\s*=\s*([^\n]+)/i);
+  if(!m) return null;
+  let t=m[1].trim();
+  t=t.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g,'$2');
+  t=t.replace(/\[\[([^\]]+)\]\]/g,'$1');
+  t=t.replace(/\{\{[^}]+\}\}/g,'');
+  t=t.replace(/\s+/g,' ').replace(/\.\s*$/,'').trim();
+  return t||null;
+}
+
+// Fetch resistances+abilities from fandom wiki (abilities only on fandom), fallback BR for resistances
 async function fetchMonsterResistances(name){
   const slug=name.trim().replace(/\s+/g,'_');
-  const apis=[
-    `https://tibia.fandom.com/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
-    `https://www.tibiawiki.com.br/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`,
-  ];
-  for(const url of apis){
+  const fandomUrl=`https://tibia.fandom.com/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`;
+  const brUrl=`https://www.tibiawiki.com.br/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`;
+  let resistances=null,abilities=null;
+  try{
+    const r=await fetch(fandomUrl); const d=await r.json();
+    const wt=d.parse?.wikitext?.['*'];
+    if(wt){ resistances=parseWikiResistances(wt); abilities=parseWikiAbilities(wt); }
+  }catch(e){}
+  if(!resistances){
     try{
-      const r=await fetch(url);
-      const d=await r.json();
+      const r=await fetch(brUrl); const d=await r.json();
       const wt=d.parse?.wikitext?.['*'];
-      if(wt){ const res=parseWikiResistances(wt); if(res) return res; }
+      if(wt) resistances=parseWikiResistances(wt);
     }catch(e){}
   }
-  return null;
+  return {resistances,abilities};
 }
 
 const MAJOR_CHARMS = [
@@ -2515,11 +2529,11 @@ function _tryGifUrls(urls,idx){
   img.src=gifUrl+'?cb='+Date.now();
 }
 async function _fetchAndStoreResistances(name){
-  const res=await fetchMonsterResistances(name);
-  wiz._resistances=res;
-  // Show preview badge row in form if we got data
+  const {resistances,abilities}=await fetchMonsterResistances(name);
+  wiz._resistances=resistances;
+  wiz._abilities=abilities||null;
   const preview=document.getElementById('resPreview');
-  if(preview) preview.innerHTML=res?buildResistRow(res):'';
+  if(preview) preview.innerHTML=resistances?buildResistRow(resistances):'';
 }
 function addMonster(){
   const name=document.getElementById('monName').value.trim(); if(!name){toast('⚠️ Insira o nome do monstro');return;}
@@ -2527,7 +2541,7 @@ function addMonster(){
   const existing=wiz._editMonId?wiz.monsters.find(m=>m.id===wiz._editMonId):null;
   const majorCharm=existing?.majorCharm||null;
   const minorCharm=existing?.minorCharm||null;
-  const monData={id:wiz._editMonId||'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm,resistances:wiz._resistances||null};
+  const monData={id:wiz._editMonId||'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm,resistances:wiz._resistances||null,abilities:wiz._abilities||null};
   if(wiz._editMonId){
     const idx=wiz.monsters.findIndex(m=>m.id===wiz._editMonId);
     if(idx>=0) wiz.monsters[idx]=monData;
@@ -2540,7 +2554,7 @@ function addMonster(){
 function clearMonForm(){
   document.getElementById('monName').value=''; document.getElementById('monWiki').value='';
   document.getElementById('gifPreview').classList.remove('on'); document.getElementById('gifLoad').classList.add('h');
-  wiz._gif=null; wiz._editMonId=null; wiz._resistances=null;
+  wiz._gif=null; wiz._editMonId=null; wiz._resistances=null; wiz._abilities=null;
   const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML='';
   const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='➕ Adicionar';
 }
@@ -2552,7 +2566,7 @@ function editMonster(id){
   if(m.gifUrl){ wiz._gif=m.gifUrl; document.getElementById('gifImg').src=m.gifUrl; document.getElementById('gifPreview').classList.add('on'); }
   else { wiz._gif=null; document.getElementById('gifPreview').classList.remove('on'); }
   document.getElementById('gifLoad').classList.add('h');
-  wiz._resistances=m.resistances||null;
+  wiz._resistances=m.resistances||null; wiz._abilities=m.abilities||null;
   const rp=document.getElementById('resPreview'); if(rp) rp.innerHTML=wiz._resistances?buildResistRow(wiz._resistances):'';
   const addBtn=document.getElementById('monAddBtn'); if(addBtn) addBtn.textContent='✓ Salvar';
   document.querySelectorAll('.mon-card').forEach(c=>c.classList.remove('editing'));
@@ -2578,10 +2592,11 @@ function renderMonList(){
     const maj=m.majorCharm?`<span class="charm-badge major"><img src="${m.majorCharm.img}">${m.majorCharm.name}</span>`:'';
     const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
     const resRow=buildResistRow(m.resistances);
+    const abRow=m.abilities?`<div style="font-size:.64rem;color:var(--t1);margin-top:.22rem;line-height:1.4;"><span style="font-weight:700;color:var(--gold);">⚔️</span> ${m.abilities}</div>`:'';
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
     const upBtn=idx>0?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',-1)" title="Subir">▲</button>`:'<button class="mon-ord-btn" disabled>▲</button>';
     const dnBtn=idx<wiz.monsters.length-1?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',1)" title="Descer">▼</button>`:'<button class="mon-ord-btn" disabled>▼</button>';
-    c.innerHTML=`<div class="mon-drag-handle" title="Arrastar para reordenar"><span class="mon-pri-num">${idx+1}</span>⠿</div><div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}</div><div class="mon-ord-btns">${upBtn}${dnBtn}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
+    c.innerHTML=`<div class="mon-drag-handle" title="Arrastar para reordenar"><span class="mon-pri-num">${idx+1}</span>⠿</div><div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}${abRow}</div><div class="mon-ord-btns">${upBtn}${dnBtn}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
     c.addEventListener('dragstart',e=>{
       _dragIdx=idx;
       e.dataTransfer.effectAllowed='move';
@@ -2742,10 +2757,11 @@ async function _fetchGifAsync(name){
 
 // Fetch GIF + resistances for one import monster object
 async function _fetchImportMonData(mon){
-  [mon.gifUrl, mon.resistances] = await Promise.all([
+  const [gif, wikiData] = await Promise.all([
     _fetchGifAsync(mon.name),
     fetchMonsterResistances(mon.name),
   ]);
+  mon.gifUrl=gif; mon.resistances=wikiData.resistances; mon.abilities=wikiData.abilities||null;
   mon.loading = false;
 }
 
@@ -3459,7 +3475,8 @@ function renderHunts(){
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
-      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${res}</a>`;
+      const ab=m.abilities?`<div style="font-size:.6rem;color:var(--t1);margin-top:.18rem;line-height:1.35;text-align:center;"><span style="color:var(--gold);font-weight:700;">⚔️</span> ${m.abilities}</div>`:'';
+      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${res}${ab}</a>`;
     }).join('');
 
     // Loot toolbar: rarity filters + price sort
