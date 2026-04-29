@@ -1408,10 +1408,11 @@ function parseWikiAbilities(wt){
   const m=wt.match(/\|\s*abilities\s*=\s*([^\n]+)/i);
   if(!m) return null;
   let t=m[1].trim();
-  t=t.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g,'$2');
-  t=t.replace(/\[\[([^\]]+)\]\]/g,'$1');
-  t=t.replace(/\{\{[^}]+\}\}/g,'');
-  t=t.replace(/\s+/g,' ').replace(/\.\s*$/,'').trim();
+  t=t.replace(/([^\s])\[\[/g,'$1 [['); // space before adjacent [[
+  t=t.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g,'$2'); // [[A|B]] → B
+  t=t.replace(/\[\[([^\]]+)\]\]/g,'$1');             // [[A]] → A
+  t=t.replace(/\{\{[^}]+\}\}/g,'');                  // strip {{templates}}
+  t=t.replace(/\s{2,}/g,' ').replace(/\s*,\s*/g,', ').replace(/\.\s*$/,'').trim();
   return t||null;
 }
 
