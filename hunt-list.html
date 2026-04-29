@@ -1082,23 +1082,27 @@ input[type=number]{-moz-appearance:textfield;}
 
     <!-- Step 4: Magias & Imbuimentos -->
     <div class="wpanel" id="wp4">
-      <div class="sec-lbl">✨ Magias &amp; 🛡️ Imbuimentos</div>
-      <div style="margin-bottom:1.4rem;">
-        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">✨ Magias <span id="spellCount" style="font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span></div>
-        <div class="voc-bar" id="vocBar" style="margin-bottom:.6rem;">
-          <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
-          <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
-          <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
-          <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
-          <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;align-items:start;">
+        <!-- BOX 1: Magias -->
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc(90vh - 180px);">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.4rem;">✨ Magias <span id="spellCount" style="font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;font-size:.65rem;"></span></div>
+          <div class="voc-bar" id="vocBar" style="margin-bottom:.5rem;flex-shrink:0;">
+            <button class="voc-btn" id="vbtn_druid"    onclick="selectVocation('druid')">🌿 Druid</button>
+            <button class="voc-btn" id="vbtn_sorcerer" onclick="selectVocation('sorcerer')">🔮 Sorcerer</button>
+            <button class="voc-btn" id="vbtn_knight"   onclick="selectVocation('knight')">⚔️ Knight</button>
+            <button class="voc-btn" id="vbtn_paladin"  onclick="selectVocation('paladin')">🏹 Paladin</button>
+            <button class="voc-btn" id="vbtn_monk"     onclick="selectVocation('monk')">🥋 Monk</button>
+          </div>
+          <div id="spellGridWrap" style="overflow-y:auto;flex:1;">
+            <div style="color:var(--t1);font-size:.82rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima.</div>
+          </div>
         </div>
-        <div id="spellGridWrap">
-          <div style="color:var(--t1);font-size:.82rem;padding:.4rem 0;">⬆️ Selecione uma vocação acima para ver as magias disponíveis.</div>
+        <!-- BOX 2: Imbuimentos -->
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc(90vh - 180px);">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.4rem;">🛡️ Imbuimentos <span id="imbuCount" style="font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;font-size:.65rem;"></span></div>
+          <div style="font-size:.62rem;color:var(--t2);margin-bottom:.4rem;">Máx. 2 slots — clique para ciclar 0→1→2</div>
+          <div class="charm-grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));overflow-y:auto;flex:1;" id="imbuGrid"></div>
         </div>
-      </div>
-      <div>
-        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:.4rem;">🛡️ Imbuimentos <span id="imbuCount" style="font-weight:700;color:var(--green);text-transform:none;letter-spacing:0;"></span> <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t1);">Máx. 2 slots — clique para ciclar 0→1→2</span></div>
-        <div class="charm-grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));max-width:580px;" id="imbuGrid"></div>
       </div>
     </div>
 
