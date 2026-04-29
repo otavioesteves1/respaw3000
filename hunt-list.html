@@ -230,6 +230,8 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .charm-badge img{width:14px;height:14px;object-fit:contain;image-rendering:pixelated;}
 .mon-rm{width:22px;height:22px;border-radius:5px;border:none;background:rgba(239,68,68,.12);color:#fca5a5;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
 .mon-rm:hover{background:rgba(239,68,68,.25);}
+.mon-copy-btn{background:none;border:none;cursor:pointer;font-size:.65rem;padding:.1rem .22rem;border-radius:4px;color:var(--t2);opacity:.45;transition:all .15s;flex-shrink:0;line-height:1;}
+.mon-copy-btn:hover{opacity:1;color:var(--t0);background:rgba(255,255,255,.08);}
 
 /* ── Hunt card ── */
 .hcard{background:var(--c2);border-radius:var(--r);border:1px solid var(--c4);box-shadow:var(--sh);margin-bottom:1.1rem;overflow:hidden;}
@@ -1720,6 +1722,7 @@ function selectGateProfile(id){
 // ══════════════════════════════════════════════════════
 let _tt;
 function toast(m){ const el=document.getElementById('toast'); el.textContent=m; el.classList.add('on'); clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('on'),2400); }
+function _copyMon(name){ navigator.clipboard?.writeText(name).then(()=>toast('📋 '+name)).catch(()=>toast('⚠️ Erro ao copiar')); }
 
 // ══════════════════════════════════════════════════════
 // PROFILES
@@ -1971,7 +1974,7 @@ function renderStep4MonWeaknesses(){
     const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.4rem;opacity:.4;">🐉</span>';
     const res=m.resistances?buildResistRow(m.resistances,false,true):'<span style="font-size:.65rem;color:var(--t2);">Sem dados</span>';
     const row=document.createElement('div'); row.className='step4-mon-row';
-    row.innerHTML=`<div class="step4-mon-gif">${gif}</div><div class="step4-mon-info"><div class="step4-mon-name">${m.name}</div>${res}</div>`;
+    row.innerHTML=`<div class="step4-mon-gif">${gif}</div><div class="step4-mon-info"><div class="step4-mon-name" style="display:flex;align-items:center;gap:.3rem;">${m.name}<button class="mon-copy-btn" onclick="event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button></div>${res}</div>`;
     el.appendChild(row);
   });
 }
@@ -2015,7 +2018,7 @@ function _renderCharmPicker(monId){
     <div style="margin-bottom:.65rem;">
       <div style="font-size:.82rem;font-weight:800;display:flex;align-items:center;gap:.45rem;margin-bottom:.35rem;">
         ${mon.gifUrl?`<img src="${mon.gifUrl}" style="width:34px;height:34px;object-fit:contain;image-rendering:pixelated;border-radius:6px;">`:'🐉'}
-        ${mon.name}
+        ${mon.name}<button class="mon-copy-btn" onclick="event.stopPropagation();_copyMon('${mon.name.replace(/'/g,"\\'")}')">📋</button>
       </div>
       ${mon.resistances?buildResistRow(mon.resistances,false,true):'<span style="font-size:.65rem;color:var(--t2);">Sem dados de fraqueza</span>'}
     </div>
@@ -2596,7 +2599,8 @@ function renderMonList(){
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
     const upBtn=idx>0?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',-1)" title="Subir">▲</button>`:'<button class="mon-ord-btn" disabled>▲</button>';
     const dnBtn=idx<wiz.monsters.length-1?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',1)" title="Descer">▼</button>`:'<button class="mon-ord-btn" disabled>▼</button>';
-    c.innerHTML=`<div class="mon-drag-handle" title="Arrastar para reordenar"><span class="mon-pri-num">${idx+1}</span>⠿</div><div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name">${m.name}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}${abRow}</div><div class="mon-ord-btns">${upBtn}${dnBtn}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
+    const cpBtn=`<button class="mon-copy-btn" onclick="event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')" title="Copiar nome">📋</button>`;
+    c.innerHTML=`<div class="mon-drag-handle" title="Arrastar para reordenar"><span class="mon-pri-num">${idx+1}</span>⠿</div><div class="mon-gif">${gif}</div><div class="mon-info"><div class="mon-name" style="display:flex;align-items:center;gap:.3rem;">${m.name}${cpBtn}</div>${wl}<div class="mon-charms">${maj}${min}</div>${resRow}${abRow}</div><div class="mon-ord-btns">${upBtn}${dnBtn}</div><button class="mon-edit" onclick="editMonster('${m.id}')" title="Editar monstro">✏️</button><button class="mon-rm" onclick="rmMon('${m.id}')">✕</button>`;
     c.addEventListener('dragstart',e=>{
       _dragIdx=idx;
       e.dataTransfer.effectAllowed='move';
@@ -2755,14 +2759,10 @@ async function _fetchGifAsync(name){
   return null;
 }
 
-// Fetch GIF + resistances for one import monster object
+// Fetch GIF only during import preview (resistances+abilities fetched after adding)
 async function _fetchImportMonData(mon){
-  const [gif, wikiData] = await Promise.all([
-    _fetchGifAsync(mon.name),
-    fetchMonsterResistances(mon.name),
-  ]);
-  mon.gifUrl=gif; mon.resistances=wikiData.resistances; mon.abilities=wikiData.abilities||null;
-  mon.loading = false;
+  mon.gifUrl=await _fetchGifAsync(mon.name);
+  mon.loading=false;
 }
 
 function _setImportStatus(msg, cls=''){
@@ -2787,12 +2787,10 @@ function renderImportList(){
       ?`<img src="${m.gifUrl}" alt="">`
       :`<span style="font-size:1.1rem;opacity:.35;">🐉</span>`;
     const spin=m.loading?`<span style="font-size:.65rem;color:var(--t2);">⏳</span>`:'';
-    const res=(!m.loading&&m.resistances)?buildResistRow(m.resistances,false,true):'';
     return `<div class="import-mon-row${m.selected?' isel':''}" onclick="toggleImportMon(${i})">
       <input class="import-chk" type="checkbox" ${m.selected?'checked':''} onclick="event.stopPropagation();toggleImportMon(${i})">
       <div class="import-mon-gif">${gif}</div>
       <span class="import-mon-name">${m.name}</span>
-      <span class="import-mon-res">${res}</span>
       ${spin}
     </div>`;
   }).join('');
@@ -2891,22 +2889,25 @@ async function confirmImport(){
   const toAdd=_importMonsters.filter(m=>m.selected);
   if(!toAdd.length){toast('⚠️ Nenhum monstro selecionado');return;}
   let added=0;
+  const newMons=[];
   toAdd.forEach(m=>{
-    if(wiz.monsters.find(x=>x.name.toLowerCase()===m.name.toLowerCase())) return; // skip dup
-    wiz.monsters.push({
-      id:'m_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
-      name:m.name,
-      wikiUrl:`https://www.tibiawiki.com.br/wiki/${encodeURIComponent(m.name.replace(/\s+/g,'_'))}`,
-      gifUrl:m.gifUrl||null,
-      majorCharm:null, minorCharm:null,
-      resistances:m.resistances||null,
-    });
-    added++;
+    if(wiz.monsters.find(x=>x.name.toLowerCase()===m.name.toLowerCase())) return;
+    const mo={id:'m_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),name:m.name,
+      wikiUrl:`https://tibia.fandom.com/wiki/${encodeURIComponent(m.name.replace(/\s+/g,'_'))}`,
+      gifUrl:m.gifUrl||null,majorCharm:null,minorCharm:null,resistances:null,abilities:null};
+    wiz.monsters.push(mo); newMons.push(mo); added++;
   });
   renderMonList();
-  toast(`✅ ${added} monstro${added>1?'s':''} adicionado${added>1?'s':''}!`);
-  clearImport();
-  setMonMode('single');
+  toast(`✅ ${added} monstro${added>1?'s':''} adicionado${added>1?'s':''}! Buscando dados...`);
+  clearImport(); setMonMode('single');
+  // Fetch full wiki data (resistances + abilities) from fandom for each new monster
+  (async()=>{
+    for(const mon of newMons){
+      const {resistances,abilities}=await fetchMonsterResistances(mon.name);
+      mon.resistances=resistances; mon.abilities=abilities;
+      renderMonList();
+    }
+  })();
 }
 
 // ══════════════════════════════════════════════════════
@@ -3402,7 +3403,7 @@ function buildSummaryHTML(h){
       const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">${m.minorCharm.name}</div>`:'';
       const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
-      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}${maj}${min}${noCharms}${res}</div></div>`;
+      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name" style="display:flex;align-items:center;gap:.3rem;">${m.name}<button class="mon-copy-btn" onclick="event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button></div>${wl}${maj}${min}${noCharms}${res}</div></div>`;
     });
     html+='</div></div>';
   }
@@ -3476,7 +3477,8 @@ function renderHunts(){
       const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
       const ab=m.abilities?`<div style="font-size:.6rem;color:var(--t1);margin-top:.18rem;line-height:1.35;text-align:center;"><span style="color:var(--gold);font-weight:700;">⚔️</span> ${m.abilities}</div>`:'';
-      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name">${m.name}</div>${maj}${min}${res}${ab}</a>`;
+      const cpMini=`<button class="mon-copy-btn" onclick="event.preventDefault();event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button>`;
+      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name" style="display:flex;align-items:center;justify-content:center;gap:.25rem;">${m.name}${cpMini}</div>${maj}${min}${res}${ab}</a>`;
     }).join('');
 
     // Loot toolbar: rarity filters + price sort
