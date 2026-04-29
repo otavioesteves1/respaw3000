@@ -3126,7 +3126,7 @@ function renderWheelStep(){
     <label style="font-size:.65rem;font-weight:700;color:var(--t1);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;">Level</label>
     <input type="number" min="0" max="9999" value="${level||''}" placeholder="ex: 300"
       style="width:76px;padding:.25rem .4rem;border:1.5px solid var(--c4);border-radius:7px;background:var(--c2);color:var(--t0);font-size:.88rem;font-weight:700;outline:none;"
-      oninput="window._whlSetLevel(this.value)" onkeydown="if(event.key==='Enter')window._whlSetLevel(this.value)">
+      oninput="window._whlSetLevel(this.value)" onkeydown="event.stopPropagation();if(event.key==='Enter')window._whlSetLevel(this.value)">
     <span style="font-size:.73rem;font-weight:700;color:${ptCol};">
       ${level>50?`${Math.max(0,remaining)} pts restantes <span style="font-weight:400;color:var(--t2);">/ ${avail} total</span>`:'Insira o level para ver pontos'}
     </span>
@@ -4190,6 +4190,7 @@ function switchMainTab(tab){
   });
   if(tab==='bestiary') renderBestiary();
   if(tab==='imbu') renderImbu();
+  try{ localStorage.setItem('respaw_tab',tab); }catch(e){}
 }
 
 // Navigate to bestiary tab and highlight a monster from a hunt
@@ -5456,6 +5457,8 @@ function initApp(){
   } else {
     document.getElementById('profileGate').style.display='none';
     renderProfiles(); renderHunts();
+    const savedTab=localStorage.getItem('respaw_tab');
+    if(savedTab&&savedTab!=='hunts') switchMainTab(savedTab);
   }
 }
 initApp();
