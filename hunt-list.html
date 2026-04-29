@@ -1060,22 +1060,22 @@ input[type=number]{-moz-appearance:textfield;}
     <div class="wpanel" id="wp3">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;align-items:start;">
         <!-- BOX 1: Runas -->
-        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;">
-          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.5rem;">📜 Runas</div>
-          <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));"></div>
-          <div id="runaSel" style="margin-top:.4rem;"></div>
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc(90vh - 180px);">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">📜 Runas</div>
+          <div id="runaSel" style="margin-bottom:.35rem;"></div>
+          <div class="charm-grid" id="runaGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
         </div>
         <!-- BOX 2: Poções -->
-        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;">
-          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.5rem;">💊 Potions</div>
-          <div class="charm-grid" id="potGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));"></div>
-          <div id="potSel" style="margin-top:.4rem;"></div>
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc(90vh - 180px);">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">💊 Potions</div>
+          <div id="potSel" style="margin-bottom:.35rem;"></div>
+          <div class="charm-grid" id="potGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
         </div>
         <!-- BOX 3: Skill Potions -->
-        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;">
-          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.5rem;">⚗️ Skill Potions</div>
-          <div class="charm-grid" id="skillPotGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));"></div>
-          <div id="skillPotSel" style="margin-top:.4rem;"></div>
+        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc(90vh - 180px);">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">⚗️ Skill Potions</div>
+          <div id="skillPotSel" style="margin-bottom:.35rem;"></div>
+          <div class="charm-grid" id="skillPotGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
         </div>
       </div>
     </div>
