@@ -2223,6 +2223,10 @@ function togglePot(id, group){
   if(idx>=0) wiz.pots.splice(idx,1); else wiz.pots.push({...p,qty:defQty});
   renderPotGrid();
 }
+function removePot(id){
+  const idx=wiz.pots.findIndex(x=>x.id===id);
+  if(idx>=0){ wiz.pots.splice(idx,1); renderPotGrid(); }
+}
 function renderPotSel(){
   const el=document.getElementById('potSel'); el.innerHTML='';
   const sel2=document.getElementById('skillPotSel'); if(sel2) sel2.innerHTML='';
@@ -2245,7 +2249,7 @@ function renderPotSel(){
         </div>
         <input class="qty-slider" type="range" min="0" max="5000" step="100" value="${x.qty}" oninput="syncPot('${x.id}',this)" style="--pct:${Math.round((x.qty/5000)*100)}%">
       </div>
-      <button class="sel-rm" onclick="togglePot('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
+      <button class="sel-rm" onclick="removePot('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
     target.appendChild(r);
   });
 }
@@ -2288,26 +2292,32 @@ function toggleRuna(id){
   if(idx>=0) wiz.runas.splice(idx,1); else wiz.runas.push({...p,qty:100});
   renderRunaGrid();
 }
+function removeRuna(id){
+  const idx=wiz.runas.findIndex(x=>x.id===id);
+  if(idx>=0){ wiz.runas.splice(idx,1); renderRunaGrid(); }
+}
 function renderRunaSel(){
   const el=document.getElementById('runaSel'); el.innerHTML='';
   if(!wiz.runas.length) return;
   wiz.runas.forEach(x=>{
     const r=document.createElement('div'); r.className='sel-row';
-    r.innerHTML=`<div class="sel-icon" style="align-self:center;"><img src="${x.img}" alt=""></div>
-      <div style="flex:1;min-width:0;">
-        <div class="sel-name">${x.name}</div>
-        <div class="qty-row" style="margin-top:.3rem;">
-          <button class="qb" onclick="adjRuna('${x.id}',-1000)">−1k</button>
-          <button class="qb" onclick="adjRuna('${x.id}',-100)">−100</button>
-          <button class="qb main" onclick="adjRuna('${x.id}',-1)">−</button>
-          <input class="qi" type="number" value="${x.qty}" min="0" oninput="syncRuna('${x.id}',this)" onchange="syncRuna('${x.id}',this)">
-          <button class="qb main" onclick="adjRuna('${x.id}',1)">+</button>
-          <button class="qb" onclick="adjRuna('${x.id}',100)">+100</button>
-          <button class="qb" onclick="adjRuna('${x.id}',1000)">+1k</button>
-        </div>
-        <input class="qty-slider" type="range" min="0" max="5000" step="100" value="${x.qty}" oninput="syncRuna('${x.id}',this)" style="--pct:${Math.round((x.qty/5000)*100)}%">
+    r.style.cssText='flex-direction:column;align-items:stretch;gap:.28rem;padding:.42rem .55rem;';
+    r.innerHTML=`
+      <div style="display:flex;align-items:center;gap:.4rem;">
+        <div class="sel-icon"><img src="${x.img}" alt=""></div>
+        <span style="flex:1;font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${x.name}</span>
+        <span class="runa-qty-disp" style="font-size:.8rem;font-weight:800;color:var(--gold);flex-shrink:0;">×${x.qty}</span>
+        <button class="sel-rm" onclick="removeRuna('${x.id}')" title="Remover">✕</button>
       </div>
-      <button class="sel-rm" onclick="toggleRuna('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
+      <div class="qty-row" style="margin:0;gap:.18rem;">
+        <button class="qb" onclick="adjRuna('${x.id}',-100)">−100</button>
+        <button class="qb main" onclick="adjRuna('${x.id}',-1)">−</button>
+        <input class="qi" type="number" value="${x.qty}" min="0" oninput="syncRuna('${x.id}',this)" onchange="syncRuna('${x.id}',this)" style="width:56px;">
+        <button class="qb main" onclick="adjRuna('${x.id}',1)">+</button>
+        <button class="qb" onclick="adjRuna('${x.id}',100)">+100</button>
+      </div>
+      <input class="qty-slider" type="range" min="0" max="5000" step="100" value="${x.qty}" oninput="syncRuna('${x.id}',this)" style="--pct:${Math.round((x.qty/5000)*100)}%;margin:0;width:100%;">
+    `;
     el.appendChild(r);
   });
 }
@@ -2321,11 +2331,13 @@ function syncRuna(id,srcEl){
   const row=srcEl.closest('.sel-row');
   if(row){
     const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider');
+    const disp=row.querySelector('.runa-qty-disp');
     if(ni&&ni!==srcEl) ni.value=v;
     if(sl&&sl!==srcEl) sl.value=Math.min(5000,v);
     const pct=Math.min(100,Math.round((v/5000)*100))+'%';
     if(sl) sl.style.setProperty('--pct',pct);
     if(isSl) srcEl.style.setProperty('--pct',pct);
+    if(disp) disp.textContent='×'+v;
   }
 }
 
@@ -2559,32 +2571,54 @@ async function startLootFetch(){
 }
 
 // ── Loot bar chart (PowerBI-style interactive) ──
-function _renderLootChart(loot, prices, containerId){
+function _renderLootChart(loot, prices, weights, monsters, containerId){
+  // Build monster name → gifUrl map for icons
+  const monGifMap={};
+  (monsters||[]).forEach(m=>{ if(m.name&&m.gifUrl) monGifMap[m.name]=m.gifUrl; });
+
   const priced=loot
     .filter(it=>!it.excluded && (prices[it.name.toLowerCase()]||0)>0)
-    .map(it=>({name:it.name, price:prices[it.name.toLowerCase()]}))
+    .map(it=>({
+      name:it.name,
+      price:prices[it.name.toLowerCase()],
+      weight:(weights||{})[it.name.toLowerCase()]||0,
+      monsters:it.monsters||[]
+    }))
     .sort((a,b)=>b.price-a.price)
     .slice(0,20);
   if(priced.length<2) return '';
   const maxP=priced[0].price||1;
-  const barH=20,gap=4,labelW=135,barMaxW=170,valW=72;
+  // Layout: [iconW][gap][labelW][barMaxW][valW]
+  const iconW=20,barH=22,gap=4,labelW=112,barMaxW=140,valW=82;
   const svgH=priced.length*(barH+gap)-gap;
-  const svgW=labelW+barMaxW+valW;
+  const svgW=iconW+4+labelW+barMaxW+valW;
   const bars=priced.map((item,i)=>{
     const bw=Math.max(4,Math.round((item.price/maxP)*barMaxW));
     const y=i*(barH+gap);
     const safeN=item.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     const safeJs=item.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    // Monster icon: if item from single monster, show its sprite
+    const singleMon=item.monsters.length===1?item.monsters[0]:null;
+    const monGifUrl=singleMon
+      ?(monGifMap[singleMon]||`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent((singleMon).replace(/\s+/g,'_'))}.gif`)
+      :'';
+    const iconEl=monGifUrl
+      ?`<image href="${monGifUrl}" x="0" y="${y+2}" width="${iconW}" height="${iconW-2}" preserveAspectRatio="xMidYMid meet" opacity="0.82"/>`
+      :`<rect x="0" y="${y+2}" width="${iconW}" height="${iconW-2}" rx="3" fill="rgba(255,255,255,.03)"/>`;
+    const barX=iconW+4+labelW;
+    // Weight label (oz = cap)
+    const wStr=item.weight>0?` · ${item.weight.toFixed(2)}oz`:'';
     return `<g class="loot-bar-g" onclick="lootBarClick('${safeJs}','${containerId}')">
-  <rect x="0" y="${y}" width="${labelW-6}" height="${barH}" rx="0" fill="transparent"/>
-  <text x="${labelW-8}" y="${y+barH/2+4}" text-anchor="end" fill="rgba(255,255,255,.72)" font-size="10.5" font-family="inherit" font-weight="500">${safeN}</text>
-  <rect class="loot-bar-rect" x="${labelW}" y="${y}" width="${bw}" height="${barH}" rx="3" fill="rgba(168,85,247,.55)" data-item="${safeN}" data-cid="${containerId}"/>
-  <text x="${labelW+bw+6}" y="${y+barH/2+4}" fill="rgba(251,191,36,.9)" font-size="10" font-family="inherit">${fmtPrice(item.price)}</text>
+  <rect x="0" y="${y}" width="${svgW}" height="${barH}" rx="2" fill="transparent"/>
+  ${iconEl}
+  <text x="${iconW+4+labelW-6}" y="${y+barH/2+4}" text-anchor="end" fill="rgba(255,255,255,.72)" font-size="10" font-family="inherit" font-weight="500">${safeN}</text>
+  <rect class="loot-bar-rect" x="${barX}" y="${y}" width="${bw}" height="${barH}" rx="3" fill="rgba(168,85,247,.55)" data-item="${safeN}" data-cid="${containerId}"/>
+  <text x="${barX+bw+5}" y="${y+barH/2+4}" fill="rgba(251,191,36,.9)" font-size="9" font-family="inherit">${fmtPrice(item.price)}${wStr}</text>
 </g>`;
   }).join('');
   return `<div class="loot-chart-wrap" id="lootChart_${containerId}">
   <div class="loot-chart-header">
-    <span class="loot-chart-title">📊 Valor por item <span style="font-weight:400;text-transform:none;letter-spacing:0;">(top ${priced.length})</span></span>
+    <span class="loot-chart-title">📊 Top ${priced.length} <span style="font-weight:400;text-transform:none;letter-spacing:0;">por valor</span></span>
     <button class="loot-chart-toggle" onclick="(function(btn){const b=document.getElementById('lootChartBody_${containerId}');b.classList.toggle('hidden');btn.textContent=b.classList.contains('hidden')?'▼ Expandir':'▲ Recolher';})(this)">▲ Recolher</button>
   </div>
   <div class="loot-chart-body" id="lootChartBody_${containerId}">
@@ -2664,12 +2698,26 @@ function renderLootList(ctx){
       }
     }
   }
-  // ── Chart (only when prices are loaded) ──
+  // ── 2-col layout when prices are loaded ──
   const hasPrices=Object.keys(prices).length>0;
-  if(hasPrices){
-    const chartHtml=_renderLootChart(loot,prices,containerId);
-    if(chartHtml){ const cd=document.createElement('div'); cd.innerHTML=chartHtml; list.appendChild(cd.firstElementChild); }
+  const pricedCount=loot.filter(it=>!it.excluded&&(prices[it.name.toLowerCase()]||0)>0).length;
+  const use2Col=hasPrices&&pricedCount>=2;
+  let itemsContainer=list;
+
+  if(use2Col){
+    // Left col: chart | Right col: item list
+    const gridWrap=document.createElement('div');
+    gridWrap.style.cssText='display:grid;grid-template-columns:minmax(180px,1fr) minmax(160px,1.25fr);gap:.55rem;align-items:start;margin-top:.25rem;';
+    const leftCol=document.createElement('div');
+    const rightCol=document.createElement('div');
+    const chartHtml=_renderLootChart(loot,prices,weights,monsters,containerId);
+    if(chartHtml){ const cd=document.createElement('div'); cd.innerHTML=chartHtml; leftCol.appendChild(cd.firstElementChild); }
+    gridWrap.appendChild(leftCol);
+    gridWrap.appendChild(rightCol);
+    list.appendChild(gridWrap);
+    itemsContainer=rightCol;
   }
+
   // ── Group by rarity, sorted by price desc within group ──
   const groups={};
   LOOT_RARITY_ORDER.forEach(r=>groups[r]=[]);
@@ -2704,7 +2752,7 @@ function renderLootList(ctx){
       grid.appendChild(div);
     });
     section.appendChild(grid);
-    list.appendChild(section);
+    itemsContainer.appendChild(section);
   });
 }
 
@@ -3889,19 +3937,26 @@ function _miniWheelSVG(slots,size){
   const sc=size/420,cx=size/2,cy=size/2;
   const rings=[4,8,12,8,4];
   const radii=[[22,60],[62,100],[102,142],[144,180],[182,200]];
-  let paths='',si=0;
+  const maxPts=[50,75,100,150,200]; // WD_SLOT_MAX per ring
+  // The main wheel renders segment i at angle segDeg*(idx+1) CW from 3 o'clock.
+  // The mini wheel draws k-th segment of ring ri starting at -π/2 + k*(2π/n).
+  // To align them, sector k in mini = slot index: base + (k + 3n/4) % n
+  let paths='',base=0;
   rings.forEach((n,ri)=>{
     const ir=radii[ri][0]*sc,or=radii[ri][1]*sc,gap=0.07;
+    const offset=Math.round(n/4); // quarter-turn offset (n/4 for each ring)
+    const maxV=maxPts[ri];
     for(let k=0;k<n;k++){
-      const v=slots[si]||0;
+      const slotIdx=base+(k+(n-offset))%n; // correct index: aligns mini with main wheel
+      const v=slots[slotIdx]||0;
       const a1=(k/n)*2*Math.PI-Math.PI/2+gap/2;
       const a2=((k+1)/n)*2*Math.PI-Math.PI/2-gap/2;
       const c1=Math.cos(a1),s1=Math.sin(a1),c2=Math.cos(a2),s2=Math.sin(a2);
       const d=`M${(cx+ir*c1).toFixed(2)},${(cy+ir*s1).toFixed(2)} L${(cx+or*c1).toFixed(2)},${(cy+or*s1).toFixed(2)} A${or.toFixed(2)},${or.toFixed(2)} 0 0 1 ${(cx+or*c2).toFixed(2)},${(cy+or*s2).toFixed(2)} L${(cx+ir*c2).toFixed(2)},${(cy+ir*s2).toFixed(2)} A${ir.toFixed(2)},${ir.toFixed(2)} 0 0 0 ${(cx+ir*c1).toFixed(2)},${(cy+ir*s1).toFixed(2)} Z`;
-      const fill=v===0?'rgba(255,255,255,0.05)':v<=2?'rgba(167,139,250,0.45)':v<=4?'rgba(167,139,250,0.75)':'rgba(167,139,250,1)';
+      const fill=v===0?'rgba(255,255,255,0.05)':v<maxV*0.34?'rgba(167,139,250,0.35)':v<maxV*0.67?'rgba(167,139,250,0.65)':'rgba(167,139,250,1)';
       paths+=`<path d="${d}" fill="${fill}" stroke="#0d0d18" stroke-width="0.8"/>`;
-      si++;
     }
+    base+=n;
   });
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block;flex-shrink:0;border-radius:50%;"><circle cx="${cx}" cy="${cy}" r="${cx}" fill="#12121e"/>${paths}</svg>`;
 }
@@ -5931,11 +5986,9 @@ function _renderImbuShop(){
       <span style="opacity:.65;font-size:.72rem;">Adicione imbuements e marque<br>como ⏳ Comprar.</span></div>`;
     return;
   }
-  const allNames=list.map(it=>`${it.name} x${it.qty}`).join('\n');
   el.innerHTML=`<div class="imbu-shop-title">🛒 Lista de Compras
     <span style="margin-left:auto;font-weight:600;color:var(--t2);font-size:.65rem;text-transform:none;letter-spacing:0;">${list.length} itens · ${tobuyCnt} imbu</span>
-  </div>
-  <button class="imbu-shop-copyall" onclick="navigator.clipboard.writeText(${JSON.stringify(allNames)}).then(()=>toast('📋 Lista copiada!'))">📋 Copiar tudo</button>`
+  </div>`
   +list.map(it=>{
     const slug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
     const safeName=it.name.replace(/'/g,"\\'");
