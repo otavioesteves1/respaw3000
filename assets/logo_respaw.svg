@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="52" height="52">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2d0f6e"/>
+      <stop offset="100%" stop-color="#06020f"/>
+    </radialGradient>
+    <radialGradient id="sweep-fade" cx="0%" cy="100%" r="100%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.4"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .arm { transform-origin: 26px 26px; animation: sweep 3s linear infinite; }
+      @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .p1 { animation: ping 2s ease-in-out infinite; }
+      .p2 { animation: ping 2s ease-in-out infinite .65s; }
+      .p3 { animation: ping 2s ease-in-out infinite 1.3s; }
+      @keyframes ping { 0%,100% { opacity:.15 } 50% { opacity:.9 } }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="26" cy="26" r="25" fill="url(#bg)" stroke="rgba(168,85,247,.5)" stroke-width="1.5"/>
+
+  <!-- Radar rings -->
+  <circle cx="26" cy="26" r="19" fill="none" stroke="rgba(168,85,247,.2)" stroke-width=".9"/>
+  <circle cx="26" cy="26" r="13" fill="none" stroke="rgba(168,85,247,.2)" stroke-width=".9"/>
+  <circle cx="26" cy="26" r="7"  fill="none" stroke="rgba(168,85,247,.3)" stroke-width=".9"/>
+
+  <!-- Cross axes -->
+  <line x1="26" y1="2"  x2="26" y2="50" stroke="rgba(168,85,247,.12)" stroke-width=".7"/>
+  <line x1="2"  y1="26" x2="50" y2="26" stroke="rgba(168,85,247,.12)" stroke-width=".7"/>
+
+  <!-- Sweep arm (animated) -->
+  <g class="arm">
+    <line x1="26" y1="26" x2="26" y2="7" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round" opacity=".95"/>
+    <path d="M26 26 L26 7 A19 19 0 0 1 43.4 34 Z" fill="rgba(168,85,247,.18)" stroke="none"/>
+  </g>
+
+  <!-- Blips (animated) -->
+  <circle cx="35" cy="15" r="2"   fill="#c084fc" class="p1" filter="url(#glow)"/>
+  <circle cx="16" cy="31" r="1.5" fill="#c084fc" class="p2" filter="url(#glow)"/>
+  <circle cx="38" cy="33" r="1.5" fill="#c084fc" class="p3" filter="url(#glow)"/>
+
+  <!-- Center -->
+  <circle cx="26" cy="26" r="2.5" fill="#c084fc" filter="url(#glow)"/>
+  <circle cx="26" cy="26" r="5"   fill="none" stroke="rgba(192,132,252,.4)" stroke-width=".8"/>
+</svg>

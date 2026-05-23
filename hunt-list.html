@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RESPAW3000 — SECOND BRAIN FOR HUNTING</title>
-<link rel="icon" type="image/png" href="assets/logo_respaw.png?v=4">
+<link rel="icon" type="image/svg+xml" href="assets/logo_respaw.svg">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -27,7 +27,7 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .hdr{max-width:960px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;gap:.875rem;flex-wrap:wrap;}
 .hdr-brand{display:flex;align-items:center;gap:.65rem;}
 .hdr-title{font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:.4px;}
-.hdr-sub{font-size:.65rem;color:var(--t1);font-weight:500;}
+.hdr-sub{font-size:.65rem;color:var(--t1);font-weight:500;white-space:nowrap;}
 .profiles-strip{display:flex;align-items:center;gap:.4rem;overflow-x:auto;flex:1;scrollbar-width:none;}
 .profiles-strip::-webkit-scrollbar{display:none;}
 .pchip{display:flex;align-items:center;gap:.35rem;padding:.28rem .6rem;border-radius:20px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
@@ -70,12 +70,18 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .tab-panel.on{display:block;}
 
 /* ── Main tab navigation ── */
-.main-tab-bar{display:flex;gap:.5rem;margin-bottom:1.3rem;border-bottom:1px solid var(--c3);padding-bottom:.7rem;}
-.main-tab-btn{padding:.42rem 1.1rem;border-radius:20px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s;}
-.main-tab-btn:hover{border-color:var(--gold);color:var(--gold);}
-.main-tab-btn.on{background:var(--gold-g);color:var(--btn-g-text);border-color:var(--gold);}
+.main-tab-bar{display:none;} /* hidden — replaced by vertical sidebar */
+.main-tab-btn{display:none;}
 .main-tab-panel{display:none;}
 .main-tab-panel.on{display:block;}
+/* ── Vertical nav sidebar (always visible on right) ── */
+.main-nav-strip{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:390;display:flex;flex-direction:column;gap:0;background:var(--c2);border:1px solid rgba(var(--accent-rgb),.25);border-right:none;border-radius:12px 0 0 12px;overflow:hidden;box-shadow:-4px 0 22px rgba(0,0,0,.5);}
+.mnav-btn{display:flex;flex-direction:column;align-items:center;gap:.28rem;padding:.72rem .52rem;background:none;border:none;border-bottom:1px solid rgba(var(--accent-rgb),.12);color:var(--t1);cursor:pointer;transition:all .15s;min-width:54px;}
+.mnav-btn:last-child{border-bottom:none;}
+.mnav-btn:hover{background:rgba(var(--accent-rgb),.1);color:var(--t0);}
+.mnav-btn.on{background:rgba(var(--accent-rgb),.18);color:var(--gold);}
+.mnav-icon{font-size:1.1rem;line-height:1;}
+.mnav-lbl{font-size:.5rem;font-weight:900;text-transform:uppercase;letter-spacing:.9px;white-space:nowrap;}
 
 /* ── Bestiary ── */
 .bst-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;}
@@ -483,6 +489,18 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-item-wiki:hover{opacity:1;}
 .loot-item.loot-dim{opacity:.18;filter:saturate(0);}
 .loot-item.loot-filter-hi{border-color:rgba(var(--accent-rgb),.5)!important;background:rgba(var(--accent-rgb),.07)!important;}
+.loot-item-weight{font-size:.58rem;color:var(--t2);flex-shrink:0;white-space:nowrap;}
+.loot-chart-hi{border-color:var(--gold)!important;background:rgba(251,191,36,.1)!important;box-shadow:0 0 0 2px rgba(251,191,36,.35)!important;transition:all .3s;}
+.loot-chart-wrap{background:var(--c2);border:1px solid var(--c4);border-radius:10px;padding:.6rem .75rem;margin-bottom:.6rem;}
+.loot-chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem;}
+.loot-chart-title{font-size:.63rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--t2);}
+.loot-chart-toggle{font-size:.6rem;background:none;border:1px solid var(--c4);color:var(--t2);border-radius:4px;padding:.1rem .38rem;cursor:pointer;transition:all .12s;}
+.loot-chart-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.loot-chart-body{overflow-x:auto;overflow-y:hidden;}
+.loot-chart-body.hidden{display:none;}
+.loot-bar-g{cursor:pointer;}
+.loot-bar-g:hover .loot-bar-rect{fill:rgba(192,132,252,.8);}
+.loot-bar-g.active .loot-bar-rect{fill:rgba(251,191,36,.8)!important;}
 .loot-fetch-prog{height:3px;border-radius:2px;background:var(--c4);margin:.4rem 0;overflow:hidden;}
 .loot-fetch-prog-bar{height:100%;border-radius:2px;background:var(--gold-g);transition:width .3s ease;}
 .loot-empty{font-size:.82rem;color:var(--t2);text-align:center;padding:2rem 0;}
@@ -679,10 +697,7 @@ input[type=number]{-moz-appearance:textfield;}
 .outfitter-helper-ext a{font-size:.75rem;color:var(--gold);font-weight:700;text-decoration:none;padding:.18rem .55rem;border:1px solid rgba(var(--accent-rgb),.3);border-radius:20px;background:rgba(var(--accent-rgb),.08);white-space:nowrap;}
 .outfitter-helper-ext a:hover{background:rgba(var(--accent-rgb),.18);}
 /* ── Import by hunt page ── */
-.import-toggle{display:flex;gap:.35rem;margin-bottom:.65rem;}
-.import-toggle-btn{flex:1;padding:.38rem .5rem;border-radius:9px;border:1.5px solid var(--c4);background:none;color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;}
-.import-toggle-btn:hover{border-color:rgba(var(--accent-rgb),.4);color:var(--gold);}
-.import-toggle-btn.on{background:rgba(var(--accent-rgb),.12);border-color:var(--gold);color:var(--gold);}
+/* import-toggle buttons removed — unified input replaces the two-tab system */
 .import-result{max-height:280px;overflow-y:auto;margin-top:.5rem;padding-right:2px;}
 .import-mon-row{display:flex;align-items:center;gap:.45rem;padding:.38rem .5rem;border-radius:8px;border:1px solid var(--c4);background:var(--c3);margin-bottom:.22rem;cursor:pointer;transition:border-color .15s,background .15s;user-select:none;}
 .import-mon-row:hover{border-color:rgba(var(--accent-rgb),.4);}
@@ -735,7 +750,7 @@ input[type=number]{-moz-appearance:textfield;}
 .ph-paste-row{display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.65rem;}
 .spell-priority-list{margin-top:.75rem;}
 .spell-priority-row{display:flex;align-items:center;gap:.5rem;padding:.3rem .5rem;background:var(--c3);border:1px solid var(--c4);border-radius:8px;margin-bottom:.3rem;}
-.spell-priority-num{font-size:.65rem;font-weight:900;color:var(--gold);min-width:1.2rem;text-align:center;}
+.spell-priority-num{font-size:.72rem;font-weight:900;color:#0a0a12;background:var(--gold);min-width:1.6rem;height:1.6rem;display:inline-flex;align-items:center;justify-content:center;border-radius:.35rem;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.45);}
 .spell-priority-img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;}
 .spell-priority-name{font-size:.82rem;font-weight:700;flex:1;}
 .spell-priority-words{font-size:.65rem;color:var(--t2);}
@@ -750,46 +765,65 @@ input[type=number]{-moz-appearance:textfield;}
 .imbu-tb-title{font-size:.88rem;font-weight:800;color:var(--t0);}
 .imbu-tb-profile{font-size:.75rem;color:var(--t2);padding:.2rem .55rem;border-radius:20px;background:var(--c3);border:1px solid var(--c4);}
 .imbu-tb-right{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
-.imbu-layout{display:grid;grid-template-columns:1fr 270px;gap:1.2rem;align-items:start;}
+/* Compact imbu layout: 60% equipment / 40% shop, half-screen feel */
+.imbu-layout{display:grid;grid-template-columns:1fr 240px;gap:.75rem;align-items:start;}
 @media(max-width:820px){.imbu-layout{grid-template-columns:1fr;}}
-/* Piece rows */
-.imbu-piece-row{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 0;border-bottom:1px solid var(--c3);}
+/* Piece rows — compact */
+.imbu-piece-row{display:flex;align-items:center;gap:.55rem;padding:.38rem 0;border-bottom:1px solid var(--c3);}
 .imbu-piece-row:last-child{border-bottom:none;}
-.imbu-piece-label{display:flex;flex-direction:column;align-items:center;gap:.18rem;width:52px;flex-shrink:0;padding-top:.25rem;}
-.imbu-piece-icon{font-size:1.45rem;line-height:1;}
-.imbu-piece-name{font-size:.56rem;font-weight:800;color:var(--t1);text-transform:uppercase;letter-spacing:.4px;text-align:center;}
-.imbu-slots-row{display:flex;gap:.5rem;flex:1;flex-wrap:wrap;}
-/* Slot boxes */
-.imbu-slot-box{flex:1;min-height:90px;min-width:110px;border:2px dashed var(--c4);border-radius:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.28rem;transition:all .18s;background:var(--c3);position:relative;padding:.6rem .5rem;}
-.imbu-slot-box:hover{border-color:var(--gold);background:rgba(var(--accent-rgb),.07);transform:translateY(-2px);box-shadow:0 4px 16px rgba(var(--accent-rgb),.12);}
-.imbu-slot-add{font-size:1.9rem;color:var(--c4);transition:color .15s;line-height:1;}
-.imbu-slot-add-lbl{font-size:.6rem;color:var(--t2);font-weight:600;transition:color .15s;}
+.imbu-piece-label{display:flex;flex-direction:row;align-items:center;gap:.35rem;width:auto;flex-shrink:0;min-width:90px;}
+.imbu-piece-icon{font-size:1.05rem;line-height:1;}
+.imbu-piece-name{font-size:.6rem;font-weight:800;color:var(--t1);text-transform:uppercase;letter-spacing:.4px;}
+.imbu-slots-row{display:flex;gap:.35rem;flex:1;flex-wrap:wrap;}
+/* Slot boxes — compact */
+.imbu-slot-box{flex:1;min-height:62px;min-width:88px;max-width:160px;border:1.5px dashed var(--c4);border-radius:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.18rem;transition:all .18s;background:var(--c3);position:relative;padding:.4rem .4rem;}
+.imbu-slot-box:hover{border-color:var(--gold);background:rgba(var(--accent-rgb),.07);transform:translateY(-1px);box-shadow:0 3px 12px rgba(var(--accent-rgb),.12);}
+.imbu-slot-add{font-size:1.45rem;color:var(--c4);transition:color .15s;line-height:1;}
+.imbu-slot-add-lbl{font-size:.55rem;color:var(--t2);font-weight:600;transition:color .15s;}
 .imbu-slot-box:hover .imbu-slot-add,.imbu-slot-box:hover .imbu-slot-add-lbl{color:var(--gold);}
 /* Filled slot */
-.imbu-slot-box.filled{border-style:solid;cursor:default;align-items:flex-start;justify-content:flex-start;padding:.5rem .55rem .45rem .7rem;transform:none!important;box-shadow:none!important;}
+.imbu-slot-box.filled{border-style:solid;cursor:default;align-items:flex-start;justify-content:flex-start;padding:.38rem .45rem .35rem .6rem;transform:none!important;box-shadow:none!important;}
 .imbu-slot-box.filled:hover{background:var(--c3);}
-.imbu-slot-cat-bar{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:11px 0 0 11px;}
-.imbu-slot-name{font-size:.8rem;font-weight:800;color:var(--t0);line-height:1.2;margin-bottom:.08rem;padding-right:1.2rem;}
-.imbu-slot-eff{font-size:.66rem;font-weight:700;margin-bottom:.3rem;}
-.imbu-slot-footer{display:flex;align-items:center;gap:.22rem;flex-wrap:wrap;width:100%;}
-.imbu-slot-del{background:none;border:none;color:var(--c4);cursor:pointer;font-size:.7rem;position:absolute;top:.32rem;right:.35rem;line-height:1;padding:.12rem;transition:color .12s;border-radius:3px;}
+.imbu-slot-cat-bar{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:9px 0 0 9px;}
+.imbu-slot-name{font-size:.72rem;font-weight:800;color:var(--t0);line-height:1.15;margin-bottom:.05rem;padding-right:1.1rem;}
+.imbu-slot-eff{font-size:.6rem;font-weight:700;margin-bottom:.22rem;}
+.imbu-slot-footer{display:flex;align-items:center;gap:.18rem;flex-wrap:wrap;width:100%;}
+.imbu-slot-del{background:none;border:none;color:var(--c4);cursor:pointer;font-size:.65rem;position:absolute;top:.25rem;right:.28rem;line-height:1;padding:.1rem;transition:color .12s;border-radius:3px;}
 .imbu-slot-del:hover{color:#f87171;background:rgba(239,68,68,.12);}
-.imbu-tier-btn{font-size:.62rem;padding:.1rem .28rem;border-radius:4px;border:1px solid var(--c4);background:none;color:var(--t2);cursor:pointer;font-weight:800;transition:all .12s;white-space:nowrap;}
+.imbu-tier-btn{font-size:.58rem;padding:.08rem .22rem;border-radius:4px;border:1px solid var(--c4);background:none;color:var(--t2);cursor:pointer;font-weight:800;transition:all .12s;white-space:nowrap;}
 .imbu-tier-btn.on{background:rgba(var(--accent-rgb),.2);border-color:var(--gold);color:var(--t0);}
-.imbu-toggle{margin-left:auto;padding:.12rem .4rem;border-radius:20px;font-size:.62rem;font-weight:800;cursor:pointer;transition:all .15s;border:1.5px solid rgba(239,68,68,.4);background:rgba(239,68,68,.1);color:#f87171;white-space:nowrap;display:inline-flex;align-items:center;gap:.18rem;}
+.imbu-toggle{margin-left:auto;padding:.1rem .32rem;border-radius:20px;font-size:.58rem;font-weight:800;cursor:pointer;transition:all .15s;border:1.5px solid rgba(239,68,68,.4);background:rgba(239,68,68,.1);color:#f87171;white-space:nowrap;display:inline-flex;align-items:center;gap:.15rem;}
 .imbu-toggle.on{border-color:rgba(16,185,129,.5);background:rgba(16,185,129,.12);color:#34d399;}
 /* Category color helpers */
 .cc-skill{color:#60a5fa;}.cc-elemdmg{color:#fb923c;}.cc-elemprot{color:#34d399;}.cc-support{color:#c4b5fd;}
 .cb-skill{background:#60a5fa;}.cb-elemdmg{background:#fb923c;}.cb-elemprot{background:#34d399;}.cb-support{background:#c4b5fd;}
-/* Shopping panel */
-.imbu-shop-panel{background:var(--c2);border:1px solid var(--c4);border-radius:12px;padding:.85rem;position:sticky;top:5rem;}
-.imbu-shop-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.65rem;display:flex;align-items:center;gap:.35rem;}
-.imbu-shop-empty{text-align:center;color:var(--t2);font-size:.78rem;padding:1.4rem 0;line-height:1.7;}
-.imbu-shop-item{display:flex;align-items:center;gap:.5rem;padding:.32rem .45rem;border-radius:7px;background:var(--c3);margin-bottom:.25rem;transition:background .12s;}
+/* Shopping panel — compact */
+.imbu-shop-panel{background:var(--c2);border:1px solid var(--c4);border-radius:12px;padding:.65rem;position:sticky;top:5rem;max-height:calc(100vh - 160px);overflow-y:auto;}
+.imbu-shop-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.5rem;display:flex;align-items:center;gap:.3rem;}
+.imbu-shop-empty{text-align:center;color:var(--t2);font-size:.75rem;padding:1rem 0;line-height:1.7;}
+.imbu-shop-item{display:flex;align-items:center;gap:.4rem;padding:.26rem .38rem;border-radius:6px;background:var(--c3);margin-bottom:.2rem;transition:background .12s;}
 .imbu-shop-item:hover{background:var(--c4);}
-.imbu-shop-item img{width:24px;height:24px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
-.imbu-shop-item-name{font-size:.76rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.imbu-shop-qty{font-size:.82rem;font-weight:800;color:var(--gold);flex-shrink:0;}
+.imbu-shop-item img{width:20px;height:20px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.imbu-shop-item-name{font-size:.72rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.imbu-shop-qty{font-size:.72rem;font-weight:800;color:var(--gold);flex-shrink:0;}
+.imbu-shop-copy{background:none;border:1px solid var(--c4);color:var(--t2);border-radius:4px;width:20px;height:20px;font-size:.62rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;transition:all .12s;}
+.imbu-shop-copy:hover{border-color:var(--gold);color:var(--gold);}
+.imbu-shop-copyall{width:100%;margin-bottom:.45rem;padding:.28rem;border-radius:6px;border:1px solid var(--c4);background:rgba(var(--accent-rgb),.06);color:var(--t1);font-size:.62rem;font-weight:700;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:.3rem;}
+.imbu-shop-copyall:hover{border-color:var(--gold);color:var(--gold);}
+/* Bestiary class grid */
+.bst-class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.35rem;margin-bottom:.75rem;}
+.bst-class-btn{padding:.4rem .5rem;border-radius:8px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:left;display:flex;align-items:center;gap:.35rem;}
+.bst-class-btn:hover{border-color:rgba(var(--accent-rgb),.5);color:var(--gold);}
+.bst-class-btn.on{border-color:var(--gold);background:rgba(var(--accent-rgb),.12);color:var(--gold);}
+.bst-class-results{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:.28rem;}
+.bst-class-mon-row{display:flex;align-items:center;gap:.5rem;padding:.3rem .55rem;border-radius:7px;background:var(--c3);border:1px solid var(--c4);cursor:pointer;user-select:none;transition:all .12s;}
+.bst-class-mon-row:hover{border-color:rgba(var(--accent-rgb),.35);}
+.bst-class-mon-row.on{background:rgba(var(--accent-rgb),.1);border-color:var(--gold);}
+.bst-class-mon-cb{width:14px;height:14px;border-radius:3px;border:2px solid var(--c4);flex-shrink:0;transition:all .12s;}
+.bst-class-mon-row.on .bst-class-mon-cb{background:var(--green);border-color:var(--green);}
+.bst-errors-box{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:.6rem .75rem;margin-top:.65rem;}
+.bst-errors-title{font-size:.7rem;font-weight:800;color:#fca5a5;margin-bottom:.35rem;}
+.bst-errors-list{display:flex;flex-direction:column;gap:.28rem;max-height:150px;overflow-y:auto;}
 /* Picker overlay */
 .imbu-picker-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:210;display:none;align-items:center;justify-content:center;}
 .imbu-picker-modal{background:var(--c1);border:1px solid var(--c3);border-radius:14px;width:min(560px,96vw);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.65);}
@@ -815,7 +849,7 @@ input[type=number]{-moz-appearance:textfield;}
 <header>
   <div class="hdr">
     <div class="hdr-brand">
-      <img src="assets/logo_respaw.png?v=4" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
+      <img src="assets/logo_respaw.svg" alt="RESPAW3000" style="height:44px;width:auto;object-fit:contain;">
       <div><div class="hdr-title">RESPAW3000</div><div class="hdr-sub">Second Brain for Hunting</div></div>
     </div>
     <div class="profiles-strip" id="profilesStrip"></div>
@@ -916,14 +950,16 @@ input[type=number]{-moz-appearance:textfield;}
 <!-- ══ BESTIARY ADD ══ -->
 <div class="ov" id="bstAddOv" style="display:none;">
   <div class="modal" style="max-width:560px;">
-    <div class="wiz-header" style="border-bottom:1px solid var(--c3);padding-bottom:.75rem;margin-bottom:.85rem;">
-      <span style="font-weight:700;font-size:1.05rem;">📖 Adicionar ao Bestiary</span>
-      <button class="close-btn" onclick="closeBestiaryAdd()">✕</button>
+    <div style="display:flex;align-items:center;gap:.55rem;border-bottom:1px solid var(--c3);padding-bottom:.75rem;margin-bottom:.85rem;">
+      <span style="font-size:1.25rem;">📖</span>
+      <span style="font-weight:700;font-size:1.05rem;flex:1;">Adicionar ao Bestiary</span>
+      <button class="btn btn-o btn-sm" onclick="closeBestiaryAdd()">✕ Fechar</button>
     </div>
     <!-- Mode tabs -->
     <div class="tab-bar" style="margin-bottom:.9rem;">
       <button class="tab-btn on" id="bstModeUrlBtn" onclick="bstSetMode('url')">🔗 URL / Nome</button>
       <button class="tab-btn" id="bstModeHuntBtn" onclick="bstSetMode('hunt')">🏹 Importar Hunt</button>
+      <button class="tab-btn" id="bstModeClassBtn" onclick="bstSetMode('class')">🐾 Por Classe</button>
     </div>
     <!-- URL mode -->
     <div id="bstPanelUrl" class="tab-panel on">
@@ -937,6 +973,17 @@ input[type=number]{-moz-appearance:textfield;}
       <label class="lbl">Selecione uma Hunt para importar os monstros</label>
       <select class="inp" id="bstHuntSelect" style="margin-bottom:.6rem;"></select>
       <button class="btn btn-g" onclick="bstImportHunt()" id="bstImportBtn">📥 Carregar monstros</button>
+    </div>
+    <!-- Class mode -->
+    <div id="bstPanelClass" class="tab-panel">
+      <div style="font-size:.65rem;color:var(--t2);margin-bottom:.55rem;">Selecione uma classe para ver todos os monstros. Escolha quais adicionar ao Bestiary.</div>
+      <div class="bst-class-grid" id="bstClassGrid"></div>
+      <div id="bstClassStatus" style="font-size:.72rem;color:var(--t2);min-height:1.2rem;margin-bottom:.35rem;"></div>
+      <div class="bst-class-results" id="bstClassResults"></div>
+      <div id="bstClassActions" style="display:none;margin-top:.6rem;display:flex;gap:.4rem;flex-wrap:wrap;">
+        <button class="btn btn-o btn-sm" onclick="_bstClassToggleAll()">☑️ Sel. todos</button>
+        <button class="btn btn-g btn-sm" onclick="_bstClassConfirm()">➕ Adicionar selecionados</button>
+      </div>
     </div>
     <!-- Preview area -->
     <div id="bstPreviewWrap" style="display:none;margin-top:1rem;">
@@ -976,20 +1023,51 @@ input[type=number]{-moz-appearance:textfield;}
       <div class="step3-wrap">
         <!-- LEFT: add form -->
         <div class="step3-form">
-          <div class="import-toggle">
-            <button class="import-toggle-btn on" id="modeSingleBtn" onclick="setMonMode('single')">🐉 Monstro único</button>
-            <button class="import-toggle-btn" id="modeBulkBtn" onclick="setMonMode('bulk')">📋 Importar por respaw</button>
-          </div>
-          <!-- Single monster panel -->
+          <!-- Unified monster input (auto-detects single monster vs hunt page) -->
           <div id="singlePanel">
-            <div class="sec-lbl">🐉 Adicionar Monstro</div>
+            <div class="sec-lbl">🐉 Adicionar Monstros</div>
             <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
+
+              <!-- URL import — works for monster OR hunt page -->
+              <div class="f">
+                <label class="lbl">Link <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.63rem;">— monstro único <em>ou</em> página de hunt, tibiawiki / fandom</span></label>
+                <div style="display:flex;gap:.4rem;">
+                  <input class="inp" id="huntUrl" placeholder="tibia.fandom.com/wiki/Demon  ou  tibiawiki.com.br/wiki/Secret_Library..." style="flex:1;" onkeydown="if(event.key==='Enter')fetchHuntPage()">
+                  <button class="btn btn-o btn-sm" id="huntFetchBtn" onclick="fetchHuntPage()">🔍 Buscar</button>
+                </div>
+                <div style="font-size:.62rem;color:var(--t2);margin-top:.22rem;">O RESPAW detecta automaticamente — cole o link do monstro <em>ou</em> da hunt. Se for uma hunt, todos os monstros aparecem para você selecionar.</div>
+                <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.32rem;">
+                  <a href="https://www.tibiawiki.com.br/wiki/Categoria:Locais_de_Hunt" target="_blank" class="outfitter-link" style="font-size:.63rem;">📋 Hunts BR →</a>
+                  <a href="https://tibia.fandom.com/wiki/Hunting_Places" target="_blank" class="outfitter-link" style="font-size:.63rem;">📋 Hunts Fandom →</a>
+                </div>
+              </div>
+
+              <!-- Status / progress / bulk import results -->
+              <div id="importStatus"></div>
+              <div class="import-prog" id="importProg" style="display:none;"><div class="import-prog-bar" id="importProgBar" style="width:0%"></div></div>
+              <div id="importResults" class="import-result"></div>
+              <div id="importActions" style="display:none;margin-top:.55rem;">
+                <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                  <button class="btn btn-g btn-sm" onclick="confirmImport()">➕ Adicionar <span id="importSelCount">0</span> selecionados</button>
+                  <button class="btn btn-o btn-sm" onclick="toggleAllImport()">☑️ Sel. todos</button>
+                  <button class="btn btn-o btn-sm" onclick="clearImport()">🗑️ Limpar</button>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div style="display:flex;align-items:center;gap:.6rem;margin:.75rem 0 .5rem;">
+                <div style="flex:1;height:1px;background:var(--c4);"></div>
+                <span style="font-size:.62rem;color:var(--t2);white-space:nowrap;">ou adicionar manualmente</span>
+                <div style="flex:1;height:1px;background:var(--c4);"></div>
+              </div>
+
+              <!-- Manual single monster form -->
               <div class="f">
                 <label class="lbl">Nome do Monstro</label>
                 <input class="inp" id="monName" placeholder="Ex: Demon, Hydra..." oninput="onMonNameInput()">
               </div>
               <div class="f">
-                <label class="lbl">Link TibiaWiki <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.65rem;">— ou busque em: <a href="https://www.tibiawiki.com.br" target="_blank" style="color:var(--gold);">tibiawiki.com.br</a> / <a href="https://tibia.fandom.com" target="_blank" style="color:var(--gold);">fandom</a></span></label>
+                <label class="lbl">GIF do Monstro <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.63rem;">— ou busque em: <a href="https://www.tibiawiki.com.br" target="_blank" style="color:var(--gold);">tibiawiki.com.br</a> / <a href="https://tibia.fandom.com" target="_blank" style="color:var(--gold);">fandom</a></span></label>
                 <div style="display:flex;gap:.4rem;">
                   <input class="inp" id="monWiki" placeholder="tibia.fandom.com/wiki/... ou tibiawiki.com.br/wiki/..." oninput="onMonWikiInput()" style="flex:1;">
                   <button class="btn btn-o btn-sm" onclick="fetchGif()">🖼️ GIF</button>
@@ -1007,34 +1085,6 @@ input[type=number]{-moz-appearance:textfield;}
               <div style="display:flex;gap:.4rem;margin-top:.4rem;">
                 <button class="btn btn-g btn-sm" id="monAddBtn" onclick="addMonster()">➕ Adicionar</button>
                 <button class="btn btn-o btn-sm" onclick="clearMonForm()">🗑️ Limpar</button>
-              </div>
-            </div>
-          </div>
-          <!-- Bulk import panel -->
-          <div id="bulkPanel" style="display:none;">
-            <div class="sec-lbl">📋 Importar por Respaw</div>
-            <div style="background:rgba(0,0,0,.18);border-radius:10px;padding:.9rem;border:1px solid var(--c4);">
-              <div class="f">
-                <label class="lbl">Link da Hunt — TibiaWiki BR ou Fandom</label>
-                <div style="display:flex;gap:.4rem;">
-                  <input class="inp" id="huntUrl" placeholder="tibiawiki.com.br/wiki/Secret_Library_Energy_Section" style="flex:1;">
-                  <button class="btn btn-o btn-sm" id="huntFetchBtn" onclick="fetchHuntPage()">🔍 Buscar</button>
-                </div>
-                <div style="font-size:.65rem;color:var(--t2);margin-top:.28rem;">Suporta qualquer página de hunt do tibiawiki.com.br ou tibia.fandom.com</div>
-                <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.35rem;">
-                  <a href="https://www.tibiawiki.com.br/wiki/Categoria:Locais_de_Hunt" target="_blank" class="outfitter-link" style="font-size:.65rem;">📋 Hunts BR →</a>
-                  <a href="https://tibia.fandom.com/wiki/Hunting_Places" target="_blank" class="outfitter-link" style="font-size:.65rem;">📋 Hunts Fandom →</a>
-                </div>
-              </div>
-              <div id="importStatus"></div>
-              <div class="import-prog" id="importProg" style="display:none;"><div class="import-prog-bar" id="importProgBar" style="width:0%"></div></div>
-              <div id="importResults" class="import-result"></div>
-              <div id="importActions" style="display:none;margin-top:.55rem;">
-                <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
-                  <button class="btn btn-g btn-sm" onclick="confirmImport()">➕ Adicionar <span id="importSelCount">0</span> selecionados</button>
-                  <button class="btn btn-o btn-sm" onclick="toggleAllImport()">☑️ Sel. todos</button>
-                  <button class="btn btn-o btn-sm" onclick="clearImport()">🗑️ Limpar</button>
-                </div>
               </div>
             </div>
           </div>
@@ -1246,6 +1296,19 @@ input[type=number]{-moz-appearance:textfield;}
 
 <div class="toast" id="toast"></div>
 
+<!-- ══ VERTICAL NAV SIDEBAR ══ -->
+<div class="main-nav-strip" id="mainNavStrip">
+  <button class="mnav-btn on" id="mnavBtnHunts" onclick="switchMainTab('hunts')" title="Hunts">
+    <span class="mnav-icon">🏹</span><span class="mnav-lbl">Hunts</span>
+  </button>
+  <button class="mnav-btn" id="mnavBtnBestiary" onclick="switchMainTab('bestiary')" title="Bestiary">
+    <span class="mnav-icon">📖</span><span class="mnav-lbl">Bestiary</span>
+  </button>
+  <button class="mnav-btn" id="mnavBtnImbu" onclick="switchMainTab('imbu')" title="Imbuements">
+    <span class="mnav-icon">⚗️</span><span class="mnav-lbl">Imbu</span>
+  </button>
+</div>
+
 <!-- ══ CHECKLIST TOGGLE ══ -->
 <button class="cl-toggle" id="clToggle" onclick="toggleChecklist()" title="Checklist Pré-Hunt">
   <span class="cl-toggle-icon">🎯</span>
@@ -1404,29 +1467,336 @@ function parseWikiResistances(wt){
   });
   return Object.keys(res).length?res:null;
 }
+// Depth-aware split of a template's inner content by | (handles nested {{...}})
+function _wtSplitParams(inner){
+  const parts=[];let depth=0,cur='';
+  for(let i=0;i<inner.length;i++){
+    if(inner[i]==='{' && inner[i+1]==='{'){depth++;cur+='{{';i++;}
+    else if(inner[i]==='}' && inner[i+1]==='}'){depth--;cur+='}}';i++;}
+    else if(inner[i]==='|' && depth===0){parts.push(cur.trim());cur='';}
+    else cur+=inner[i];
+  }
+  if(cur.trim()) parts.push(cur.trim());
+  return parts;
+}
+// Find the complete {{...}} template starting at idx in str (handles nesting). Returns end index (inclusive).
+function _wtTplEnd(str,idx){
+  let depth=0;
+  for(let i=idx;i<str.length-1;i++){
+    if(str[i]==='{' && str[i+1]==='{'){depth++;i++;}
+    else if(str[i]==='}' && str[i+1]==='}'){depth--;i++;if(depth===0) return i;}
+  }
+  return str.length-1;
+}
+// Extract one ability chip from a template string {{Name|p1|p2|p3|...}}
+function _chipFromTpl(tpl){
+  if(!tpl.startsWith('{{')) return null;
+  const inner=tpl.slice(2,tpl.length-2);
+  const p=_wtSplitParams(inner);
+  const tplName=(p[0]||'').trim();
+  const nameLower=tplName.toLowerCase();
+  // Physical melee-type templates: {{Melee|dmg}}, {{Punch|dmg}}, etc.
+  if(/^(melee|punch|bite|kick|claw|tail|berserk)$/.test(nameLower)){
+    const dmg=(p[1]||'').trim();
+    const chipName=tplName.charAt(0).toUpperCase()+tplName.slice(1);
+    return dmg?{elemKey:'physical',name:chipName,dmg}:null;
+  }
+  // {{Healing|range=X}} or {{Healing|X}} or {{Healing|Name|range=X|scene=...}}
+  if(nameLower==='healing'){
+    let healName='Healing';
+    let dmg='';
+    for(const pp of p.slice(1)){
+      if(pp.includes('=')){
+        const eqIdx=pp.indexOf('=');
+        const key=pp.slice(0,eqIdx).trim().toLowerCase();
+        const val=pp.slice(eqIdx+1).trim();
+        if((key==='range'||key==='value'||key==='damage')&&!dmg) dmg=val;
+        // ignore scene, spell, effect, etc.
+      } else if(!pp.includes('{')){
+        // Positional: digit → dmg, letters → name label
+        if(/^\d/.test(pp)){if(!dmg) dmg=pp.trim();}
+        else if(pp.trim()) healName=pp.trim();
+      }
+    }
+    if(!healName&&!dmg) return null;
+    return {elemKey:'lifedrain',name:healName,dmg};
+  }
+  // {{Summon|Creature|count}} — show as a chip
+  if(nameLower==='summon'){
+    const creature=(p[1]||'').trim();
+    if(!creature) return null;
+    const count=parseInt(p[2]||'1')||1;
+    return {elemKey:'physical',name:`Summons ${creature}${count>1?` ×${count}`:''}`,dmg:''};
+  }
+  // {{Ability|name|dmg|elem|...}} — elem can be positional OR named "element=fire"
+  if(nameLower==='ability' && p.length>=3){
+    const abilName=(p[1]||'').replace(/\[\[[^\]]*\]\]/g,'').trim();
+    const dmg=(p[2]||'').trim();
+    let elem='physical';
+    // Search params p[3..] for element
+    for(let j=3;j<p.length;j++){
+      const pp=p[j].trim();
+      if(/^element\s*=/i.test(pp)){
+        // named: element=fire
+        elem=(pp.split('=')[1]||'').trim().toLowerCase(); break;
+      } else if(!pp.includes('=') && !pp.includes('{') && pp.trim() && pp.length<30){
+        // positional elem: fire, earth, poisoned, etc.
+        elem=pp.toLowerCase(); break;
+      }
+    }
+    const elemKey=_ELEM_KEY_MAP[elem]||'physical';
+    if(!abilName&&!dmg) return null;
+    return {elemKey,name:abilName,dmg};
+  }
+  return null;
+}
 function parseWikiAbilities(wt){
-  const m=wt.match(/\|\s*abilities\s*=\s*([^\n]+)/i);
-  if(!m) return null;
-  let t=m[1].trim();
-  t=t.replace(/([^\s])\[\[/g,'$1 [['); // space before adjacent [[
-  t=t.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g,'$2'); // [[A|B]] → B
-  t=t.replace(/\[\[([^\]]+)\]\]/g,'$1');             // [[A]] → A
-  t=t.replace(/\{\{[^}]+\}\}/g,'');                  // strip {{templates}}
-  t=t.replace(/\s{2,}/g,' ').replace(/\s*,\s*/g,', ').replace(/\.\s*$/,'').trim();
-  return t||null;
+  const startIdx=wt.search(/\|\s*abilities\s*=/i);
+  if(startIdx<0) return null;
+  const afterEq=wt.slice(startIdx).replace(/^\|\s*abilities\s*=\s*/i,'');
+
+  // ── Template format: search {{Ability List}} in the FULL afterEq (no truncation),
+  //    using depth-aware _wtTplEnd so multi-line |scene=, |element= params don't cut it short
+  const alIdx=afterEq.search(/\{\{Ability\s*List/i);
+  if(alIdx>=0){
+    const alEnd=_wtTplEnd(afterEq,alIdx);
+    const alTpl=afterEq.slice(alIdx,alEnd+1);
+    const inner=alTpl.slice(2,alTpl.length-2); // strip outer {{ }}
+    const items=_wtSplitParams(inner); // items[0]="Ability List", items[1..n]=ability tpls
+    const chips=[];
+    for(let i=1;i<items.length;i++){
+      const item=items[i];
+      const tplStart=item.indexOf('{{');
+      if(tplStart<0) continue;
+      const tplEnd=_wtTplEnd(item,tplStart);
+      const chip=_chipFromTpl(item.slice(tplStart,tplEnd+1));
+      if(chip) chips.push(chip);
+    }
+    if(chips.length) return chips.map(c=>`${c.elemKey}|${c.name||''}|${c.dmg}`).join(', ');
+  }
+
+  // ── Wikilink fallback (older pages): [[Ice Damage]]Ice Ball (350+), ...
+  //    Here it's safe to truncate at the next infobox field (no nested templates)
+  const nextField=afterEq.search(/\n\s*\|[a-zA-Z]/);
+  let t=nextField>=0?afterEq.slice(0,nextField):afterEq.slice(0,3000);
+  t=t.trim();
+  let t3=t;
+  t3=t3.replace(/\{\{[^{}]*\}\}/g,'').replace(/[\r\n]+/g,' ');
+  // Fix missing space after ]] when immediately followed by a non-space/non-separator character
+  t3=t3.replace(/\]\]([^\s,.\[])/g,']] $1');
+  const chips2=[];
+  // Match each [[Link]] or [[Link|display]] followed by optional name text and optional (dmg)
+  const wlRe=/\[\[([^\]|]+?)(?:\|[^\]]+)?\]\]\s*([^,\[\n]*?)(?=\s*,|\s*\[\[|\s*$)/gi;
+  let wm;
+  while((wm=wlRe.exec(t3))!==null){
+    const link=wm[1].trim();
+    const rest=wm[2].trim();
+    const linkL=link.toLowerCase();
+    let elemKey=_ELEM_KEY_MAP[linkL];
+    if(!elemKey){
+      const stripped=linkL.replace(/\s*(damage|drain|healing)\s*$/,'').trim();
+      elemKey=_ELEM_KEY_MAP[stripped]||'physical';
+    }
+    const dmgMatch=rest.match(/\(([^)]+)\)/);
+    const dmg=dmgMatch?dmgMatch[1]:'';
+    const name=rest.replace(/\s*\([^)]*\)/g,'').trim();
+    const chipName=name||link.replace(/\s*(Damage|Drain|Healing)\s*$/i,'').trim();
+    chips2.push(`${elemKey}|${chipName}|${dmg}`);
+  }
+  if(chips2.length) return chips2.join(', ');
+  return null;
 }
 
-// Fetch resistances+abilities from fandom wiki (abilities only on fandom), fallback BR for resistances
+const _ELEM_KEY_MAP={'physical':'physical','death':'death','fire':'fire','ice':'ice','energy':'energy','earth':'earth','holy':'holy','drown':'drown','life drain':'lifedrain','lifedrain':'lifedrain','life':'lifedrain','healing':'lifedrain','mana':'energy','mana drain':'energy','missing':'physical','poison':'earth','poisoned':'earth','electrified':'energy','frozen':'ice','burning':'fire','cursed':'death','bleeding':'physical','bleed':'physical','paralyze':'physical','paralyzed':'physical','stun':'physical','drunk':'physical','soulfire':'fire','manadrain':'energy','drown damage':'drown','holy damage':'holy'};
+function _abilityElemIcon(key){
+  const e=ELEM_TYPES.find(x=>x.key===key)||ELEM_TYPES[0];
+  return `<img class="res-icon" src="${e.icon}" alt="${e.label}" title="${e.label}">`;
+}
+function _parseAbilityChips(str){
+  if(!str) return [];
+  const chips=[];
+  const parts=str.split(/,\s*/);
+  for(const p of parts){
+    if(p.includes('|')){
+      // Pipe format: "elemKey|name|dmg"
+      const segs=p.split('|');
+      const elemKey=(segs[0]||'physical').trim();
+      const name=(segs[1]||'').trim();
+      const dmg=(segs[2]||'').trim();
+      if(elemKey&&(name||dmg)) chips.push({elemKey,name,dmg});
+    } else {
+      // Legacy plain-text format: "ice (350+)"
+      const kw=p.match(/\b(physical|death|fire|ice|energy|earth|holy|drown|life drain|lifedrain|healing|mana drain|mana|poison|missing)\b/i);
+      const elemKey=kw?(_ELEM_KEY_MAP[kw[1].toLowerCase()]||'physical'):'physical';
+      const dmg=p.match(/\(([^)]+)\)/);
+      if(dmg) chips.push({elemKey,name:'',dmg:dmg[1]});
+    }
+  }
+  return chips;
+}
+function _renderAbilityChips(str,center=false){
+  const chips=_parseAbilityChips(str);
+  if(!chips.length) return '';
+  const inner=chips.map(c=>{
+    const nameStr=c.name?`<span style="font-size:.62rem;font-weight:600;white-space:nowrap;">${c.name}</span>`:'';
+    const dmgStr=c.dmg?`<b style="font-size:.58rem;white-space:nowrap;">(${c.dmg})</b>`:'';
+    return `<span style="display:inline-flex;align-items:center;gap:.12rem;background:rgba(255,255,255,.08);border-radius:.25rem;padding:.06rem .28rem;max-width:100%;box-sizing:border-box;">${_abilityElemIcon(c.elemKey)}${nameStr}${dmgStr}</span>`;
+  }).join('');
+  return `<div style="display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.25rem;width:100%;box-sizing:border-box;${center?'justify-content:center;':''}">${inner}</div>`;
+}
+
+// Full "Attacks & Combat" section: Max DPS + element breakdown (hakai only)
+function _renderCombatSection(m,center=false){
+  const combat=m.combat||null;
+  const justify=center?'justify-content:center;':'';
+  let html='';
+  if(combat&&(combat.maxDps||(combat.breakdown&&combat.breakdown.length))){
+    const dpsBadge=combat.maxDps
+      ?`<span style="display:inline-flex;align-items:center;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.28);color:#34d399;border-radius:.28rem;padding:.04rem .28rem;font-size:.58rem;font-weight:700;white-space:nowrap;">Max DPS: ${combat.maxDps.toLocaleString('pt-BR')}</span>`
+      :'';
+    const bdChips=(combat.breakdown||[]).map(b=>{
+      const e=ELEM_TYPES.find(x=>x.key===b.elemKey)||ELEM_TYPES[0];
+      return `<span style="display:inline-flex;align-items:center;gap:.1rem;font-size:.58rem;white-space:nowrap;background:rgba(255,255,255,.06);border-radius:.22rem;padding:.04rem .22rem;"><img class="res-icon" src="${e.icon}" alt="${e.label}" title="${e.label}">${b.pct}%</span>`;
+    }).join('');
+    html+=`<div style="display:flex;flex-wrap:wrap;gap:.22rem;margin-top:.2rem;${justify}">${dpsBadge}${bdChips}</div>`;
+  }
+  return html;
+}
+// Map icon filename → element key
+function _elemKeyFromImgSrc(src){
+  src=(src||'').toLowerCase();
+  if(src.includes('life_drain')||src.includes('lifedrain')) return 'lifedrain';
+  if(src.includes('physical')) return 'physical';
+  if(src.includes('fire')||src.includes('flame')) return 'fire';
+  if(src.includes('freez')||src.includes('ice_damage')||src.includes('ice-damage')) return 'ice';
+  if(src.includes('electr')||src.includes('energy')) return 'energy';
+  if(src.includes('poison')||src.includes('earth')) return 'earth';
+  if(src.includes('curs')||src.includes('death')) return 'death';
+  if(src.includes('holy')) return 'holy';
+  if(src.includes('drown')) return 'drown';
+  return null;
+}
+// Walk a DOM node, extract {elemKey, dmg} pairs from icons+text
+function _chipsFromNode(node){
+  const chips=[];
+  let curElem='physical';
+  function walk(n){
+    if(n.nodeType===3){
+      const text=n.textContent;
+      for(const m of text.matchAll(/\(([^)]+)\)/g)) chips.push({elemKey:curElem,dmg:m[1]});
+    } else if(n.nodeType===1){
+      if(n.tagName==='IMG'){
+        const combined=(n.getAttribute('data-src')||n.getAttribute('src')||'')+' '+(n.getAttribute('alt')||'')+' '+(n.getAttribute('title')||'');
+        const k=_elemKeyFromImgSrc(combined); if(k) curElem=k;
+      } else { for(const c of n.childNodes) walk(c); }
+    }
+  }
+  for(const c of node.childNodes) walk(c);
+  return chips;
+}
+// Extract ability chips from fandom rendered HTML
+function _abilitiesFromHTML(html){
+  try{
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    // Portable Infobox: data-source="abilities"
+    const piVal=doc.querySelector('[data-source="abilities"] .pi-data-value');
+    if(piVal){ const c=_chipsFromNode(piVal); if(c.length) return c; }
+    // Portable Infobox: search pi-data labels
+    for(const item of doc.querySelectorAll('.pi-data')){
+      const lbl=item.querySelector('.pi-data-label');
+      if(lbl&&/abilities/i.test(lbl.textContent)){
+        const val=item.querySelector('.pi-data-value');
+        if(val){ const c=_chipsFromNode(val); if(c.length) return c; }
+      }
+    }
+    // Table infobox fallback: <tr> where first cell text = "Abilities"
+    for(const tr of doc.querySelectorAll('tr')){
+      const tds=[...tr.querySelectorAll('th,td')];
+      if(tds.length>=2&&/^\s*abilities\s*$/i.test(tds[0].textContent)){
+        const c=_chipsFromNode(tds[1]); if(c.length) return c;
+      }
+    }
+  }catch(e){}
+  return [];
+}
+// ── Hakai Market helpers ────────────────────────────────
+function _hakaiSlug(name){
+  return name.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+// ── Hakai: load full monsters JSON once, cache in memory ──────────────────
+let _hakaiData=null;
+async function _loadHakaiData(){
+  if(_hakaiData) return _hakaiData;
+  const base='https://hakaimarket.com/monsters_enhanced_complete.json';
+  const urls=[
+    {u:base, proxy:false},
+    {u:`https://corsproxy.io/?url=${encodeURIComponent(base)}`, proxy:false},
+    {u:`https://api.allorigins.win/get?url=${encodeURIComponent(base)}`, proxy:true},
+  ];
+  for(const c of urls){
+    try{
+      const r=await fetch(c.u);
+      if(!r.ok) continue;
+      const raw=c.proxy?(await r.json()).contents:await r.text();
+      const parsed=JSON.parse(raw);
+      // Response is { monsters: [...] }
+      const data=parsed.monsters||parsed;
+      _hakaiData=Array.isArray(data)?data:Object.values(data);
+      const sample=_hakaiData[0];
+      console.log('[Hakai] JSON carregado,', _hakaiData.length, 'monstros. Amostra:', JSON.stringify(sample).slice(0,500));
+      return _hakaiData;
+    }catch(e){ console.log('[Hakai] load erro:', e.message, c.u.slice(0,60)); }
+  }
+  return null;
+}
+async function fetchHakaiMarketCombat(name){
+  const data=await _loadHakaiData();
+  if(!data) return null;
+  const slug=_hakaiSlug(name);
+  const nameLow=name.toLowerCase();
+  // Find entry: try array (by slug/name) or object (keyed by slug/name)
+  let entry=null;
+  if(Array.isArray(data)){
+    entry=data.find(m=>{
+      const ms=(m.slug||m.name_slug||m.id||'').toString().toLowerCase();
+      const mn=(m.name||'').toLowerCase();
+      return ms===slug||mn===nameLow;
+    });
+  } else {
+    entry=data[slug]||data[name]||data[nameLow];
+  }
+  if(!entry){ console.log('[Hakai] monstro nao encontrado:', name, slug); return null; }
+  // Fields confirmed: entry.maxDPS (number) + entry.elementPercentages ({death:42.1,...})
+  const maxDps=entry.maxDPS!=null?Math.round(Number(entry.maxDPS))||null:null;
+  const breakdown=[];
+  const elemObj=entry.elementPercentages||null;
+  if(elemObj&&typeof elemObj==='object'){
+    for(const [k,v] of Object.entries(elemObj)){
+      const elemKey=_ELEM_KEY_MAP[k.toLowerCase()]||k.toLowerCase();
+      const pct=parseFloat(v);
+      if(!isNaN(pct)&&pct>0) breakdown.push({elemKey,pct});
+    }
+  }
+  if(!maxDps&&!breakdown.length) return null;
+  return {maxDps,breakdown};
+}
+// Fetch resistances+abilities (Fandom) + combat (Hakai) in parallel
 async function fetchMonsterResistances(name){
   const slug=name.trim().replace(/\s+/g,'_');
-  const fandomUrl=`https://tibia.fandom.com/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`;
+  const fandomUrl=`https://tibia.fandom.com/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext%7Ctext&format=json&origin=*`;
   const brUrl=`https://www.tibiawiki.com.br/api.php?action=parse&page=${encodeURIComponent(slug)}&prop=wikitext&format=json&origin=*`;
-  let resistances=null,abilities=null;
-  try{
-    const r=await fetch(fandomUrl); const d=await r.json();
+  let resistances=null,combat=null;
+  // Fandom (resistances) + Hakai (combat) in parallel
+  const [fandomRes,hakaiRes]=await Promise.allSettled([
+    fetch(fandomUrl).then(r=>r.json()),
+    fetchHakaiMarketCombat(name)
+  ]);
+  if(fandomRes.status==='fulfilled'){
+    const d=fandomRes.value;
     const wt=d.parse?.wikitext?.['*'];
-    if(wt){ resistances=parseWikiResistances(wt); abilities=parseWikiAbilities(wt); }
-  }catch(e){}
+    if(wt) resistances=parseWikiResistances(wt);
+  }
+  if(hakaiRes.status==='fulfilled') combat=hakaiRes.value;
   if(!resistances){
     try{
       const r=await fetch(brUrl); const d=await r.json();
@@ -1434,7 +1804,7 @@ async function fetchMonsterResistances(name){
       if(wt) resistances=parseWikiResistances(wt);
     }catch(e){}
   }
-  return {resistances,abilities};
+  return {resistances,combat};
 }
 
 const MAJOR_CHARMS = [
@@ -1507,11 +1877,9 @@ const RUNES = [
   {id:'hm',   name:'Holy Missile',        img:'https://tibia.fandom.com/wiki/Special:FilePath/Holy_Missile_Rune.gif'},
   {id:'sf',   name:'Soulfire',            img:'https://static.wikia.nocookie.net/tibia/images/6/65/Soulfire_Rune.gif/revision/latest?cb=20121105212912&path-prefix=en'},
   {id:'wg',   name:'Wild Growth',         img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Wild_Growth_Rune.gif/revision/latest?cb=20170906122303&path-prefix=en'},
-  {id:'ad',   name:'Animate Dead',        img:'https://static.wikia.nocookie.net/tibia/images/5/53/Animate_Dead_Rune.gif/revision/latest?cb=20121105212405&path-prefix=en'},
   {id:'dis',  name:'Disintegrate',        img:'https://static.wikia.nocookie.net/tibia/images/b/b4/Disintegrate_Rune.gif/revision/latest?cb=20121105212507&path-prefix=en'},
   {id:'chm',  name:'Chameleon',           img:'https://static.wikia.nocookie.net/tibia/images/7/7a/Chameleon_Rune.gif/revision/latest?cb=20121105212434&path-prefix=en'},
   {id:'uh',   name:'Ultimate Healing',    img:'https://static.wikia.nocookie.net/tibia/images/e/e7/Ultimate_Healing_Rune.gif/revision/latest?cb=20140920171116&path-prefix=en'},
-  {id:'ih',   name:'Intense Healing',     img:'https://static.wikia.nocookie.net/tibia/images/b/bf/Intense_Healing_Rune.gif/revision/latest?cb=20221004180035&path-prefix=en'},
   {id:'antidote', name:'Antidote',        img:'https://static.wikia.nocookie.net/tibia/images/f/f7/Cure_Poison_Rune.gif/revision/latest?cb=20221004175612&path-prefix=en'},
   {id:'gfr',  name:'Great Fireball',      img:'https://static.wikia.nocookie.net/tibia/images/f/f1/Great_Fireball_Rune.gif/revision/latest?cb=20150720234444&path-prefix=en'},
 ];
@@ -1604,7 +1972,7 @@ const SPELLS = [
 // ══════════════════════════════════════════════════════
 const KEY = 'respaw3000_v4';
 let state = { profiles:[], activeProfile:null, hunts:[], bestiary:[] };
-let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null, loot:[] };
+let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null, loot:[], _lootWeights:{} };
 let _activeTab = 'pot';
 
 // ══════════════════════════════════════════════════════
@@ -1658,7 +2026,7 @@ function renderGateNew(showBack=false){
   document.getElementById('profileGateContent').innerHTML=`
     ${showBack?`<button class="gate-back" onclick="renderGateSelect()">← Voltar para perfis</button>`:''}
     <div class="gate-brand">
-      <div class="gate-logo">⚔️</div>
+      <div class="gate-logo"><img src="assets/logo_respaw.svg" style="width:56px;height:56px;"></div>
       <div class="gate-title">RESPAW3000</div>
       <div class="gate-sub">${showBack?'Crie um novo perfil de personagem.':'Bem-vindo! Crie seu perfil para começar a gerenciar suas hunts.'}</div>
     </div>
@@ -1696,7 +2064,7 @@ function renderGateSelect(){
   }).join('');
   document.getElementById('profileGateContent').innerHTML=`
     <div class="gate-brand">
-      <div class="gate-logo">⚔️</div>
+      <div class="gate-logo"><img src="assets/logo_respaw.svg" style="width:56px;height:56px;"></div>
       <div class="gate-title">RESPAW3000</div>
       <div class="gate-sub">Bem-vindo de volta! Escolha seu personagem.</div>
     </div>
@@ -2109,13 +2477,8 @@ function fmtPrice(v){
 }
 function _priceStyle(price){
   if(!price||price<=0) return {priceColor:'',borderStyle:'',shadowStyle:''};
-  const t=Math.min(1,Math.max(0,(Math.log10(Math.max(1,price))-2)/4));
-  const hue=43, sat=Math.round(30+t*70), lit=Math.round(38+t*27);
-  const alpha=0.25+t*0.75;
-  const priceColor=`hsla(${hue},${sat}%,${lit}%,${alpha})`;
-  const borderStyle=t>0.5?`border-color:hsla(${hue},${sat}%,${lit}%,${Math.round((t-0.5)*2*0.4*100)/100})`:'' ;
-  const shadowStyle=t>0.72?`box-shadow:0 0 ${Math.round((t-0.72)*25)}px hsla(${hue},100%,55%,.22)`:'';
-  return {priceColor,borderStyle,shadowStyle};
+  // Uniform gold color for all priced items — no more faded hierarchy
+  return {priceColor:'var(--gold)',borderStyle:'',shadowStyle:''};
 }
 
 let _lootFetchActive=false;
@@ -2189,18 +2552,80 @@ async function startLootFetch(){
   }));
   renderLootList();
   if(subLbl) subLbl.textContent=`${wiz.loot.length} itens encontrados`;
-  // Auto-fetch prices
+  // Auto-fetch prices + weights
   wiz._lootPrices={};
+  wiz._lootWeights={};
   fetchLootPrices();
 }
 
+// ── Loot bar chart (PowerBI-style interactive) ──
+function _renderLootChart(loot, prices, containerId){
+  const priced=loot
+    .filter(it=>!it.excluded && (prices[it.name.toLowerCase()]||0)>0)
+    .map(it=>({name:it.name, price:prices[it.name.toLowerCase()]}))
+    .sort((a,b)=>b.price-a.price)
+    .slice(0,20);
+  if(priced.length<2) return '';
+  const maxP=priced[0].price||1;
+  const barH=20,gap=4,labelW=135,barMaxW=170,valW=72;
+  const svgH=priced.length*(barH+gap)-gap;
+  const svgW=labelW+barMaxW+valW;
+  const bars=priced.map((item,i)=>{
+    const bw=Math.max(4,Math.round((item.price/maxP)*barMaxW));
+    const y=i*(barH+gap);
+    const safeN=item.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const safeJs=item.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<g class="loot-bar-g" onclick="lootBarClick('${safeJs}','${containerId}')">
+  <rect x="0" y="${y}" width="${labelW-6}" height="${barH}" rx="0" fill="transparent"/>
+  <text x="${labelW-8}" y="${y+barH/2+4}" text-anchor="end" fill="rgba(255,255,255,.72)" font-size="10.5" font-family="inherit" font-weight="500">${safeN}</text>
+  <rect class="loot-bar-rect" x="${labelW}" y="${y}" width="${bw}" height="${barH}" rx="3" fill="rgba(168,85,247,.55)" data-item="${safeN}" data-cid="${containerId}"/>
+  <text x="${labelW+bw+6}" y="${y+barH/2+4}" fill="rgba(251,191,36,.9)" font-size="10" font-family="inherit">${fmtPrice(item.price)}</text>
+</g>`;
+  }).join('');
+  return `<div class="loot-chart-wrap" id="lootChart_${containerId}">
+  <div class="loot-chart-header">
+    <span class="loot-chart-title">📊 Valor por item <span style="font-weight:400;text-transform:none;letter-spacing:0;">(top ${priced.length})</span></span>
+    <button class="loot-chart-toggle" onclick="(function(btn){const b=document.getElementById('lootChartBody_${containerId}');b.classList.toggle('hidden');btn.textContent=b.classList.contains('hidden')?'▼ Expandir':'▲ Recolher';})(this)">▲ Recolher</button>
+  </div>
+  <div class="loot-chart-body" id="lootChartBody_${containerId}">
+    <svg width="${svgW}" height="${svgH}" style="display:block;font-family:inherit;overflow:visible;">${bars}</svg>
+  </div>
+</div>`;
+}
+function lootBarClick(itemName, containerId){
+  // Reset all bars in this chart
+  document.querySelectorAll(`.loot-bar-rect[data-cid="${containerId}"]`).forEach(r=>{
+    r.setAttribute('fill','rgba(168,85,247,.55)');
+    r.closest('.loot-bar-g')?.classList.remove('active');
+  });
+  // Highlight clicked bar (dataset.item is HTML-decoded, itemName is raw)
+  document.querySelectorAll(`.loot-bar-rect[data-cid="${containerId}"]`).forEach(r=>{
+    if(r.dataset.item===itemName){
+      r.setAttribute('fill','rgba(251,191,36,.8)');
+      r.closest('.loot-bar-g')?.classList.add('active');
+    }
+  });
+  // Find item in the loot list container and highlight it
+  const listEl=document.getElementById(containerId);
+  if(!listEl) return;
+  listEl.querySelectorAll('.loot-item').forEach(el=>{
+    const n=el.querySelector('.loot-item-name')?.textContent?.trim();
+    if(n===itemName){
+      el.scrollIntoView({behavior:'smooth',block:'nearest'});
+      el.classList.add('loot-chart-hi');
+      setTimeout(()=>el.classList.remove('loot-chart-hi'),2500);
+    }
+  });
+}
+
 function renderLootList(ctx){
-  // ctx = {loot, monsters, prices, filter, setFilter, containerId} for summary mode
+  // ctx = {loot, monsters, prices, weights, filter, setFilter, containerId} for summary mode
   // When called with no args, uses wiz state (wizard mode)
   const isWiz=!ctx;
   const loot=ctx?ctx.loot:(wiz.loot||[]);
   const monsters=ctx?ctx.monsters:(wiz.monsters||[]);
   const prices=ctx?ctx.prices:(wiz._lootPrices||{});
+  const weights=ctx?ctx.weights:(wiz._lootWeights||{});
   const filter=ctx?ctx.filter:wiz._lootMonFilter;
   const setFilter=ctx?ctx.setFilter:(name=>{wiz._lootMonFilter=name;renderLootList();});
   const containerId=ctx?ctx.containerId:'lootList';
@@ -2239,6 +2664,12 @@ function renderLootList(ctx){
       }
     }
   }
+  // ── Chart (only when prices are loaded) ──
+  const hasPrices=Object.keys(prices).length>0;
+  if(hasPrices){
+    const chartHtml=_renderLootChart(loot,prices,containerId);
+    if(chartHtml){ const cd=document.createElement('div'); cd.innerHTML=chartHtml; list.appendChild(cd.firstElementChild); }
+  }
   // ── Group by rarity, sorted by price desc within group ──
   const groups={};
   LOOT_RARITY_ORDER.forEach(r=>groups[r]=[]);
@@ -2253,22 +2684,21 @@ function renderLootList(ctx){
     const grid=document.createElement('div'); grid.className='loot-items-grid';
     groups[r].forEach(it=>{
       const price=prices[it.name.toLowerCase()]||0;
-      const {priceColor,borderStyle,shadowStyle}=_priceStyle(price);
+      const weightVal=weights[it.name.toLowerCase()]||0;
+      const {priceColor}=_priceStyle(price);
       const fromMonsters=it.monsters||[];
       const isFiltered=filter&&!fromMonsters.includes(filter);
       const isHighlit=filter&&fromMonsters.includes(filter);
       let cls='loot-item'+(it.excluded?' loot-excluded':'')+(isFiltered?' loot-dim':isHighlit?' loot-filter-hi':'');
       const div=document.createElement('div'); div.className=cls;
-      const inlineStyle=[borderStyle,shadowStyle].filter(Boolean).join(';');
-      if(inlineStyle) div.setAttribute('style',inlineStyle);
       const iconSlug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
       const iconUrl=`https://tibia.fandom.com/wiki/Special:FilePath/${iconSlug}.gif`;
-      const fromLabel=fromMonsters.length<=2?fromMonsters.join(', '):`${fromMonsters.length} monstros`;
       const priceHtml=price?`<span class="loot-item-price" style="color:${priceColor};">${fmtPrice(price)}</span>`:'';
+      const weightHtml=weightVal?`<span class="loot-item-weight">${weightVal.toFixed(2)} oz</span>`:'';
       const wikiSlug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
       const wikiHref=`https://www.tibiawiki.com.br/wiki/${wikiSlug}`;
       const cbHtml=isWiz?`<div class="loot-item-cb">✓</div>`:'';
-      div.innerHTML=`${cbHtml}<img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}<a class="loot-item-wiki" href="${wikiHref}" target="_blank" title="Ver no TibiaWiki" onclick="event.stopPropagation()">↗</a>`;
+      div.innerHTML=`${cbHtml}<img class="loot-item-icon" src="${iconUrl}" alt="" onerror="this.style.visibility='hidden'"><div class="loot-item-name" title="${it.name}">${it.name}</div>${priceHtml}${weightHtml}<a class="loot-item-wiki" href="${wikiHref}" target="_blank" title="Ver no TibiaWiki" onclick="event.stopPropagation()">↗</a>`;
       if(isWiz){ div.onclick=()=>toggleLootItem(it.name,ctx); }
       else { div.style.cursor='pointer'; div.onclick=()=>window.open(wikiHref,'_blank'); div.title='Ver no TibiaWiki (clique para abrir)'; }
       grid.appendChild(div);
@@ -2289,6 +2719,7 @@ async function fetchLootPrices(ctx){
   const isWiz=!ctx;
   const loot=ctx?ctx.loot:(wiz.loot||[]);
   const prices=ctx?ctx.prices:(wiz._lootPrices||(wiz._lootPrices={}));
+  const weights=ctx?ctx.weights:(wiz._lootWeights||(wiz._lootWeights={}));
   const allItems=loot.map(x=>x.name);
   if(!allItems.length) return;
   if(isWiz){ const sub=document.getElementById('lootSubLbl'); if(sub) sub.textContent='buscando preços...'; }
@@ -2303,15 +2734,21 @@ async function fetchLootPrices(ctx){
       Object.values(pages).forEach(page=>{
         const wt=page.revisions?.[0]?.['*']||'';
         const nameM=wt.match(/\|\s*name\s*=\s*([^\n|]+)/i);
+        const itemName=(nameM?nameM[1].trim():page.title).replace(/_/g,' ');
         // npcvalue = numeric NPC sell price (e.g. Rashid items show value=Negotiable but npcvalue=3000)
         // value    = general value field, may be numeric or text like "Negotiable"
         const npcValM=wt.match(/\|\s*npcvalue\s*=\s*([\d,]+)/i);
         const valM   =wt.match(/\|\s*value\s*=\s*([\d,]+)/i);
         const best=npcValM||valM;
         if(best){
-          const itemName=(nameM?nameM[1].trim():page.title).replace(/_/g,' ');
           const val=parseInt(best[1].replace(/,/g,''));
           if(val>0) prices[itemName.toLowerCase()]=val;
+        }
+        // Weight — "It weighs X.XX oz."
+        const weightM=wt.match(/\|\s*weight\s*=\s*([\d.,]+)/i);
+        if(weightM){
+          const wv=parseFloat(weightM[1].replace(/,/g,'.'));
+          if(!isNaN(wv)&&wv>0) weights[itemName.toLowerCase()]=wv;
         }
       });
     }catch(e){}
@@ -2545,7 +2982,9 @@ function addMonster(){
   const existing=wiz._editMonId?wiz.monsters.find(m=>m.id===wiz._editMonId):null;
   const majorCharm=existing?.majorCharm||null;
   const minorCharm=existing?.minorCharm||null;
-  const monData={id:wiz._editMonId||'m_'+Date.now(),name,wikiUrl:document.getElementById('monWiki').value.trim(),gifUrl:wiz._gif||null,majorCharm,minorCharm,resistances:wiz._resistances||null,abilities:wiz._abilities||null};
+  const _wikiInput=document.getElementById('monWiki').value.trim();
+  const _fSlug=name.trim().replace(/\s+/g,'_');
+  const monData={id:wiz._editMonId||'m_'+Date.now(),name,wikiUrl:_wikiInput||`https://www.tibiawiki.com.br/wiki/${encodeURIComponent(_fSlug)}`,fandomUrl:`https://tibia.fandom.com/wiki/${encodeURIComponent(_fSlug)}`,gifUrl:wiz._gif||null,majorCharm,minorCharm,resistances:wiz._resistances||null,abilities:wiz._abilities||null};
   if(wiz._editMonId){
     const idx=wiz.monsters.findIndex(m=>m.id===wiz._editMonId);
     if(idx>=0) wiz.monsters[idx]=monData;
@@ -2580,6 +3019,15 @@ function editMonster(id){
 function rmMon(id){ wiz.monsters=wiz.monsters.filter(m=>m.id!==id); renderMonList(); }
 let _dragIdx=null;
 function renderMonList(){
+  // wiz.monsters is a deep copy — sync combat/resistances from state so data is always fresh
+  const _allSM=state.hunts.flatMap(h=>h.monsters||[]);
+  wiz.monsters.forEach(wm=>{
+    const sm=_allSM.find(x=>x.id===wm.id);
+    if(sm){
+      if(sm.combat!=null) wm.combat=sm.combat;
+      if(sm.resistances&&!wm.resistances) wm.resistances=sm.resistances;
+    }
+  });
   const el=document.getElementById('monList'); el.innerHTML='';
   const badge=document.getElementById('monCount');
   if(!wiz.monsters.length){
@@ -2592,11 +3040,14 @@ function renderMonList(){
     const c=document.createElement('div'); c.className='mon-card';
     c.draggable=true;
     const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:`<span class="ph">🐉</span>`;
-    const wl=m.wikiUrl?`<a class="mon-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
+    const _twUrl=m.wikiUrl||`https://www.tibiawiki.com.br/wiki/${encodeURIComponent((m.name||'').replace(/\s+/g,'_'))}`;
+    const _fdUrl=m.fandomUrl||`https://tibia.fandom.com/wiki/${encodeURIComponent((m.name||'').replace(/\s+/g,'_'))}`;
+    const _hkUrl=`https://hakaimarket.com/monsters/${_hakaiSlug(m.name)}`;
+    const wl=`<div style="display:flex;gap:.35rem;flex-wrap:wrap;"><a class="mon-link" href="${_twUrl}" target="_blank">📖 TibiaWiki</a><a class="mon-link" href="${_fdUrl}" target="_blank">📖 Fandom</a><a class="mon-link" href="${_hkUrl}" target="_blank">📖 Hakai</a></div>`;
     const maj=m.majorCharm?`<span class="charm-badge major"><img src="${m.majorCharm.img}">${m.majorCharm.name}</span>`:'';
     const min=m.minorCharm?`<span class="charm-badge minor"><img src="${m.minorCharm.img}">${m.minorCharm.name}</span>`:'';
     const resRow=buildResistRow(m.resistances);
-    const abRow=m.abilities?`<div style="font-size:.64rem;color:var(--t1);margin-top:.22rem;line-height:1.4;"><span style="font-weight:700;color:var(--gold);">⚔️</span> ${m.abilities}</div>`:'';
+    const abRow=_renderCombatSection(m);
     const isEditing=wiz._editMonId===m.id; if(isEditing) c.classList.add('editing');
     const upBtn=idx>0?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',-1)" title="Subir">▲</button>`:'<button class="mon-ord-btn" disabled>▲</button>';
     const dnBtn=idx<wiz.monsters.length-1?`<button class="mon-ord-btn" onclick="moveMon('${m.id}',1)" title="Descer">▼</button>`:'<button class="mon-ord-btn" disabled>▼</button>';
@@ -2638,12 +3089,7 @@ function renderMonList(){
 // ══════════════════════════════════════════════════════
 let _importMonsters = [];
 
-function setMonMode(mode){
-  document.getElementById('modeSingleBtn').classList.toggle('on', mode==='single');
-  document.getElementById('modeBulkBtn').classList.toggle('on', mode==='bulk');
-  document.getElementById('singlePanel').style.display = mode==='single' ? '' : 'none';
-  document.getElementById('bulkPanel').style.display   = mode==='bulk'   ? '' : 'none';
-}
+function setMonMode(mode){ /* unified — panels merged, no-op */ }
 
 function _huntUrlToSlug(url){
   const m = url.match(/\/wiki\/([^?#\s]+)/);
@@ -2818,10 +3264,10 @@ function updateImportCount(){
 
 function clearImport(){
   _importMonsters=[];
-  document.getElementById('huntUrl').value='';
-  document.getElementById('importResults').innerHTML='';
-  document.getElementById('importStatus').innerHTML='';
-  document.getElementById('importActions').style.display='none';
+  const hu=document.getElementById('huntUrl'); if(hu) hu.value='';
+  const ir=document.getElementById('importResults'); if(ir) ir.innerHTML='';
+  const is=document.getElementById('importStatus'); if(is) is.innerHTML='';
+  const ia=document.getElementById('importActions'); if(ia) ia.style.display='none';
   _setImportProgress(0,0);
 }
 
@@ -2865,7 +3311,17 @@ async function fetchHuntPage(){
   if(btn){btn.disabled=false;btn.textContent='🔍 Buscar';}
 
   if(!creatures.length){
-    _setImportStatus('⚠️ Nenhuma criatura encontrada. Verifique se é uma página de hunt com tabela de criaturas.','');
+    // Treat as single monster page — extract name from slug
+    const singleName=slug.replace(/_/g,' ').trim();
+    if(singleName){
+      _setImportStatus(`<strong style="color:var(--green);">✅ Monstro detectado:</strong> <strong>${singleName}</strong> — confirme o nome abaixo e clique em Adicionar.`);
+      const mn=document.getElementById('monName'); if(mn){ mn.value=singleName; }
+      const mw=document.getElementById('monWiki'); if(mw){ mw.value=rawUrl; }
+      onMonNameInput();
+      setTimeout(()=>autoFetchGif(),300);
+    } else {
+      _setImportStatus('⚠️ Nenhuma criatura encontrada. Verifique se é uma página de hunt ou monstro válida.','');
+    }
     return;
   }
 
@@ -2893,14 +3349,16 @@ async function confirmImport(){
   const newMons=[];
   toAdd.forEach(m=>{
     if(wiz.monsters.find(x=>x.name.toLowerCase()===m.name.toLowerCase())) return;
+    const _slug=m.name.trim().replace(/\s+/g,'_');
     const mo={id:'m_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),name:m.name,
-      wikiUrl:`https://tibia.fandom.com/wiki/${encodeURIComponent(m.name.replace(/\s+/g,'_'))}`,
+      wikiUrl:`https://www.tibiawiki.com.br/wiki/${encodeURIComponent(_slug)}`,
+      fandomUrl:`https://tibia.fandom.com/wiki/${encodeURIComponent(_slug)}`,
       gifUrl:m.gifUrl||null,majorCharm:null,minorCharm:null,resistances:null,abilities:null};
     wiz.monsters.push(mo); newMons.push(mo); added++;
   });
   renderMonList();
   toast(`✅ ${added} monstro${added>1?'s':''} adicionado${added>1?'s':''}! Buscando dados...`);
-  clearImport(); setMonMode('single');
+  clearImport();
   // Fetch full wiki data (resistances + abilities) from fandom for each new monster
   (async()=>{
     for(const mon of newMons){
@@ -2915,7 +3373,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_charmSelMon:null,wheel:{slots:new Array(36).fill(0),link:''}};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_lootWeights:{},_charmSelMon:null,wheel:{slots:new Array(36).fill(0),link:''}};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -2931,6 +3389,7 @@ function openWizard(editId=null){
       wiz.vocation=h.vocation||null;
       wiz.loot=JSON.parse(JSON.stringify(h.loot||[]));
       wiz._lootPrices=JSON.parse(JSON.stringify(h.lootPrices||{}));
+      wiz._lootWeights=JSON.parse(JSON.stringify(h.lootWeights||{}));
       const hw=h.wheel||{}; wiz.wheel={slots:hw.slots&&hw.slots.length===36?[...hw.slots]:new Array(36).fill(0),link:hw.link||''};
     }
   } else {
@@ -2939,6 +3398,8 @@ function openWizard(editId=null){
   renderMonList();
   setStep(1);
   document.getElementById('wizOv').classList.add('on');
+  // Refresh abilities for all loaded monsters (re-fetch with new HTML parser)
+  if(wiz.monsters.length)(async()=>{for(const mon of wiz.monsters){if(!mon.name)continue;const{resistances,abilities}=await fetchMonsterResistances(mon.name);if(abilities!=null&&abilities!==mon.abilities){mon.abilities=abilities;renderMonList();}if(resistances&&!mon.resistances){mon.resistances=resistances;renderMonList();}}})();
 }
 function closeWizard(){ _lootFetchActive=false; document.getElementById('wizOv').classList.remove('on'); }
 function setStep(n){
@@ -2956,7 +3417,7 @@ function setStep(n){
     document.getElementById('wizNameBarVal').textContent=name||'(sem nome)';
     bar.classList.toggle('on',n>1);
   }
-  if(n===1){ setMonMode('single'); }
+  if(n===1){ /* unified input — no tab switch needed */ }
   if(n===2){ if(!wiz._charmSelMon&&wiz.monsters.length) wiz._charmSelMon=wiz.monsters[0].id; renderStep2Charms(); }
   if(n===3){ renderRunaGrid(); renderPotGrid(); }
   if(n===4){
@@ -3248,6 +3709,7 @@ function saveHunt(){
     monsters:wiz.monsters.map(x=>({...x})),
     loot:wiz.loot.map(x=>({...x})),
     lootPrices:{...(wiz._lootPrices||{})},
+    lootWeights:{...(wiz._lootWeights||{})},
     wheel:{slots:[...(wiz.wheel?.slots||new Array(36).fill(0))],link:wiz.wheel?.link||''},
     createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
     updatedAt:Date.now()
@@ -3279,6 +3741,7 @@ function openSummary(huntId){
       loot:h.loot||[],
       monsters:h.monsters||[],
       prices:h.lootPrices||{},
+      weights:h.lootWeights||{},
       get filter(){ return _summLootFilter; },
       setFilter:(name)=>{ _summLootFilter=name; renderLootList(summCtx); },
       containerId:'summLootArea'
@@ -3475,11 +3938,14 @@ function renderHunts(){
       const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" loading="lazy">`:'<span style="font-size:2rem;opacity:.35;">\u{1F409}</span>';
       const maj=m.majorCharm?`<div class="mon-mini-charm major"><img src="${m.majorCharm.img}" alt=""> ${m.majorCharm.name}</div>`:'';
       const min=m.minorCharm?`<div class="mon-mini-charm minor"><img src="${m.minorCharm.img}" alt=""> ${m.minorCharm.name}</div>`:'';
-      const lnk=m.wikiUrl?`href="${m.wikiUrl}" target="_blank"`:'';
+      const _twU=m.wikiUrl||`https://www.tibiawiki.com.br/wiki/${encodeURIComponent((m.name||'').replace(/\s+/g,'_'))}`;
+      const _fdU=m.fandomUrl||`https://tibia.fandom.com/wiki/${encodeURIComponent((m.name||'').replace(/\s+/g,'_'))}`;
+      const _hkU=`https://hakaimarket.com/monsters/${_hakaiSlug(m.name)}`;
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
-      const ab=m.abilities?`<div style="font-size:.6rem;color:var(--t1);margin-top:.18rem;line-height:1.35;text-align:center;"><span style="color:var(--gold);font-weight:700;">⚔️</span> ${m.abilities}</div>`:'';
+      const ab=_renderCombatSection(m,true);
       const cpMini=`<button class="mon-copy-btn" onclick="event.preventDefault();event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button>`;
-      return `<a class="mon-mini" ${lnk}><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name" style="display:flex;align-items:center;justify-content:center;gap:.25rem;">${m.name}${cpMini}</div>${maj}${min}${res}${ab}</a>`;
+      const linksHtml=`<div style="display:flex;gap:.2rem;justify-content:center;flex-wrap:wrap;margin-top:.15rem;"><a href="${_twU}" target="_blank" onclick="event.stopPropagation()" style="font-size:.52rem;color:var(--gold);opacity:.8;text-decoration:none;">TibiaWiki</a><a href="${_fdU}" target="_blank" onclick="event.stopPropagation()" style="font-size:.52rem;color:var(--gold);opacity:.8;text-decoration:none;">Fandom</a><a href="${_hkU}" target="_blank" onclick="event.stopPropagation()" style="font-size:.52rem;color:var(--gold);opacity:.8;text-decoration:none;">Hakai</a></div>`;
+      return `<div class="mon-mini"><div class="mon-mini-gif">${gif}</div><div class="mon-mini-name" style="display:flex;align-items:center;justify-content:center;gap:.25rem;">${m.name}${cpMini}</div>${linksHtml}${maj}${min}${res}${ab}</div>`;
     }).join('');
 
     // Loot toolbar: rarity filters + price sort
@@ -3510,8 +3976,10 @@ function renderHunts(){
         <span style="color:var(--t1);font-size:.95rem;flex-shrink:0;">&#x25BE;</span>
       </div>
       <div class="hcard-body" id="${bodyId}">
-        ${refilTags?`<div class="hd-block"><div class="hd-lbl">&#x1F501; Refil</div><div class="hd-list">${refilTags}</div></div>`:''}
-        ${spellTags?`<div class="hd-block"><div class="hd-lbl">&#x2728; Magias</div><div class="hd-list">${spellTags}</div></div>`:''}
+        ${(refilTags||spellTags)?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.45rem;">
+          ${refilTags?`<div class="hd-block" style="margin-bottom:0;"><div class="hd-lbl">&#x1F501; Refil</div><div class="hd-list">${refilTags}</div></div>`:'<div></div>'}
+          ${spellTags?`<div class="hd-block" style="margin-bottom:0;"><div class="hd-lbl">&#x2728; Magias</div><div class="hd-list">${spellTags}</div></div>`:'<div></div>'}
+        </div>`:''}
         ${imbuTags?`<div class="hd-block"><div class="hd-lbl">&#x1F6E1;&#xFE0F; Imbuements</div><div class="hd-list">${imbuTags}</div></div>`:''}
         ${monGrid?`<div class="hd-block"><div class="hd-lbl">&#x1F409; Monstros</div><div class="mon-grid">${monGrid}</div></div>`:''}
         ${(()=>{const wh=h.wheel||{};const ws=wh.slots&&wh.slots.length===36?wh.slots:null;const wu=ws?ws.reduce((a,b)=>a+(b||0),0):0;if(!ws||wu===0)return '';const wlv=state.wheelLevel||0;const wav=Math.max(0,wlv-50);return `<div class="hd-block"><div class="hd-lbl">&#x1F3A1; Wheel of Destiny</div><div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;">${_miniWheelSVG(ws,110)}<div style="display:flex;flex-direction:column;gap:.3rem;">${wlv>0?`<div style="font-size:.78rem;font-weight:700;color:var(--t0);">Level ${wlv}<span style="font-weight:400;color:var(--t2);"> / ${wav} pts disponíveis</span></div>`:'<div style="font-size:.75rem;color:var(--t2);">Defina seu level no wizard</div>'}<div style="font-size:.8rem;font-weight:800;color:var(--gold);">⚡ ${wu} pontos distribuídos</div>${wh.link?`<a href="${encodeURI(wh.link)}" target="_blank" rel="noopener" style="font-size:.65rem;color:var(--blue);text-decoration:none;">&#x1F517; Ver planner completo</a>`:''}</div></div></div>`;})()}
@@ -4296,7 +4764,8 @@ document.addEventListener('keydown', e=>{
 function switchMainTab(tab){
   ['Hunts','Bestiary','Imbu'].forEach(t=>{
     const key=t.toLowerCase();
-    document.getElementById('mainTabBtn'+t).classList.toggle('on',key===tab);
+    const topBtn=document.getElementById('mainTabBtn'+t); if(topBtn) topBtn.classList.toggle('on',key===tab);
+    const sideBtn=document.getElementById('mnavBtn'+t); if(sideBtn) sideBtn.classList.toggle('on',key===tab);
     document.getElementById('mainTab'+t).classList.toggle('on',key===tab);
   });
   if(tab==='bestiary') renderBestiary();
@@ -4720,6 +5189,7 @@ function openBestiaryAdd(){
     opt.value=h.id;opt.textContent=h.name||(h.monsters||[]).map(m=>m.name).join(', ').slice(0,40)||'Hunt sem nome';
     sel.appendChild(opt);
   });
+  const errBox=document.getElementById('bstErrorSummary'); if(errBox) errBox.remove();
   bstSetMode('url');
   el.style.display='flex';
 }
@@ -4727,13 +5197,15 @@ function closeBestiaryAdd(){document.getElementById('bstAddOv').style.display='n
 
 function bstSetMode(mode){
   _bstWiz.mode=mode;
-  document.getElementById('bstModeUrlBtn').classList.toggle('on',mode==='url');
-  document.getElementById('bstModeHuntBtn').classList.toggle('on',mode==='hunt');
-  document.getElementById('bstPanelUrl').classList.toggle('on',mode==='url');
-  document.getElementById('bstPanelHunt').classList.toggle('on',mode==='hunt');
+  ['url','hunt','class'].forEach(m=>{
+    const b=document.getElementById('bstMode'+m.charAt(0).toUpperCase()+m.slice(1)+'Btn'); if(b) b.classList.toggle('on',m===mode);
+    const p=document.getElementById('bstPanel'+m.charAt(0).toUpperCase()+m.slice(1)); if(p) p.classList.toggle('on',m===mode);
+  });
   _bstWiz.pending=[];
   document.getElementById('bstPreviewWrap').style.display='none';
   document.getElementById('bstPreviewGrid').innerHTML='';
+  const errBox=document.getElementById('bstErrorSummary'); if(errBox) errBox.remove();
+  if(mode==='class') _bstInitClassPanel();
 }
 
 async function bstFetchAll(){
@@ -4790,11 +5262,127 @@ function _bstRenderPreview(){
 }
 function _bstRemovePreview(i){_bstWiz.pending.splice(i,1);_bstRenderPreview();}
 
+// ── Bestiary: add by class ──
+const BST_CLASSES=[
+  {id:'Amphibics',      label:'Amphibic',         emoji:'🐸'},
+  {id:'Aquatics',       label:'Aquatic',           emoji:'🐠'},
+  {id:'Birds',          label:'Bird',              emoji:'🦅'},
+  {id:'Constructs',     label:'Construct',         emoji:'🤖'},
+  {id:'Demons',         label:'Demon',             emoji:'😈'},
+  {id:'Dragons',        label:'Dragon',            emoji:'🐉'},
+  {id:'Elementals',     label:'Elemental',         emoji:'⚡'},
+  {id:'Extra_Dimensionals',label:'Extra Dimensional',emoji:'🌀'},
+  {id:'Feys',           label:'Fey',               emoji:'🧚'},
+  {id:'Giants',         label:'Giant',             emoji:'🏔️'},
+  {id:'Humans',         label:'Human',             emoji:'🧍'},
+  {id:'Humanoids',      label:'Humanoid',          emoji:'👺'},
+  {id:'Ink_Borns',      label:'Ink Born',          emoji:'🦑'},
+  {id:'Lycanthropes',   label:'Lycanthrope',       emoji:'🐺'},
+  {id:'Magical_Creatures',label:'Magical',         emoji:'✨'},
+  {id:'Mammals',        label:'Mammal',            emoji:'🦌'},
+  {id:'Plants',         label:'Plant',             emoji:'🌿'},
+  {id:'Reptiles',       label:'Reptile',           emoji:'🦎'},
+  {id:'Slimes',         label:'Slime',             emoji:'🟢'},
+  {id:'Undead',         label:'Undead',            emoji:'💀'},
+  {id:'Vermin',         label:'Vermin',            emoji:'🐀'},
+];
+let _bstClassSel=null;
+let _bstClassMonsters=[]; // [{name, selected}]
+
+function _bstInitClassPanel(){
+  const grid=document.getElementById('bstClassGrid'); if(!grid) return;
+  grid.innerHTML=BST_CLASSES.map(c=>`
+    <button class="bst-class-btn${_bstClassSel===c.id?' on':''}" onclick="_bstSelectClass('${c.id}')" data-cls="${c.id}">
+      <span>${c.emoji}</span>${c.label}
+    </button>`).join('');
+  if(_bstClassSel) _bstRenderClassMonsters();
+}
+
+async function _bstSelectClass(classId){
+  _bstClassSel=classId;
+  _bstClassMonsters=[];
+  // Update button states
+  document.querySelectorAll('.bst-class-btn').forEach(b=>b.classList.toggle('on',b.dataset.cls===classId));
+  const status=document.getElementById('bstClassStatus');
+  const results=document.getElementById('bstClassResults');
+  const actions=document.getElementById('bstClassActions');
+  if(status) status.textContent='⏳ Buscando monstros...';
+  if(results) results.innerHTML='';
+  if(actions) actions.style.display='none';
+  try{
+    // Query fandom category members
+    let allNames=[];
+    let continueToken=null;
+    for(let page=0;page<5;page++){ // max 5 pages (500 each = 2500 monsters)
+      let url=`https://tibia.fandom.com/api.php?action=query&list=categorymembers&cmtitle=Category:${encodeURIComponent(classId)}&cmlimit=500&cmtype=page&format=json&origin=*`;
+      if(continueToken) url+='&cmcontinue='+encodeURIComponent(continueToken);
+      const r=await fetch(url); const d=await r.json();
+      const members=(d.query?.categorymembers||[]).map(m=>m.title);
+      allNames.push(...members);
+      continueToken=d.continue?.cmcontinue||null;
+      if(!continueToken) break;
+    }
+    // Filter out redirect/disambiguation pages (usually have ':' or start with lowercase)
+    allNames=allNames.filter(n=>!n.includes(':')&&/^[A-Z]/.test(n)&&n.length>1);
+    // Remove already-in-bestiary monsters
+    const inBst=new Set((state.bestiary||[]).filter(b=>!b.isGroup).map(b=>b.name.toLowerCase()));
+    _bstClassMonsters=allNames.map(n=>({name:n,selected:!inBst.has(n.toLowerCase())}));
+    if(status) status.textContent=`${allNames.length} monstro${allNames.length!==1?'s':''} encontrado${allNames.length!==1?'s':''}`;
+    _bstRenderClassMonsters();
+    if(actions) actions.style.display='flex';
+  }catch(e){
+    if(status) status.textContent='❌ Erro ao buscar: '+e.message;
+  }
+}
+
+function _bstRenderClassMonsters(){
+  const el=document.getElementById('bstClassResults'); if(!el) return;
+  if(!_bstClassMonsters.length){el.innerHTML='<div style="color:var(--t2);font-size:.78rem;text-align:center;padding:1rem;">Nenhum monstro encontrado.</div>';return;}
+  el.innerHTML=_bstClassMonsters.map((m,i)=>{
+    const inBst=(state.bestiary||[]).some(b=>!b.isGroup&&b.name.toLowerCase()===m.name.toLowerCase());
+    return `<div class="bst-class-mon-row${m.selected?' on':''}" onclick="_bstClassToggleMon(${i})">
+      <div class="bst-class-mon-cb"></div>
+      <span style="font-size:.8rem;font-weight:600;flex:1;">${m.name}</span>
+      ${inBst?'<span style="font-size:.6rem;color:var(--green);font-weight:700;">✓ já no bestiary</span>':''}
+    </div>`;
+  }).join('');
+}
+
+function _bstClassToggleMon(i){
+  if(!_bstClassMonsters[i]) return;
+  _bstClassMonsters[i].selected=!_bstClassMonsters[i].selected;
+  _bstRenderClassMonsters();
+}
+
+function _bstClassToggleAll(){
+  const allSel=_bstClassMonsters.every(m=>m.selected);
+  _bstClassMonsters.forEach(m=>m.selected=!allSel);
+  _bstRenderClassMonsters();
+}
+
+async function _bstClassConfirm(){
+  const sel=_bstClassMonsters.filter(m=>m.selected);
+  if(!sel.length){toast('Selecione pelo menos um monstro.');return;}
+  const status=document.getElementById('bstClassStatus');
+  if(status) status.textContent=`⏳ Buscando dados de ${sel.length} monstro${sel.length>1?'s':''} da wiki...`;
+  const btn=document.querySelector('#bstPanelClass .btn-g');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Buscando...';}
+  const results=await Promise.allSettled(sel.map(m=>fetchBestiaryData(m.name)));
+  _bstWiz.pending=results.map((r,i)=>r.status==='fulfilled'?r.value:{_error:true,_name:sel[i].name,_msg:r.reason?.message||'Erro'});
+  _bstRenderPreview();
+  if(btn){btn.disabled=false;btn.textContent='➕ Adicionar selecionados';}
+  const ok=_bstWiz.pending.filter(p=>!p._error).length;
+  const fail=_bstWiz.pending.filter(p=>p._error).length;
+  if(status) status.textContent=`${ok} prontos para adicionar${fail?`, ${fail} com erro`:''}`;
+  document.getElementById('bstPreviewWrap').style.display='block';
+}
+
 function bestiaryConfirmAdd(){
   if(!state.bestiary)state.bestiary=[];
   const cur=Math.max(0,parseInt(document.getElementById('bstCurrentKills')?.value)||0);
   const toAdd=_bstWiz.pending.filter(p=>!p._error);
-  if(!toAdd.length){toast('Nenhum monstro válido para adicionar.');return;}
+  const errors=_bstWiz.pending.filter(p=>p._error);
+  if(!toAdd.length && !errors.length){toast('Nenhum monstro válido para adicionar.');return;}
   let added=0;
   toAdd.forEach(p=>{
     const already=(state.bestiary).find(b=>!b.isGroup&&b.name.toLowerCase()===p.name.toLowerCase()&&!b.completed);
@@ -4809,8 +5397,31 @@ function bestiaryConfirmAdd(){
     });
     added++;
   });
-  dirty();save(false);closeBestiaryAdd();renderBestiary();
-  toast(`📖 ${added} monstro${added!==1?'s':''} adicionado${added!==1?'s':''} ao Bestiary!`);
+  dirty();save(false);renderBestiary();
+  if(errors.length){
+    // Show errors — keep modal open so user can fix
+    // Remove successfully added monsters from pending, keep only errors
+    _bstWiz.pending=errors;
+    _bstRenderPreview();
+    // Inject error summary box
+    const pw=document.getElementById('bstPreviewWrap');
+    if(pw){
+      let errBox=document.getElementById('bstErrorSummary');
+      if(!errBox){errBox=document.createElement('div');errBox.id='bstErrorSummary';errBox.className='bst-errors-box';pw.insertBefore(errBox,pw.firstChild);}
+      errBox.innerHTML=`<div class="bst-errors-title">⚠️ ${errors.length} monstro${errors.length>1?'s':''} não encontrado${errors.length>1?'s':''} — revise os nomes abaixo:</div>
+      <div class="bst-errors-list">${errors.map(e=>`<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;">
+        <span style="color:#f87171;">✕</span>
+        <span style="font-weight:700;">${e._name}</span>
+        <span style="color:var(--t2);font-size:.65rem;">${e._msg}</span>
+        <button onclick="(function(){document.getElementById('bstUrlInput').value='${e._name.replace(/'/g,"\\'")}';bstSetMode('url');document.getElementById('bstFetchBtn').click();})()" class="btn btn-o btn-sm" style="margin-left:auto;font-size:.6rem;padding:.1rem .3rem;">Tentar</button>
+      </div>`).join('')}</div>`;
+    }
+    if(added>0) toast(`📖 ${added} adicionado${added>1?'s':''}. ⚠️ ${errors.length} com erro — corrija os nomes.`);
+    else toast(`⚠️ ${errors.length} monstro${errors.length>1?'s':''} com erro — revise os nomes.`);
+  } else {
+    closeBestiaryAdd();
+    toast(`📖 ${added} monstro${added!==1?'s':''} adicionado${added!==1?'s':''} ao Bestiary!`);
+  }
 }
 
 // ── Group actions ──
@@ -5320,15 +5931,19 @@ function _renderImbuShop(){
       <span style="opacity:.65;font-size:.72rem;">Adicione imbuements e marque<br>como ⏳ Comprar.</span></div>`;
     return;
   }
+  const allNames=list.map(it=>`${it.name} x${it.qty}`).join('\n');
   el.innerHTML=`<div class="imbu-shop-title">🛒 Lista de Compras
     <span style="margin-left:auto;font-weight:600;color:var(--t2);font-size:.65rem;text-transform:none;letter-spacing:0;">${list.length} itens · ${tobuyCnt} imbu</span>
-  </div>`
+  </div>
+  <button class="imbu-shop-copyall" onclick="navigator.clipboard.writeText(${JSON.stringify(allNames)}).then(()=>toast('📋 Lista copiada!'))">📋 Copiar tudo</button>`
   +list.map(it=>{
     const slug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
+    const safeName=it.name.replace(/'/g,"\\'");
     return `<div class="imbu-shop-item">
       <img src="https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif" alt="" onerror="this.style.display='none'">
       <div class="imbu-shop-item-name">${it.name}</div>
       <div class="imbu-shop-qty">×${it.qty}</div>
+      <button class="imbu-shop-copy" onclick="navigator.clipboard.writeText('${safeName}').then(()=>toast('📋 ${safeName} copiado!'))" title="Copiar nome">📋</button>
     </div>`;
   }).join('');
 }
@@ -5557,6 +6172,47 @@ function _imbuShowTextModal(title,subtitle,content,editable,onConfirm){
   if(!editable) setTimeout(()=>{const ta=document.getElementById('imbuTextArea');if(ta){ta.select();}},80);
 }
 
+// Fill/refresh abilities for all saved monsters (background, on load)
+// Uses session flag so it only runs once per browser session
+async function _fillAllMissingAbilities(){
+  const _sesKey='_abFill_v15';
+  const allMons=[];
+  const fullRefresh=!sessionStorage.getItem(_sesKey);
+  state.hunts.forEach(h=>(h.monsters||[]).forEach(m=>{
+    if(m.name&&(fullRefresh||m.combat==null)) allMons.push({h,m});
+  }));
+  if(!allMons.length) return;
+  let changed=false;
+  for(const{h,m}of allMons){
+    try{
+      const{resistances,combat}=await fetchMonsterResistances(m.name);
+      if(resistances&&!m.resistances){m.resistances=resistances;changed=true;}
+      // Only overwrite combat when hakai returned real data — never clear existing with null.
+      if(combat!==null){
+        const combatStr=JSON.stringify(combat);
+        if(combatStr!==JSON.stringify(m.combat)){m.combat=combat;changed=true;}
+      }
+    }catch(e){}
+  }
+  if(changed){
+    dirty();
+    renderHunts();
+    // wiz.monsters is a deep copy — sync combat+resistances back into it and re-render
+    if(wiz.monsters.length && document.getElementById('monList')){
+      const allSM=state.hunts.flatMap(h=>h.monsters||[]);
+      wiz.monsters.forEach(wm=>{
+        const sm=allSM.find(m=>m.id===wm.id);
+        if(sm){
+          if(sm.combat!==undefined) wm.combat=sm.combat;
+          if(sm.resistances!==undefined&&!wm.resistances) wm.resistances=sm.resistances;
+        }
+      });
+      renderMonList();
+    }
+  }
+  if(fullRefresh) sessionStorage.setItem(_sesKey,'1');
+}
+
 function initApp(){
   load(); clLoad(); clUpdateBadge();
   // Show gate if no profiles OR no active profile
@@ -5571,6 +6227,8 @@ function initApp(){
     const savedTab=localStorage.getItem('respaw_tab');
     if(savedTab&&savedTab!=='hunts') switchMainTab(savedTab);
   }
+  // Background: fill abilities for monsters that don't have them yet
+  setTimeout(_fillAllMissingAbilities, 1500);
 }
 initApp();
 </script>
