@@ -822,15 +822,28 @@ input[type=number]{-moz-appearance:textfield;}
 .imbu-shop-panel{background:var(--c2);border:1px solid var(--c4);border-radius:12px;padding:.65rem;position:sticky;top:5rem;max-height:calc(100vh - 160px);overflow-y:auto;}
 .imbu-shop-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--t1);margin-bottom:.5rem;display:flex;align-items:center;gap:.3rem;}
 .imbu-shop-empty{text-align:center;color:var(--t2);font-size:.75rem;padding:1rem 0;line-height:1.7;}
-.imbu-shop-item{display:flex;align-items:center;gap:.4rem;padding:.26rem .38rem;border-radius:6px;background:var(--c3);margin-bottom:.2rem;transition:background .12s;}
-.imbu-shop-item:hover{background:var(--c4);}
+/* ── Imbu shop — grouped by imbuement ── */
+.imbu-shop-group{margin-bottom:.5rem;border:1px solid var(--c4);border-radius:9px;overflow:hidden;}
+.imbu-shop-group-hdr{display:flex;align-items:center;gap:.38rem;padding:.3rem .5rem;background:rgba(var(--accent-rgb),.06);border-bottom:1px solid rgba(255,255,255,.05);}
+.imbu-shop-group-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.imbu-shop-group-name{font-size:.72rem;font-weight:800;color:var(--t0);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.imbu-shop-group-eff{font-size:.62rem;color:var(--t2);font-style:italic;white-space:nowrap;}
+.imbu-shop-group-cnt{font-size:.62rem;font-weight:900;background:rgba(var(--accent-rgb),.18);color:var(--gold);border-radius:8px;padding:.05rem .3rem;white-space:nowrap;flex-shrink:0;}
+.imbu-shop-group-pieces{font-size:.6rem;color:var(--t1);padding:.06rem 0 .18rem .5rem;}
+.imbu-shop-item{display:flex;align-items:center;gap:.4rem;padding:.26rem .5rem;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .1s;}
+.imbu-shop-item:last-child{border-bottom:none;}
+.imbu-shop-item:hover{background:rgba(var(--accent-rgb),.06);}
+.imbu-shop-item.purchased{opacity:.42;}
+.imbu-shop-item.purchased .imbu-shop-item-name{text-decoration:line-through;color:var(--t2);}
+.imbu-shop-cb{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--c4);background:var(--c2);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:transparent;flex-shrink:0;transition:all .15s;}
+.imbu-shop-cb.on{background:var(--green);border-color:var(--green);color:#fff;}
 .imbu-shop-item img{width:20px;height:20px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
 .imbu-shop-item-name{font-size:.72rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .imbu-shop-qty{font-size:.72rem;font-weight:800;color:var(--gold);flex-shrink:0;}
 .imbu-shop-copy{background:none;border:1px solid var(--c4);color:var(--t2);border-radius:4px;width:20px;height:20px;font-size:.62rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;transition:all .12s;}
 .imbu-shop-copy:hover{border-color:var(--gold);color:var(--gold);}
-.imbu-shop-copyall{width:100%;margin-bottom:.45rem;padding:.28rem;border-radius:6px;border:1px solid var(--c4);background:rgba(var(--accent-rgb),.06);color:var(--t1);font-size:.62rem;font-weight:700;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:.3rem;}
-.imbu-shop-copyall:hover{border-color:var(--gold);color:var(--gold);}
+.imbu-shop-clearall{width:100%;margin-bottom:.45rem;padding:.28rem;border-radius:6px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.06);color:#fca5a5;font-size:.62rem;font-weight:700;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:.3rem;}
+.imbu-shop-clearall:hover{border-color:#ef4444;color:#fca5a5;background:rgba(239,68,68,.12);}
 /* Bestiary class grid */
 .bst-class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.35rem;margin-bottom:.75rem;}
 .bst-class-btn{padding:.4rem .5rem;border-radius:8px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:left;display:flex;align-items:center;gap:.35rem;}
@@ -4635,11 +4648,11 @@ function updateCompanionFields(){
 // ══════════════════════════════════════════════════════
 const CL_KEY='respaw3000_cl';
 const CL_FIXED=[
-  {id:'f_charm',   label:'Charm',               imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Charm_Points.gif',                 hint:'Charms ativos nos monstros certos?'},
-  {id:'f_imbu',    label:'Imbuements',          imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Imbuement_Shrine.gif',              hint:'Slots de imbu ativos?'},
-  {id:'f_weaponp', label:'Weapon Proficiency',  imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Weapon_Proficiency.gif',            hint:'Proficiência de arma verificada?'},
-  {id:'f_refil',   label:'Refil',               imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Ultimate_Mana_Potion.gif',          hint:'Poções e consumíveis reabastecidos?'},
-  {id:'f_amuleto', label:'Recarregar Amuletos', imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Charged_Arcanomancer_Sigil.gif',    hint:'Amuletos com carga antes de entrar?'},
+  {id:'f_charm',   label:'Charm',               icon:'✨', imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Charm_Points.gif',              hint:'Charms ativos nos monstros certos?'},
+  {id:'f_imbu',    label:'Imbuements',           icon:'💎', imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Imbuement_Shrine.gif',          hint:'Slots de imbu ativos?'},
+  {id:'f_weaponp', label:'Weapon Proficiency',   icon:'⚔️', imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Sword_Proficiency.gif',         hint:'Proficiência de arma verificada?'},
+  {id:'f_refil',   label:'Refil',                icon:'🧪', imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Ultimate_Mana_Potion.gif',       hint:'Poções e consumíveis reabastecidos?'},
+  {id:'f_amuleto', label:'Recarregar Amuletos',  icon:'📿', imgUrl:'https://tibia.fandom.com/wiki/Special:FilePath/Charged_Arcanomancer_Sigil.gif', hint:'Amuletos com carga antes de entrar?'},
 ];
 const PREY_BONUS_ICO={attack:'⚔️',defense:'🛡️',loot:'💰',xp:'✨'};
 const PREY_BONUS_LABEL={attack:'Attack',defense:'Defense',loot:'Loot',xp:'XP'};
@@ -4731,9 +4744,12 @@ function renderChecklist(){
   const pinnedItems=cl.items.filter(x=>cl.pinned[x.id]);
   const unpinnedItems=cl.items.filter(x=>!cl.pinned[x.id]);
 
-  const _fixedIco=(item)=>item.imgUrl
-    ?`<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`
-    :`<span style="font-size:1.1rem;">${item.icon||'📌'}</span>`;
+  const _fixedIco=(item)=>{
+    const fb=item.icon||'📌';
+    if(!item.imgUrl) return `<span style="font-size:1.1rem;">${fb}</span>`;
+    const onErr=`this.outerHTML='<span style=\\'font-size:1.1rem;\\'>${fb}</span>'`;
+    return `<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" onerror="${onErr}">`;
+  };
   const _custIco=(item)=>item.imgUrl
     ?`<img src="${item.imgUrl}" alt="" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;" onerror="this.outerHTML='<span style=\\'font-size:1.1rem;\\'>📌</span>'">`
     :`<span style="font-size:1.1rem;">${item.emoji||'📌'}</span>`;
@@ -6005,44 +6021,84 @@ function renderImbu(){
   _renderImbuShop();
 }
 
+/* ── Imbu shop purchase persistence ── */
+function _imbuGetPurchased(){try{return JSON.parse(localStorage.getItem('respaw3000_imbu_purchased')||'{}')}catch(e){return {};}}
+function _imbuSavePurchased(obj){localStorage.setItem('respaw3000_imbu_purchased',JSON.stringify(obj));}
+function _imbuTogglePurchased(key){const p=_imbuGetPurchased();p[key]=!p[key];_imbuSavePurchased(p);_renderImbuShop();}
+function _imbuClearPurchased(){_imbuSavePurchased({});_renderImbuShop();}
+
 function _renderImbuShop(){
   const el=document.getElementById('imbuShop'); if(!el) return;
   const prof=state.imbu[_imbuPid()]||{};
-  const totals={};
-  let tobuyCnt=0;
+
+  // Group by imbuId — each unique imbuement becomes one card with summed mats
+  const groups={}; // imbuId → {imbu, tierIdx, pieces:[], mats:{}}
   IMBU_PIECES.forEach(p=>{
     (prof[p.id]||[]).forEach(s=>{
       if(s.active||!s.imbuId) return;
-      tobuyCnt++;
       const imbu=IMBU_DATA.find(x=>x.id===s.imbuId); if(!imbu) return;
-      const tier=imbu.tiers[Math.min(s.tier,imbu.tiers.length-1)];
+      const tierIdx=Math.min(s.tier,imbu.tiers.length-1);
+      const tier=imbu.tiers[tierIdx];
+      if(!groups[s.imbuId]) groups[s.imbuId]={imbu,tierIdx,pieces:[],mats:{}};
+      groups[s.imbuId].pieces.push(p.emoji+' '+p.label);
       tier.mats.forEach(m=>{
         const k=m.n.toLowerCase();
-        if(!totals[k]) totals[k]={name:m.n,qty:0};
-        totals[k].qty+=m.q;
+        if(!groups[s.imbuId].mats[k]) groups[s.imbuId].mats[k]={name:m.n,qty:0};
+        groups[s.imbuId].mats[k].qty+=m.q;
       });
     });
   });
-  const list=Object.values(totals).sort((a,b)=>b.qty-a.qty);
-  if(!list.length){
+
+  const groupList=Object.values(groups);
+  if(!groupList.length){
     el.innerHTML=`<div class="imbu-shop-title">🛒 Lista de Compras</div>
       <div class="imbu-shop-empty">Nenhum material necessário.<br>
       <span style="opacity:.65;font-size:.72rem;">Adicione imbuements e marque<br>como ⏳ Comprar.</span></div>`;
     return;
   }
-  el.innerHTML=`<div class="imbu-shop-title">🛒 Lista de Compras
-    <span style="margin-left:auto;font-weight:600;color:var(--t2);font-size:.65rem;text-transform:none;letter-spacing:0;">${list.length} itens · ${tobuyCnt} imbu</span>
-  </div>`
-  +list.map(it=>{
-    const slug=encodeURIComponent(it.name.replace(/\s+/g,'_'));
-    const safeName=it.name.replace(/'/g,"\\'");
-    return `<div class="imbu-shop-item">
-      <img src="https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif" alt="" onerror="this.style.display='none'">
-      <div class="imbu-shop-item-name">${it.name}</div>
-      <div class="imbu-shop-qty">×${it.qty}</div>
-      <button class="imbu-shop-copy" onclick="navigator.clipboard.writeText('${safeName}').then(()=>toast('📋 ${safeName} copiado!'))" title="Copiar nome">📋</button>
+
+  const purchased=_imbuGetPurchased();
+  const totalMats=groupList.reduce((acc,g)=>acc+Object.keys(g.mats).length,0);
+  const purchasedCnt=Object.values(purchased).filter(Boolean).length;
+
+  let html=`<div class="imbu-shop-title">🛒 Lista de Compras
+    <span style="margin-left:auto;font-weight:600;color:var(--t2);font-size:.65rem;text-transform:none;letter-spacing:0;">${groupList.length} imbu · ${totalMats} itens</span>
+  </div>`;
+
+  if(purchasedCnt>0){
+    html+=`<button class="imbu-shop-clearall" onclick="_imbuClearPurchased()">🗑️ Limpar compras (${purchasedCnt}/${totalMats})</button>`;
+  }
+
+  groupList.forEach(g=>{
+    const catColor=_IMBU_CAT_COLOR[g.imbu.cat]||'#888';
+    const tierLabel=g.imbu.tiers[g.tierIdx]?.label||'';
+    const cnt=g.pieces.length;
+    const mats=Object.values(g.mats);
+    html+=`<div class="imbu-shop-group">
+      <div class="imbu-shop-group-hdr">
+        <span class="imbu-shop-group-dot" style="background:${catColor}"></span>
+        <span class="imbu-shop-group-name">${g.imbu.name}</span>
+        <span class="imbu-shop-group-eff">${g.imbu.effLabel}</span>
+        ${cnt>1?`<span class="imbu-shop-group-cnt">×${cnt}</span>`:''}
+      </div>
+      <div class="imbu-shop-group-pieces">${g.pieces.join(' · ')} · <span style="color:var(--gold);">${tierLabel}</span></div>
+      ${mats.map(m=>{
+        const k=m.name.toLowerCase();
+        const bought=!!purchased[k];
+        const slug=encodeURIComponent(m.name.replace(/\s+/g,'_'));
+        const safeName=m.name.replace(/'/g,"\\'");
+        return `<div class="imbu-shop-item${bought?' purchased':''}" onclick="_imbuTogglePurchased('${k}')">
+          <div class="imbu-shop-cb${bought?' on':''}">${bought?'✓':''}</div>
+          <img src="https://tibia.fandom.com/wiki/Special:FilePath/${slug}.gif" alt="" onerror="this.style.display='none'">
+          <div class="imbu-shop-item-name">${m.name}</div>
+          <div class="imbu-shop-qty">×${m.qty}</div>
+          <button class="imbu-shop-copy" onclick="event.stopPropagation();navigator.clipboard.writeText('${safeName}').then(()=>toast('📋 ${safeName} copiado!'))" title="Copiar nome">📋</button>
+        </div>`;
+      }).join('')}
     </div>`;
-  }).join('');
+  });
+
+  el.innerHTML=html;
 }
 
 // ── Slot actions ──
