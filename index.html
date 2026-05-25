@@ -74,8 +74,8 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .main-tab-btn{display:none;}
 .main-tab-panel{display:none;}
 .main-tab-panel.on{display:block;}
-/* ── Vertical nav sidebar (always visible on right) ── */
-.main-nav-strip{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:390;display:flex;flex-direction:column;gap:0;background:var(--c2);border:1px solid rgba(var(--accent-rgb),.25);border-right:none;border-radius:12px 0 0 12px;overflow:hidden;box-shadow:-4px 0 22px rgba(0,0,0,.5);}
+/* ── Vertical nav sidebar (always visible on LEFT) ── */
+.main-nav-strip{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:390;display:flex;flex-direction:column;gap:0;background:var(--c2);border:1px solid rgba(var(--accent-rgb),.25);border-left:none;border-radius:0 12px 12px 0;overflow:hidden;box-shadow:4px 0 22px rgba(0,0,0,.5);}
 .mnav-btn{display:flex;flex-direction:column;align-items:center;gap:.28rem;padding:.72rem .52rem;background:none;border:none;border-bottom:1px solid rgba(var(--accent-rgb),.12);color:var(--t1);cursor:pointer;transition:all .15s;min-width:54px;}
 .mnav-btn:last-child{border-bottom:none;}
 .mnav-btn:hover{background:rgba(var(--accent-rgb),.1);color:var(--t0);}
@@ -465,7 +465,7 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-cat-semirare{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.25);}
 .loot-cat-rare{background:rgba(236,72,153,.12);color:#f9a8d4;border:1px solid rgba(236,72,153,.25);}
 .loot-cat-veryrare{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
-.loot-items-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.35rem;}
+.loot-items-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem;}
 .loot-item{display:flex;align-items:center;gap:.45rem;padding:.32rem .55rem;border-radius:8px;border:1px solid var(--c4);background:var(--c3);cursor:pointer;user-select:none;transition:all .12s;min-height:34px;}
 .loot-item:hover{border-color:rgba(var(--accent-rgb),.35);}
 .loot-item.loot-excluded{opacity:.4;text-decoration:line-through;}
@@ -496,8 +496,18 @@ input[type=number]{-moz-appearance:textfield;}
 .loot-chart-title{font-size:.63rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--t2);}
 .loot-chart-toggle{font-size:.6rem;background:none;border:1px solid var(--c4);color:var(--t2);border-radius:4px;padding:.1rem .38rem;cursor:pointer;transition:all .12s;}
 .loot-chart-toggle:hover{border-color:var(--gold);color:var(--gold);}
-.loot-chart-body{overflow-x:auto;overflow-y:hidden;}
+.loot-chart-body{overflow:hidden;}
 .loot-chart-body.hidden{display:none;}
+/* Print: show only summary content */
+@media print{
+  header,.main-nav-strip,.cl-toggle,.cl-panel,.unsaved,.wrap{display:none!important;}
+  .ov#summaryOv{position:static!important;background:none!important;overflow:visible!important;padding:0!important;display:block!important;}
+  .sum-modal{max-width:100%!important;max-height:none!important;overflow:visible!important;box-shadow:none!important;border:none!important;width:100%!important;margin:0!important;border-radius:0!important;}
+  .sum-hdr{display:none!important;}
+  .sum-body{overflow:visible!important;max-height:none!important;}
+  button{display:none!important;}
+  a{color:inherit!important;}
+}
 .loot-bar-g{cursor:pointer;}
 .loot-bar-g:hover .loot-bar-rect{fill:rgba(192,132,252,.8);}
 .loot-bar-g.active .loot-bar-rect{fill:rgba(251,191,36,.8)!important;}
@@ -574,17 +584,28 @@ input[type=number]{-moz-appearance:textfield;}
 .sum-mon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.48rem;}
 @media(max-width:780px){.sum-mon-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.sum-mon-grid{grid-template-columns:1fr;}}
-.sum-mon-compact{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.6rem;display:flex;gap:.55rem;align-items:flex-start;}
+.sum-mon-compact{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.6rem;display:flex;flex-direction:column;gap:0;align-items:stretch;position:relative;}
+.sum-mon-c-top{display:flex;align-items:center;gap:.45rem;margin-bottom:.45rem;}
 .sum-mon-c-gif{width:50px;height:50px;border-radius:8px;background:#0a0820;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
 .sum-mon-c-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
 .sum-mon-c-info{flex:1;min-width:0;}
-.sum-mon-c-name{font-size:.82rem;font-weight:700;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sum-mon-c-link{font-size:.65rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.28rem;}
-.sum-charm-sm{display:flex;align-items:center;gap:.5rem;padding:.42rem .75rem;border-radius:9px;margin-bottom:.3rem;font-size:.82rem;font-weight:700;}
-.sum-charm-sm.major{background:rgba(var(--accent-rgb),.12);border:1.5px solid rgba(var(--accent-rgb),.32);color:var(--gold);}
-.sum-charm-sm.minor{background:rgba(139,92,246,.12);border:1.5px solid rgba(139,92,246,.32);color:#c4b5fd;}
-.sum-charm-sm img{width:26px;height:26px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
-.sum-no-charm-sm{font-size:.65rem;color:var(--t2);font-style:italic;}
+.sum-mon-c-name{font-size:.82rem;font-weight:700;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:1.4rem;}
+.sum-mon-c-link{font-size:.65rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.1rem;}
+/* Charm pair — always 2 boxes side by side */
+.sum-charm-pair{display:grid;grid-template-columns:1fr 1fr;gap:.28rem;margin-bottom:.35rem;}
+.sum-charm-box{display:flex;align-items:center;gap:.35rem;padding:.35rem .45rem;border-radius:8px;font-size:.73rem;font-weight:700;min-height:38px;}
+.sum-charm-box.major{background:rgba(var(--accent-rgb),.12);border:1.5px solid rgba(var(--accent-rgb),.32);color:var(--gold);}
+.sum-charm-box.minor{background:rgba(139,92,246,.12);border:1.5px solid rgba(139,92,246,.32);color:#c4b5fd;}
+.sum-charm-box.empty{background:var(--c2);border:1.5px dashed rgba(255,255,255,.08);color:var(--t2);justify-content:center;font-style:italic;font-size:.65rem;font-weight:400;}
+.sum-charm-box img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+/* Section separator (Fraquezas / Dano) */
+.sum-mon-sep{font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--t2);padding:.22rem 0 .28rem;border-top:1px solid rgba(255,255,255,.07);margin-top:.2rem;display:flex;align-items:center;gap:.3rem;}
+/* Copy button pinned top-right */
+.sum-mon-copy{position:absolute;top:.38rem;right:.38rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:.68rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;z-index:2;}
+.sum-mon-copy:hover{background:rgba(var(--accent-rgb),.18);color:var(--gold);}
+/* Keep old names for compat */
+.sum-charm-sm{display:none;}
+.sum-no-charm-sm{display:none;}
 
 /* ── Summary 2-column layout ── */
 .sum-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start;}
@@ -2481,6 +2502,15 @@ function normalizeRarity(r){
 // LOOT PRICE HELPERS
 // ══════════════════════════════════════════════════════
 let _summLootFilter=null;
+const _lootChartModes={}; // containerId → 'price'|'cap'
+const _lootChartData={};  // containerId → {loot,prices,weights,monsters,filter}
+function _toggleLootChartMode(containerId){
+  _lootChartModes[containerId]=(_lootChartModes[containerId]==='cap')?'price':'cap';
+  const d=_lootChartData[containerId]; if(!d) return;
+  const wrap=document.getElementById('lootChart_'+containerId); if(!wrap) return;
+  const html=_renderLootChart(d.loot,d.prices,d.weights,d.monsters,containerId,d.filter);
+  if(html){ const tmp=document.createElement('div'); tmp.innerHTML=html; if(tmp.firstElementChild) wrap.replaceWith(tmp.firstElementChild); }
+}
 function fmtPrice(v){
   if(!v||v<=0) return null;
   if(v>=1000000) return (v/1000000).toFixed(v%1000000===0?0:1)+'M gp';
@@ -2571,58 +2601,85 @@ async function startLootFetch(){
 }
 
 // ── Loot bar chart (PowerBI-style interactive) ──
-function _renderLootChart(loot, prices, weights, monsters, containerId){
-  // Build monster name → gifUrl map for icons
+function _renderLootChart(loot, prices, weights, monsters, containerId, filter){
+  // Cache data for toggle re-render
+  _lootChartData[containerId]={loot,prices,weights,monsters,filter:filter||null};
+  const mode=_lootChartModes[containerId]||'price';
+  const isCap=mode==='cap';
+
+  // Build monster name → gifUrl map
   const monGifMap={};
   (monsters||[]).forEach(m=>{ if(m.name&&m.gifUrl) monGifMap[m.name]=m.gifUrl; });
 
-  const priced=loot
-    .filter(it=>!it.excluded && (prices[it.name.toLowerCase()]||0)>0)
-    .map(it=>({
-      name:it.name,
-      price:prices[it.name.toLowerCase()],
-      weight:(weights||{})[it.name.toLowerCase()]||0,
-      monsters:it.monsters||[]
-    }))
-    .sort((a,b)=>b.price-a.price)
-    .slice(0,20);
-  if(priced.length<2) return '';
-  const maxP=priced[0].price||1;
-  // Layout: [iconW][gap][labelW][barMaxW][valW]
-  const iconW=20,barH=22,gap=4,labelW=112,barMaxW=140,valW=82;
+  // Filter by selected monster if active
+  let src=loot.filter(it=>!it.excluded && (prices[it.name.toLowerCase()]||0)>0);
+  if(filter) src=src.filter(it=>(it.monsters||[]).includes(filter));
+
+  // For cap mode, also require weight data
+  if(isCap) src=src.filter(it=>(weights||{})[it.name.toLowerCase()]>0);
+
+  const mapped=src.map(it=>({
+    name:it.name,
+    price:prices[it.name.toLowerCase()]||0,
+    weight:(weights||{})[it.name.toLowerCase()]||0,
+    monsters:it.monsters||[]
+  }));
+  // Sort by active mode
+  mapped.sort((a,b)=>isCap?(b.weight-a.weight):(b.price-a.price));
+  const priced=mapped.slice(0,20);
+  if(priced.length<1) return '';
+
+  const maxVal=isCap?(priced[0].weight||1):(priced[0].price||1);
+  // Layout: [monIcon(13)][itemIcon(13)][4px][label(95)][bar(130)][val(72)]  = 327px
+  const monIW=13,itemIW=13,iconGap=4,labelW=95,barMaxW=130,valW=72;
+  const barH=22,gap=4;
+  const barX=monIW+itemIW+iconGap+labelW;
+  const svgW=barX+barMaxW+valW;
   const svgH=priced.length*(barH+gap)-gap;
-  const svgW=iconW+4+labelW+barMaxW+valW;
+
   const bars=priced.map((item,i)=>{
-    const bw=Math.max(4,Math.round((item.price/maxP)*barMaxW));
+    const sortVal=isCap?item.weight:item.price;
+    const bw=Math.max(4,Math.round((sortVal/maxVal)*barMaxW));
     const y=i*(barH+gap);
     const safeN=item.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     const safeJs=item.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    // Monster icon: if item from single monster, show its sprite
+
+    // Monster icon (single monster source only)
     const singleMon=item.monsters.length===1?item.monsters[0]:null;
-    const monGifUrl=singleMon
-      ?(monGifMap[singleMon]||`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent((singleMon).replace(/\s+/g,'_'))}.gif`)
-      :'';
-    const iconEl=monGifUrl
-      ?`<image href="${monGifUrl}" x="0" y="${y+2}" width="${iconW}" height="${iconW-2}" preserveAspectRatio="xMidYMid meet" opacity="0.82"/>`
-      :`<rect x="0" y="${y+2}" width="${iconW}" height="${iconW-2}" rx="3" fill="rgba(255,255,255,.03)"/>`;
-    const barX=iconW+4+labelW;
-    // Weight label (oz = cap)
-    const wStr=item.weight>0?` · ${item.weight.toFixed(2)}oz`:'';
+    const monGifUrl=singleMon?(monGifMap[singleMon]||`https://tibia.fandom.com/wiki/Special:FilePath/${encodeURIComponent((singleMon).replace(/\s+/g,'_'))}.gif`):'';
+    const monIconEl=monGifUrl
+      ?`<image href="${monGifUrl}" x="0" y="${y+2}" width="${monIW}" height="${monIW}" preserveAspectRatio="xMidYMid meet" opacity="0.8"/>`
+      :`<rect x="0" y="${y+2}" width="${monIW}" height="${monIW}" rx="2" fill="rgba(255,255,255,.04)"/>`;
+
+    // Item icon (always shown)
+    const itemSlug=encodeURIComponent(item.name.replace(/\s+/g,'_'));
+    const itemIconEl=`<image href="https://tibia.fandom.com/wiki/Special:FilePath/${itemSlug}.gif" x="${monIW}" y="${y+2}" width="${itemIW}" height="${itemIW}" preserveAspectRatio="xMidYMid meet" opacity="0.92"/>`;
+
+    // Value label
+    const valLabel=isCap?`${item.weight.toFixed(2)}oz`:fmtPrice(item.price);
+    // Secondary label (the other metric, smaller)
+    const sec=isCap&&item.price>0?` ${fmtPrice(item.price)}`:(item.weight>0?` ${item.weight.toFixed(1)}oz`:'');
+
     return `<g class="loot-bar-g" onclick="lootBarClick('${safeJs}','${containerId}')">
   <rect x="0" y="${y}" width="${svgW}" height="${barH}" rx="2" fill="transparent"/>
-  ${iconEl}
-  <text x="${iconW+4+labelW-6}" y="${y+barH/2+4}" text-anchor="end" fill="rgba(255,255,255,.72)" font-size="10" font-family="inherit" font-weight="500">${safeN}</text>
+  ${monIconEl}${itemIconEl}
+  <text x="${barX-5}" y="${y+barH/2+4}" text-anchor="end" fill="rgba(255,255,255,.75)" font-size="9.5" font-family="inherit" font-weight="500">${safeN}</text>
   <rect class="loot-bar-rect" x="${barX}" y="${y}" width="${bw}" height="${barH}" rx="3" fill="rgba(168,85,247,.55)" data-item="${safeN}" data-cid="${containerId}"/>
-  <text x="${barX+bw+5}" y="${y+barH/2+4}" fill="rgba(251,191,36,.9)" font-size="9" font-family="inherit">${fmtPrice(item.price)}${wStr}</text>
+  <text x="${barX+bw+4}" y="${y+barH/2+2}" fill="${isCap?'rgba(52,211,153,.9)':'rgba(251,191,36,.9)'}" font-size="9" font-family="inherit">${valLabel}</text>
+  ${sec?`<text x="${barX+bw+4}" y="${y+barH/2+10}" fill="rgba(160,158,192,.65)" font-size="7.5" font-family="inherit">${sec}</text>`:''}
 </g>`;
   }).join('');
+
+  const modeLabel=isCap?'⚖️ Cap':'💰 Valor';
+  const altLabel=isCap?'💰 Valor':'⚖️ Cap';
   return `<div class="loot-chart-wrap" id="lootChart_${containerId}">
   <div class="loot-chart-header">
-    <span class="loot-chart-title">📊 Top ${priced.length} <span style="font-weight:400;text-transform:none;letter-spacing:0;">por valor</span></span>
+    <span class="loot-chart-title">📊 Top ${priced.length} · ${modeLabel}${filter?` · <span style="color:var(--gold);">${filter}</span>`:''}</span>
+    <button class="loot-chart-toggle" onclick="_toggleLootChartMode('${containerId}')" style="margin-right:.3rem;">${altLabel}</button>
     <button class="loot-chart-toggle" onclick="(function(btn){const b=document.getElementById('lootChartBody_${containerId}');b.classList.toggle('hidden');btn.textContent=b.classList.contains('hidden')?'▼ Expandir':'▲ Recolher';})(this)">▲ Recolher</button>
   </div>
   <div class="loot-chart-body" id="lootChartBody_${containerId}">
-    <svg width="${svgW}" height="${svgH}" style="display:block;font-family:inherit;overflow:visible;">${bars}</svg>
+    <svg width="${svgW}" height="${svgH}" style="display:block;font-family:inherit;max-width:100%;">${bars}</svg>
   </div>
 </div>`;
 }
@@ -2698,25 +2755,14 @@ function renderLootList(ctx){
       }
     }
   }
-  // ── 2-col layout when prices are loaded ──
+  // ── Chart (full-width, on top) ──
   const hasPrices=Object.keys(prices).length>0;
   const pricedCount=loot.filter(it=>!it.excluded&&(prices[it.name.toLowerCase()]||0)>0).length;
-  const use2Col=hasPrices&&pricedCount>=2;
-  let itemsContainer=list;
-
-  if(use2Col){
-    // Left col: chart | Right col: item list
-    const gridWrap=document.createElement('div');
-    gridWrap.style.cssText='display:grid;grid-template-columns:minmax(180px,1fr) minmax(160px,1.25fr);gap:.55rem;align-items:start;margin-top:.25rem;';
-    const leftCol=document.createElement('div');
-    const rightCol=document.createElement('div');
-    const chartHtml=_renderLootChart(loot,prices,weights,monsters,containerId);
-    if(chartHtml){ const cd=document.createElement('div'); cd.innerHTML=chartHtml; leftCol.appendChild(cd.firstElementChild); }
-    gridWrap.appendChild(leftCol);
-    gridWrap.appendChild(rightCol);
-    list.appendChild(gridWrap);
-    itemsContainer=rightCol;
+  if(hasPrices&&pricedCount>=1){
+    const chartHtml=_renderLootChart(loot,prices,weights,monsters,containerId,filter);
+    if(chartHtml){ const cd=document.createElement('div'); cd.innerHTML=chartHtml; list.appendChild(cd.firstElementChild); }
   }
+  const itemsContainer=list;
 
   // ── Group by rarity, sorted by price desc within group ──
   const groups={};
@@ -3911,11 +3957,25 @@ function buildSummaryHTML(h){
       const safeN=m.name.replace(/'/g,"\\'");
       const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.8rem;opacity:.35;">🐉</span>';
       const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
-      const maj=m.majorCharm?`<div class="sum-charm-sm major"><img src="${m.majorCharm.img}" alt="">${m.majorCharm.name}</div>`:'';
-      const min=m.minorCharm?`<div class="sum-charm-sm minor"><img src="${m.minorCharm.img}" alt="">${m.minorCharm.name}</div>`:'';
-      const noCharms=(!m.majorCharm&&!m.minorCharm)?'<div class="sum-no-charm-sm">Sem charms</div>':'';
+      // Charm boxes — always 2, show placeholder if empty
+      const majBox=m.majorCharm
+        ?`<div class="sum-charm-box major"><img src="${m.majorCharm.img}" alt=""><span>${m.majorCharm.name}</span></div>`
+        :`<div class="sum-charm-box empty">— major</div>`;
+      const minBox=m.minorCharm
+        ?`<div class="sum-charm-box minor"><img src="${m.minorCharm.img}" alt=""><span>${m.minorCharm.name}</span></div>`
+        :`<div class="sum-charm-box empty">— minor</div>`;
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
-      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;""><div class="sum-mon-c-gif">${gif}</div><div class="sum-mon-c-info"><div class="sum-mon-c-name" style="display:flex;align-items:center;gap:.3rem;">${m.name}<button class="mon-copy-btn" onclick="event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button></div>${wl}${maj}${min}${noCharms}${res}</div></div>`;
+      const ab=_renderCombatSection(m,false);
+      html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;">
+        <button class="sum-mon-copy" onclick="event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button>
+        <div class="sum-mon-c-top">
+          <div class="sum-mon-c-gif">${gif}</div>
+          <div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}</div>
+        </div>
+        <div class="sum-charm-pair">${majBox}${minBox}</div>
+        ${res?`<div class="sum-mon-sep">⚡ Fraquezas</div>${res}`:''}
+        ${ab?`<div class="sum-mon-sep">⚔️ Dano</div>${ab}`:''}
+      </div>`;
     });
     html+='</div></div>';
   }
@@ -4098,25 +4158,9 @@ function _toggleLootSort(huntId){
 
 // ── Per-hunt print ──
 function printHunt(huntId){
-  const h=state.hunts.find(x=>x.id===huntId); if(!h){toast('Hunt não encontrada');return;}
-  const p=state.profiles.find(x=>x.id===h.profileId);
-  const _ri=(arr)=>[...(SPELLS||[]),...(SKILL_POTIONS||[]),...(POTIONS||[]),...(RUNES||[])].find(s=>s.id===arr);
-  const pot=(h.pots||[]).map(x=>{const r=_ri(x.id);const img=x.img||r?.img||'';return `<span class="item">${img?`<img src="${img}" alt="">`:'💊'} ${x.name}<span class="qty">×${x.qty}</span></span>`;}).join('');
-  const run=(h.runas||[]).map(x=>{const r=_ri(x.id);const img=x.img||r?.img||'';return `<span class="item">${img?`<img src="${img}" alt="">`:'📜'} ${x.name}<span class="qty">×${x.qty}</span></span>`;}).join('');
-  const imb=(h.imbu||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'🛡️'} ${x.name}</span>`).join('');
-  const sp=(h.spells||[]).map(x=>{const r=_ri(x.id);const img=x.img||r?.img||'';return `<span class="item">${img?`<img src="${img}" alt="">`:'✨'} ${x.name}</span>`;}).join('');
-  const mons=(h.monsters||[]).map(m=>`<div class="mon">${m.gifUrl?`<img class="gif" src="${m.gifUrl}" alt="">`:'🐉'}<div class="monname">${m.name}</div><div class="mcharms">${m.majorCharm?`<span class="charm-lbl charm-maj">${m.majorCharm.name}</span>`:''} ${m.minorCharm?`<span class="charm-lbl charm-min">${m.minorCharm.name}</span>`:''}</div></div>`).join('');
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${h.name}</title>
-<style>body{font-family:Arial,sans-serif;padding:2rem;max-width:820px;margin:0 auto;color:#111;}h1{font-size:1.3rem;margin-bottom:.2rem;}.sub{color:#666;font-size:.82rem;margin-bottom:1.5rem;}.sec{margin-bottom:.6rem;}.lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#666;font-weight:700;margin-bottom:.3rem;}.items{display:flex;gap:.3rem;flex-wrap:wrap;}.item{display:flex;align-items:center;gap:.25rem;padding:.22rem .5rem;border-radius:6px;background:#f5f5f5;font-size:.75rem;font-weight:600;}.item img{height:18px;object-fit:contain;}.qty{color:#b45309;font-weight:800;margin-left:.15rem;}.mons{display:flex;gap:.5rem;flex-wrap:wrap;}.mon{text-align:center;border:1px solid #eee;border-radius:8px;padding:.5rem;min-width:90px;}.mon img.gif{height:52px;display:block;margin:0 auto .3rem;object-fit:contain;}.monname{font-size:.75rem;font-weight:700;}.mcharms{font-size:.65rem;margin-top:.2rem;}.charm-lbl{display:inline-block;padding:.1rem .3rem;border-radius:4px;font-size:.65rem;font-weight:700;margin:.1rem;background:#fef3c7;color:#92400e;}@media print{body{padding:.5rem;}}</style></head><body>
-<h1>⚔️ ${h.name}${h.vocation?` <span style="font-size:.85rem;font-weight:400;color:#666;">(${VOC_LABELS[h.vocation]})</span>`:''}</h1>
-<div class="sub">${p?`Perfil: ${p.name} · `:''}${new Date(h.createdAt).toLocaleDateString('pt-BR')}</div>
-${pot?`<div class="sec"><div class="lbl">Poções</div><div class="items">${pot}</div></div>`:''}
-${run?`<div class="sec"><div class="lbl">Runas</div><div class="items">${run}</div></div>`:''}
-${imb?`<div class="sec"><div class="lbl">Imbuements</div><div class="items">${imb}</div></div>`:''}
-${sp?`<div class="sec"><div class="lbl">Magias</div><div class="items">${sp}</div></div>`:''}
-${mons?`<div class="sec"><div class="lbl">Monstros</div><div class="mons">${mons}</div></div>`:''}
-</body></html>`;
-  const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); setTimeout(()=>w.print(),400);
+  // Open summary modal (renders same HTML as the summary view) then print
+  openSummary(huntId);
+  setTimeout(()=>window.print(), 700);
 }
 
 // ══════════════════════════════════════════════════════
