@@ -595,15 +595,15 @@ input[type=number]{-moz-appearance:textfield;}
   cursor:pointer;transition:border-color .15s;
 }
 .sum-mon-compact:hover{border-color:rgba(var(--accent-rgb),.45);}
-/* Header — row 1 */
-.sum-mon-head{display:grid;grid-template-columns:1fr 1fr;gap:.42rem;align-items:center;padding:.48rem .6rem;background:linear-gradient(135deg,#1a1530,#221848);border-bottom:1px solid rgba(var(--accent-rgb),.13);}
-.sum-mon-head-left{display:flex;align-items:center;gap:.42rem;min-width:0;}
-.sum-mon-c-gif{width:44px;height:44px;border-radius:8px;background:#0a0820;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+/* Header — row 1: 55% left (gif+nome) / 45% right (charms) */
+.sum-mon-head{display:grid;grid-template-columns:1.2fr 1fr;gap:.38rem;align-items:center;padding:.45rem .55rem;background:linear-gradient(135deg,#1a1530,#221848);border-bottom:1px solid rgba(var(--accent-rgb),.13);}
+.sum-mon-head-left{display:flex;align-items:center;gap:.38rem;min-width:0;}
+.sum-mon-c-gif{width:40px;height:40px;border-radius:7px;background:#0a0820;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
 .sum-mon-c-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
 .sum-mon-c-info{flex:1;min-width:0;}
-.sum-mon-c-name-row{display:flex;align-items:center;gap:.3rem;}
-.sum-mon-c-name{font-size:.85rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;}
-.sum-mon-c-link{font-size:.6rem;color:var(--gold);opacity:.75;text-decoration:none;display:block;margin-top:.06rem;font-weight:700;}
+.sum-mon-c-name-row{display:flex;align-items:center;gap:.28rem;}
+.sum-mon-c-name{font-size:.78rem;font-weight:800;line-height:1.2;flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.sum-mon-c-link{font-size:.58rem;color:var(--gold);opacity:.7;text-decoration:none;display:block;margin-top:.06rem;font-weight:700;}
 /* Body: display:contents makes .sum-mon-sec direct grid items (rows 2 & 3) */
 .sum-mon-body{display:contents;}
 /* Sections — rows 2 & 3, all aligned across siblings */
@@ -613,14 +613,13 @@ input[type=number]{-moz-appearance:textfield;}
 .sum-mon-sec .res-badge{padding:.14rem .3rem;font-size:.66rem;border-radius:5px;border-width:1px;}
 .sum-mon-sec .res-icon{width:13px;height:13px;}
 /* Charm pair — always 2 boxes side by side */
-.sum-charm-pair{display:grid;grid-template-columns:1fr 1fr;gap:.2rem;}
-.sum-charm-box{display:flex;align-items:center;gap:.25rem;padding:.26rem .35rem;border-radius:7px;font-size:.67rem;font-weight:700;min-height:28px;}
+.sum-charm-pair{display:flex;flex-direction:column;gap:.16rem;}
+.sum-charm-box{display:flex;align-items:center;gap:.22rem;padding:.2rem .28rem;border-radius:6px;font-size:.66rem;font-weight:700;min-height:24px;overflow:hidden;}
 .sum-charm-box.major{background:rgba(var(--accent-rgb),.12);border:1.5px solid rgba(var(--accent-rgb),.3);color:var(--gold);}
 .sum-charm-box.minor{background:rgba(139,92,246,.12);border:1.5px solid rgba(139,92,246,.28);color:#c4b5fd;}
-.sum-charm-box.empty{background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.08);color:var(--t2);justify-content:center;font-style:italic;font-size:.6rem;font-weight:400;}
-.sum-charm-box img{width:20px;height:20px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
-.sum-charm-box .chb-sub{font-size:.46rem;font-weight:900;text-transform:uppercase;letter-spacing:.3px;opacity:.55;display:block;line-height:1;}
-.sum-charm-box .chb-name{display:block;line-height:1.2;}
+.sum-charm-box.empty{background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.08);color:var(--t2);justify-content:center;font-style:italic;font-size:.55rem;font-weight:400;}
+.sum-charm-box img{width:17px;height:17px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-charm-box .chb-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.66rem;line-height:1;}
 /* Section separator (Fraquezas / Dano) */
 /* Copy button — inline next to monster name */
 .sum-mon-copy{width:18px;height:18px;border-radius:4px;border:none;background:rgba(255,255,255,.07);color:var(--t2);font-size:.56rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;}
@@ -3999,11 +3998,11 @@ function buildSummaryHTML(h){
       const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
       // Charm boxes — always 2, show placeholder if empty
       const majBox=m.majorCharm
-        ?`<div class="sum-charm-box major"><img src="${m.majorCharm.img}" alt="" onerror="this.style.display='none'"><div><span class="chb-sub">Major</span><span class="chb-name">${m.majorCharm.name}</span></div></div>`
-        :`<div class="sum-charm-box empty">— sem major —</div>`;
+        ?`<div class="sum-charm-box major"><img src="${m.majorCharm.img}" alt="" onerror="this.style.display='none'"><span class="chb-name">${m.majorCharm.name}</span></div>`
+        :`<div class="sum-charm-box empty">— major</div>`;
       const minBox=m.minorCharm
-        ?`<div class="sum-charm-box minor"><img src="${m.minorCharm.img}" alt="" onerror="this.style.display='none'"><div><span class="chb-sub">Minor</span><span class="chb-name">${m.minorCharm.name}</span></div></div>`
-        :`<div class="sum-charm-box empty">— sem minor —</div>`;
+        ?`<div class="sum-charm-box minor"><img src="${m.minorCharm.img}" alt="" onerror="this.style.display='none'"><span class="chb-name">${m.minorCharm.name}</span></div>`
+        :`<div class="sum-charm-box empty">— minor</div>`;
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
       const ab=_renderCombatSection(m,false);
       html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;">
