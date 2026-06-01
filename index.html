@@ -581,11 +581,21 @@ input[type=number]{-moz-appearance:textfield;}
 .mon-mini-charm{display:flex;align-items:center;gap:.2rem;font-size:.65rem;font-weight:600;padding:.08rem .28rem;border-radius:5px;margin-bottom:.12rem;justify-content:center;}
 
 /* ── Summary monsters compact grid ── */
-.sum-mon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.48rem;}
+/* ── Monster grid: 3 col, subgrid rows for alignment ── */
+.sum-mon-grid{display:grid;grid-template-columns:repeat(3,1fr);column-gap:.48rem;row-gap:0;}
 @media(max-width:780px){.sum-mon-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.sum-mon-grid{grid-template-columns:1fr;}}
-/* ── Monster card — new layout ── */
-.sum-mon-compact{background:var(--c2);border:1px solid var(--c4);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;}
+/* Each card spans 3 implicit rows in parent, subgrid syncs heights across the row */
+.sum-mon-compact{
+  display:grid;
+  grid-row:span 3;
+  grid-template-rows:subgrid;
+  background:var(--c2);border:1px solid var(--c4);border-radius:10px;overflow:hidden;
+  margin-bottom:.48rem; /* vertical gap between card rows */
+  cursor:pointer;transition:border-color .15s;
+}
+.sum-mon-compact:hover{border-color:rgba(var(--accent-rgb),.45);}
+/* Header — row 1 */
 .sum-mon-head{display:grid;grid-template-columns:1fr 1fr;gap:.42rem;align-items:center;padding:.48rem .6rem;background:linear-gradient(135deg,#1a1530,#221848);border-bottom:1px solid rgba(var(--accent-rgb),.13);}
 .sum-mon-head-left{display:flex;align-items:center;gap:.42rem;min-width:0;}
 .sum-mon-c-gif{width:44px;height:44px;border-radius:8px;background:#0a0820;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
@@ -594,9 +604,10 @@ input[type=number]{-moz-appearance:textfield;}
 .sum-mon-c-name-row{display:flex;align-items:center;gap:.3rem;}
 .sum-mon-c-name{font-size:.85rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;}
 .sum-mon-c-link{font-size:.6rem;color:var(--gold);opacity:.75;text-decoration:none;display:block;margin-top:.06rem;font-weight:700;}
-.sum-mon-body{display:flex;flex-direction:column;}
-.sum-mon-sec{padding:.34rem .6rem;}
-.sum-mon-sec+.sum-mon-sec{border-top:1px solid rgba(255,255,255,.04);}
+/* Body: display:contents makes .sum-mon-sec direct grid items (rows 2 & 3) */
+.sum-mon-body{display:contents;}
+/* Sections — rows 2 & 3, all aligned across siblings */
+.sum-mon-sec{padding:.34rem .6rem;border-top:1px solid rgba(255,255,255,.042);}
 .sum-mon-sec-lbl{font-size:.5rem;font-weight:900;text-transform:uppercase;letter-spacing:.8px;color:var(--t2);margin-bottom:.22rem;display:flex;align-items:center;gap:.2rem;}
 .sum-mon-sec .res-grid{display:flex;flex-wrap:wrap;gap:.16rem;margin:0;}
 .sum-mon-sec .res-badge{padding:.14rem .3rem;font-size:.66rem;border-radius:5px;border-width:1px;}
@@ -4010,8 +4021,14 @@ function buildSummaryHTML(h){
           <div class="sum-charm-pair">${majBox}${minBox}</div>
         </div>
         <div class="sum-mon-body">
-          ${res?`<div class="sum-mon-sec"><div class="sum-mon-sec-lbl">⚡ Fraquezas</div>${res}</div>`:''}
-          ${ab?`<div class="sum-mon-sec"><div class="sum-mon-sec-lbl">⚔️ Dano Aplicado</div>${ab}</div>`:''}
+          <div class="sum-mon-sec">
+            <div class="sum-mon-sec-lbl">⚡ Fraquezas</div>
+            ${res||'<span style="font-size:.62rem;color:var(--t2);font-style:italic;">— sem dados —</span>'}
+          </div>
+          <div class="sum-mon-sec">
+            <div class="sum-mon-sec-lbl">⚔️ Dano Aplicado</div>
+            ${ab||'<span style="font-size:.62rem;color:var(--t2);font-style:italic;">— sem dados —</span>'}
+          </div>
         </div>
       </div>`;
     });
