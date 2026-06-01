@@ -584,24 +584,35 @@ input[type=number]{-moz-appearance:textfield;}
 .sum-mon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.48rem;}
 @media(max-width:780px){.sum-mon-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.sum-mon-grid{grid-template-columns:1fr;}}
-.sum-mon-compact{background:var(--c3);border:1px solid var(--c4);border-radius:10px;padding:.6rem;display:flex;flex-direction:column;gap:0;align-items:stretch;position:relative;}
-.sum-mon-c-top{display:flex;align-items:center;gap:.45rem;margin-bottom:.45rem;}
-.sum-mon-c-gif{width:50px;height:50px;border-radius:8px;background:#0a0820;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+/* ── Monster card — new layout ── */
+.sum-mon-compact{background:var(--c2);border:1px solid var(--c4);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;}
+.sum-mon-head{display:grid;grid-template-columns:1fr 1fr;gap:.42rem;align-items:center;padding:.48rem .6rem;background:linear-gradient(135deg,#1a1530,#221848);border-bottom:1px solid rgba(var(--accent-rgb),.13);}
+.sum-mon-head-left{display:flex;align-items:center;gap:.42rem;min-width:0;}
+.sum-mon-c-gif{width:44px;height:44px;border-radius:8px;background:#0a0820;border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
 .sum-mon-c-gif img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;}
 .sum-mon-c-info{flex:1;min-width:0;}
-.sum-mon-c-name{font-size:.82rem;font-weight:700;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:1.4rem;}
-.sum-mon-c-link{font-size:.65rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:.1rem;}
+.sum-mon-c-name-row{display:flex;align-items:center;gap:.3rem;}
+.sum-mon-c-name{font-size:.85rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;}
+.sum-mon-c-link{font-size:.6rem;color:var(--gold);opacity:.75;text-decoration:none;display:block;margin-top:.06rem;font-weight:700;}
+.sum-mon-body{display:flex;flex-direction:column;}
+.sum-mon-sec{padding:.34rem .6rem;}
+.sum-mon-sec+.sum-mon-sec{border-top:1px solid rgba(255,255,255,.04);}
+.sum-mon-sec-lbl{font-size:.5rem;font-weight:900;text-transform:uppercase;letter-spacing:.8px;color:var(--t2);margin-bottom:.22rem;display:flex;align-items:center;gap:.2rem;}
+.sum-mon-sec .res-grid{display:flex;flex-wrap:wrap;gap:.16rem;margin:0;}
+.sum-mon-sec .res-badge{padding:.14rem .3rem;font-size:.66rem;border-radius:5px;border-width:1px;}
+.sum-mon-sec .res-icon{width:13px;height:13px;}
 /* Charm pair — always 2 boxes side by side */
-.sum-charm-pair{display:grid;grid-template-columns:1fr 1fr;gap:.28rem;margin-bottom:.35rem;}
-.sum-charm-box{display:flex;align-items:center;gap:.35rem;padding:.35rem .45rem;border-radius:8px;font-size:.73rem;font-weight:700;min-height:38px;}
-.sum-charm-box.major{background:rgba(var(--accent-rgb),.12);border:1.5px solid rgba(var(--accent-rgb),.32);color:var(--gold);}
-.sum-charm-box.minor{background:rgba(139,92,246,.12);border:1.5px solid rgba(139,92,246,.32);color:#c4b5fd;}
-.sum-charm-box.empty{background:var(--c2);border:1.5px dashed rgba(255,255,255,.08);color:var(--t2);justify-content:center;font-style:italic;font-size:.65rem;font-weight:400;}
-.sum-charm-box img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-charm-pair{display:grid;grid-template-columns:1fr 1fr;gap:.2rem;}
+.sum-charm-box{display:flex;align-items:center;gap:.25rem;padding:.26rem .35rem;border-radius:7px;font-size:.67rem;font-weight:700;min-height:28px;}
+.sum-charm-box.major{background:rgba(var(--accent-rgb),.12);border:1.5px solid rgba(var(--accent-rgb),.3);color:var(--gold);}
+.sum-charm-box.minor{background:rgba(139,92,246,.12);border:1.5px solid rgba(139,92,246,.28);color:#c4b5fd;}
+.sum-charm-box.empty{background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.08);color:var(--t2);justify-content:center;font-style:italic;font-size:.6rem;font-weight:400;}
+.sum-charm-box img{width:20px;height:20px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
+.sum-charm-box .chb-sub{font-size:.46rem;font-weight:900;text-transform:uppercase;letter-spacing:.3px;opacity:.55;display:block;line-height:1;}
+.sum-charm-box .chb-name{display:block;line-height:1.2;}
 /* Section separator (Fraquezas / Dano) */
-.sum-mon-sep{font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--t2);padding:.22rem 0 .28rem;border-top:1px solid rgba(255,255,255,.07);margin-top:.2rem;display:flex;align-items:center;gap:.3rem;}
-/* Copy button pinned top-right */
-.sum-mon-copy{position:absolute;top:.38rem;right:.38rem;width:22px;height:22px;border-radius:5px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:.68rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;z-index:2;}
+/* Copy button — inline next to monster name */
+.sum-mon-copy{width:18px;height:18px;border-radius:4px;border:none;background:rgba(255,255,255,.07);color:var(--t2);font-size:.56rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;}
 .sum-mon-copy:hover{background:rgba(var(--accent-rgb),.18);color:var(--gold);}
 /* Keep old names for compat */
 .sum-charm-sm{display:none;}
@@ -638,9 +649,12 @@ input[type=number]{-moz-appearance:textfield;}
 .res-icon{width:15px;height:15px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;}
 .res-grid.res-sm .res-icon{width:12px;height:12px;}
 /* Colors — vivid like TibiaWiki */
-.res-weak{background:rgba(22,163,74,.28);border-color:rgba(34,197,94,.7);color:#4ade80;}
-.res-res {background:rgba(194,65,12,.28);border-color:rgba(251,146,60,.7);color:#fdba74;}
-.res-imm {background:rgba(185,28,28,.3);border-color:rgba(239,68,68,.75);color:#fca5a5;}
+.res-sw  {background:rgba(52,211,153,.17);border-color:rgba(52,211,153,.48);color:#34d399;}   /* ≥110% fraqueza forte */
+.res-w   {background:rgba(134,239,172,.11);border-color:rgba(134,239,172,.35);color:#86efac;}  /* 101-109% fraqueza leve */
+.res-weak{background:rgba(52,211,153,.17);border-color:rgba(52,211,153,.48);color:#34d399;}   /* alias */
+.res-res {background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.38);color:#fbbf24;}   /* 50-99% resistência */
+.res-sr  {background:rgba(251,146,60,.13);border-color:rgba(251,146,60,.4);color:#fb923c;}    /* <50% resistência forte */
+.res-imm {background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);color:var(--t2);font-style:italic;} /* 0% imune */
 .res-neu {background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.13);color:#64748b;}
 
 /* ── Delete profile modal phrase input ── */
@@ -1474,8 +1488,10 @@ function _elemIconHtml(e){
 }
 function _resCls(pct){
   if(pct===0)   return 'res-imm';
-  if(pct<100)   return 'res-res';
-  return 'res-weak'; // >100
+  if(pct<50)    return 'res-sr';   // strong resist
+  if(pct<100)   return 'res-res';  // resist
+  if(pct<110)   return 'res-w';    // slight weak
+  return 'res-sw';                  // strong weak ≥110%
 }
 // Build resistance grid — mostra só >100% (fraco) e <100% (resistente/imune), ignora 100% (neutro)
 // sorted: mais fraco primeiro (esq), mais resistente/imune por último (dir)
@@ -3968,26 +3984,35 @@ function buildSummaryHTML(h){
     html+=`<div class="sum-sec"><div class="sum-sec-lbl">🐉 Monstros (${h.monsters.length})${hasLoot?` <span style="font-weight:400;color:var(--t2);text-transform:none;letter-spacing:0;font-size:.65rem;">clique para filtrar loot</span>`:''}</div><div class="sum-mon-grid">`;
     h.monsters.forEach(m=>{
       const safeN=m.name.replace(/'/g,"\\'");
-      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.8rem;opacity:.35;">🐉</span>';
+      const gif=m.gifUrl?`<img src="${m.gifUrl}" alt="${m.name}" style="max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;">`:'<span style="font-size:1.6rem;opacity:.35;">🐉</span>';
       const wl=m.wikiUrl?`<a class="sum-mon-c-link" href="${m.wikiUrl}" target="_blank">📖 TibiaWiki</a>`:'';
       // Charm boxes — always 2, show placeholder if empty
       const majBox=m.majorCharm
-        ?`<div class="sum-charm-box major"><img src="${m.majorCharm.img}" alt=""><span>${m.majorCharm.name}</span></div>`
-        :`<div class="sum-charm-box empty">— major</div>`;
+        ?`<div class="sum-charm-box major"><img src="${m.majorCharm.img}" alt="" onerror="this.style.display='none'"><div><span class="chb-sub">Major</span><span class="chb-name">${m.majorCharm.name}</span></div></div>`
+        :`<div class="sum-charm-box empty">— sem major —</div>`;
       const minBox=m.minorCharm
-        ?`<div class="sum-charm-box minor"><img src="${m.minorCharm.img}" alt=""><span>${m.minorCharm.name}</span></div>`
-        :`<div class="sum-charm-box empty">— minor</div>`;
+        ?`<div class="sum-charm-box minor"><img src="${m.minorCharm.img}" alt="" onerror="this.style.display='none'"><div><span class="chb-sub">Minor</span><span class="chb-name">${m.minorCharm.name}</span></div></div>`
+        :`<div class="sum-charm-box empty">— sem minor —</div>`;
       const res=m.resistances?buildResistRow(m.resistances,false,true):'';
       const ab=_renderCombatSection(m,false);
       html+=`<div class="sum-mon-compact" data-sum-mon="${m.name}" onclick="window._summMonFilter('${safeN}')" style="cursor:pointer;">
-        <button class="sum-mon-copy" onclick="event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button>
-        <div class="sum-mon-c-top">
-          <div class="sum-mon-c-gif">${gif}</div>
-          <div class="sum-mon-c-info"><div class="sum-mon-c-name">${m.name}</div>${wl}</div>
+        <div class="sum-mon-head">
+          <div class="sum-mon-head-left">
+            <div class="sum-mon-c-gif">${gif}</div>
+            <div class="sum-mon-c-info">
+              <div class="sum-mon-c-name-row">
+                <span class="sum-mon-c-name">${m.name}</span>
+                <button class="sum-mon-copy" onclick="event.stopPropagation();_copyMon('${m.name.replace(/'/g,"\\'")}')">📋</button>
+              </div>
+              ${wl}
+            </div>
+          </div>
+          <div class="sum-charm-pair">${majBox}${minBox}</div>
         </div>
-        <div class="sum-charm-pair">${majBox}${minBox}</div>
-        ${res?`<div class="sum-mon-sep">⚡ Fraquezas</div>${res}`:''}
-        ${ab?`<div class="sum-mon-sep">⚔️ Dano</div>${ab}`:''}
+        <div class="sum-mon-body">
+          ${res?`<div class="sum-mon-sec"><div class="sum-mon-sec-lbl">⚡ Fraquezas</div>${res}</div>`:''}
+          ${ab?`<div class="sum-mon-sec"><div class="sum-mon-sec-lbl">⚔️ Dano Aplicado</div>${ab}</div>`:''}
+        </div>
       </div>`;
     });
     html+='</div></div>';
