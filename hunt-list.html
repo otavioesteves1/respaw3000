@@ -560,11 +560,10 @@ input[type=number]{-moz-appearance:textfield;}
 .hcard-pv-div{width:1px;height:28px;background:rgba(255,255,255,.13);margin:0 .05rem;flex-shrink:0;}
 .hcard-pv-more{font-size:.75rem;font-weight:800;color:var(--t1);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.2rem .45rem;flex-shrink:0;}
 .hunt-layout{display:flex;gap:1.25rem;align-items:flex-start;}
-.hunt-portrait{flex-shrink:0;width:162px;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:sticky;top:74px;align-self:flex-start;min-height:calc(100vh - 90px);padding-top:55px;}
-.hunt-portrait-card{background:var(--c2);border:1.5px solid rgba(var(--accent-rgb),.28);border-radius:14px;padding:.75rem .6rem .7rem;display:flex;flex-direction:column;align-items:center;gap:.45rem;width:100%;box-shadow:0 4px 18px rgba(0,0,0,.35);position:relative;overflow:visible;padding-top:88px;}
-/* GIF floating above card */
-.hp-gif-wrap{position:absolute;top:-54px;left:50%;transform:translateX(-50%);z-index:3;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;}
-.hunt-portrait-img{width:auto;max-width:148px;max-height:155px;object-fit:contain;image-rendering:pixelated;display:block;filter:drop-shadow(0 6px 18px rgba(0,0,0,.65));}
+.hunt-portrait{flex-shrink:0;width:158px;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:sticky;top:74px;align-self:flex-start;min-height:calc(100vh - 90px);}
+.hunt-portrait-card{background:var(--c2);border:1.5px solid rgba(var(--accent-rgb),.28);border-radius:14px;padding:.7rem .6rem .65rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;width:100%;box-shadow:0 4px 18px rgba(0,0,0,.35);}
+.hp-gif-wrap{display:contents;}
+.hunt-portrait-img{width:auto;max-width:100%;max-height:148px;border-radius:8px;object-fit:contain;image-rendering:pixelated;display:block;margin:0 auto;}
 .hunt-portrait-edit-btn{width:100%;padding:.3rem;border-radius:7px;border:1px solid var(--c4);background:none;color:var(--t1);font-size:.65rem;font-weight:600;cursor:pointer;transition:all .12s;margin-top:.2rem;text-align:center;}
 .hunt-portrait-edit-btn:hover{border-color:var(--gold);color:var(--gold);}
 .hunt-portrait-name{font-size:.75rem;font-weight:700;color:var(--t0);text-align:center;word-break:break-word;width:100%;}
@@ -2327,8 +2326,8 @@ function renderProfiles(){
         <button class="lv-hist-btn" onclick="openLvHist()" style="margin-bottom:.1rem;">📋 Histórico / adicionar data</button>
         <button class="lv-hist-btn" onclick="openLvDash()" style="border-style:solid;border-color:rgba(var(--accent-rgb),.28);color:var(--t1);">📊 Dashboard de atividade</button>
       </div>`:'<button class="hunt-portrait-edit-btn" onclick="openProfileModal(\''+ap.id+'\')" style="margin-top:.35rem;">⚡ Definir Level</button>';
-    const gifHtml=ap.imgUrl?`<div class="hp-gif-wrap"><img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}"></div>`:'';
-    portrait.innerHTML=`<div class="hunt-portrait-card"${ap.imgUrl?'':' style="padding-top:.75rem;"'}>${gifHtml}<div class="hunt-portrait-name">${ap.name}</div><button class="hunt-portrait-edit-btn" onclick="openProfileModal('${ap.id}')">✏️ Editar Perfil</button>${lvWidget}</div>`;
+    const gifHtml=ap.imgUrl?`<img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}">`:'';
+    portrait.innerHTML=`<div class="hunt-portrait-card">${gifHtml}<div class="hunt-portrait-name">${ap.name}</div><button class="hunt-portrait-edit-btn" onclick="openProfileModal('${ap.id}')">✏️ Editar Perfil</button>${lvWidget}</div>`;
     portrait.style.display='';
   } else {
     portrait.innerHTML='';
