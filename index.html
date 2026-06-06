@@ -981,7 +981,7 @@ input[type=number]{-moz-appearance:textfield;}
 .imbu-picker-search:focus{border-color:var(--gold);}
 .imbu-cat-hdr{display:flex;align-items:center;gap:.4rem;margin:.75rem 0 .3rem;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;}
 .imbu-cat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.imbu-pick-item{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.5rem;padding:.55rem .6rem;border-radius:9px;cursor:pointer;transition:all .12s;border:1px solid transparent;margin-bottom:.2rem;}
+.imbu-pick-item{display:flex;align-items:center;gap:.5rem;padding:.5rem .6rem;border-radius:9px;cursor:pointer;transition:all .12s;border:1px solid transparent;margin-bottom:.2rem;}
 .imbu-pick-item:hover{background:var(--c3);border-color:var(--c4);}
 .imbu-pick-item.cur{background:rgba(var(--accent-rgb),.1);border-color:rgba(var(--accent-rgb),.3);}
 .imbu-pick-name{font-size:.86rem;font-weight:800;color:var(--t0);}
@@ -6152,6 +6152,34 @@ const IMBU_PIECES=[
   {id:'backpack',label:'Backpack',emoji:'🎒',  slots:1},
 ];
 
+// Imbuement icon URLs (tibiawiki.com.br Special:FilePath, confirmed EN+PT naming)
+const _IMBU_IMG={
+  epiphany:      'https://www.tibiawiki.com.br/wiki/Special:FilePath/Epiphany_(N%C3%ADvel_M%C3%A1gico).gif',
+  precision:     'https://www.tibiawiki.com.br/wiki/Special:FilePath/Precision_(Pontaria).gif',
+  bash:          'https://www.tibiawiki.com.br/wiki/Special:FilePath/Bash_(Clavas).gif',
+  chop:          'https://www.tibiawiki.com.br/wiki/Special:FilePath/Chop_(Machados).gif',
+  slash:         'https://www.tibiawiki.com.br/wiki/Special:FilePath/Slash_(Espadas).gif',
+  punch:         'https://www.tibiawiki.com.br/wiki/Special:FilePath/Punch_(Luta_sem_arma).gif',
+  blockade:      'https://www.tibiawiki.com.br/wiki/Special:FilePath/Blockade_(Escudos).gif',
+  electrify:     'https://www.tibiawiki.com.br/wiki/Special:FilePath/Electrify_(Dano_de_Energia).gif',
+  scorch:        'https://www.tibiawiki.com.br/wiki/Special:FilePath/Scorch_(Dano_de_Fogo).gif',
+  venom:         'https://www.tibiawiki.com.br/wiki/Special:FilePath/Venom_(Dano_de_Terra).gif',
+  frost:         'https://www.tibiawiki.com.br/wiki/Special:FilePath/Frost_(Dano_de_Gelo).gif',
+  reap:          'https://www.tibiawiki.com.br/wiki/Special:FilePath/Reap_(Dano_de_Morte).gif',
+  lich_shroud:   'https://www.tibiawiki.com.br/wiki/Special:FilePath/Lich_Shroud_(Prote%C3%A7%C3%A3o_de_Morte).gif',
+  snake_skin:    'https://www.tibiawiki.com.br/wiki/Special:FilePath/Snake_Skin_(Prote%C3%A7%C3%A3o_de_Terra).gif',
+  dragon_hide:   'https://www.tibiawiki.com.br/wiki/Special:FilePath/Dragon_Hide_(Prote%C3%A7%C3%A3o_de_Fogo).gif',
+  quara_scale:   'https://www.tibiawiki.com.br/wiki/Special:FilePath/Quara_Scale_(Prote%C3%A7%C3%A3o_de_Gelo).gif',
+  cloud_fabric:  'https://www.tibiawiki.com.br/wiki/Special:FilePath/Cloud_Fabric_(Prote%C3%A7%C3%A3o_de_Energia).gif',
+  demon_presence:'https://www.tibiawiki.com.br/wiki/Special:FilePath/Demon_Presence_(Prote%C3%A7%C3%A3o_Sagrada).gif',
+  vampirism:     'https://www.tibiawiki.com.br/wiki/Special:FilePath/Vampirism_(Roubo_de_Vida).gif',
+  void:          'https://www.tibiawiki.com.br/wiki/Special:FilePath/Void_(Roubo_de_Mana).gif',
+  strike:        'https://www.tibiawiki.com.br/wiki/Special:FilePath/Strike_(Dano_Cr%C3%ADtico).gif',
+  swiftness:     'https://www.tibiawiki.com.br/wiki/Special:FilePath/Swiftness_(Velocidade).gif',
+  vibrancy:      'https://www.tibiawiki.com.br/wiki/Special:FilePath/Vibrancy_(Anti-Paralisia).gif',
+  featherweight: 'https://www.tibiawiki.com.br/wiki/Special:FilePath/Featherweight_(Capacidade_de_Carga).gif',
+};
+
 const IMBU_DATA=[
   // ── Aumento de Skill ──
   {id:'epiphany',name:'Epiphany',cat:'skill',catLabel:'Aumento de Skill',effLabel:'Magic Level',
@@ -6399,6 +6427,13 @@ const IMBU_DATA=[
    ]},
 ];
 
+// ── Icon helper ──
+function _imbuImg(id,size=28){
+  const url=_IMBU_IMG[id];
+  if(!url) return '';
+  return `<img src="${url}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;image-rendering:pixelated;flex-shrink:0;" onerror="this.style.display='none'">`;
+}
+
 // ── Category helpers ──
 const _IMBU_CAT_COLOR={skill:'#60a5fa',elemdmg:'#fb923c',elemprot:'#34d399',support:'#c4b5fd'};
 const _IMBU_CAT_CLASS={skill:'cc-skill',elemdmg:'cc-elemdmg',elemprot:'cc-elemprot',support:'cc-support'};
@@ -6467,7 +6502,7 @@ function renderImbu(){
       return `<div class="imbu-slot-box filled" style="border-color:${_IMBU_CAT_COLOR[imbu.cat]||'var(--c4)'}22;">
         <div class="imbu-slot-cat-bar ${cb}"></div>
         <button class="imbu-slot-del" onclick="imbuClearSlot('${p.id}',${i})" title="Remover">✕</button>
-        <div class="imbu-slot-name">${imbu.name}</div>
+        <div style="display:flex;align-items:center;gap:.3rem;margin-bottom:.04rem;">${_imbuImg(imbu.id,22)}<div class="imbu-slot-name" style="margin-bottom:0;padding-right:1rem;">${imbu.name}</div></div>
         <div class="imbu-slot-eff ${cc}">${tier.eff}</div>
         <div class="imbu-slot-footer">
           ${imbu.tiers.map((t,ti)=>`<button class="imbu-tier-btn${ti===s.tier?' on':''}" onclick="imbuSetTier('${p.id}',${i},${ti})" title="${t.label}: ${t.eff}">${tierLabels[ti]||t.label.substring(0,3)}</button>`).join('')}
@@ -6566,7 +6601,7 @@ function _renderImbuShop(){
     const mats=Object.values(g.mats);
     html+=`<div class="imbu-shop-group">
       <div class="imbu-shop-group-hdr">
-        <span class="imbu-shop-group-dot" style="background:${catColor}"></span>
+        ${_imbuImg(g.imbu.id,20)}
         <span class="imbu-shop-group-name">${g.imbu.name}</span>
         <span class="imbu-shop-group-eff">${g.imbu.effLabel}</span>
         ${cnt>1?`<span class="imbu-shop-group-cnt">×${cnt}</span>`:''}
@@ -6653,6 +6688,7 @@ function _renderImbuPickerList(search,curId){
       const isCur=im.id===curId;
       const cc=_IMBU_CAT_CLASS[im.cat]||'';
       return `<div class="imbu-pick-item${isCur?' cur':''}" onclick="imbuPickSelect('${im.id}')">
+        ${_imbuImg(im.id,32)}
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;">
             <span class="imbu-pick-name">${im.name}</span>
