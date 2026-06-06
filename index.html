@@ -587,6 +587,36 @@ input[type=number]{-moz-appearance:textfield;}
 .lv-kpi-item.kpi-streak .lv-kpi-val{color:#fbbf24;}
 .lv-hist-btn{width:100%;padding:.24rem;border-radius:7px;border:1px dashed var(--c4);background:none;color:var(--t2);font-size:.58rem;font-weight:600;cursor:pointer;transition:all .12s;text-align:center;}
 .lv-hist-btn:hover{border-color:var(--gold);color:var(--gold);}
+/* ── Level Dashboard ── */
+.lv-dash-modal{background:var(--c1);border-radius:14px;border:1px solid var(--c4);width:95vw;max-width:680px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.65);}
+.lv-dash-body{flex:1;overflow-y:auto;padding:.8rem 1rem;display:flex;flex-direction:column;gap:1.1rem;}
+.lv-dash-section{display:flex;flex-direction:column;gap:.55rem;}
+.lv-dash-sec-lbl{font-size:.55rem;font-weight:900;text-transform:uppercase;letter-spacing:.8px;color:var(--t2);border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:.28rem;display:flex;align-items:center;gap:.3rem;}
+/* heatmap */
+.lv-hm-wrap{overflow-x:auto;padding-bottom:.4rem;}
+.lv-hm-cell{width:11px;height:11px;border-radius:2px;flex-shrink:0;transition:opacity .1s;}
+.lv-hm-cell:hover{opacity:.75;}
+.lv-hm-i0{background:rgba(255,255,255,.06);}
+.lv-hm-i1{background:rgba(167,139,250,.28);}
+.lv-hm-i2{background:rgba(167,139,250,.62);}
+.lv-hm-i3{background:rgba(167,139,250,1);}
+.lv-hm-fut{background:rgba(255,255,255,.02);}
+/* KPI cards */
+.lv-dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:.38rem;}
+.lv-dash-kpi{background:var(--c2);border:1px solid var(--c4);border-radius:10px;padding:.5rem .6rem;display:flex;flex-direction:column;gap:.05rem;}
+.lv-dash-kpi-ico{font-size:.85rem;line-height:1;margin-bottom:.08rem;}
+.lv-dash-kpi-val{font-size:1.35rem;font-weight:900;color:var(--gold);line-height:1.1;}
+.lv-dash-kpi-lbl{font-size:.48rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;}
+.lv-dash-kpi.kpi-green .lv-dash-kpi-val{color:#34d399;}
+.lv-dash-kpi.kpi-amber .lv-dash-kpi-val{color:#fbbf24;}
+.lv-dash-kpi.kpi-red .lv-dash-kpi-val{color:#f87171;}
+/* DOW bars */
+.lv-dow-row{display:flex;align-items:center;gap:.5rem;}
+.lv-dow-name{font-size:.68rem;font-weight:700;color:var(--t1);width:30px;flex-shrink:0;}
+.lv-dow-bar-bg{flex:1;height:9px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.lv-dow-bar-fill{height:100%;border-radius:4px;background:var(--gold-g);transition:width .4s ease;}
+.lv-dow-cnt{font-size:.65rem;font-weight:800;color:var(--t1);width:20px;text-align:right;flex-shrink:0;}
+.lv-dow-pct{font-size:.58rem;color:var(--t2);width:32px;text-align:right;flex-shrink:0;}
 /* ── Level History Modal ── */
 .lv-hist-modal{background:var(--c1);border-radius:14px;border:1px solid var(--c4);width:100%;max-width:400px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.65);}
 .lv-hist-head{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border-bottom:1px solid var(--c4);background:var(--c2);border-radius:14px 14px 0 0;flex-shrink:0;}
@@ -1369,6 +1399,17 @@ input[type=number]{-moz-appearance:textfield;}
       </div>
       <div id="lvHistList" class="lv-hist-log"></div>
     </div>
+  </div>
+</div>
+
+<!-- ══ LEVEL DASHBOARD MODAL ══ -->
+<div class="ov" id="lvDashOv" style="display:none" onclick="if(event.target===this)closeLvDash()">
+  <div class="lv-dash-modal" onclick="event.stopPropagation()">
+    <div class="lv-hist-head">
+      <span class="lv-hist-title">📊 Dashboard de Atividade</span>
+      <button class="lv-hist-close" onclick="closeLvDash()">✕</button>
+    </div>
+    <div class="lv-dash-body" id="lvDashContent"></div>
   </div>
 </div>
 
@@ -2281,7 +2322,8 @@ function renderProfiles(){
           <div class="lv-kpi-item kpi-streak"><div class="lv-kpi-val">${kpi.streak}</div><div class="lv-kpi-lbl">🔥 Streak</div></div>
           <div class="lv-kpi-item"><div class="lv-kpi-val">${kpi.total}</div><div class="lv-kpi-lbl">📅 Dias</div></div>
         </div>
-        <button class="lv-hist-btn" onclick="openLvHist()">📋 Ver histórico / adicionar data</button>
+        <button class="lv-hist-btn" onclick="openLvHist()" style="margin-bottom:.1rem;">📋 Histórico / adicionar data</button>
+        <button class="lv-hist-btn" onclick="openLvDash()" style="border-style:solid;border-color:rgba(var(--accent-rgb),.28);color:var(--t1);">📊 Dashboard de atividade</button>
       </div>`:'<button class="hunt-portrait-edit-btn" onclick="openProfileModal(\''+ap.id+'\')" style="margin-top:.35rem;">⚡ Definir Level</button>';
     portrait.innerHTML=`<div class="hunt-portrait-card">${ap.imgUrl?`<img class="hunt-portrait-img" src="${ap.imgUrl}" alt="${ap.name}">`:''}<div class="hunt-portrait-name">${ap.name}</div><button class="hunt-portrait-edit-btn" onclick="openProfileModal('${ap.id}')">✏️ Editar Perfil</button>${lvWidget}</div>`;
     portrait.style.display='';
@@ -4925,6 +4967,168 @@ function _renderLvHist(ap){
     });
   });
   el.innerHTML=html;
+}
+
+// ── Level Dashboard ──────────────────────────────────
+function openLvDash(){
+  const ap=state.profiles.find(x=>x.id===state.activeProfile); if(!ap||ap.level==null) return;
+  document.getElementById('lvDashContent').innerHTML=_buildDashHTML(ap);
+  document.getElementById('lvDashOv').style.display='flex';
+}
+function closeLvDash(){ document.getElementById('lvDashOv').style.display='none'; }
+
+function _buildDashHTML(p){
+  const log=(p.levelLog||[]).filter(e=>e.delta);
+  const upLog=log.filter(e=>e.delta>0);
+  if(!upLog.length) return `<div class="lv-empty">Nenhum registro de up ainda.<br><span style="font-size:.65rem;">Use os botões +/− no perfil para começar a rastrear.</span></div>`;
+
+  const MONTHS=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const MFULL=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const DOWS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+  // ── Build delta map ──
+  const dm={};
+  upLog.forEach(e=>{ dm[e.date]=(dm[e.date]||0)+e.delta; });
+
+  // ── Heatmap (last 52 weeks, Mon→Sun columns) ──
+  const today=new Date(); today.setHours(0,0,0,0);
+  const firstLogDate=new Date(upLog[upLog.length-1].date);
+  const hmStart=new Date(today);
+  // Go back to Monday 51 weeks ago
+  const todayDow=(today.getDay()+6)%7; // Mon=0
+  hmStart.setDate(today.getDate()-todayDow-51*7);
+
+  const weeks=[];
+  let cur=new Date(hmStart);
+  while(cur<=today){
+    const week=[];
+    for(let d=0;d<7;d++){
+      const ds=cur.toISOString().slice(0,10);
+      week.push({ds,v:dm[ds]||0,past:cur<firstLogDate,future:cur>today});
+      cur.setDate(cur.getDate()+1);
+    }
+    weeks.push(week);
+  }
+
+  // Month labels
+  let mlHtml='<div style="display:flex;gap:2px;margin-left:28px;margin-bottom:3px;">';
+  let lastM=-1;
+  weeks.forEach(w=>{
+    const d=new Date(w[0].ds); const m=d.getMonth();
+    if(m!==lastM){lastM=m;mlHtml+=`<span style="font-size:.5rem;color:var(--t2);font-weight:700;width:13px;white-space:nowrap;overflow:visible;flex-shrink:0;">${MONTHS[m]}</span>`;}
+    else mlHtml+=`<span style="width:13px;flex-shrink:0;"></span>`;
+  });
+  mlHtml+='</div>';
+
+  const DOW_LABELS=['Seg','','Qua','','Sex','','Dom'];
+  let hmGridHtml=`<div style="display:flex;gap:2px;">`;
+  // DOW labels column
+  hmGridHtml+=`<div style="display:flex;flex-direction:column;gap:2px;margin-right:0;flex-shrink:0;">`;
+  DOW_LABELS.forEach(l=>hmGridHtml+=`<div style="height:11px;width:26px;font-size:.45rem;color:var(--t2);display:flex;align-items:center;justify-content:flex-end;padding-right:3px;">${l}</div>`);
+  hmGridHtml+='</div>';
+  // Weeks
+  weeks.forEach(w=>{
+    hmGridHtml+='<div style="display:flex;flex-direction:column;gap:2px;">';
+    w.forEach(cell=>{
+      if(cell.future||cell.past) {
+        hmGridHtml+=`<div class="lv-hm-cell lv-hm-${cell.future?'fut':'i0'}" style="opacity:${cell.past?'.15':'1'}"></div>`;
+      } else {
+        const v=cell.v;
+        const cl=v===0?'lv-hm-i0':v===1?'lv-hm-i1':v<=3?'lv-hm-i2':'lv-hm-i3';
+        hmGridHtml+=`<div class="lv-hm-cell ${cl}" title="${cell.ds}${v>0?': +'+v+' nível'+(v>1?'s':''):''}"></div>`;
+      }
+    });
+    hmGridHtml+='</div>';
+  });
+  hmGridHtml+='</div>';
+
+  const hmHtml=`<div class="lv-hm-wrap">${mlHtml}${hmGridHtml}
+    <div style="display:flex;align-items:center;gap:.35rem;margin-top:.45rem;justify-content:flex-end;">
+      <span style="font-size:.52rem;color:var(--t2);">Menos</span>
+      <div class="lv-hm-cell lv-hm-i0"></div><div class="lv-hm-cell lv-hm-i1"></div><div class="lv-hm-cell lv-hm-i2"></div><div class="lv-hm-cell lv-hm-i3"></div>
+      <span style="font-size:.52rem;color:var(--t2);">Mais</span>
+    </div>
+  </div>`;
+
+  // ── KPIs ──
+  const totalUp=upLog.reduce((s,e)=>s+e.delta,0);
+  // Best & current streak
+  const upDatesSet=new Set(upLog.map(e=>e.date));
+  let bestStreak=0,curStreak=0,tmpStreak=0;
+  const chkStart=new Date(firstLogDate),chkEnd=new Date(today);
+  let chkD=new Date(chkStart);
+  while(chkD<=chkEnd){
+    const ds=chkD.toISOString().slice(0,10);
+    if(upDatesSet.has(ds)){tmpStreak++;}
+    else tmpStreak=0;
+    if(tmpStreak>bestStreak) bestStreak=tmpStreak;
+    chkD.setDate(chkD.getDate()+1);
+  }
+  // Current streak (from today backwards)
+  chkD=new Date(today);
+  while(chkD>=chkStart){
+    const ds=chkD.toISOString().slice(0,10);
+    if(upDatesSet.has(ds)) curStreak++;
+    else break;
+    chkD.setDate(chkD.getDate()-1);
+  }
+  // Best month
+  const byMonth={};
+  upLog.forEach(e=>{const mk=e.date.slice(0,7);byMonth[mk]=(byMonth[mk]||0)+e.delta;});
+  const bestMonthEntry=Object.entries(byMonth).sort((a,b)=>b[1]-a[1])[0];
+  const bestMonthStr=bestMonthEntry?`${MFULL[parseInt(bestMonthEntry[0].split('-')[1])-1]} (${bestMonthEntry[1]})`:'—';
+  // Avg per week
+  const totalWeeks=Math.max(1,Math.ceil((today-firstLogDate)/(7*86400000)));
+  const avgWeek=(totalUp/totalWeeks).toFixed(1);
+
+  const kpisHtml=`<div class="lv-dash-kpis">
+    <div class="lv-dash-kpi kpi-green"><div class="lv-dash-kpi-ico">⚡</div><div class="lv-dash-kpi-val">${totalUp}</div><div class="lv-dash-kpi-lbl">Total de níveis</div></div>
+    <div class="lv-dash-kpi kpi-amber"><div class="lv-dash-kpi-ico">🔥</div><div class="lv-dash-kpi-val">${curStreak}</div><div class="lv-dash-kpi-lbl">Ofensiva atual</div></div>
+    <div class="lv-dash-kpi"><div class="lv-dash-kpi-ico">🏆</div><div class="lv-dash-kpi-val">${bestStreak}</div><div class="lv-dash-kpi-lbl">Recorde de ofensiva</div></div>
+    <div class="lv-dash-kpi"><div class="lv-dash-kpi-ico">📅</div><div class="lv-dash-kpi-val">${upDatesSet.size}</div><div class="lv-dash-kpi-lbl">Dias que upou</div></div>
+    <div class="lv-dash-kpi"><div class="lv-dash-kpi-ico">📈</div><div class="lv-dash-kpi-val">${avgWeek}</div><div class="lv-dash-kpi-lbl">Níveis / semana</div></div>
+    <div class="lv-dash-kpi"><div class="lv-dash-kpi-ico">🏅</div><div class="lv-dash-kpi-val" style="font-size:.82rem;line-height:1.2;">${bestMonthStr}</div><div class="lv-dash-kpi-lbl">Melhor mês</div></div>
+  </div>`;
+
+  // ── Day of week analysis ──
+  const dowUp=[0,0,0,0,0,0,0]; // Sun..Sat ups
+  const dowTotal=[0,0,0,0,0,0,0]; // total days of that DOW in range
+  let dIt=new Date(firstLogDate);
+  while(dIt<=today){
+    dowTotal[dIt.getDay()]++;
+    const ds=dIt.toISOString().slice(0,10);
+    if(upDatesSet.has(ds)) dowUp[dIt.getDay()]++;
+    dIt.setDate(dIt.getDate()+1);
+  }
+  const maxUp=Math.max(1,...dowUp);
+  const dowHtml=`<div style="display:flex;flex-direction:column;gap:.32rem;">
+    ${DOWS.map((name,i)=>{
+      const pct=dowTotal[i]>0?Math.round(dowUp[i]/dowTotal[i]*100):0;
+      const isBest=dowUp[i]===Math.max(...dowUp)&&dowUp[i]>0;
+      const isWorst=pct===Math.min(...dowUp.map((v,j)=>dowTotal[j]>0?Math.round(v/dowTotal[j]*100):100))&&dowTotal[i]>0;
+      return `<div class="lv-dow-row">
+        <div class="lv-dow-name" style="${isBest?'color:#34d399;':isWorst?'color:#f87171;':''}">${name}${isBest?' 🔥':isWorst?' 😴':''}</div>
+        <div class="lv-dow-bar-bg"><div class="lv-dow-bar-fill" style="width:${Math.round(dowUp[i]/maxUp*100)}%;background:${isBest?'linear-gradient(90deg,#34d399,#059669)':isWorst?'linear-gradient(90deg,#f87171,#dc2626)':'var(--gold-g)'};"></div></div>
+        <div class="lv-dow-cnt">${dowUp[i]}</div>
+        <div class="lv-dow-pct">${pct}%</div>
+      </div>`;
+    }).join('')}
+    <div style="font-size:.55rem;color:var(--t2);margin-top:.15rem;">🔥 = dia mais produtivo &nbsp;·&nbsp; 😴 = dia com menos ups &nbsp;·&nbsp; % = taxa de sucesso</div>
+  </div>`;
+
+  return `
+    <div class="lv-dash-section">
+      <div class="lv-dash-sec-lbl">📆 Atividade — últimas 52 semanas</div>
+      ${hmHtml}
+    </div>
+    <div class="lv-dash-section">
+      <div class="lv-dash-sec-lbl">🎯 KPIs</div>
+      ${kpisHtml}
+    </div>
+    <div class="lv-dash-section">
+      <div class="lv-dash-sec-lbl">📅 Produtividade por dia da semana</div>
+      ${dowHtml}
+    </div>`;
 }
 
 // PRE-HUNT CHECKLIST
