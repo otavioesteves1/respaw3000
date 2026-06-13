@@ -563,7 +563,7 @@ input[type=number]{-moz-appearance:textfield;}
 .hunt-portrait{flex-shrink:0;width:158px;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:sticky;top:74px;align-self:flex-start;min-height:calc(100vh - 90px);}
 .hunt-portrait-card{background:var(--c2);border:1.5px solid rgba(var(--accent-rgb),.28);border-radius:14px;padding:.7rem .6rem .65rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;width:100%;box-shadow:0 4px 18px rgba(0,0,0,.35);}
 .hp-gif-wrap{display:contents;}
-.hunt-portrait-img{width:auto;max-width:100%;max-height:148px;border-radius:8px;object-fit:contain;image-rendering:pixelated;display:block;margin:0 auto;}
+.hunt-portrait-img{width:auto;max-width:100%;max-height:140px;border-radius:8px;object-fit:contain;image-rendering:pixelated;display:block;margin:0 auto;}
 .hunt-portrait-edit-btn{width:100%;padding:.3rem;border-radius:7px;border:1px solid var(--c4);background:none;color:var(--t1);font-size:.65rem;font-weight:600;cursor:pointer;transition:all .12s;margin-top:.2rem;text-align:center;}
 .hunt-portrait-edit-btn:hover{border-color:var(--gold);color:var(--gold);}
 .hunt-portrait-name{font-size:.75rem;font-weight:700;color:var(--t0);text-align:center;word-break:break-word;width:100%;}
@@ -1269,11 +1269,20 @@ input[type=number]{-moz-appearance:textfield;}
           <div id="potSel" style="margin-bottom:.35rem;"></div>
           <div class="charm-grid" id="potGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
         </div>
-        <!-- BOX 3: Skill Potions -->
-        <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc(90vh - 180px);">
-          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">⚗️ Skill Potions</div>
-          <div id="skillPotSel" style="margin-bottom:.35rem;"></div>
-          <div class="charm-grid" id="skillPotGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
+        <!-- BOX 3: Skill Potions (top) + Foods (bottom) — column split vertically -->
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <!-- 3a: Skill Potions -->
+          <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc((90vh - 200px) * 0.42);min-height:0;">
+            <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">⚗️ Skill Potions</div>
+            <div id="skillPotSel" style="margin-bottom:.35rem;"></div>
+            <div class="charm-grid" id="skillPotGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
+          </div>
+          <!-- 3b: Foods -->
+          <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc((90vh - 200px) * 0.58);min-height:0;">
+            <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">🍖 Foods <span style="font-weight:400;color:var(--t2);text-transform:none;letter-spacing:0;font-size:.6rem;">efeitos especiais</span></div>
+            <div id="foodSel" style="margin-bottom:.35rem;"></div>
+            <div class="charm-grid" id="foodGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1322,6 +1331,7 @@ input[type=number]{-moz-appearance:textfield;}
       <span style="flex:1;font-size:.75rem;color:var(--t1);" id="wizPgLbl"></span>
       <button class="btn btn-o" onclick="closeWizard()">Cancelar</button>
       <button class="btn btn-g" id="wizNext" onclick="wizNext()">Próximo →</button>
+      <button class="btn btn-g" id="wizSave" onclick="saveHunt()" style="display:none;">✓ Atualizar</button>
     </div>
   </div>
 </div>
@@ -2047,6 +2057,47 @@ const SKILL_POTIONS = [
   {id:'bullseye',   name:'Bullseye Potion',   img:'https://tibia.fandom.com/wiki/Special:FilePath/Bullseye_Potion.gif',   voc:'Paladin'},
   {id:'mastermind', name:'Mastermind Potion', img:'https://tibia.fandom.com/wiki/Special:FilePath/Mastermind_Potion.gif', voc:'Druid / Sorcerer'},
 ];
+// ── Comidas com efeitos especiais (tibiawiki.com.br/wiki/Comidas — Categoria:Comidas Especiais) ──
+const FOODS = [
+  // Magic Level
+  {id:'terrorbird',   name:'Tropical Fried Terrorbird', sub:'+5 Magic Level · 1h',          img:'https://www.tibiawiki.com.br/images/0/02/Tropical_Fried_Terrorbird.gif'},
+  {id:'tiger',        name:'Tropical Marinated Tiger',  sub:'+3 Magic Level · 1h',          img:'https://www.tibiawiki.com.br/images/a/a9/Tropical_Marinated_Tiger.gif'},
+  // Melee
+  {id:'veggie_cass',  name:'Veggie Casserole',          sub:'+10 Axe/Club/Fist/Sword · 1h', img:'https://www.tibiawiki.com.br/images/d/d9/Veggie_Casserole.gif'},
+  {id:'zaoan',        name:'Zaoan Sauce',               sub:'+10 Fist Fighting · 1h',       img:'https://www.tibiawiki.com.br/images/e/e7/Zaoan_Sauce.gif'},
+  {id:'delicatessen', name:'Delicatessen Salad',        sub:'+3 Axe/Club/Sword · 1h',       img:'https://www.tibiawiki.com.br/images/1/13/Delicatessen_Salad.gif'},
+  // Distance
+  {id:'carrot_cake',  name:'Carrot Cake',               sub:'+10 Distance · 1h',            img:'https://www.tibiawiki.com.br/images/9/95/Carrot_Cake.gif'},
+  {id:'lemon_cup',    name:'Lemon Cupcake',             sub:'+10 Distance · 1h',            img:'https://www.tibiawiki.com.br/images/8/8f/Lemon_Cupcake.gif'},
+  {id:'carrot_pie',   name:'Carrot Pie',                sub:'+7 Distance · 1h',             img:'https://www.tibiawiki.com.br/images/8/88/Carrot_Pie.gif'},
+  // Shielding
+  {id:'dragon_wings', name:'Roasted Dragon Wings',      sub:'+10 Shielding · 1h',           img:'https://www.tibiawiki.com.br/images/e/ed/Roasted_Dragon_Wings.gif'},
+  {id:'wyvern_wings', name:'Roasted Wyvern Wings',      sub:'+7 Shielding · 1h',            img:'https://www.tibiawiki.com.br/images/2/2a/Roasted_Wyvern_Wings.gif'},
+  // Velocidade
+  {id:'jalapeno',     name:'Filled Jalapeño Peppers',   sub:'+100 velocidade · 1h',         img:'https://www.tibiawiki.com.br/images/f/f2/Filled_Jalape%C3%B1o_Peppers.gif'},
+  {id:'chilli',       name:'Chilli Con Carniphila',     sub:'+80 velocidade · 1h',          img:'https://www.tibiawiki.com.br/images/0/0f/Chilli_Con_Carniphila.gif'},
+  // Restaura Mana
+  {id:'blessed_steak',name:'Blessed Steak',             sub:'Enche toda a mana',            img:'https://www.tibiawiki.com.br/images/a/a2/Blessed_Steak.gif'},
+  {id:'blueberry_cup',name:'Blueberry Cupcake',         sub:'Enche toda a mana',            img:'https://www.tibiawiki.com.br/images/4/48/Blueberry_Cupcake.gif'},
+  {id:'consec_beef',  name:'Consecrated Beef',          sub:'Regenera 30% da mana máx.',    img:'https://www.tibiawiki.com.br/images/5/50/Consecrated_Beef.gif'},
+  // Restaura Vida
+  {id:'rotworm_stew', name:'Rotworm Stew',              sub:'Enche toda a vida',            img:'https://www.tibiawiki.com.br/images/7/7a/Rotworm_Stew.gif'},
+  {id:'strawberry_cup',name:'Strawberry Cupcake',       sub:'Enche toda a vida',            img:'https://www.tibiawiki.com.br/images/f/f0/Strawberry_Cupcake.gif'},
+  {id:'carrion_cass', name:'Carrion Casserole',         sub:'Regenera 30% da vida máx.',    img:'https://www.tibiawiki.com.br/images/9/92/Carrion_Casserole.gif'},
+  {id:'blackjack',    name:'Pot of Blackjack',          sub:'Cura 5.000 de vida',           img:'https://www.tibiawiki.com.br/images/1/1b/Pot_of_Blackjack.gif'},
+  {id:'blessed_acorn',name:'Blessed Acorn',             sub:'Regenera vida e mana',         img:'https://www.tibiawiki.com.br/images/2/2c/Blessed_Acorn.gif'},
+  // Utilidade
+  {id:'hydra_salad',  name:'Hydra Tongue Salad',        sub:'Cura condições negativas',     img:'https://www.tibiawiki.com.br/images/d/d3/Hydra_Tongue_Salad.gif'},
+  {id:'coconut_bake', name:'Coconut Shrimp Bake',       sub:'+ velocidade subaquática · 24h',img:'https://www.tibiawiki.com.br/images/d/d1/Coconut_Shrimp_Bake.gif'},
+  // Fishing
+  {id:'fishburger',   name:'Northern Fishburger',       sub:'+50 Fishing · 1h',             img:'https://www.tibiawiki.com.br/images/d/df/Northern_Fishburger.gif'},
+  {id:'salmon_filet', name:'Svargrond Salmon Filet',    sub:'+30 Fishing · 1h',             img:'https://www.tibiawiki.com.br/images/3/38/Svargrond_Salmon_Filet.gif'},
+  // Diversos
+  {id:'mangonaise',   name:'Sweet Mangonaise Elixir',   sub:'Cria 10 cópias do anel usado', img:'https://www.tibiawiki.com.br/images/f/f3/Sweet_Mangonaise_Elixir.gif'},
+  {id:'candy_ball',   name:'Demonic Candy Ball',        sub:'Efeitos aleatórios',           img:'https://www.tibiawiki.com.br/images/1/19/Demonic_Candy_Ball.gif'},
+  {id:'banana_shake', name:'Banana Chocolate Shake',    sub:'Deixa você feliz',             img:'https://www.tibiawiki.com.br/images/c/c7/Banana_Chocolate_Shake.gif'},
+  {id:'noodles',      name:'Overcooked Noodles',        sub:'Sem efeito',                   img:'https://www.tibiawiki.com.br/images/8/82/Overcooked_Noodles.gif'},
+];
 const RUNES = [
   {id:'sd',   name:'Sudden Death',        img:'https://static.wikia.nocookie.net/tibia/images/c/c2/Sudden_Death_Rune.gif/revision/latest?cb=20150720234440&path-prefix=en'},
   {id:'hmm',  name:'Heavy Magic Missile', img:'https://static.wikia.nocookie.net/tibia/images/6/69/Heavy_Magic_Missile_Rune.gif/revision/latest?cb=20150720234442&path-prefix=en'},
@@ -2165,7 +2216,7 @@ const SPELLS = [
 // ══════════════════════════════════════════════════════
 const KEY = 'respaw3000_v4';
 let state = { profiles:[], activeProfile:null, hunts:[], bestiary:[] };
-let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null, loot:[], _lootWeights:{} };
+let wiz = { step:1, editId:null, _editMonId:null, pots:[], runas:[], foods:[], imbu:[], spells:[], monsters:[], vocation:null, _gif:null, loot:[], _lootWeights:{} };
 let _activeTab = 'pot';
 
 // ══════════════════════════════════════════════════════
@@ -2484,6 +2535,70 @@ function syncPot(id,srcEl){
     if(ni&&ni!==srcEl) ni.value=v;
     if(sl&&sl!==srcEl) sl.value=Math.min(5000,v);
     const pct=Math.min(100,Math.round((v/5000)*100))+'%';
+    if(sl) sl.style.setProperty('--pct',pct);
+    if(isSl) srcEl.style.setProperty('--pct',pct);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// GRID: FOODS (comidas com efeitos especiais)
+// ══════════════════════════════════════════════════════
+function renderFoodGrid(){
+  const grid=document.getElementById('foodGrid'); if(!grid) return; grid.innerHTML='';
+  FOODS.forEach(p=>{
+    const sel=wiz.foods.find(x=>x.id===p.id);
+    const el=document.createElement('div'); el.className='charm-opt'+(sel?' on':'');
+    el.innerHTML=`<div class="charm-opt-img"><img src="${p.img}" alt="" onerror="this.style.opacity='0'"></div><div class="charm-opt-name">${p.name}</div><div class="charm-opt-sub">${p.sub}</div>`;
+    el.onclick=()=>toggleFood(p.id);
+    grid.appendChild(el);
+  });
+  renderFoodSel();
+}
+function toggleFood(id){
+  const p=FOODS.find(x=>x.id===id); if(!p) return;
+  const idx=wiz.foods.findIndex(x=>x.id===id);
+  if(idx>=0) wiz.foods.splice(idx,1); else wiz.foods.push({...p,qty:10});
+  renderFoodGrid();
+}
+function removeFood(id){
+  const idx=wiz.foods.findIndex(x=>x.id===id);
+  if(idx>=0){ wiz.foods.splice(idx,1); renderFoodGrid(); }
+}
+function renderFoodSel(){
+  const el=document.getElementById('foodSel'); if(!el) return; el.innerHTML='';
+  if(!wiz.foods.length) return;
+  wiz.foods.forEach(x=>{
+    const r=document.createElement('div'); r.className='sel-row';
+    r.innerHTML=`<div class="sel-icon" style="align-self:center;"><img src="${x.img}" alt=""></div>
+      <div style="flex:1;min-width:0;">
+        <div class="sel-name">${x.name}</div>
+        ${x.sub?`<div class="sel-sub" style="font-size:.62rem;color:var(--t2);">${x.sub}</div>`:''}
+        <div class="qty-row" style="margin-top:.3rem;">
+          <button class="qb" onclick="adjFood('${x.id}',-100)">−100</button>
+          <button class="qb main" onclick="adjFood('${x.id}',-1)">−</button>
+          <input class="qi" type="number" value="${x.qty}" min="0" oninput="syncFood('${x.id}',this)" onchange="syncFood('${x.id}',this)">
+          <button class="qb main" onclick="adjFood('${x.id}',1)">+</button>
+          <button class="qb" onclick="adjFood('${x.id}',100)">+100</button>
+        </div>
+        <input class="qty-slider" type="range" min="0" max="1000" step="10" value="${x.qty}" oninput="syncFood('${x.id}',this)" style="--pct:${Math.round((x.qty/1000)*100)}%">
+      </div>
+      <button class="sel-rm" onclick="removeFood('${x.id}')" title="Remover" style="align-self:center;">✕</button>`;
+    el.appendChild(r);
+  });
+}
+function adjFood(id,d){ const x=wiz.foods.find(i=>i.id===id); if(x) x.qty=Math.max(0,(x.qty||0)+d); renderFoodSel(); }
+function setFood(id,v){ const x=wiz.foods.find(i=>i.id===id); if(x) x.qty=Math.max(0,parseInt(v)||0); }
+function syncFood(id,srcEl){
+  const x=wiz.foods.find(i=>i.id===id); if(!x)return;
+  const isSl=srcEl.classList.contains('qty-slider');
+  const v=isSl?Math.min(1000,Math.max(0,parseInt(srcEl.value)||0)):Math.max(0,parseInt(srcEl.value)||0);
+  x.qty=v;
+  const row=srcEl.closest('.sel-row');
+  if(row){
+    const ni=row.querySelector('.qi'); const sl=row.querySelector('.qty-slider');
+    if(ni&&ni!==srcEl) ni.value=v;
+    if(sl&&sl!==srcEl) sl.value=Math.min(1000,v);
+    const pct=Math.min(100,Math.round((v/1000)*100))+'%';
     if(sl) sl.style.setProperty('--pct',pct);
     if(isSl) srcEl.style.setProperty('--pct',pct);
   }
@@ -3663,7 +3778,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_lootWeights:{},_charmSelMon:null,wheel:{slots:new Array(36).fill(0),link:''}};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],foods:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_lootWeights:{},_charmSelMon:null,wheel:{slots:new Array(36).fill(0),link:''}};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -3673,6 +3788,7 @@ function openWizard(editId=null){
       document.getElementById('wHuntName').value=h.name;
       wiz.pots=JSON.parse(JSON.stringify(h.pots||[]));
       wiz.runas=JSON.parse(JSON.stringify(h.runas||[]));
+      wiz.foods=JSON.parse(JSON.stringify(h.foods||[]));
       wiz.imbu=JSON.parse(JSON.stringify(h.imbu||[]));
       wiz.spells=JSON.parse(JSON.stringify(h.spells||[]));
       wiz.monsters=JSON.parse(JSON.stringify(h.monsters||[]));
@@ -3699,7 +3815,21 @@ function setStep(n){
     const d=document.getElementById('wd'+i); if(d){ d.classList.toggle('on',i===n); d.classList.toggle('done',i<n); }
   });
   document.getElementById('wizBack').style.display=n>1?'':'none';
-  document.getElementById('wizNext').textContent=n===6?(wiz.editId?'✓ Atualizar':'✓ Criar Hunt'):'Próximo →';
+  // Botões de ação: ao EDITAR, "✓ Atualizar" fica disponível em todos os passos; "Próximo →" só navega.
+  const _isEdit=!!wiz.editId;
+  const _next=document.getElementById('wizNext');
+  const _save=document.getElementById('wizSave');
+  if(_isEdit){
+    if(_save) _save.style.display='';
+    _next.classList.remove('btn-g'); _next.classList.add('btn-o');
+    _next.textContent='Próximo →';
+    _next.style.display=n===6?'none':'';
+  } else {
+    if(_save) _save.style.display='none';
+    _next.classList.remove('btn-o'); _next.classList.add('btn-g');
+    _next.textContent=n===6?'✓ Criar Hunt':'Próximo →';
+    _next.style.display='';
+  }
   document.getElementById('wizPgLbl').textContent=`Passo ${n} de 6`;
   const bar=document.getElementById('wizNameBar');
   if(bar){
@@ -3709,7 +3839,7 @@ function setStep(n){
   }
   if(n===1){ /* unified input — no tab switch needed */ }
   if(n===2){ if(!wiz._charmSelMon&&wiz.monsters.length) wiz._charmSelMon=wiz.monsters[0].id; renderStep2Charms(); }
-  if(n===3){ renderRunaGrid(); renderPotGrid(); }
+  if(n===3){ renderRunaGrid(); renderPotGrid(); renderFoodGrid(); }
   if(n===4){
     renderImbuGrid();
     document.querySelectorAll('.voc-btn').forEach(b=>b.classList.remove('on'));
@@ -3994,6 +4124,7 @@ function saveHunt(){
     vocation:wiz.vocation,
     pots:wiz.pots.map(x=>({...x})),
     runas:wiz.runas.map(x=>({...x})),
+    foods:wiz.foods.map(x=>({...x})),
     imbu:wiz.imbu.map(x=>({...x})),
     spells:wiz.spells.map(x=>({...x})),
     monsters:wiz.monsters.map(x=>({...x})),
@@ -4059,7 +4190,7 @@ function openSummary(huntId){
 function closeSummary(){ document.getElementById('summaryOv').classList.remove('on'); }
 
 function buildSummaryHTML(h){
-  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length;
+  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.foods||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length;
   if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.95rem;">Hunt vazia — nenhum item configurado.</div>';
 
   // Item row: icon + name + optional sub + qty
@@ -4068,7 +4199,7 @@ function buildSummaryHTML(h){
   let html='';
 
   // ── TOP 2-COL: REFIL | MAGIAS + IMBU ──
-  const hasRefil=(h.pots||[]).length||(h.runas||[]).length;
+  const hasRefil=(h.pots||[]).length||(h.runas||[]).length||(h.foods||[]).length;
   const hasMagias=(h.spells||[]).length;
   const hasImbu=(h.imbu||[]).length;
   if(hasRefil||hasMagias||hasImbu){
@@ -4080,6 +4211,11 @@ function buildSummaryHTML(h){
       (h.pots||[]).forEach(x=>{ html+=itm(x); });
       (h.runas||[]).forEach(x=>{ html+=itm(x); });
       html+='</div></div>';
+      if((h.foods||[]).length){
+        html+=`<div class="sum-sec"><div class="sum-sec-lbl">🍖 Foods</div><div class="sum-items-col">`;
+        (h.foods||[]).forEach(x=>{ html+=itm(x); });
+        html+='</div></div>';
+      }
     } else { html+='<div></div>'; }
 
     // RIGHT — MAGIAS then IMBU
@@ -4254,14 +4390,14 @@ function renderHunts(){
       return (arr||[]).map(x=>{
         let img=x.img||x.imgUrl||'';
         if(!img&&x.id){
-          const src=SPELLS.find(s=>s.id===x.id)||SKILL_POTIONS.find(s=>s.id===x.id)||POTIONS.find(s=>s.id===x.id)||RUNES.find(s=>s.id===x.id);
+          const src=SPELLS.find(s=>s.id===x.id)||SKILL_POTIONS.find(s=>s.id===x.id)||POTIONS.find(s=>s.id===x.id)||RUNES.find(s=>s.id===x.id)||FOODS.find(s=>s.id===x.id);
           if(src)img=src.img||src.imgUrl||'';
         }
         return `<div class="hd-tag" style="background:${bg};border:1px solid ${bc};">${img?`<img src="${img}" alt="" style="width:22px;height:22px;object-fit:contain;image-rendering:pixelated;" onerror="this.style.display='none'">`:''} ${x.name}${hasQty&&x.qty!=null?`&nbsp;<strong class="hd-qty">&times;${x.qty}</strong>`:''}</div>`;
       }).join('');
     }
     // Refil: pots + runas merged
-    const refilTags=mkTags(h.pots,'rgba(16,185,129,.1)','rgba(16,185,129,.3)',true)+mkTags(h.runas,'rgba(59,130,246,.1)','rgba(59,130,246,.3)',true);
+    const refilTags=mkTags(h.pots,'rgba(16,185,129,.1)','rgba(16,185,129,.3)',true)+mkTags(h.runas,'rgba(59,130,246,.1)','rgba(59,130,246,.3)',true)+mkTags(h.foods,'rgba(249,115,22,.1)','rgba(249,115,22,.3)',true);
     const imbuTags =mkTags(h.imbu,  'rgba(139,92,246,.1)','rgba(139,92,246,.3)',false);
     const spellTags=mkTags(h.spells,'rgba(var(--accent-rgb),.1)','rgba(var(--accent-rgb),.3)',false);
 
@@ -4481,10 +4617,11 @@ function exportPrint(){
   hunts.forEach(h=>{
     const pot=(h.pots||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'💊'} ${x.name}<span class="qty">×${x.qty}</span></span>`).join('');
     const run=(h.runas||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'📜'} ${x.name}<span class="qty">×${x.qty}</span></span>`).join('');
+    const fd=(h.foods||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'🍖'} ${x.name}<span class="qty">×${x.qty}</span></span>`).join('');
     const imb=(h.imbu||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'🛡️'} ${x.name}</span>`).join('');
     const sp=(h.spells||[]).map(x=>`<span class="item">${x.img?`<img src="${x.img}" alt="">`:'✨'} ${x.name}</span>`).join('');
     const mons=(h.monsters||[]).map(m=>`<div class="mon">${m.gifUrl?`<img class="gif" src="${m.gifUrl}" alt="">`:'🐉'}<div class="monname">${m.name}</div><div class="mcharms">${m.majorCharm?`<span class="charm-lbl charm-maj">⭐ ${m.majorCharm.name}</span>`:''} ${m.minorCharm?`<span class="charm-lbl charm-min">🔮 ${m.minorCharm.name}</span>`:''}</div></div>`).join('');
-    html+=`<div class="hunt"><div class="hname">${h.name}${h.vocation?` <span style="font-size:.82rem;font-weight:400;color:#666;">(${VOC_LABELS[h.vocation]})</span>`:''}</div>${pot?`<div class="sec"><div class="lbl">Poções</div><div class="items">${pot}</div></div>`:''}${run?`<div class="sec"><div class="lbl">Runas</div><div class="items">${run}</div></div>`:''}${imb?`<div class="sec"><div class="lbl">Imbuements</div><div class="items">${imb}</div></div>`:''}${sp?`<div class="sec"><div class="lbl">Magias</div><div class="items">${sp}</div></div>`:''}${mons?`<div class="sec"><div class="lbl">Monstros</div><div class="mons">${mons}</div></div>`:''}</div>`;
+    html+=`<div class="hunt"><div class="hname">${h.name}${h.vocation?` <span style="font-size:.82rem;font-weight:400;color:#666;">(${VOC_LABELS[h.vocation]})</span>`:''}</div>${pot?`<div class="sec"><div class="lbl">Poções</div><div class="items">${pot}</div></div>`:''}${run?`<div class="sec"><div class="lbl">Runas</div><div class="items">${run}</div></div>`:''}${fd?`<div class="sec"><div class="lbl">Foods</div><div class="items">${fd}</div></div>`:''}${imb?`<div class="sec"><div class="lbl">Imbuements</div><div class="items">${imb}</div></div>`:''}${sp?`<div class="sec"><div class="lbl">Magias</div><div class="items">${sp}</div></div>`:''}${mons?`<div class="sec"><div class="lbl">Monstros</div><div class="mons">${mons}</div></div>`:''}</div>`;
   });
   html+='</body></html>';
   const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); setTimeout(()=>w.print(),500);
@@ -4816,6 +4953,7 @@ function copySummaryToClipboard(huntId){
   lines.push('');
   if((h.pots||[]).length){ lines.push('💊 *Poções*'); h.pots.forEach(x=>lines.push(`  • ${x.name} ×${x.qty}`)); lines.push(''); }
   if((h.runas||[]).length){ lines.push('📜 *Runas*'); h.runas.forEach(x=>lines.push(`  • ${x.name} ×${x.qty}`)); lines.push(''); }
+  if((h.foods||[]).length){ lines.push('🍖 *Foods*'); h.foods.forEach(x=>lines.push(`  • ${x.name} ×${x.qty}${x.sub?' — '+x.sub:''}`)); lines.push(''); }
   if((h.imbu||[]).length){
     lines.push('🛡️ *Imbuements*');
     const seen={}; (h.imbu||[]).forEach(x=>{seen[x.id]=(seen[x.id]||0)+1;});
@@ -5347,7 +5485,7 @@ document.addEventListener('keydown', e=>{
     closeBestiaryAdd(); return;
   }
   if(document.getElementById('wizOv')?.classList.contains('on')){
-    const hasData = wiz.monsters.length||wiz.pots.length||wiz.runas.length||wiz.imbu.length||wiz.spells.length;
+    const hasData = wiz.monsters.length||wiz.pots.length||wiz.runas.length||wiz.foods.length||wiz.imbu.length||wiz.spells.length;
     if(hasData){
       if(confirm('Tem dados não salvos. Fechar mesmo assim?')) closeWizard();
     } else {
