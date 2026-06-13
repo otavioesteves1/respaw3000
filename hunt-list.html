@@ -214,7 +214,7 @@ header{background:var(--hdr-bg);border-bottom:1px solid rgba(var(--accent-rgb),.
 .charm-opt-img{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .charm-opt-img img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;}
 .charm-opt-name{font-size:.65rem;font-weight:600;color:var(--t0);line-height:1.2;width:100%;}
-.charm-opt-sub{font-size:.65rem;color:var(--t1);line-height:1.2;width:100%;font-style:italic;}
+.charm-opt-sub{font-size:.6rem;color:var(--t1);line-height:1.25;width:100%;font-style:italic;overflow-wrap:anywhere;word-break:break-word;}
 .charm-opt.on .charm-opt-name{color:var(--gold);}
 .charm-none-btn{padding:.4rem .75rem;border-radius:8px;border:1.5px solid var(--c4);background:var(--c3);color:var(--t1);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;}
 .charm-none-btn.on{border-color:var(--c4);color:var(--t0);background:rgba(255,255,255,.06);}
@@ -1275,13 +1275,13 @@ input[type=number]{-moz-appearance:textfield;}
           <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc((90vh - 200px) * 0.42);min-height:0;">
             <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">⚗️ Skill Potions</div>
             <div id="skillPotSel" style="margin-bottom:.35rem;"></div>
-            <div class="charm-grid" id="skillPotGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
+            <div class="charm-grid" id="skillPotGrid" style="grid-template-columns:repeat(auto-fill,minmax(116px,1fr));overflow-y:auto;flex:1;"></div>
           </div>
           <!-- 3b: Foods -->
           <div style="background:var(--c2);border:1px solid var(--c4);border-radius:11px;padding:.7rem;display:flex;flex-direction:column;max-height:calc((90vh - 200px) * 0.58);min-height:0;">
             <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:.35rem;">🍖 Foods <span style="font-weight:400;color:var(--t2);text-transform:none;letter-spacing:0;font-size:.6rem;">efeitos especiais</span></div>
             <div id="foodSel" style="margin-bottom:.35rem;"></div>
-            <div class="charm-grid" id="foodGrid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr));overflow-y:auto;flex:1;"></div>
+            <div class="charm-grid" id="foodGrid" style="grid-template-columns:repeat(auto-fill,minmax(116px,1fr));overflow-y:auto;flex:1;"></div>
           </div>
         </div>
       </div>
