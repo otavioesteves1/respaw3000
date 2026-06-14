@@ -4135,7 +4135,13 @@ function saveHunt(){
     createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
     updatedAt:Date.now()
   };
-  if(isEdit){ const i=state.hunts.findIndex(h=>h.id===wiz.editId); if(i>=0) state.hunts[i]=hunt; }
+  if(isEdit){
+    const i=state.hunts.findIndex(h=>h.id===wiz.editId);
+    // Mescla os campos editados no wizard SOBRE a hunt existente, preservando
+    // todo o histórico/config que não vem do wizard: favorito (pinned),
+    // sessões/KPI (sessions), profileId original e quaisquer campos futuros.
+    if(i>=0) state.hunts[i]={...state.hunts[i], ...hunt, profileId:state.hunts[i].profileId||hunt.profileId};
+  }
   else state.hunts.unshift(hunt);
   closeWizard(); renderHunts();
   save(false);
