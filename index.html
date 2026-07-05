@@ -3791,7 +3791,7 @@ async function confirmImport(){
 // WIZARD
 // ══════════════════════════════════════════════════════
 function openWizard(editId=null){
-  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],foods:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_lootWeights:{},_charmSelMon:null,wheel:{slots:new Array(36).fill(0),link:''}};
+  wiz={step:1,editId,_editMonId:null,pots:[],runas:[],foods:[],imbu:[],spells:[],monsters:[],vocation:null,_gif:null,loot:[],_lootMonFilter:null,_lootPrices:{},_lootWeights:{},_charmSelMon:null,wheel:{slots:new Array(36).fill(0),link:'',preset:''}};
   _selMajor=null; _selMinor=null; _activeTab='pot';
   // Reset import state
   _importMonsters=[]; setMonMode('single');
@@ -3809,7 +3809,7 @@ function openWizard(editId=null){
       wiz.loot=JSON.parse(JSON.stringify(h.loot||[]));
       wiz._lootPrices=JSON.parse(JSON.stringify(h.lootPrices||{}));
       wiz._lootWeights=JSON.parse(JSON.stringify(h.lootWeights||{}));
-      const hw=h.wheel||{}; wiz.wheel={slots:hw.slots&&hw.slots.length===36?[...hw.slots]:new Array(36).fill(0),link:hw.link||''};
+      const hw=h.wheel||{}; wiz.wheel={slots:hw.slots&&hw.slots.length===36?[...hw.slots]:new Array(36).fill(0),link:hw.link||'',preset:hw.preset||''};
     }
   } else {
     document.getElementById('wHuntName').value='';
@@ -3917,9 +3917,10 @@ function renderWheelStep(){
   // vocação (o fallback mostrava as do Knight = dado errado), mostramos um aviso
   // honesto e mantemos level + link do planner (que são salvos na hunt).
   if(!WD_CONV_MAP[voc]){
-    if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36) wiz.wheel={slots:new Array(36).fill(0),link:''};
+    if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36) wiz.wheel={slots:new Array(36).fill(0),link:wiz.wheel?.link||'',preset:wiz.wheel?.preset||''};
     if(wiz.wheel._level===undefined) wiz.wheel._level=state.wheelLevel||0;
     window._whlLink=(v)=>{ wiz.wheel.link=v; };
+    window._whlPreset=(v)=>{ wiz.wheel.preset=v; };
     window._whlSetLevel=(v)=>{ const lv=Math.max(0,parseInt(v)||0); wiz.wheel._level=lv; state.wheelLevel=lv; save(false); };
     const _lv=wiz.wheel._level||0;
     el.innerHTML=`
@@ -3941,6 +3942,10 @@ function renderWheelStep(){
         <div style="font-size:.68rem;color:var(--t2);margin-top:.5rem;">✅ Confirmado até agora: avatar do ${VOC_LABELS[voc]||voc} = <b style="color:var(--gold);">Avatar of Balance</b>. As perks detalhadas entram assim que a fonte oficial publicar.</div>
       </div>
       <div>
+        <label style="font-size:.62rem;color:var(--gold);font-weight:700;display:block;margin-bottom:.15rem;">🎡 Código da Wheel <span style="color:var(--t2);font-weight:400;">(cole o código do jogo — dá pra importar de volta)</span></label>
+        <textarea class="wheel-link-inp wi" rows="2" oninput="window._whlPreset(this.value)" onkeydown="event.stopPropagation()" placeholder="Ex: S0PgQAAAAAAAAAZAAAZBlkSwAy..." style="resize:vertical;font-family:monospace;font-size:.66rem;word-break:break-all;line-height:1.4;">${(wiz.wheel.preset||'').replace(/</g,'&lt;')}</textarea>
+      </div>
+      <div>
         <label style="font-size:.6rem;color:var(--t1);display:block;margin-bottom:.15rem;">🔗 Link do planner <span style="color:var(--t2);">(opcional — cole seu planner externo)</span></label>
         <input class="wheel-link-inp wi" type="url" value="${(wiz.wheel.link||'').replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" onkeydown="event.stopPropagation()" placeholder="https://tibia-wheel.vercel.app/...">
       </div>
@@ -3949,7 +3954,7 @@ function renderWheelStep(){
   }
 
   if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36)
-    wiz.wheel={slots:new Array(36).fill(0),link:''};
+    wiz.wheel={slots:new Array(36).fill(0),link:wiz.wheel?.link||'',preset:wiz.wheel?.preset||''};
   if(wiz.wheel._level===undefined) wiz.wheel._level=state.wheelLevel||0;
   if(wiz.wheel._selSlot===undefined) wiz.wheel._selSlot=null;
   const slots=wiz.wheel.slots;
@@ -3961,6 +3966,7 @@ function renderWheelStep(){
 
   // ── Handlers ────────────────────────────────────────
   window._whlLink=(v)=>{ wiz.wheel.link=v; };
+  window._whlPreset=(v)=>{ wiz.wheel.preset=v; };
   window._whlReset=()=>{ wiz.wheel.slots=new Array(36).fill(0); wiz.wheel._selSlot=null; renderWheelStep(); };
   window._whlSetLevel=(v)=>{ const lv=Math.max(0,parseInt(v)||0); wiz.wheel._level=lv; state.wheelLevel=lv; save(false); renderWheelStep(); setTimeout(()=>{ const _li=document.getElementById('whlLevelInp'); if(_li){_li.focus();const l=_li.value.length;_li.setSelectionRange(l,l);} },0); };
   window._whlAdd=(i,delta)=>{
@@ -4124,6 +4130,10 @@ function renderWheelStep(){
       ${convHtml}
       ${revHtml}
       <div style="margin-top:.45rem;">
+        <label style="font-size:.62rem;color:var(--gold);font-weight:700;display:block;margin-bottom:.15rem;">🎡 Código da Wheel <span style="color:var(--t2);font-weight:400;">(cole o código do jogo — importa de volta)</span></label>
+        <textarea class="wheel-link-inp wi" rows="2" oninput="window._whlPreset(this.value)" onkeydown="event.stopPropagation()" placeholder="Ex: S0PgQAAAAAAAAAZAAAZBlkSwAy..." style="resize:vertical;font-family:monospace;font-size:.66rem;word-break:break-all;line-height:1.4;">${(wiz.wheel.preset||'').replace(/</g,'&lt;')}</textarea>
+      </div>
+      <div style="margin-top:.45rem;">
         <label style="font-size:.6rem;color:var(--t1);display:block;margin-bottom:.15rem;">🔗 Link do planner <span style="color:var(--t2);">(opcional)</span></label>
         <input class="wheel-link-inp wi" type="url" value="${(wiz.wheel.link||'').replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" onkeydown="event.stopPropagation()" placeholder="https://tibia-wheel.vercel.app/...">
       </div>
@@ -4181,7 +4191,7 @@ function saveHunt(){
     loot:wiz.loot.map(x=>({...x})),
     lootPrices:{...(wiz._lootPrices||{})},
     lootWeights:{...(wiz._lootWeights||{})},
-    wheel:{slots:[...(wiz.wheel?.slots||new Array(36).fill(0))],link:wiz.wheel?.link||''},
+    wheel:{slots:[...(wiz.wheel?.slots||new Array(36).fill(0))],link:wiz.wheel?.link||'',preset:wiz.wheel?.preset||''},
     createdAt:isEdit?(state.hunts.find(h=>h.id===wiz.editId)?.createdAt||Date.now()):Date.now(),
     updatedAt:Date.now()
   };
@@ -4246,7 +4256,9 @@ function openSummary(huntId){
 function closeSummary(){ document.getElementById('summaryOv').classList.remove('on'); }
 
 function buildSummaryHTML(h){
-  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.foods||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length;
+  const _wh0=h.wheel||{};
+  const _hasWheel=(_wh0.preset||'').trim()||(_wh0.link||'').trim()||(Array.isArray(_wh0.slots)&&_wh0.slots.some(s=>(s||0)>0));
+  const hasAny=(h.pots||[]).length||(h.runas||[]).length||(h.foods||[]).length||(h.imbu||[]).length||(h.spells||[]).length||(h.monsters||[]).length||(h.loot||[]).length||_hasWheel;
   if(!hasAny) return '<div style="color:var(--t1);text-align:center;padding:2rem 0;font-size:.95rem;">Hunt vazia — nenhum item configurado.</div>';
 
   // Item row: icon + name + optional sub + qty
@@ -4298,14 +4310,15 @@ function buildSummaryHTML(h){
     const wh=h.wheel||{};
     const wslots=Array.isArray(wh.slots)&&wh.slots.length===36?wh.slots:null;
     const hasLink=!!(wh.link||'').trim();
+    const hasPreset=!!(wh.preset||'').trim();
     if(wslots){
       const totalPts=wslots.reduce((a,b)=>a+(b||0),0);
       const revMap=h.vocation?WD_REV_MAP[h.vocation]:null;
       const domPts=[0,0,0,0];
       for(let i=0;i<36;i++) domPts[_wdDomain(i)]+=wslots[i]||0;
       const revTier=(d)=>domPts[d]>=500?3:domPts[d]>=250?2:domPts[d]>=100?1:0;
-      if(totalPts>0||hasLink){
-        html+=`<div class="sum-sec" style="margin-bottom:.55rem;"><div class="sum-sec-lbl">🔮 Wheel of Destiny <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${totalPts} pontos</span></div>`;
+      if(totalPts>0||hasLink||hasPreset){
+        html+=`<div class="sum-sec" style="margin-bottom:.55rem;"><div class="sum-sec-lbl">🔮 Wheel of Destiny <span style="font-weight:400;color:var(--t1);text-transform:none;letter-spacing:0;">${totalPts>0?totalPts+' pontos':(hasPreset?'código importável':'')}</span></div>`;
         // ── mini donut chart for domain distribution ──
         const miniSvg=(()=>{
           const tot=domPts.reduce((a,b)=>a+b,0);if(!tot)return '';
@@ -4332,6 +4345,16 @@ function buildSummaryHTML(h){
           html+=`</div>`;
         }
         if(hasLink) html+=`<a href="${wh.link}" target="_blank" style="font-size:.65rem;color:var(--blue);text-decoration:none;">🔗 Ver planner completo</a>`;
+        if(hasPreset){
+          const _pc=(wh.preset||'').trim();
+          html+=`<div style="margin-top:.4rem;">
+            <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem;">
+              <span style="font-size:.62rem;font-weight:700;color:var(--gold);">🎡 Código da Wheel</span>
+              <button class="btn btn-o btn-sm" style="padding:.12rem .5rem;font-size:.62rem;" onclick="copyWheelPreset('${h.id}')">📋 Copiar</button>
+            </div>
+            <div style="font-family:monospace;font-size:.62rem;color:var(--t0);background:var(--c3);border:1px solid var(--c4);border-radius:6px;padding:.4rem .5rem;word-break:break-all;line-height:1.45;">${_pc.replace(/</g,'&lt;')}</div>
+          </div>`;
+        }
         html+=`</div>`;
       }
     }
@@ -5000,6 +5023,13 @@ function buildPreviewStrip(h, sessCount){
 // ══════════════════════════════════════════════════════
 // CLIPBOARD COPY
 // ══════════════════════════════════════════════════════
+function copyWheelPreset(huntId){
+  const h=state.hunts.find(x=>x.id===huntId); if(!h)return;
+  const code=((h.wheel&&h.wheel.preset)||'').trim(); if(!code){toast('⚠️ Sem código da Wheel');return;}
+  navigator.clipboard.writeText(code).then(()=>toast('🎡 Código da Wheel copiado!')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=code; ta.style.cssText='position:fixed;opacity:0;'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('🎡 Copiado!');
+  });
+}
 function copySummaryToClipboard(huntId){
   const h=state.hunts.find(x=>x.id===huntId); if(!h)return;
   const p=state.profiles.find(x=>x.id===h.profileId);
@@ -5022,6 +5052,7 @@ function copySummaryToClipboard(huntId){
     h.monsters.forEach(m=>{ let ml=`  • ${m.name}`; if(m.majorCharm) ml+=` [⭐ ${m.majorCharm.name}]`; if(m.minorCharm) ml+=` [🔮 ${m.minorCharm.name}]`; lines.push(ml); });
     lines.push('');
   }
+  if(h.wheel&&(h.wheel.preset||'').trim()){ lines.push('🎡 *Wheel (código do jogo)*'); lines.push('  '+h.wheel.preset.trim()); lines.push(''); }
   lines.push('_Gerado pelo RESPAW3000_ 🐊');
   const text=lines.join('\n');
   navigator.clipboard.writeText(text).then(()=>toast('📋 Copiado para área de transferência!')).catch(()=>{
