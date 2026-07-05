@@ -6061,28 +6061,29 @@ function _bstRenderPreview(){
 function _bstRemovePreview(i){_bstWiz.pending.splice(i,1);_bstRenderPreview();}
 
 // ── Bestiary: add by class ──
+// cat = nome exato da categoria de bestiary na tibia.fandom.com ("Bestiary X Creatures")
 const BST_CLASSES=[
-  {id:'Amphibics',      label:'Amphibic',         emoji:'🐸'},
-  {id:'Aquatics',       label:'Aquatic',           emoji:'🐠'},
-  {id:'Birds',          label:'Bird',              emoji:'🦅'},
-  {id:'Constructs',     label:'Construct',         emoji:'🤖'},
-  {id:'Demons',         label:'Demon',             emoji:'😈'},
-  {id:'Dragons',        label:'Dragon',            emoji:'🐉'},
-  {id:'Elementals',     label:'Elemental',         emoji:'⚡'},
-  {id:'Extra_Dimensionals',label:'Extra Dimensional',emoji:'🌀'},
-  {id:'Feys',           label:'Fey',               emoji:'🧚'},
-  {id:'Giants',         label:'Giant',             emoji:'🏔️'},
-  {id:'Humans',         label:'Human',             emoji:'🧍'},
-  {id:'Humanoids',      label:'Humanoid',          emoji:'👺'},
-  {id:'Ink_Borns',      label:'Ink Born',          emoji:'🦑'},
-  {id:'Lycanthropes',   label:'Lycanthrope',       emoji:'🐺'},
-  {id:'Magical_Creatures',label:'Magical',         emoji:'✨'},
-  {id:'Mammals',        label:'Mammal',            emoji:'🦌'},
-  {id:'Plants',         label:'Plant',             emoji:'🌿'},
-  {id:'Reptiles',       label:'Reptile',           emoji:'🦎'},
-  {id:'Slimes',         label:'Slime',             emoji:'🟢'},
-  {id:'Undead',         label:'Undead',            emoji:'💀'},
-  {id:'Vermin',         label:'Vermin',            emoji:'🐀'},
+  {id:'Amphibics',      label:'Amphibic',         emoji:'🐸', cat:'Bestiary Amphibic Creatures'},
+  {id:'Aquatics',       label:'Aquatic',           emoji:'🐠', cat:'Bestiary Aquatic Creatures'},
+  {id:'Birds',          label:'Bird',              emoji:'🦅', cat:'Bestiary Bird Creatures'},
+  {id:'Constructs',     label:'Construct',         emoji:'🤖', cat:'Bestiary Construct Creatures'},
+  {id:'Demons',         label:'Demon',             emoji:'😈', cat:'Bestiary Demon Creatures'},
+  {id:'Dragons',        label:'Dragon',            emoji:'🐉', cat:'Bestiary Dragon Creatures'},
+  {id:'Elementals',     label:'Elemental',         emoji:'⚡', cat:'Bestiary Elemental Creatures'},
+  {id:'Extra_Dimensionals',label:'Extra Dimensional',emoji:'🌀', cat:'Bestiary Extra Dimensional Creatures'},
+  {id:'Feys',           label:'Fey',               emoji:'🧚', cat:'Bestiary Fey Creatures'},
+  {id:'Giants',         label:'Giant',             emoji:'🏔️', cat:'Bestiary Giant Creatures'},
+  {id:'Humans',         label:'Human',             emoji:'🧍', cat:'Bestiary Human Creatures'},
+  {id:'Humanoids',      label:'Humanoid',          emoji:'👺', cat:'Bestiary Humanoid Creatures'},
+  {id:'Ink_Borns',      label:'Ink Born',          emoji:'🦑', cat:'Bestiary Inkborn Creatures'},
+  {id:'Lycanthropes',   label:'Lycanthrope',       emoji:'🐺', cat:'Bestiary Lycanthrope Creatures'},
+  {id:'Magical_Creatures',label:'Magical',         emoji:'✨', cat:'Bestiary Magical Creatures'},
+  {id:'Mammals',        label:'Mammal',            emoji:'🦌', cat:'Bestiary Mammal Creatures'},
+  {id:'Plants',         label:'Plant',             emoji:'🌿', cat:'Bestiary Plant Creatures'},
+  {id:'Reptiles',       label:'Reptile',           emoji:'🦎', cat:'Bestiary Reptile Creatures'},
+  {id:'Slimes',         label:'Slime',             emoji:'🟢', cat:'Bestiary Slime Creatures'},
+  {id:'Undead',         label:'Undead',            emoji:'💀', cat:'Bestiary Undead Creatures'},
+  {id:'Vermin',         label:'Vermin',            emoji:'🐀', cat:'Bestiary Vermin Creatures'},
 ];
 let _bstClassSel=null;
 let _bstClassMonsters=[]; // [{name, selected}]
@@ -6108,11 +6109,12 @@ async function _bstSelectClass(classId){
   if(results) results.innerHTML='';
   if(actions) actions.style.display='none';
   try{
-    // Query fandom category members
+    // Query fandom category members — as classes de bestiary têm categoria "Bestiary X Creatures"
+    const _cls=BST_CLASSES.find(c=>c.id===classId); const _cat=(_cls&&_cls.cat)||classId;
     let allNames=[];
     let continueToken=null;
     for(let page=0;page<5;page++){ // max 5 pages (500 each = 2500 monsters)
-      let url=`https://tibia.fandom.com/api.php?action=query&list=categorymembers&cmtitle=Category:${encodeURIComponent(classId)}&cmlimit=500&cmtype=page&format=json&origin=*`;
+      let url=`https://tibia.fandom.com/api.php?action=query&list=categorymembers&cmtitle=Category:${encodeURIComponent(_cat)}&cmlimit=500&cmtype=page&format=json&origin=*`;
       if(continueToken) url+='&cmcontinue='+encodeURIComponent(continueToken);
       const r=await fetch(url); const d=await r.json();
       const members=(d.query?.categorymembers||[]).map(m=>m.title);
