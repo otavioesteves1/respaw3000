@@ -3911,6 +3911,43 @@ function renderWheelStep(){
     return;
   }
 
+  // ── Vocação sem layout de perks publicado em fonte confiável (ex.: Monk pós-15.25) ──
+  // A atualização 15.25 reformulou a Roda (sistema de gemas) e o layout de perks do
+  // Monk não está publicado em fonte oficial. Em vez de exibir as perks de outra
+  // vocação (o fallback mostrava as do Knight = dado errado), mostramos um aviso
+  // honesto e mantemos level + link do planner (que são salvos na hunt).
+  if(!WD_CONV_MAP[voc]){
+    if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36) wiz.wheel={slots:new Array(36).fill(0),link:''};
+    if(wiz.wheel._level===undefined) wiz.wheel._level=state.wheelLevel||0;
+    window._whlLink=(v)=>{ wiz.wheel.link=v; };
+    window._whlSetLevel=(v)=>{ const lv=Math.max(0,parseInt(v)||0); wiz.wheel._level=lv; state.wheelLevel=lv; save(false); };
+    const _lv=wiz.wheel._level||0;
+    el.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:.7rem;">
+      <div style="display:flex;align-items:center;gap:.5rem;background:var(--c3);border-radius:10px;padding:.4rem .7rem;border:1px solid var(--c4);">
+        <label style="font-size:.65rem;font-weight:700;color:var(--t1);text-transform:uppercase;letter-spacing:.5px;">Level</label>
+        <input type="text" inputmode="numeric" maxlength="4" value="${_lv||''}" placeholder="ex: 300"
+          style="width:76px;padding:.25rem .4rem;border:1.5px solid var(--c4);border-radius:7px;background:var(--c2);color:var(--t0);font-size:.88rem;font-weight:700;outline:none;"
+          oninput="window._whlSetLevel(this.value)" onkeydown="event.stopPropagation()">
+      </div>
+      <div style="background:rgba(var(--accent-rgb),.08);border:1px solid rgba(var(--accent-rgb),.28);border-radius:10px;padding:.8rem;">
+        <div style="font-size:.82rem;font-weight:800;color:var(--gold);margin-bottom:.35rem;">${VOC_ICONS[voc]||'🥋'} Roda do Destino — ${VOC_LABELS[voc]||voc}</div>
+        <div style="font-size:.72rem;color:var(--t1);line-height:1.5;">
+          O planejador visual da roda ainda <b>não está disponível para ${VOC_LABELS[voc]||voc}</b>.
+          A atualização <b>15.25</b> reformulou a Roda do Destino (novo sistema de <i>gemas</i> / Gem Atelier)
+          e o layout de perks do ${VOC_LABELS[voc]||voc} <b>não foi publicado em fonte confiável</b> até agora.
+          Para <b>não exibir dados incorretos</b>, o planejador fica desativado nesta vocação — em vez de mostrar perks de outra vocação.
+        </div>
+        <div style="font-size:.68rem;color:var(--t2);margin-top:.5rem;">✅ Confirmado até agora: avatar do ${VOC_LABELS[voc]||voc} = <b style="color:var(--gold);">Avatar of Balance</b>. As perks detalhadas entram assim que a fonte oficial publicar.</div>
+      </div>
+      <div>
+        <label style="font-size:.6rem;color:var(--t1);display:block;margin-bottom:.15rem;">🔗 Link do planner <span style="color:var(--t2);">(opcional — cole seu planner externo)</span></label>
+        <input class="wheel-link-inp wi" type="url" value="${(wiz.wheel.link||'').replace(/"/g,'&quot;')}" oninput="window._whlLink(this.value)" onkeydown="event.stopPropagation()" placeholder="https://tibia-wheel.vercel.app/...">
+      </div>
+    </div>`;
+    return;
+  }
+
   if(!wiz.wheel||!Array.isArray(wiz.wheel.slots)||wiz.wheel.slots.length!==36)
     wiz.wheel={slots:new Array(36).fill(0),link:''};
   if(wiz.wheel._level===undefined) wiz.wheel._level=state.wheelLevel||0;
