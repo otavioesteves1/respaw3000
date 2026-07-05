@@ -1183,7 +1183,7 @@ input[type=number]{-moz-appearance:textfield;}
                 </div>
                 <div style="font-size:.62rem;color:var(--t2);margin-top:.22rem;">O RESPAW detecta automaticamente — cole o link do monstro <em>ou</em> da hunt. Se for uma hunt, todos os monstros aparecem para você selecionar.</div>
                 <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.32rem;">
-                  <a href="https://www.tibiawiki.com.br/wiki/Categoria:Locais_de_Hunt" target="_blank" class="outfitter-link" style="font-size:.63rem;">📋 Hunts BR →</a>
+                  <a href="https://www.tibiawiki.com.br/wiki/Locais_de_Ca%C3%A7a" target="_blank" class="outfitter-link" style="font-size:.63rem;">📋 Hunts BR →</a>
                   <a href="https://tibia.fandom.com/wiki/Hunting_Places" target="_blank" class="outfitter-link" style="font-size:.63rem;">📋 Hunts Fandom →</a>
                 </div>
               </div>
@@ -2155,6 +2155,8 @@ const SPELLS = [
   {id:'d_sterrastrike', name:'Strong Terra Strike',   words:'exori gran tera',    vocs:['druid'],             img:spellImg('Strong Terra Strike')},
   {id:'d_ulticestrike', name:'Ultimate Ice Strike',   words:'exori max frigo',    vocs:['druid'],             img:spellImg('Ultimate Ice Strike')},
   {id:'d_ultterrastrike',name:'Ultimate Terra Strike',words:'exori max tera',     vocs:['druid'],             img:spellImg('Ultimate Terra Strike')},
+  {id:'d_forkedglacier',name:'Forked Glacier',         words:'exevo fur frigo',    vocs:['druid'],             img:spellImg('Forked Glacier')},
+  {id:'d_forkedthorns', name:'Forked Thorns',          words:'exevo fur tera',     vocs:['druid'],             img:spellImg('Forked Thorns')},
   // Druid + Sorcerer
   {id:'ds_appstrike',   name:"Apprentice's Strike",   words:'exori min flam',     vocs:['druid','sorcerer'],  img:spellImg("Apprentice's Strike")},
   {id:'ds_energystrike',name:'Energy Strike',          words:'exori vis',          vocs:['druid','sorcerer'],  img:spellImg('Energy Strike')},
@@ -2179,6 +2181,7 @@ const SPELLS = [
   {id:'s_sflamestrike', name:'Strong Flame Strike',    words:'exori gran flam',    vocs:['sorcerer'],          img:spellImg('Strong Flame Strike')},
   {id:'s_ulenergy',     name:'Ultimate Energy Strike', words:'exori max vis',      vocs:['sorcerer'],          img:spellImg('Ultimate Energy Strike')},
   {id:'s_ulflame',      name:'Ultimate Flame Strike',  words:'exori max flam',     vocs:['sorcerer'],          img:spellImg('Ultimate Flame Strike')},
+  {id:'s_deathecho',    name:'Death Echo',             words:'exevo mort ora',     vocs:['sorcerer'],          img:spellImg('Death Echo')},
   // Knight
   {id:'k_annihilation', name:'Annihilation',           words:'exori gran ico',     vocs:['knight'],            img:spellImg('Annihilation')},
   {id:'k_berserk',      name:'Berserk',                words:'exori',              vocs:['knight'],            img:spellImg('Berserk')},
@@ -2188,6 +2191,8 @@ const SPELLS = [
   {id:'k_frontsweep',   name:'Front Sweep',            words:'exori min',          vocs:['knight'],            img:spellImg('Front Sweep')},
   {id:'k_groundshaker', name:'Groundshaker',           words:'exori mas',          vocs:['knight'],            img:spellImg('Groundshaker')},
   {id:'k_whirlwind',    name:'Whirlwind Throw',        words:'exori hur',          vocs:['knight'],            img:spellImg('Whirlwind Throw')},
+  {id:'k_shieldbash',   name:'Shield Bash',            words:'exori ico scu',      vocs:['knight'],            img:spellImg('Shield Bash')},
+  {id:'k_shieldslam',   name:'Shield Slam',            words:'exori scu',          vocs:['knight'],            img:spellImg('Shield Slam')},
   // Knight + Monk
   {id:'km_inflictwound',name:'Inflict Wound',          words:'utori kor',          vocs:['knight','monk'],     img:spellImg('Inflict Wound')},
   // Monk
@@ -2202,6 +2207,9 @@ const SPELLS = [
   {id:'m_mysticrepulse',name:'Mystic Repulse',         words:'exori amp pug',      vocs:['monk'],              img:spellImg('Mystic Repulse')},
   {id:'m_spiritualout', name:'Spiritual Outburst',     words:'exori gran mas nia', vocs:['monk'],              img:spellImg('Spiritual Outburst')},
   {id:'m_sweepingtd',   name:'Sweeping Takedown',      words:'exori mas nia',      vocs:['monk'],              img:spellImg('Sweeping Takedown')},
+  {id:'m_swiftjab',     name:'Swift Jab',              words:'exori infir pug',    vocs:['monk'],              img:spellImg('Swift Jab')},
+  {id:'m_tigerclash',   name:'Tiger Clash',            words:'exori infir nia',    vocs:['monk'],              img:spellImg('Tiger Clash')},
+  {id:'m_thousandfist', name:'Thousand Fist Blows',    words:'exori mas amp pug',  vocs:['monk'],              img:spellImg('Thousand Fist Blows')},
   // Paladin
   {id:'p_divcaldera',   name:'Divine Caldera',         words:'exevo mas san',      vocs:['paladin'],           img:spellImg('Divine Caldera')},
   {id:'p_divgrenade',   name:'Divine Grenade',         words:'exevo tempo mas san',vocs:['paladin'],           img:spellImg('Divine Grenade')},
@@ -2209,6 +2217,8 @@ const SPELLS = [
   {id:'p_ethspear',     name:'Ethereal Spear',         words:'exori con',          vocs:['paladin'],           img:spellImg('Ethereal Spear')},
   {id:'p_holyflash',    name:'Holy Flash',             words:'utori san',          vocs:['paladin'],           img:spellImg('Holy Flash')},
   {id:'p_sethspear',    name:'Strong Ethereal Spear',  words:'exori gran con',     vocs:['paladin'],           img:spellImg('Strong Ethereal Spear')},
+  {id:'p_divbarrage',   name:'Divine Barrage',         words:'exori dir san',      vocs:['paladin'],           img:spellImg('Divine Barrage')},
+  {id:'p_ethbarrage',   name:'Ethereal Barrage',       words:'exori dir moe',      vocs:['paladin'],           img:spellImg('Ethereal Barrage')},
 ];
 
 // ══════════════════════════════════════════════════════
