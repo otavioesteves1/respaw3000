@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
   try {
     // timeout interno < 60s (limite do Vercel Hobby) pra devolver erro legível
-    const r = await fetch(scrapeUrl, { headers: { accept: 'text/html' }, signal: AbortSignal.timeout(52000) });
+    const r = await fetch(scrapeUrl, { headers: { accept: 'text/html' }, signal: AbortSignal.timeout(58000) });
     const html = await r.text();
 
     if (debug) {
