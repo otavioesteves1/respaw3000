@@ -27,24 +27,28 @@ export default async function handler(req, res) {
 
   const target = RUBINOT_BASE + encodeURIComponent(name);
 
+  // proxy: 'datacenter' (rápido, default) | 'residential' (mais lento, passa CF mais forte)
+  const proxyType = (process.env.SCRAPER_PROXY || 'datacenter').toLowerCase();
+
   let scrapeUrl, provider;
   if (process.env.SCRAPINGANT_KEY) {
     provider = 'scrapingant';
     scrapeUrl = 'https://api.scrapingant.com/v2/general'
       + '?url=' + encodeURIComponent(target)
       + '&x-api-key=' + process.env.SCRAPINGANT_KEY
-      + '&browser=true&proxy_type=residential&proxy_country=BR';
+      + '&browser=true&proxy_type=' + proxyType;
   } else if (process.env.SCRAPEDO_TOKEN) {
     provider = 'scrapedo';
     scrapeUrl = 'https://api.scrape.do/?token=' + process.env.SCRAPEDO_TOKEN
       + '&url=' + encodeURIComponent(target)
-      + '&render=true&super=true&geoCode=br';
+      + '&render=true' + (proxyType === 'residential' ? '&super=true' : '');
   } else {
     return res.status(500).json({ ok: false, error: 'sem chave de scraper (defina SCRAPINGANT_KEY ou SCRAPEDO_TOKEN)' });
   }
 
   try {
-    const r = await fetch(scrapeUrl, { headers: { accept: 'text/html' } });
+    // timeout interno < 60s (limite do Vercel Hobby) pra devolver erro legível
+    const r = await fetch(scrapeUrl, { headers: { accept: 'text/html' }, signal: AbortSignal.timeout(52000) });
     const html = await r.text();
 
     if (debug) {
@@ -59,7 +63,7 @@ export default async function handler(req, res) {
 
     // Ainda barrado pelo Cloudflare?
     if (/just a moment|cf-mitigated|challenge-platform/i.test(html) && !/n[íi]vel/i.test(html))
-      return res.status(502).json({ ok: false, error: 'bloqueado pelo Cloudflare (scraper não resolveu o challenge)' });
+      return res.status(502).json({ ok: false, error: 'bloqueado pelo Cloudflare — tente definir SCRAPER_PROXY=residential no Vercel', provider, proxy: proxyType });
 
     const notFound = /não\s+encontrad|not\s+found|does not exist|no character|nenhum personagem/i.test(html);
     const level = parseLevel(html);
@@ -70,7 +74,13 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 's-maxage=180, stale-while-revalidate=600');
     return res.status(200).json({ ok: true, exists: true, name, level, source: target });
   } catch (e) {
-    return res.status(504).json({ ok: false, error: String((e && e.message) || e) });
+    const msg = String((e && e.message) || e);
+    const isTimeout = e && (e.name === 'TimeoutError' || /timeout|aborted|abort/i.test(msg));
+    return res.status(504).json({
+      ok: false,
+      error: isTimeout ? 'scraper demorou demais (>52s) — o modo residential é lento no Hobby; deixe SCRAPER_PROXY=datacenter' : msg,
+      proxy: proxyType,
+    });
   }
 }
 
